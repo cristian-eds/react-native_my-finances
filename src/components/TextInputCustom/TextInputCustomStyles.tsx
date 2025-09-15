@@ -10,11 +10,12 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#09090929',
     borderRadius: 10,
-    marginBottom: 25,
+    marginBottom: 20,
     paddingHorizontal: 10,
     backgroundColor: '#fffffffb',
   },
     input: {
         fontSize: 18,
+        width: '100%',
     }
 });
