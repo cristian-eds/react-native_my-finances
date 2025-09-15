@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { styles } from './RegisterScreenStyles';
 
-export function Register() {
+export function RegisterScreen() {
   return (
     <View style={styles.container}>
 
