@@ -1,0 +1,16 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#ffffffff',
+    borderTopLeftRadius: 80,
+    borderTopRightRadius: 80,
+    flex: 1,
+    paddingHorizontal: 40,
+    paddingTop: 35,
+    rowGap: 70,
+  },
+  text: {
+    fontSize: 20,
+  }
+});
