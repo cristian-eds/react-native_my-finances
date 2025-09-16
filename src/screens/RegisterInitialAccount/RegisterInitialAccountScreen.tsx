@@ -7,12 +7,11 @@ import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/Te
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/RootStackParamList';
+import { RootStackParamList } from '../../routes/types/RootStackParamList';
 
 export function RegisterInitialAccountScreen() {
-
+  
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
   return (
     <View style={globalStyles.container_screens_auth}>
       <View style={globalStyles.container_header_auth}>
@@ -31,7 +30,7 @@ export function RegisterInitialAccountScreen() {
         </View>
         <View>
           <ButtonPrincipal title='Avançar' />
-          <ButtonPrincipal title='Voltar' onPress={() => navigation.navigate("Register")}/>
+          <ButtonPrincipal title='Voltar' onPress={() => navigation.goBack()}/>
         </View>
       </View>
     </View>

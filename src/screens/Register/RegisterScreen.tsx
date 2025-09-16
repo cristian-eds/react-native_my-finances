@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { RootStackParamList } from '../../routes/RootStackParamList';
+import { RootStackParamList } from '../../routes/types/RootStackParamList';
 
 import { styles } from './RegisterScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';

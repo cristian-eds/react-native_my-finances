@@ -2,8 +2,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { LoginScreen } from "../screens/Login/LoginScreen";
 import { RegisterScreen } from "../screens/Register/RegisterScreen";
 import { RegisterInitialAccountScreen } from "../screens/RegisterInitialAccount/RegisterInitialAccountScreen";
+import { RootStackParamList } from "./types/RootStackParamList";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export function AuthStackNavigationRoutes() {
   return (
