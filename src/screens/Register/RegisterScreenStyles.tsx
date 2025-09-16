@@ -8,9 +8,4 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 40,
     rowGap: 35,
   },
-  title: {
-    fontSize: 36,
-    color: 'black',
-    paddingLeft: 10
-  },
 });
