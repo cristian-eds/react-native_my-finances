@@ -3,6 +3,7 @@ import { LoginScreen } from "../screens/Login/LoginScreen";
 import { RegisterScreen } from "../screens/Register/RegisterScreen";
 import { RegisterInitialAccountScreen } from "../screens/RegisterInitialAccount/RegisterInitialAccountScreen";
 import { RootStackParamList } from "./types/RootStackParamList";
+import { WelcomeRegisterScreen } from "../screens/WelcomeRegister/WelcomeRegisterScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -12,6 +13,7 @@ export function AuthStackNavigationRoutes() {
       <Stack.Screen name="Login" component={() => <LoginScreen />} />
       <Stack.Screen name="Register" component={() => <RegisterScreen />} />
       <Stack.Screen name="RegisterInitialAccount" component={() => <RegisterInitialAccountScreen />} />
+      <Stack.Screen name="WelcomeRegister" component={() => <WelcomeRegisterScreen />} />
     </Stack.Navigator>
   );
 }

@@ -29,7 +29,7 @@ export function RegisterInitialAccountScreen() {
           <TextInpuWithLeftLabel name='Responsável' placeholder='Nome do responsável' />
         </View>
         <View>
-          <ButtonPrincipal title='Avançar' />
+          <ButtonPrincipal title='Avançar' onPress={() => navigation.push('WelcomeRegister')}/>
           <ButtonPrincipal title='Voltar' onPress={() => navigation.goBack()}/>
         </View>
       </View>
