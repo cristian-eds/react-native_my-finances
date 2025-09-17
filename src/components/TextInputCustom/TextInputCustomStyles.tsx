@@ -14,8 +14,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#fffffffb',
   },
-    input: {
-        fontSize: 18,
-        width: '100%',
-    }
+  input: {
+    fontSize: 18,
+    width: '100%',
+    
+  },
+  error_message: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
+    left: 2,
+    position: 'absolute',
+    bottom: -16,
+  }
 });
