@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     marginVertical: 15,
   },
   line: {
-    backgroundColor: '#2b2b2bc0',
+    backgroundColor: '#9c9c9cc0',
     height:2,
     flex: 1,
   },
