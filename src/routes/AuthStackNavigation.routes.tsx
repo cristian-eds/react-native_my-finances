@@ -10,10 +10,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 export function AuthStackNavigationRoutes() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={() => <LoginScreen />} />
-      <Stack.Screen name="Register" component={() => <RegisterScreen />} />
-      <Stack.Screen name="RegisterInitialAccount" component={() => <RegisterInitialAccountScreen />} />
-      <Stack.Screen name="WelcomeRegister" component={() => <WelcomeRegisterScreen />} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="RegisterInitialAccount" component={RegisterInitialAccountScreen} />
+      <Stack.Screen name="WelcomeRegister" component={WelcomeRegisterScreen} />
     </Stack.Navigator>
   );
 }
