@@ -1,9 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import { Routes } from './src/routes/Routes';
+import { DatabaseProvider } from './src/database/DatabaseProvider';
 
 export default function App() {
   return (
-    <Routes />
+    <DatabaseProvider>
+      <Routes />
+    </DatabaseProvider>
   );
 }
    
