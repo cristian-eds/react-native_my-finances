@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -13,20 +12,22 @@ import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/Button
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
 import { create } from '../../services/userService';
 import { useSQLiteContext } from 'expo-sqlite';
+import { useForm } from 'react-hook-form';
+import { userSchemas } from '../../schemas/userSchemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 
 export function RegisterScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const db = useSQLiteContext()
+  const db = useSQLiteContext();
 
-  const [name, setName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); 
+   const { control, handleSubmit, watch, formState: {errors} } = useForm({
+    resolver: zodResolver(userSchemas),
+  })
 
   const handleRegister = async () => {
-    const response = await create(db, { name, cpf, password });
+    const response = await create(db, watch());
     Alert.alert('Registrado com sucesso!', response && response.id?.toString());
   }
 
@@ -37,15 +38,15 @@ export function RegisterScreen() {
       </View>
       <View style={styles.container}>
         <View>
-          <TextInputCustom placeholder='Informe seu nome: ' value={name} onChangeText={(e) => setName(e)}/>
-          <TextInputCustom placeholder='Informe seu CPF: ' value={cpf} onChangeText={(e) => setCpf(e)}/>
-          <TextInputCustom placeholder='Digite sua senha: ' value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} />
-          <TextInputCustom placeholder='Confirme sua senha: ' value={confirmPassword} onChangeText={(e) => setConfirmPassword(e)} secureTextEntry={true} />
+          <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' errors={errors.name} />
+          <TextInputCustom name="cpf"  control={control} placeholder='Informe seu CPF: ' inputMode='numeric' maxLength={11} errors={errors.cpf} />
+          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' secureTextEntry={true} errors={errors.password} />
+          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: '  secureTextEntry={true} errors={errors.confirmPassword} />
         </View>
 
         <View>
-          <ButtonPrincipal title='Avançar' onPress={handleRegister} />
-          <DividerTextMiddle />
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} />
+          <DividerTextMiddle text='Já possui conta?'/>
           <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
         </View>
       </View>
