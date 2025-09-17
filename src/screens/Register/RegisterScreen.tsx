@@ -27,8 +27,8 @@ export function RegisterScreen() {
   })
 
   const handleRegister = async () => {
-    const response = await create(db, watch());
-    Alert.alert('Registrado com sucesso!', response && response.id?.toString());
+    const response = await create(watch(), db);
+    Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
   }
 
   return (

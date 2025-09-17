@@ -33,6 +33,7 @@ export function LoginScreen() {
       Alert.alert(response.error);
       return;
     }
+    Alert.alert('Login realizado com sucesso!', response?.data?.name);
 
   }
 

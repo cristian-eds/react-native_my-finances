@@ -1,18 +1,16 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import bcrypt from "react-native-bcrypt";
 import { User } from "../domain/userModel";
+import { ResponseUser } from "../domain/responseUser";
 
 interface UserLogin {
     cpf: string;
     password: string;
 }
 
-interface ResponseLogin {
-    data: Omit<User,"id"> | null;
-    error?: string;
-}
 
-export async function login(database: SQLiteDatabase, data: UserLogin) : Promise<ResponseLogin | undefined> {
+
+export async function login(database: SQLiteDatabase, data: UserLogin) : Promise<ResponseUser | undefined> {
     const statement = await database.prepareAsync(` 
             SELECT * FROM users WHERE cpf = $cpf;
         `);
@@ -20,7 +18,6 @@ export async function login(database: SQLiteDatabase, data: UserLogin) : Promise
         const params = { $cpf: data.cpf, $password: data.password };    
         const result = await statement.executeAsync<Omit<User,"id">>(params);
         const user = await result.getFirstAsync();
-        console.log(user);
         if(user) {
             const hashedPassword = user.password;
 
