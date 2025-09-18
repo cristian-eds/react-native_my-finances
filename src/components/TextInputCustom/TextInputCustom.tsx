@@ -15,7 +15,7 @@ interface TextInputCustomProps {
 
 type Props = TextInputProps & TextInputCustomProps;
 
-export function TextInputCustom({ iconName,control, name, errors, ...props}: Props) {
+export function TextInputCustom({ iconName, control, name, errors, ...props}: Props) {
 
   const {field} = useController({
     name,

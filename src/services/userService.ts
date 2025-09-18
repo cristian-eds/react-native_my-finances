@@ -22,8 +22,4 @@ async function createUser(data: User, database: SQLiteDatabase): Promise<Respons
 }
 
 
-
-
-
-
 export { createUser };
