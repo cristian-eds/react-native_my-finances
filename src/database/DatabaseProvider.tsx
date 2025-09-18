@@ -1,5 +1,5 @@
 import React from 'react';
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { SQLiteProvider } from 'expo-sqlite';
 import { intilizeDatabase } from './initializeDatabase';
 
 
