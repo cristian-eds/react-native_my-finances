@@ -1,7 +1,5 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
-import bcrypt from 'react-native-bcrypt';
-
 import * as userRepository from "../repository/userRepository";
 
 import { User } from "../domain/userModel";

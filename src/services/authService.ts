@@ -2,12 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import bcrypt from "react-native-bcrypt";
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
-
-interface UserLogin {
-    cpf: string;
-    password: string;
-}
-
+import { UserLogin } from "../domain/userLogin";
 
 
 export async function login(database: SQLiteDatabase, data: UserLogin) : Promise<ResponseUser | undefined> {

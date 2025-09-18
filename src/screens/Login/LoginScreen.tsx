@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Alert, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -13,29 +13,30 @@ import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/Button
 import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSQLiteContext } from 'expo-sqlite';
-import { login } from '../../services/authService';
 import { loginSchemas } from '../../schemas/loginSchemas';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
+import { UserContext } from '../../context/UserContext';
 
 export function LoginScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const db = useSQLiteContext();
+
+  const context = useContext(UserContext);
+  
 
   const { control, handleSubmit, watch, formState: {errors} } = useForm({
     resolver: zodResolver(loginSchemas),
   })
 
   const handleLogin = async () => {
-    const response = await login(db, watch());
-    if(response?.error) {
-      Alert.alert(response.error);
-      return;
-    }
-    Alert.alert('Login realizado com sucesso!', response?.data?.name);
-
+    context?.loginUser( watch());
   }
+
+  useEffect(() => {
+    if(context?.user){
+      Alert.alert("Usuário logado!")
+    }
+  }, [context?.user])
 
   return (
     <View style={globalStyles.container_screens_auth}>
