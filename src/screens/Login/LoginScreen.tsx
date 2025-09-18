@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -20,23 +20,24 @@ import { UserContext } from '../../context/UserContext';
 export function LoginScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
   const context = useContext(UserContext);
-  
 
-  const { control, handleSubmit, watch, formState: {errors} } = useForm({
+  const [loading, setLoading] = useState(false);
+
+  const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchemas),
   })
 
   const handleLogin = async () => {
-    context?.loginUser( watch());
-  }
-
-  useEffect(() => {
-    if(context?.user){
+    setLoading(true);
+    const response = await context?.loginUser(watch());
+    if (response?.error) {
+      Alert.alert("Erro no login", response.error)
+    } else if (response?.data) {
       Alert.alert("Usuário logado!")
     }
-  }, [context?.user])
+    setLoading(false);
+  }
 
   return (
     <View style={globalStyles.container_screens_auth}>
@@ -45,14 +46,32 @@ export function LoginScreen() {
       </View>
       <View style={styles.container}>
         <View>
-          <TextInputCustom name="cpf" control={control} placeholder='CPF:' iconName='perm-identity' inputMode='numeric' maxLength={11} errors={errors.cpf}/>
-          <TextInputCustom name="password" control={control} placeholder='Senha:' iconName='lock-outline' secureTextEntry={true} errors={errors.password}></TextInputCustom>
+          <TextInputCustom
+            name="cpf"
+            control={control}
+            placeholder='CPF:'
+            iconName='perm-identity'
+            inputMode='numeric'
+            maxLength={11}
+            errors={errors.cpf} 
+            readOnly={loading}/>
+
+          <TextInputCustom
+            name="password"
+            control={control}
+            placeholder='Senha:'
+            iconName='lock-outline'
+            secureTextEntry={true}
+            errors={errors.password} 
+            readOnly={loading}
+            />
+
           <Text style={styles.forgot_password}>Esqueceu a senha?</Text>
         </View>
         <View>
-          <ButtonPrincipal title='Entrar' onPress={handleSubmit(handleLogin)} />
-          <DividerTextMiddle text='Não possui conta?'/>
-          <ButtonPrincipal title='Registrar-se' onPress={() => navigation.navigate("Register")} />
+          <ButtonPrincipal title={loading ? 'Entrando...' : 'Entrar'} onPress={handleSubmit(handleLogin)} loading={loading} />
+          <DividerTextMiddle text='Não possui conta?' />
+          <ButtonPrincipal title='Registre-se' onPress={() => navigation.navigate("Register")} />
         </View>
       </View>
     </View>
