@@ -1,12 +1,26 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { HomeScreen } from "../screens/Home/HomeScreen";
+import { Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 export function TabBottomNavigationRoutes() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Login" component={() => null} />
-      <Tab.Screen name="Screen" component={() => null} />
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{ headerStyle: { borderBottomLeftRadius: 20, borderBottomStartRadius: 20 },
+                      headerTitleAlign: 'center',
+                 }} 
+      >
+      <Tab.Screen
+        name="Lançamentos"
+        component={() => null} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen} />
+      <Tab.Screen
+        name="Finanças"
+        component={() => null} />
     </Tab.Navigator>
   );
 } 
