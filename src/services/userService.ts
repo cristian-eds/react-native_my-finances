@@ -1,15 +1,17 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import { User } from "../domain/userModel";
+
 import bcrypt from 'react-native-bcrypt';
+
+import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
 
 async function create(data: User, database: SQLiteDatabase): Promise<ResponseUser | undefined> {
 
-    await getUserByCpf(data.cpf, database).then(response => {
-        if(response?.data) {
-            return { data: null, error: "CPF já cadastrado" };
-        }
-    });
+    const userFound = await getUserByCpf(data.cpf, database);
+    if (userFound) {
+        console.log(userFound);
+        return { data: null, error: "Já existe um usuário com esse CPF" };
+    }
 
     const statement = await database.prepareAsync(` 
             INSERT INTO users (name, cpf, password)
@@ -24,7 +26,7 @@ async function create(data: User, database: SQLiteDatabase): Promise<ResponseUse
         const result = await statement.executeAsync(params);
         const insertId = result.lastInsertRowId.toLocaleString();
 
-        return { data : {id: Number(insertId), ...data} };
+        return { data: { id: Number(insertId), ...data } };
     } catch (error) {
         console.error("Error creating user:", error);
     } finally {
@@ -38,7 +40,7 @@ async function getUserByCpf(cpf: string, database: SQLiteDatabase): Promise<Resp
         `);
 
     try {
-        const params = { $id: cpf };
+        const params = { $cpf: cpf };
         const result = await statement.executeAsync<User>(params);
         const user = await result.getFirstAsync();
         if (user) {

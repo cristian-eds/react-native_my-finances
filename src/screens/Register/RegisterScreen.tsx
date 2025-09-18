@@ -28,6 +28,10 @@ export function RegisterScreen() {
 
   const handleRegister = async () => {
     const response = await create(watch(), db);
+    if(response?.error) {
+      Alert.alert('CPF já cadastrado', response.error);
+      return;
+    }
     Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
   }
 
