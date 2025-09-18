@@ -10,7 +10,7 @@ import { styles as globalStyles } from '../../styles/GlobalStyles';
 import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
-import { create } from '../../services/userService';
+import { createUser } from '../../services/userService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useForm } from 'react-hook-form';
 import { userSchemas } from '../../schemas/userSchemas';
@@ -27,7 +27,7 @@ export function RegisterScreen() {
   })
 
   const handleRegister = async () => {
-    const response = await create(watch(), db);
+    const response = await createUser(watch(), db);
     if(response?.error) {
       Alert.alert('CPF já cadastrado', response.error);
       return;
