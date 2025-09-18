@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { TabBottomNavigationRoutes } from './TabBottomNavigation.routes';
 import { AuthStackNavigationRoutes } from './AuthStackNavigation.routes';
 import { StatusBar } from 'expo-status-bar';
+import { UserContext } from '../context/UserContext';
 
 export function Routes() {
 
-  const [isLogged, setIsLogged] = React.useState(false);
+  const context = useContext(UserContext);
 
   return (
     <NavigationContainer >
       <StatusBar style="auto" />
-      {isLogged ? <TabBottomNavigationRoutes /> : <AuthStackNavigationRoutes />}
+      {context?.user ? <TabBottomNavigationRoutes /> : <AuthStackNavigationRoutes />}
     </NavigationContainer>
   );
 }

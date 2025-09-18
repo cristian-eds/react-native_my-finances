@@ -20,6 +20,7 @@ import { UserContext } from '../../context/UserContext';
 export function LoginScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  
   const context = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
