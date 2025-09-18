@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, TextInput, TextInputProps, View } from 'react-native';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -23,10 +23,17 @@ export function TextInputCustom({ iconName, control, name, errors, ...props}: Pr
     defaultValue: ''
   })
 
+  const [showPassword, setShowPassword] = useState(!props.secureTextEntry);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
+
   return (
     <View style={styles.container}>
       {iconName && <MaterialIcons name={iconName} size={24} color="black" />}  
-      <TextInput {...props} style={styles.input} value={field.value} onChangeText={field.onChange}/>
+      <TextInput {...props} style={styles.input} value={field.value} onChangeText={field.onChange} secureTextEntry={!showPassword}/>
+      {props.secureTextEntry && <MaterialIcons name={showPassword ? "visibility-off": "visibility"} size={24} color="black" onPress={handleShowPassword}/>}
       {errors && <Text style={styles.error_message}>{errors.message}</Text>}
     </View>
   );
