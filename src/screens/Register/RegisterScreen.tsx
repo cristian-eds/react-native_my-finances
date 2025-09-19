@@ -22,41 +22,40 @@ export function RegisterScreen() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const db = useSQLiteContext();
 
-   const { control, handleSubmit, watch, formState: {errors} } = useForm({
+  const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(userSchemas),
   })
 
   const handleRegister = async () => {
     const response = await createUser(watch(), db);
-    if(response?.error) {
-      Alert.alert('CPF já cadastrado', response.error);
+    if (response?.error) {
+      Alert.alert('Erro ao registrar', response.error);
       return;
     }
     Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
+    navigation.navigate("RegisterInitialAccount");
   }
 
   return (
     <View style={globalStyles.container_screens_auth}>
       <View style={globalStyles.container_header_auth}>
-        <Text style={[globalStyles.title_screens_auth, {textAlign: 'right'}]}>Registro</Text>
+        <Text style={[globalStyles.title_screens_auth, { textAlign: 'right' }]}>Registro</Text>
       </View>
       <View style={styles.container}>
         <View>
           <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' errors={errors.name} />
-          <TextInputCustom name="cpf"  control={control} placeholder='Informe seu CPF: ' inputMode='numeric' maxLength={11} errors={errors.cpf} />
+          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: ' inputMode='numeric' maxLength={11} errors={errors.cpf} />
           <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' secureTextEntry={true} errors={errors.password} />
-          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: '  secureTextEntry={true} errors={errors.confirmPassword} />
+          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' secureTextEntry={true} errors={errors.confirmPassword} />
         </View>
 
         <View>
           <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} />
-          <DividerTextMiddle text='Já possui conta?'/>
+          <DividerTextMiddle text='Já possui conta?' />
           <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
         </View>
       </View>
 
     </View>
-
-
   );
 }

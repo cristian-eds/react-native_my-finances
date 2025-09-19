@@ -4,7 +4,7 @@ import { Text, TextInput, TextInputProps, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { styles } from './TextInputCustomStyles';
-import { FieldError, FieldPath, useController } from 'react-hook-form';
+import { FieldError, useController } from 'react-hook-form';
 
 interface TextInputCustomProps {
   iconName?: keyof typeof MaterialIcons.glyphMap;

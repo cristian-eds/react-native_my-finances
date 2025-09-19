@@ -17,9 +17,17 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: '#ffffffff',
     textAlign: 'right',
     paddingRight: 5,
     width: '100%',
+  },
+   error_message: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
+    right: 5,
+    position: 'absolute',
+    bottom: -9,
+    backgroundColor: 'white'
   }
 });
