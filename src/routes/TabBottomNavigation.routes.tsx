@@ -14,13 +14,13 @@ export function TabBottomNavigationRoutes() {
       >
       <Tab.Screen
         name="Lançamentos"
-        component={() => null} />
+        component={HomeScreen} />
       <Tab.Screen
         name="Home"
         component={HomeScreen} />
       <Tab.Screen
         name="Finanças"
-        component={() => null} />
+        component={HomeScreen} />
     </Tab.Navigator>
   );
 } 

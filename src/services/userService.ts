@@ -5,7 +5,7 @@ import * as userRepository from "../repository/userRepository";
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
 
-async function createUser(data: User, database: SQLiteDatabase): Promise<ResponseUser | undefined> {
+async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Promise<ResponseUser | undefined> {
 
     const userFound = await userRepository.findUserByCpf(data.cpf, database);
     if (userFound) {
