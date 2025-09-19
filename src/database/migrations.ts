@@ -14,6 +14,21 @@ const migrations = [
             session_token TEXT NOT NULL UNIQUE,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
+    `,
+    `
+        CREATE TABLE IF NOT EXISTS account (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            balance REAL NOT NULL UNIQUE,
+            bank_code TEXT,
+            type TEXT,
+            account_number TEXT,
+            agency TEXT,
+            holder_name TEXT,
+            status TEXT,
+            user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    );
     `
 ];
 
