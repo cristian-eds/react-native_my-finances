@@ -2,7 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { User } from "../domain/userModel";
 import bcrypt from "react-native-bcrypt";
 
-async function create(data: User, database: SQLiteDatabase): Promise<User | undefined> {
+async function create(data: Omit<User,"id">, database: SQLiteDatabase): Promise<User | undefined> {
 
     const statement = await database.prepareAsync(` 
             INSERT INTO users (name, cpf, password)
@@ -44,4 +44,22 @@ async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<Use
     }
 }
 
-export { create, findUserByCpf };
+async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined>  {
+    const statement = await database.prepareAsync(` 
+            SELECT * FROM users JOIN sessions on sessions.user_id = users.id WHERE sessions.session_token = $sessionToken;
+        `);
+    try {
+        const params = { $sessionToken: sessionToken };
+        const result = await statement.executeAsync<User>(params);
+        const user = await result.getFirstAsync();
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        console.error("Error getting user:", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
+}
+
+export { create, findUserByCpf, findUserBySessionToken };
