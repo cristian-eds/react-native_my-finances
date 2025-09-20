@@ -2,15 +2,16 @@ import React from 'react';
 import { Text, TextInput, TextInputProps, View } from 'react-native';
 
 import { styles } from './TextInputWithLeftLabelStyles';
-import { FieldError, useController } from 'react-hook-form';
+import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
 import { RowWithLeftLabel } from '../RowWithLeftLabel/RowWithLeftLabel';
+import { TypeAccount } from '../../domain/typeAccountEnum';
 
 interface TextInputWithLeftLabelProps {
   name: string;
   title: string,
   control: any,
   required?: boolean;
-  errors?: FieldError | undefined;
+  errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> | undefined;
 }
 
 type Props = TextInputWithLeftLabelProps & TextInputProps;
@@ -22,6 +23,7 @@ export function TextInpuWithLeftLabel({ name, title, control, required = false, 
     control,
     defaultValue: ''
   })
+
 
   return (
     <RowWithLeftLabel labelText={title} errors={errors} required={required}>

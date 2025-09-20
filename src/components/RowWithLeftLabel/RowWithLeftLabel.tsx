@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
 import { styles } from './RowWithLeftLabelStyles';
-import { FieldError } from 'react-hook-form';
+import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 interface RowWithLeftLabelProps {
   labelText: string;
   required?: boolean;
-  errors?: FieldError | undefined;
+  errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> |undefined;
   children: ReactNode
 
 }
