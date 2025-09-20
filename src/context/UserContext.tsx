@@ -6,9 +6,14 @@ import { login, loginWithSessionToken } from "../services/authService";
 import { ResponseUser } from "../domain/responseUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { getAccountByUser } from "../services/accountService";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../routes/types/RootStackParamList";
+
+
 interface ContentContext {
     user: Omit<User, 'password'> | null,
-    loginUser: (data: UserLogin) => Promise<ResponseUser | undefined>
+    loginUser: (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>) => Promise<ResponseUser | undefined>
 }
 
 export const UserContext = createContext<ContentContext | null>(null);
@@ -19,21 +24,25 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const [user, setUser] = useState<Omit<User, 'password'> | null>(null);
 
-    const loginUser = async (data: UserLogin): Promise<ResponseUser | undefined> => {
+    const loginUser = async (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>): Promise<ResponseUser | undefined> => {
         const response = await login(db, data);
         if (response?.data) {
-            setUser(response?.data)
+            const account = await getAccountByUser(response.data.id, db);
+            if (account) {
+                setUser(response?.data)
+            } else {
+                navigation.navigate("RegisterInitialAccount");
+            }
         }
         return response;
     }
 
     useEffect(() => {
-        console.log("Iniciou effect")
         const verifySessionToken = async () => {
             const token = await AsyncStorage.getItem("sessionToken");
 
             if (!token) return;
-            
+
             const response = await loginWithSessionToken(db, token);
 
             if (response?.data) {
