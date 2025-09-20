@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
 
 import { styles } from './RegisterInitialAccountScreenStyles';
@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../routes/types/RootStackParamList';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchemas } from '../../schemas/accountSchemas';
+import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 
 export function RegisterInitialAccountScreen() {
 
@@ -21,7 +22,7 @@ export function RegisterInitialAccountScreen() {
   })
 
   const handleRegisterAccount = () => {
-      watch();
+    console.log(watch());
   }
 
   return (
@@ -35,7 +36,7 @@ export function RegisterInitialAccountScreen() {
           <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
           <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
           <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
-          <TextInpuWithLeftLabel control={control} title='Tipo conta' errors={errors.type} name='type' placeholder='Selecione tipo da conta' />
+          <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
           <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
           <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
           <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />

@@ -20,7 +20,7 @@ import { UserContext } from '../../context/UserContext';
 export function LoginScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  
+
   const context = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     setLoading(true);
-    const response = await context?.loginUser(watch());
+    const response = await context?.loginUser(watch(), navigation);
     if (response?.error) {
       Alert.alert("Erro no login", response.error)
     } else if (response?.data) {
@@ -54,8 +54,8 @@ export function LoginScreen() {
             iconName='perm-identity'
             inputMode='numeric'
             maxLength={11}
-            errors={errors.cpf} 
-            readOnly={loading}/>
+            errors={errors.cpf}
+            readOnly={loading} />
 
           <TextInputCustom
             name="password"
@@ -63,9 +63,9 @@ export function LoginScreen() {
             placeholder='Senha:'
             iconName='lock-outline'
             secureTextEntry={true}
-            errors={errors.password} 
+            errors={errors.password}
             readOnly={loading}
-            />
+          />
 
           <Text style={styles.forgot_password}>Esqueceu a senha?</Text>
         </View>
