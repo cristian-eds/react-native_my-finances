@@ -1,28 +1,58 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Alert, Text, View } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 
-import { styles } from './RegisterInitialAccountScreenStyles';
-import { styles as globalStyles } from '../../styles/GlobalStyles';
-import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/TextInputWithLeftLabel';
-import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes/types/RootStackParamList';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { RouteProp, StackRouterOptions, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { styles } from './RegisterInitialAccountScreenStyles';
+import { styles as globalStyles } from '../../styles/GlobalStyles';
+
+import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/TextInputWithLeftLabel';
+import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
+
 import { accountSchemas } from '../../schemas/accountSchemas';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
+import { Status } from '../../domain/statusEnum';
+
+import * as accountService from '../../services/accountService';
+
 
 export function RegisterInitialAccountScreen() {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  const db = useSQLiteContext();
+
+  const route = useRoute<RouteProp<RootStackParamList, 'RegisterInitialAccount'>>();
+  const {userId} = route.params;
+  
+
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(accountSchemas),
   })
 
-  const handleRegisterAccount = () => {
-    console.log(watch());
+  const handleRegisterAccount = async () => {
+    const formValues = watch();
+    const idConta = await accountService.save(
+      {
+        accountNumber: formValues.accountNumber ?? "",
+        agency: formValues.agency ?? "",
+        balance: Number(formValues.balance) ?? 0,
+        bankCode: formValues.bankCode ?? "",
+        holderName: formValues.holderName ?? "",
+        name: formValues.name,
+        status: Status.Ativo,
+        type: formValues.type
+
+      }, userId, db);
+
+    if(idConta) {
+      Alert.alert("Conta criada!");
+    }
   }
 
   return (
