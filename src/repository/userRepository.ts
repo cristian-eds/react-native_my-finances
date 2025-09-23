@@ -1,8 +1,10 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { User } from "../domain/userModel";
-import bcrypt from "react-native-bcrypt";
 
-async function create(data: Omit<User,"id">, database: SQLiteDatabase): Promise<User | undefined> {
+import { hash } from 'react-native-simple-bcrypt';
+
+
+async function create(data: Omit<User, "id">, database: SQLiteDatabase): Promise<User | undefined> {
 
     const statement = await database.prepareAsync(` 
             INSERT INTO users (name, cpf, password)
@@ -10,15 +12,13 @@ async function create(data: Omit<User,"id">, database: SQLiteDatabase): Promise<
         `);
 
     try {
-        const salt = bcrypt.genSaltSync(10);
-        const passwordHashed = bcrypt.hashSync(data.password, salt);
-
+        const passwordHashed = await hash(data.password, Number(10));
         const params = { $name: data.name, $cpf: data.cpf, $password: passwordHashed };
 
         const result = await statement.executeAsync(params);
         const insertId = result.lastInsertRowId.toLocaleString();
 
-        return {id: Number(insertId), ...data};
+        return { id: Number(insertId), ...data };
     } catch (error) {
         console.error("Error creating user:", error);
     } finally {
@@ -26,23 +26,23 @@ async function create(data: Omit<User,"id">, database: SQLiteDatabase): Promise<
     }
 }
 
-async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<User | undefined>  {
+async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<User | undefined> {
     const statement = (` 
             SELECT * FROM users WHERE cpf = $cpf;
         `);
     try {
         const params = { $cpf: cpf };
-        const user = await database.getFirstAsync<User>(statement,params);
+        const user = await database.getFirstAsync<User>(statement, params);
         if (user) {
             return user;
         }
     } catch (error) {
         console.error("Error getting user:", error);
         return undefined;
-    } 
+    }
 }
 
-async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined>  {
+async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined> {
     const statement = await database.prepareAsync(` 
             SELECT * FROM users JOIN sessions on sessions.user_id = users.id WHERE sessions.session_token = $sessionToken;
         `);

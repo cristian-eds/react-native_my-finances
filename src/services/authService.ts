@@ -1,10 +1,11 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import bcrypt from "react-native-bcrypt";
 import { ResponseUser } from "../domain/responseUser";
 import { UserLogin } from "../domain/userLogin";
 
 import * as userRepository from "../repository/userRepository";
 import { generateSessionToken } from "./sessionTokenService";
+
+import bcrypt from 'react-native-simple-bcrypt';
 
 export async function login(database: SQLiteDatabase, data: UserLogin): Promise<ResponseUser | undefined> {
 
@@ -13,7 +14,7 @@ export async function login(database: SQLiteDatabase, data: UserLogin): Promise<
     if (!user) return { data: null, error: "Usuário não encontrado" };
 
     const hashedPassword = user.password;
-    const isMatch = bcrypt.compareSync(data.password, hashedPassword);
+    const isMatch = await bcrypt.compare(data.password,hashedPassword);
 
     if (!isMatch) return { data: null, error: "Senha incorreta" };
 
