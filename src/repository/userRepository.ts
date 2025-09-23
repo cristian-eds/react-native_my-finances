@@ -27,21 +27,19 @@ async function create(data: Omit<User,"id">, database: SQLiteDatabase): Promise<
 }
 
 async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<User | undefined>  {
-    const statement = await database.prepareAsync(` 
+    const statement = (` 
             SELECT * FROM users WHERE cpf = $cpf;
         `);
     try {
         const params = { $cpf: cpf };
-        const result = await statement.executeAsync<User>(params);
-        const user = await result.getFirstAsync();
+        const user = await database.getFirstAsync<User>(statement,params);
         if (user) {
             return user;
         }
     } catch (error) {
         console.error("Error getting user:", error);
-    } finally {
-        await statement.finalizeAsync();
-    }
+        return undefined;
+    } 
 }
 
 async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined>  {
