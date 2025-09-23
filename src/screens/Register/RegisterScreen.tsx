@@ -33,7 +33,7 @@ export function RegisterScreen() {
       return;
     }
     Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
-    navigation.navigate("RegisterInitialAccount");
+    navigation.navigate("RegisterInitialAccount",{userId: Number(response?.data?.id)});
   }
 
   return (
@@ -43,10 +43,10 @@ export function RegisterScreen() {
       </View>
       <View style={styles.container}>
         <View>
-          <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' errors={errors.name} />
-          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: ' inputMode='numeric' maxLength={11} errors={errors.cpf} />
-          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' secureTextEntry={true} errors={errors.password} />
-          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' secureTextEntry={true} errors={errors.confirmPassword} />
+          <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' placeholderTextColor='#090909e8' errors={errors.name} />
+          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: 'placeholderTextColor='#090909e8'  inputMode='numeric' maxLength={11} errors={errors.cpf} />
+          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8'  secureTextEntry={true} errors={errors.password} />
+          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8'  secureTextEntry={true} errors={errors.confirmPassword} />
         </View>
 
         <View>

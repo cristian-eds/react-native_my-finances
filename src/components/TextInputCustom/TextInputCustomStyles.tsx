@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
   input: {
     fontSize: 18,
     flex: 1,
+    color: 'black'
   },
   error_message: {
     color: 'red',
