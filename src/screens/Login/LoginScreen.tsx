@@ -51,6 +51,7 @@ export function LoginScreen() {
             name="cpf"
             control={control}
             placeholder='CPF:'
+            placeholderTextColor='#090909e8' 
             iconName='perm-identity'
             inputMode='numeric'
             maxLength={11}
@@ -61,6 +62,7 @@ export function LoginScreen() {
             name="password"
             control={control}
             placeholder='Senha:'
+            placeholderTextColor='#090909e8' 
             iconName='lock-outline'
             secureTextEntry={true}
             errors={errors.password}
