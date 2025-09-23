@@ -13,7 +13,9 @@ import { RootStackParamList } from "../routes/types/RootStackParamList";
 
 interface ContentContext {
     user: Omit<User, 'password'> | null,
-    loginUser: (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>) => Promise<ResponseUser | undefined>
+    loginUser: (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>) => Promise<ResponseUser | undefined>,
+    logout: () => void,
+    verifySessionToken: () => void
 }
 
 export const UserContext = createContext<ContentContext | null>(null);
@@ -31,30 +33,35 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             if (account) {
                 setUser(response?.data)
             } else {
-                navigation.navigate("RegisterInitialAccount");
+                navigation.navigate("RegisterInitialAccount", {userId: response.data.id});
             }
         }
         return response;
     }
 
-    useEffect(() => {
-        const verifySessionToken = async () => {
-            const token = await AsyncStorage.getItem("sessionToken");
+    const logout = async () => {
+        setUser(null);
+        await AsyncStorage.removeItem("sessionToken");
+    }
 
-            if (!token) return;
+    const verifySessionToken = async () => {
+        const token = await AsyncStorage.getItem("sessionToken");
 
-            const response = await loginWithSessionToken(db, token);
+        if (!token) return;
 
-            if (response?.data) {
-                setUser(response?.data)
-            }
+        const response = await loginWithSessionToken(db, token);
+
+        if (response?.data) {
+            setUser(response?.data)
         }
+    }
 
+    useEffect(() => {
         verifySessionToken();
     }, [])
 
     return (
-        <UserContext.Provider value={{ user, loginUser }}>
+        <UserContext.Provider value={{ user, loginUser, logout, verifySessionToken }}>
             {children}
         </UserContext.Provider>
     );
