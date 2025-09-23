@@ -1,6 +1,6 @@
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
-  RegisterInitialAccount: undefined;
+  RegisterInitialAccount: {userId: Number};
   WelcomeRegister: undefined;
 };
