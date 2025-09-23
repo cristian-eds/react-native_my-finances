@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
   picker: {
     flex:1,
     borderColor: 'white',
-    borderBottomColor: '#ccc',
     borderRadius: 0,
     top: -2
   },
