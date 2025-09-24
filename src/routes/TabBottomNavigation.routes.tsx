@@ -13,7 +13,7 @@ export function TabBottomNavigationRoutes() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{ headerStyle: { borderBottomLeftRadius: 20, borderBottomStartRadius: 20 },
+      screenOptions={{ headerStyle: { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
                       headerTitleAlign: 'center',
                       headerRight: () => <Button onPress={context?.logout} title="Logou"></Button>
                  }} 
