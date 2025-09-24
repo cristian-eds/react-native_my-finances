@@ -1,0 +1,32 @@
+import React from 'react';
+
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+import { Text, View } from 'react-native';
+
+import { styles } from './CardAccountStyles';
+
+export function CardAccount() {
+    return (
+        <View style={styles.card}>
+            <View style={styles.card_header}>
+                <MaterialIcons name="key" size={28} color="black" />
+                <View style={{alignItems: 'center'}}>
+                    <Text style={{fontSize: 14}}>Conta</Text>
+                    <View style={styles.card_header_account}>
+                        <Text style={styles.card_header_account_title}>Caixa</Text>
+                        <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+                    </View>
+                </View>
+                <MaterialIcons name="add" size={28} color="black" />
+            </View>
+            <View>
+                <Text style={{fontSize: 22}}>Saldo:</Text>
+                <View style={styles.card_info}>
+                    <Text style={styles.card_info_text_balance}>R$ 1.000,00</Text>
+                    <MaterialIcons name="visibility" size={24} color="black" />
+                </View>
+            </View>
+        </View>
+    );
+}
