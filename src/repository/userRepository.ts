@@ -12,8 +12,8 @@ async function create(data: Omit<User, "id">, database: SQLiteDatabase): Promise
         `);
 
     try {
-        const passwordHashed = await hash(data.password, Number(10));
-        const params = { $name: data.name, $cpf: data.cpf, $password: passwordHashed };
+        //const passwordHashed = await hash(data.password, Number(10));
+        const params = { $name: data.name, $cpf: data.cpf, $password: data.password };
 
         const result = await statement.executeAsync(params);
         const insertId = result.lastInsertRowId.toLocaleString();

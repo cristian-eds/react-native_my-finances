@@ -15,7 +15,8 @@ interface ContentContext {
     user: Omit<User, 'password'> | null,
     loginUser: (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>) => Promise<ResponseUser | undefined>,
     logout: () => void,
-    verifySessionToken: () => void
+    verifySessionToken: () => void,
+    handleSetUser: (user: Omit<User, "password">) => void
 }
 
 export const UserContext = createContext<ContentContext | null>(null);
@@ -26,14 +27,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const [user, setUser] = useState<Omit<User, 'password'> | null>(null);
 
-    const loginUser = async (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>): Promise<ResponseUser | undefined> => {
+    const loginUser = async (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>): Promise<ResponseUser> => {
         const response = await login(db, data);
         if (response?.data) {
             const account = await getAccountByUser(response.data.id, db);
             if (account) {
                 setUser(response?.data)
             } else {
-                navigation.navigate("RegisterInitialAccount", {userId: response.data.id});
+                navigation.navigate("RegisterInitialAccount", {user: response.data});
             }
         }
         return response;
@@ -56,12 +57,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
+    const handleSetUser = (user: Omit<User, 'password'>) => {
+        setUser(user);
+    }
+
     useEffect(() => {
         verifySessionToken();
     }, [])
 
     return (
-        <UserContext.Provider value={{ user, loginUser, logout, verifySessionToken }}>
+        <UserContext.Provider value={{ user, loginUser, logout, verifySessionToken, handleSetUser }}>
             {children}
         </UserContext.Provider>
     );
