@@ -15,5 +15,13 @@ export const styles = StyleSheet.create({
     fontSize: 36,
     color: 'black',
     paddingLeft: 10,
+  },
+  container_screens_normal: {
+    backgroundColor: '#E5EBF1',
+    flex:1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 30,
+    rowGap: 15,
   }
 });
