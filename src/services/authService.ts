@@ -7,14 +7,15 @@ import { generateSessionToken } from "./sessionTokenService";
 
 import bcrypt from 'react-native-simple-bcrypt';
 
-export async function login(database: SQLiteDatabase, data: UserLogin): Promise<ResponseUser | undefined> {
+export async function login(database: SQLiteDatabase, data: UserLogin): Promise<ResponseUser> {
 
     const user = await userRepository.findUserByCpf(data.cpf, database);
 
     if (!user) return { data: null, error: "Usuário não encontrado" };
 
-    const hashedPassword = user.password;
-    const isMatch = await bcrypt.compare(data.password,hashedPassword);
+    //const hashedPassword = user.password;
+    //const isMatch = await bcrypt.compare(data.password,hashedPassword);
+    const isMatch = data.password === user.password;
 
     if (!isMatch) return { data: null, error: "Senha incorreta" };
 
