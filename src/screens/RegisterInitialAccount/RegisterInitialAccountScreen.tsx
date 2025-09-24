@@ -5,7 +5,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { RootStackParamList } from '../../routes/types/RootStackParamList';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RouteProp, StackRouterOptions, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { styles } from './RegisterInitialAccountScreenStyles';
@@ -19,6 +19,7 @@ import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/Picker
 import { Status } from '../../domain/statusEnum';
 
 import * as accountService from '../../services/accountService';
+import { UserContext } from '../../context/UserContext';
 
 
 export function RegisterInitialAccountScreen() {
@@ -26,9 +27,10 @@ export function RegisterInitialAccountScreen() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const db = useSQLiteContext();
+  const context = useContext(UserContext);
 
   const route = useRoute<RouteProp<RootStackParamList, 'RegisterInitialAccount'>>();
-  const {userId} = route.params;
+  const {user} = route.params;
   
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
@@ -48,10 +50,11 @@ export function RegisterInitialAccountScreen() {
         status: Status.Ativo,
         type: formValues.type
 
-      }, userId, db);
+      }, Number(user?.id), db);
 
     if(idConta) {
       Alert.alert("Conta criada!");
+      context?.handleSetUser(user);
     }
   }
 

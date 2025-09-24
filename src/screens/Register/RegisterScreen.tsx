@@ -33,7 +33,9 @@ export function RegisterScreen() {
       return;
     }
     Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
-    navigation.navigate("RegisterInitialAccount",{userId: Number(response?.data?.id)});
+    if(response.data) {
+      navigation.navigate("RegisterInitialAccount", {user: response?.data});
+    }
   }
 
   return (
