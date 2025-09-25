@@ -66,13 +66,13 @@ export function RegisterInitialAccountScreen() {
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>Dados da conta</Text>
-          <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
-          <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
-          <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
+          <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' placeholderTextColor='#090909e8' required />
+          <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' placeholderTextColor='#090909e8' required />
+          <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' placeholderTextColor='#090909e8' />
           <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
-          <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
-          <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
-          <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
+          <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' placeholderTextColor='#090909e8' />
+          <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' placeholderTextColor='#090909e8' />
+          <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' placeholderTextColor='#090909e8'/>
         </View>
         <View>
           <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} />
