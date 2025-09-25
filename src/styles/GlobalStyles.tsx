@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     flex:1,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingHorizontal: 30,
+    paddingHorizontal: 25,
     rowGap: 15,
   }
 });

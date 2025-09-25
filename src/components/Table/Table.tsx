@@ -5,27 +5,38 @@ import { styles } from './TableStyles';
 import { SectionList } from 'react-native';
 
 const data = [
-    { id: 1, data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { id: 2, data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { id: 3, data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
+    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
 ];
 
 interface Item {
-    id: Number,
     data: string,
     description: string,
     category: string,
     value: Number
 }
 
-export function Table() {
+interface TableProps {
+    flexArray: number[]
+}
+
+export function Table(props: TableProps) {
+
+    const flexArray = [3, 2, 2, 2];
+
+    console.log(flexArray[0]);
 
     const renderItem = (item: Item) => {
         return (
             <View style={styles.table_row}>
-                {Object.entries(item).map(([key, value]) => (
-                    <View style={[styles.table_row_item, key !== 'id' ? { flex: 2 } : { flex: 1 }]}>
-                        <Text style={styles.table_row_item_text}>{value}</Text>
+                {Object.values(item).map((value, index) => (
+                    <View key={index} style={[styles.table_row_cell, { flex: flexArray[index] }]}>
+                        <Text
+                            style={[styles.table_row_cell_text, index === 0 && { textAlign: 'left' }, index === Object.values(item).length - 1 && { textAlign: 'right' }]}>{value}</Text>
                     </View>
                 ))}
             </View>
@@ -34,10 +45,10 @@ export function Table() {
 
     const renderHeader = (item: string[]) => {
         return (
-            <View style={styles.table_row}>
-                {item.map(item => (
-                    <View style={[styles.table_row_item, item !== 'Id' ? { flex: 2 } : { flex: 1 }]}>
-                        <Text>{item}</Text>
+            <View style={styles.table_row_header}>
+                {item.map((text, index) => (
+                    <View key={index} style={[styles.table_row_cell, { flex: flexArray[index] }]}>
+                        <Text style={[styles.table_row_cell_text, index === 0 && { textAlign: 'left' }, index == item.length - 1 && { textAlign: 'right' }]}>{text}</Text>
                     </View>
                 ))}
             </View>
@@ -47,11 +58,12 @@ export function Table() {
 
     return (
         <View style={styles.table}>
+            {renderHeader(['Data', 'Descrição', 'Categoria', 'Valor'])}
             <FlatList
                 data={data}
-                keyExtractor={(item) => item.id.toLocaleString()}
+                keyExtractor={(item, index) => index.toLocaleString()}
                 renderItem={({ item }) => renderItem(item)}
-               
+
             />
         </View>
     );
