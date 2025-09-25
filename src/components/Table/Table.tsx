@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 
 import { styles } from './TableStyles';
-import { SectionList } from 'react-native';
 
 const data = [
     { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
@@ -27,8 +26,6 @@ interface TableProps {
 export function Table(props: TableProps) {
 
     const flexArray = [3, 2, 2, 2];
-
-    console.log(flexArray[0]);
 
     const renderItem = (item: Item) => {
         return (

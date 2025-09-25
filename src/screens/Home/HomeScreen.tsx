@@ -47,7 +47,7 @@ export function HomeScreen() {
 
                 </View>
             </View>
-            <Table />
+            <Table flexArray={[1,2,3,]}/>
         </View>
     );
 }
