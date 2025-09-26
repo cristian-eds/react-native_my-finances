@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { RootStackParamList } from '../../routes/types/RootStackParamList';
+import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -24,12 +24,12 @@ import { UserContext } from '../../context/UserContext';
 
 export function RegisterInitialAccountScreen() {
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
   const db = useSQLiteContext();
   const context = useContext(UserContext);
 
-  const route = useRoute<RouteProp<RootStackParamList, 'RegisterInitialAccount'>>();
+  const route = useRoute<RouteProp<AuthStackParamList, 'RegisterInitialAccount'>>();
   const {user} = route.params;
   
 

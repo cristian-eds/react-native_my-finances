@@ -2,7 +2,7 @@ import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { RootStackParamList } from '../../routes/types/RootStackParamList';
+import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
 
 import { styles } from './RegisterScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
@@ -19,7 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 export function RegisterScreen() {
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const db = useSQLiteContext();
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({

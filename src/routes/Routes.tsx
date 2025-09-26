@@ -5,6 +5,7 @@ import { TabBottomNavigationRoutes } from './TabBottomNavigation.routes';
 import { AuthStackNavigationRoutes } from './AuthStackNavigation.routes';
 import { StatusBar } from 'expo-status-bar';
 import { UserContext } from '../context/UserContext';
+import { PrincipalStackNavigationRoutes } from './PrincipalStackNavigation.routes';
 
 export function Routes() {
 
@@ -13,7 +14,7 @@ export function Routes() {
   return (
     <NavigationContainer >
       <StatusBar style="auto" />
-      {context?.user ? <TabBottomNavigationRoutes /> : <AuthStackNavigationRoutes />}
+      {context?.user ? <PrincipalStackNavigationRoutes /> : <AuthStackNavigationRoutes />}
     </NavigationContainer>
   );
 }

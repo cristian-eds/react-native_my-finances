@@ -8,12 +8,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getAccountByUser } from "../services/accountService";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../routes/types/RootStackParamList";
+import { AuthStackParamList } from "../routes/types/AuthStackParamList";
 
 
 interface ContentContext {
     user: Omit<User, 'password'> | null,
-    loginUser: (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>) => Promise<ResponseUser | undefined>,
+    loginUser: (data: UserLogin, navigation: StackNavigationProp<AuthStackParamList>) => Promise<ResponseUser | undefined>,
     logout: () => void,
     verifySessionToken: () => void,
     handleSetUser: (user: Omit<User, "password">) => void
@@ -27,7 +27,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const [user, setUser] = useState<Omit<User, 'password'> | null>(null);
 
-    const loginUser = async (data: UserLogin, navigation: StackNavigationProp<RootStackParamList>): Promise<ResponseUser> => {
+    const loginUser = async (data: UserLogin, navigation: StackNavigationProp<AuthStackParamList>): Promise<ResponseUser> => {
         const response = await login(db, data);
         if (response?.data) {
             const account = await getAccountByUser(response.data.id, db);

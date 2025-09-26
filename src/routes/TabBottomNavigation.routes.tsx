@@ -1,10 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../screens/Home/HomeScreen";
-import { Button, Text, View } from "react-native";
+import { Button, Text} from "react-native";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { styles } from './TabBottomNavigationStyles';
 import { ButtonIconTab } from "../components/buttons/ButtonIconTab/ButtonIconTab";

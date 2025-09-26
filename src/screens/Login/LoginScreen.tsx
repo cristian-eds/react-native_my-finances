@@ -4,7 +4,7 @@ import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../routes/types/RootStackParamList';
+import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
 
 import { styles } from './LogingScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
@@ -19,7 +19,7 @@ import { UserContext } from '../../context/UserContext';
 
 export function LoginScreen() {
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
   const context = useContext(UserContext);
 

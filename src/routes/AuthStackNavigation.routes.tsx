@@ -2,10 +2,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { LoginScreen } from "../screens/Login/LoginScreen";
 import { RegisterScreen } from "../screens/Register/RegisterScreen";
 import { RegisterInitialAccountScreen } from "../screens/RegisterInitialAccount/RegisterInitialAccountScreen";
-import { RootStackParamList } from "./types/RootStackParamList";
+import { AuthStackParamList } from "./types/AuthStackParamList";
 import { WelcomeRegisterScreen } from "../screens/WelcomeRegister/WelcomeRegisterScreen";
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<AuthStackParamList>();
 
 export function AuthStackNavigationRoutes() {
   return (

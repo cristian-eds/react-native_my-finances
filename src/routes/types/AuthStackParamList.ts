@@ -1,6 +1,6 @@
 import { User } from "../../domain/userModel";
 
-export type RootStackParamList = {
+export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
   RegisterInitialAccount: {user: Omit<User,"password"> };
