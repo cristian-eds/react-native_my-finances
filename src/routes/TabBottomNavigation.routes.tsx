@@ -7,12 +7,17 @@ import { UserContext } from "../context/UserContext";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { styles } from './TabBottomNavigationStyles';
+import { ButtonIconTab } from "../components/buttons/ButtonIconTab/ButtonIconTab";
 
 const Tab = createBottomTabNavigator();
 
 export function TabBottomNavigationRoutes() {
 
   const context = useContext(UserContext);
+
+  const renderTextLabel = (focused: boolean, title: string) => {
+    return (<Text style={[styles.label, focused && {fontSize: 12}]}>{title}</Text>)
+  }
 
   return (
     <Tab.Navigator
@@ -27,7 +32,8 @@ export function TabBottomNavigationRoutes() {
           height: 102,
           width: "100%",
           flexDirection: 'row',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          gap: 0
         },
       }}
     >
@@ -35,33 +41,24 @@ export function TabBottomNavigationRoutes() {
         name="Lançamentos"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ focused }) =>
-            <View style={styles.icon_tab}>
-              <MaterialIcons name="compare-arrows" size={focused ? 28 : 24} color="black" style={{ top: -10 }} />
-            </View>,
-          tabBarLabel: ({ focused }) => <Text style={styles.label}>Lançamentos</Text>,
+          tabBarIcon: ({ focused }) => <ButtonIconTab focused={focused} iconName="compare-arrows" />,
+          tabBarLabel: ({ focused }) => renderTextLabel(focused, "Lançamentos"),
         }}
       />
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ focused }) =>
-            <View style={styles.icon_tab}>
-              <MaterialIcons name="home" size={focused ? 28 : 24} color="black" style={{ top: -10 }} />
-            </View>,
-          tabBarLabel: ({ focused }) => <Text style={styles.label}>Home</Text>,
+          tabBarIcon: ({ focused }) => <ButtonIconTab focused={focused} iconName="home"/>,
+          tabBarLabel: ({ focused }) => renderTextLabel(focused, "Home"),
         }}
       />
       <Tab.Screen
         name="Finanças"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ focused }) =>
-            <View style={styles.icon_tab}>
-              <MaterialIcons name="attach-money" size={focused ? 28 : 24} color="black" style={{ top: -10 }} />
-            </View>,
-          tabBarLabel: ({ focused }) => <Text style={styles.label}>Finanças</Text>,
+          tabBarIcon: ({ focused }) => <ButtonIconTab focused={focused} iconName="attach-money"/>,
+          tabBarLabel: ({ focused }) => renderTextLabel(focused, "Finanças"),
         }}
       />
     </Tab.Navigator>
