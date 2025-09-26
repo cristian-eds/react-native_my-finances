@@ -5,8 +5,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Text, View } from 'react-native';
 
 import { styles } from './CardAccountStyles';
+import { Account } from '../../domain/accountModel';
 
-export function CardAccount() {
+interface CardAccountProps {
+    account: Account | null
+}
+
+export function CardAccount({account}: CardAccountProps) {
     return (
         <View style={styles.card}>
             <View style={styles.card_header}>
@@ -14,7 +19,7 @@ export function CardAccount() {
                 <View style={{alignItems: 'center'}}>
                     <Text style={{fontSize: 14}}>Conta</Text>
                     <View style={styles.card_header_account}>
-                        <Text style={styles.card_header_account_title}>Caixa</Text>
+                        <Text style={styles.card_header_account_title}>{account?.name}</Text>
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
                     </View>
                 </View>
@@ -23,7 +28,7 @@ export function CardAccount() {
             <View>
                 <Text style={{fontSize: 22}}>Saldo:</Text>
                 <View style={styles.card_info}>
-                    <Text style={styles.card_info_text_balance}>R$ 1.000,00</Text>
+                    <Text style={styles.card_info_text_balance}>R${account?.balance.toFixed(2)}</Text>
                     <MaterialIcons name="visibility" size={24} color="black" />
                 </View>
             </View>

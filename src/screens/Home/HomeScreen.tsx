@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -9,11 +9,31 @@ import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { CardAccount } from '../../components/CardAccount/CardAccount';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
 import { Table } from '../../components/Table/Table';
+import { useUserContext } from '../../hooks/useUserContext';
+import { getAccountByUser } from '../../services/accountService';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Account } from '../../domain/accountModel';
 
 export function HomeScreen() {
+
+    const {user} = useUserContext();
+    const database = useSQLiteContext();
+
+    const [account, setAccount] = useState<Account | null>(null);
+
+    console.log(account);
+    
+    useEffect(()=> {
+        const fetchAccount = async () => {
+            const accountUser = await getAccountByUser(Number(user?.id),database);
+            if(accountUser) setAccount(accountUser);
+        }
+        fetchAccount();
+    },[])
+
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <CardAccount></CardAccount>
+            <CardAccount account={account}/>
             <View style={styles.transactions}>
                 <View style={styles.transactions_infos}>
                     <View style={styles.transactions_infos_item}>
