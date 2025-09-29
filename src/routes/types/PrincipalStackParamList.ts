@@ -2,6 +2,6 @@ import { Account } from "../../domain/accountModel";
 
 
 export type PrincipalStackParamList = {
-    Home: undefined;
+    Main: undefined;
     AccountDetails: {account: Account};
 };

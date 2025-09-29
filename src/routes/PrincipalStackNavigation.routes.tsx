@@ -9,7 +9,7 @@ const Stack = createStackNavigator<PrincipalStackParamList>();
 export function PrincipalStackNavigationRoutes() {
     return (
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={TabBottomNavigationRoutes}/>
+            <Stack.Screen name="Main" component={TabBottomNavigationRoutes}/>
             <Stack.Screen name="AccountDetails" component={AccountDetails} options={{
                 headerShown: true,
             }}/>
