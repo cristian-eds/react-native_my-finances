@@ -20,8 +20,6 @@ export function HomeScreen() {
     const database = useSQLiteContext();
 
     const [account, setAccount] = useState<Account | null>(null);
-
-    console.log(account);
     
     useEffect(()=> {
         const fetchAccount = async () => {
@@ -29,7 +27,7 @@ export function HomeScreen() {
             if(accountUser) setAccount(accountUser);
         }
         fetchAccount();
-    },[])
+    },[user])
 
     return (
         <View style={GlobalStyles.container_screens_normal}>

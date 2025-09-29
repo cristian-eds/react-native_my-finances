@@ -44,7 +44,7 @@ async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<Use
 
 async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined> {
     const statement = await database.prepareAsync(` 
-            SELECT * FROM users JOIN sessions on sessions.user_id = users.id WHERE sessions.session_token = $sessionToken;
+            SELECT users.id, users.name, users.cpf FROM users JOIN sessions on sessions.user_id = users.id WHERE sessions.session_token = $sessionToken;
         `);
     try {
         const params = { $sessionToken: sessionToken };

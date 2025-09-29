@@ -4,9 +4,7 @@ import * as accountRepository from '../repository/accountRepository'
 import { Account } from "../domain/accountModel";
 
 export async function getAccountByUser(userId: Number, database: SQLiteDatabase) {
-    
     const account = await accountRepository.findAccountByUser(userId.toLocaleString(), database);
-
     return account;
 }
 
