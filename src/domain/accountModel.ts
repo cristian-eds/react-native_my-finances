@@ -11,4 +11,5 @@ export interface Account {
     agency: string;
     holderName: string;
     status: Status;
+    creationDate: string;
 }
