@@ -29,7 +29,11 @@ const migrations = [
             user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
+    `,
     `
+        ALTER TABLE account ADD COLUMN IF NOT EXISTS creation_date DATETIME;
+    `
+    
 ];
 
 export default migrations;
