@@ -2,18 +2,30 @@ import React from 'react';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './CardAccountStyles';
 import { Account } from '../../domain/accountModel';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
 
 interface CardAccountProps {
     account: Account | null
 }
 
 export function CardAccount({account}: CardAccountProps) {
+
+    const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
+
+    const handleNavigateToAccountDetails = () => {
+        if(account) {
+            navigation.navigate('AccountDetails', {account: account});
+        }
+    }
+
     return (
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={handleNavigateToAccountDetails}>
             <View style={styles.card_header}>
                 <MaterialIcons name="key" size={28} color="black" />
                 <View style={{alignItems: 'center'}}>
@@ -32,6 +44,6 @@ export function CardAccount({account}: CardAccountProps) {
                     <MaterialIcons name="visibility" size={24} color="black" />
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
