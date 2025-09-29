@@ -15,6 +15,6 @@ export const styles = StyleSheet.create({
         gap: 5
     },
     text_button: {
-        fontSize: 22
+        fontSize: 20
     }
 });
