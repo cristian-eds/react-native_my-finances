@@ -12,23 +12,23 @@ interface TextInputWithLeftLabelProps {
   control: any,
   required?: boolean;
   errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> | undefined;
-  defaultValue?: string | number;
+  defaultValueProp?: string | number;
 }
 
 type Props = TextInputWithLeftLabelProps & TextInputProps;
 
-export function TextInpuWithLeftLabel({ name, title, control, required = false, errors,defaultValue, ...props }: Props) {
+export function TextInpuWithLeftLabel({ name, title, control, required = false, errors,defaultValueProp, ...props }: Props) {
 
   const { field } = useController({
     name,
     control,
-    defaultValue: defaultValue || '',
+    defaultValue: defaultValueProp || ' ',
   })
 
 
   return (
     <RowWithLeftLabel labelText={title} errors={errors} required={required}>
-      <TextInput {...props} style={styles.input} value={field.value} onChangeText={field.onChange} />
+      <TextInput {...props} style={styles.input} value={field.value} onChangeText={field.onChange} placeholderTextColor='#090909e8'/>
     </RowWithLeftLabel>
   );
 }
