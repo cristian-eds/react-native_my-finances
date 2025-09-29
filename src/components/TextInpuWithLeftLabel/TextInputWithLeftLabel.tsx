@@ -12,16 +12,17 @@ interface TextInputWithLeftLabelProps {
   control: any,
   required?: boolean;
   errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> | undefined;
+  defaultValue?: string | number;
 }
 
 type Props = TextInputWithLeftLabelProps & TextInputProps;
 
-export function TextInpuWithLeftLabel({ name, title, control, required = false, errors, ...props }: Props) {
+export function TextInpuWithLeftLabel({ name, title, control, required = false, errors,defaultValue, ...props }: Props) {
 
   const { field } = useController({
     name,
     control,
-    defaultValue: ''
+    defaultValue: defaultValue || '',
   })
 
 
