@@ -48,8 +48,8 @@ export function RegisterInitialAccountScreen() {
         holderName: formValues.holderName ?? "",
         name: formValues.name,
         status: Status.Ativo,
-        type: formValues.type
-
+        type: formValues.type,
+        creationDate: new Date().toISOString(),
       }, Number(user?.id), db);
 
     if(idConta) {
