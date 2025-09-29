@@ -1,8 +1,9 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { Account } from "../domain/accountModel";
+import { UpdateAccountModel } from "../domain/updateAccountModel";
+import { AccountRecord } from "./models/AccountRecord";
 
-
-export async function findAccountByUser(userId: string, database: SQLiteDatabase) {
+export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord | undefined> {
 
     const statement = await database.prepareAsync(` 
             SELECT * FROM account 
@@ -11,10 +12,10 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
 
     try {
         const params = { $userId: userId };
-        const result = await statement.executeAsync<Account>(params);
+        const result = await statement.executeAsync<AccountRecord>(params);
         const account = await result.getFirstAsync();
         if (account) {
-            return account;
+            return account
         }
     } catch (error) {
         console.error("Error getting account:", error);
@@ -23,28 +24,63 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
     }
 }
 
-export async function create(account: Omit<Account, "id">, userId: string ,database: SQLiteDatabase) : Promise<Number | undefined> {
+export async function create(account: Omit<Account, "id">, userId: string, database: SQLiteDatabase): Promise<Number | undefined> {
     const statement = await database.prepareAsync(` 
             INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id)
             VALUES ($name, $balance, $bankCode, $type, $accountNumber, $agency, $holderName, $status, $userId);
         `);
 
     try {
-        const params = {$name: account.name, 
-                        $balance: account.balance, 
-                        $bankCode: account.bankCode, 
-                        $type: account.type, 
-                        $accountNumber: account.accountNumber, 
-                        $agency: account.agency, 
-                        $holderName: account.holderName, 
-                        $status: account.status, 
-                        $userId: userId};
+        const params = {
+            $name: account.name,
+            $balance: account.balance,
+            $bankCode: account.bankCode,
+            $type: account.type,
+            $accountNumber: account.accountNumber,
+            $agency: account.agency,
+            $holderName: account.holderName,
+            $status: account.status,
+            $userId: userId
+        };
 
         const result = await statement.executeAsync<Account>(params);
 
         return result.lastInsertRowId;
     } catch (error) {
         console.error("Error creating account:", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
+}
+
+export async function update(account: UpdateAccountModel, database: SQLiteDatabase) {
+    console.log('Updating account:', account);
+    const statement = await database.prepareAsync(` 
+            UPDATE account  
+            SET name = $name, 
+                bank_code = $bankCode,  
+                type = $type,
+                account_number = $accountNumber,
+                agency = $agency,
+                holder_name = $holderName
+            WHERE id = $id;
+        `);
+
+    try {
+        const params = {
+            $name: account.name,
+            $bankCode: account.bankCode,
+            $type: account.type,
+            $accountNumber: account.accountNumber,
+            $agency: account.agency,
+            $holderName: account.holderName,
+            $id: account.id
+        };
+        const response = await statement.executeAsync(params);
+        console.log('Update response:', response);
+        return response.changes > 0;
+    } catch (error) {
+        console.error("Error updating account:", error);
     } finally {
         await statement.finalizeAsync();
     }
