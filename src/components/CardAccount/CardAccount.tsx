@@ -9,18 +9,18 @@ import { Account } from '../../domain/accountModel';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
+import { useStore } from '../../../store';
 
-interface CardAccountProps {
-    account: Account | null
-}
 
-export function CardAccount({account}: CardAccountProps) {
+export function CardAccount() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
+    const {activeAccount} = useStore();
+
     const handleNavigateToAccountDetails = () => {
-        if(account) {
-            navigation.navigate('AccountDetails', {account: account});
+        if(activeAccount) {
+            navigation.navigate('AccountDetails', {account: activeAccount});
         }
     }
 
@@ -31,7 +31,7 @@ export function CardAccount({account}: CardAccountProps) {
                 <View style={{alignItems: 'center'}}>
                     <Text style={{fontSize: 14}}>Conta</Text>
                     <View style={styles.card_header_account}>
-                        <Text style={styles.card_header_account_title}>{account?.name}</Text>
+                        <Text style={styles.card_header_account_title}>{activeAccount?.name}</Text>
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
                     </View>
                 </View>
@@ -40,7 +40,7 @@ export function CardAccount({account}: CardAccountProps) {
             <View>
                 <Text style={{fontSize: 22}}>Saldo:</Text>
                 <View style={styles.card_info}>
-                    <Text style={styles.card_info_text_balance}>R${account?.balance.toFixed(2)}</Text>
+                    <Text style={styles.card_info_text_balance}>R${activeAccount?.balance.toFixed(2)}</Text>
                     <MaterialIcons name="visibility" size={24} color="black" />
                 </View>
             </View>

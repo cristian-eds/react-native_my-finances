@@ -12,26 +12,30 @@ import { Table } from '../../components/Table/Table';
 import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
-import { Account } from '../../domain/accountModel';
+import { useStore } from '../../../store';
+import { set } from 'zod';
 
 export function HomeScreen() {
 
     const {user} = useUserContext();
     const database = useSQLiteContext();
 
-    const [account, setAccount] = useState<Account | null>(null);
+    const {accounts, activeAccount, setActiveAccount, setAccounts} = useStore();
     
     useEffect(()=> {
         const fetchAccount = async () => {
-            const accountUser = await getAccountByUser(Number(user?.id),database);
-            if(accountUser) setAccount(accountUser);
+            const accountsUser = await getAccountByUser(Number(user?.id),database);
+            if(accountsUser) {
+                setAccounts(accountsUser);
+                setActiveAccount(accountsUser[0])
+            };
         }
         fetchAccount();
     },[user])
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <CardAccount account={account}/>
+            <CardAccount />
             <View style={styles.transactions}>
                 <View style={styles.transactions_infos}>
                     <View style={styles.transactions_infos_item}>
