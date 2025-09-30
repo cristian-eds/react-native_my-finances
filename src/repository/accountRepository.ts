@@ -2,6 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { AccountRecord } from "./models/AccountRecord";
+import { Status } from "../domain/statusEnum";
 
 export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord[] | undefined> {
 
@@ -84,3 +85,47 @@ export async function update(account: UpdateAccountModel, database: SQLiteDataba
         await statement.finalizeAsync();
     }
 }
+
+export async function toggleStatusAccount(accountId: Number, database: SQLiteDatabase): Promise<boolean> {
+    const statement = await database.prepareAsync(` 
+            UPDATE account  
+            SET status = $status
+            WHERE id = $id;
+        `);
+    try {
+        const currentStatus = await getAccountStatus(accountId, database);
+    
+        if (!currentStatus) return false;
+
+        const params = { $id: accountId.toLocaleString(), $status: currentStatus === Status.Ativo ? Status.Inativo : Status.Ativo };
+        const response = await statement.executeAsync(params);
+        return response.changes > 0;
+    } catch (error) {
+        console.error("Error inactivating account:", error);
+        return false;
+    } finally {
+        await statement.finalizeAsync();
+    }
+}
+
+async function getAccountStatus(accountId: Number, database: SQLiteDatabase): Promise<string | undefined> {
+    const statement = await database.prepareAsync(` 
+            SELECT status FROM account 
+            WHERE id = $id;
+        `); 
+
+    try { 
+        const params = { $id: accountId.toLocaleString() };
+        const result = await statement.executeAsync<Account>(params);
+        const account = await result.getFirstAsync();    
+        if (account) {
+            return account.status;
+        }   
+        return undefined;
+    } catch (error) {
+        console.error("Error getting account status:", error);
+        return undefined;
+    }   finally {
+        await statement.finalizeAsync();
+    }
+}   

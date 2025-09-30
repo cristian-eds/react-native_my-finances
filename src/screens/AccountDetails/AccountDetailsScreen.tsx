@@ -21,10 +21,11 @@ import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
 
 import { useStore } from '../../../store';
 import { TypeAccount } from '../../domain/typeAccountEnum';
+import { Status } from '../../domain/statusEnum';
 
 export function AccountDetails() {
 
-    const { activeAccount, updateAccount } = useStore();
+    const { activeAccount, updateAccount, toggleStatusAccount } = useStore();
 
     const { control, handleSubmit, watch, formState: { errors, isDirty }, reset } = useForm({
         resolver: zodResolver(updateAccountSchemas),
@@ -39,7 +40,6 @@ export function AccountDetails() {
     })
 
     const db = useSQLiteContext();
-
 
     const handleUpdateAccount = async () => {
         const formValues = watch();
@@ -57,6 +57,10 @@ export function AccountDetails() {
             Alert.alert("Conta atualizada com sucesso!");
             reset(newData);
         }
+    }
+
+    const handleToggleStatusAccount = () => {
+        const isToggled = toggleStatusAccount(activeAccount?.id as number, db);
     }
 
     return (
@@ -86,7 +90,7 @@ export function AccountDetails() {
                     <Text>20/09/2025</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 50 }}>
-                    <Text>Ativo</Text>
+                    <Text>{activeAccount?.status}</Text>
                 </RowWithLeftLabel>
 
             </View>
@@ -95,7 +99,7 @@ export function AccountDetails() {
                     <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 20, marginBottom: 0 }} />
                     <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 20 }} />
                 </> : <>
-                    <ButtonPrincipal title='Inativar conta' style={{ marginTop: 20, marginBottom: 0 }} />
+                    <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar':'Ativar'} conta`} style={{ marginTop: 20, marginBottom: 0 }} onPress={handleToggleStatusAccount}/>
                     <ButtonPrincipal title='Excluir conta' style={{ marginTop: 20 }} />
                 </>}
 

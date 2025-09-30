@@ -18,3 +18,7 @@ export async function save(account: Omit<Account, "id">, userId: Number, databas
 export async function update(account: UpdateAccountModel, database: SQLiteDatabase): Promise<boolean>  {
     return await accountRepository.update(account, database);
 }
+
+export async function toggleStatusAccount(accountId: Number, database: SQLiteDatabase): Promise<boolean>  {
+    return await accountRepository.toggleStatusAccount(accountId, database);
+}
