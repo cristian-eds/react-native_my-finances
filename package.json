@@ -28,7 +28,8 @@
     "react-native-screens": "~4.16.0",
     "react-native-simple-bcrypt": "^0.3.0",
     "react-native-uuid": "^2.0.3",
-    "zod": "^4.1.9"
+    "zod": "^4.1.9",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
