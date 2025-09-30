@@ -43,6 +43,8 @@ export function PickerWithLeftLabel({ labelText, required, name, control, errors
                 textStyle={styles.picker_text}
                 dropDownContainerStyle={styles.dropdownList}
                 placeholder='Selecione um item'
+                maxHeight={200}
+                listMode='SCROLLVIEW'
 
             />
         </RowWithLeftLabel>
