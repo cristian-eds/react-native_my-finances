@@ -15,3 +15,7 @@ export function toAccountDomainModel(record: AccountRecord): Account {
         creationDate: record.creation_date
     };
 }
+
+export function toAccountDomainModelList(records: AccountRecord[]): Account[] {
+    return records.map(toAccountDomainModel);
+}
