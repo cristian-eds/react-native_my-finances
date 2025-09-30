@@ -3,7 +3,7 @@ import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { AccountRecord } from "./models/AccountRecord";
 
-export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord | undefined> {
+export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord[] | undefined> {
 
     const statement = await database.prepareAsync(` 
             SELECT * FROM account 
@@ -13,9 +13,9 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
     try {
         const params = { $userId: userId };
         const result = await statement.executeAsync<AccountRecord>(params);
-        const account = await result.getFirstAsync();
-        if (account) {
-            return account
+        const accounts = await result.getAllAsync();
+        if (accounts) {
+            return accounts
         }
     } catch (error) {
         console.error("Error getting account:", error);
@@ -53,8 +53,7 @@ export async function create(account: Omit<Account, "id">, userId: string, datab
     }
 }
 
-export async function update(account: UpdateAccountModel, database: SQLiteDatabase) {
-    console.log('Updating account:', account);
+export async function update(account: UpdateAccountModel, database: SQLiteDatabase): Promise<boolean> {
     const statement = await database.prepareAsync(` 
             UPDATE account  
             SET name = $name, 
@@ -77,10 +76,10 @@ export async function update(account: UpdateAccountModel, database: SQLiteDataba
             $id: account.id
         };
         const response = await statement.executeAsync(params);
-        console.log('Update response:', response);
         return response.changes > 0;
     } catch (error) {
         console.error("Error updating account:", error);
+        return false;
     } finally {
         await statement.finalizeAsync();
     }
