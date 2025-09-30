@@ -31,7 +31,7 @@ const migrations = [
     );
     `,
     `
-        ALTER TABLE account ADD COLUMN IF NOT EXISTS creation_date DATETIME;
+        ALTER TABLE account ADD COLUMN creation_date DATETIME;
     `
     
 ];
