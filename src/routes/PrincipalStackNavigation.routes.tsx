@@ -12,6 +12,7 @@ export function PrincipalStackNavigationRoutes() {
             <Stack.Screen name="Main" component={TabBottomNavigationRoutes}/>
             <Stack.Screen name="AccountDetails" component={AccountDetails} options={{
                 headerShown: true,
+                title: 'Detalhes da Conta',
             }}/>
         </Stack.Navigator>
     )

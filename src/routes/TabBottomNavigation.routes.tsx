@@ -49,6 +49,7 @@ export function TabBottomNavigationRoutes() {
         options={{
           tabBarIcon: ({ focused }) => <ButtonIconTab focused={focused} iconName="home"/>,
           tabBarLabel: ({ focused }) => renderTextLabel(focused, "Home"),
+          title: ""
         }}
       />
       <Tab.Screen
