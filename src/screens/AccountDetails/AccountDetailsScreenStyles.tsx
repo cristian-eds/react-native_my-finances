@@ -11,8 +11,9 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     title_section: {
-        fontSize: 22,
-        marginBottom: 5,
-        paddingLeft:5
+        fontSize: 20,
+        paddingLeft:5,
+        fontStyle: 'italic',
+        textAlign: 'center'
     }
 });

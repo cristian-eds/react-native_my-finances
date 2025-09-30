@@ -60,11 +60,11 @@ export function AccountDetails() {
     }
 
     const handleToggleStatusAccount = () => {
-        const isToggled = toggleStatusAccount(activeAccount?.id as number, db);
+        toggleStatusAccount(activeAccount?.id as number, db);
     }
 
     return (
-        <ScrollView style={GlobalStyles.container_screens_normal}>
+        <ScrollView style={[GlobalStyles.container_screens_normal, { paddingBottom: 100 }]}>
             <View style={styles.header}>
                 <View>
                     <Text style={{ fontSize: 16 }}>Conta</Text>
@@ -76,7 +76,7 @@ export function AccountDetails() {
                 <ButtonPlus />
             </View>
             <View>
-                <Text style={styles.title_section}>Dados da conta</Text>
+                <Text style={[styles.title_section,{marginTop: 10}]}>Dados da conta</Text>
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
                 <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
@@ -86,21 +86,21 @@ export function AccountDetails() {
 
                 <Text style={[styles.title_section, { marginTop: 15 }]}>Informações</Text>
 
-                <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 50 }}>
+                <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>20/09/2025</Text>
                 </RowWithLeftLabel>
-                <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 50 }}>
+                <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.status}</Text>
                 </RowWithLeftLabel>
 
             </View>
             <View>
                 {isDirty ? <>
-                    <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 20, marginBottom: 0 }} />
-                    <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 20 }} />
+                    <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 15, marginBottom: 0 }} />
+                    <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
                 </> : <>
-                    <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar':'Ativar'} conta`} style={{ marginTop: 20, marginBottom: 0 }} onPress={handleToggleStatusAccount}/>
-                    <ButtonPrincipal title='Excluir conta' style={{ marginTop: 20 }} />
+                    <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar' : 'Ativar'} conta`} style={{ marginTop: 15, marginBottom: 0 }} onPress={handleToggleStatusAccount} />
+                    <ButtonPrincipal title='Excluir conta' style={{ marginTop: 15 }} />
                 </>}
 
             </View>
