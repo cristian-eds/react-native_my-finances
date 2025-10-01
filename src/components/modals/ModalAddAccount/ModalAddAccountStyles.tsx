@@ -13,18 +13,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        gap: 15,
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',  
-        height: 30  
     },
     title: {
         fontSize: 24,
         textAlign: 'center',
         marginBottom: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+    },
+    body:{
+        
     },
     buttons_footer: {
         justifyContent: 'center',

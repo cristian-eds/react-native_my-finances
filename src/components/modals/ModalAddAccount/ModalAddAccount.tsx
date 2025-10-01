@@ -1,4 +1,4 @@
-import { Text, View, Modal } from 'react-native'
+import { Text, View, Modal, Alert } from 'react-native'
 import React from 'react'
 
 import { styles } from './ModalAddAccountStyles'
@@ -9,29 +9,79 @@ import { accountSchemas } from '../../../schemas/accountSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
+import { TypeAccount } from '../../../domain/typeAccountEnum';
+import { Status } from '../../../domain/statusEnum';
+import { useUserContext } from '../../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
+
+import { useAccountStore } from '../../../stores/AccountStore';
 
 interface ModalAddAccountProps {
     isShow: boolean;
+    closeModal: () => void;
 }
 
-const ModalAddAccount = ({ isShow }: ModalAddAccountProps) => {
+const ModalAddAccount = ({ isShow, closeModal }: ModalAddAccountProps) => {
 
-    const { control, handleSubmit, watch, formState: { errors } } = useForm({
+    const context = useUserContext();
+    const db = useSQLiteContext();
+
+    const { createAccount } = useAccountStore();
+
+    const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(accountSchemas),
+        defaultValues: {
+            name: '',
+            balance: 0,
+            bankCode: '',
+            type: TypeAccount.Corrente,
+            accountNumber: '',
+            agency: '',
+            holderName: ''
+        }
     })
+
+    const handleRegisterAccount = async () => {
+        const formValues = watch();
+        const newAccount = {
+            accountNumber: formValues.accountNumber ?? "",
+            agency: formValues.agency ?? "",
+            balance: Number(formValues.balance) ?? 0,
+            bankCode: formValues.bankCode ?? "",
+            holderName: formValues.holderName ?? "",
+            name: formValues.name,
+            status: Status.Ativo,
+            type: formValues.type,
+            creationDate: new Date().toISOString(),
+        };
+
+        const idNewAccount = await createAccount(newAccount, context.user?.id as number, db);
+
+        if(idNewAccount) {
+            Alert.alert("Sucesso", "Conta criada com sucesso!");
+            handleCloseModal();
+        }
+
+    }
+
+    const handleCloseModal = () => {
+        reset();
+        closeModal();
+    }
 
     return (
         <Modal
             animationType="slide"
             transparent={true}
             visible={isShow}
+            statusBarTranslucent={true}
         >
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack />
+                        <ButtonBack onPress={handleCloseModal} />
                     </View>
-                    <View>
+                    <View style={styles.body}>
                         <Text style={styles.title}>Nova Conta</Text>
                         <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
                         <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
@@ -42,8 +92,8 @@ const ModalAddAccount = ({ isShow }: ModalAddAccountProps) => {
                         <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
                     </View>
                     <View style={styles.buttons_footer}>
-                        <ButtonPrincipal title='Cadastrar' onPress={() => { }} />
-                        <ButtonPrincipal title='Cancelar' onPress={() => { }} />
+                        <ButtonPrincipal title='Cadastrar' onPress={handleSubmit(handleRegisterAccount)} />
+                        <ButtonPrincipal title='Cancelar' onPress={handleCloseModal} />
                     </View>
                 </View>
             </View>
