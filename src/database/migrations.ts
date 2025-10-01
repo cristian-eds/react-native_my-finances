@@ -19,7 +19,7 @@ const migrations = [
         CREATE TABLE IF NOT EXISTS account (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            balance REAL NOT NULL UNIQUE,
+            balance REAL NOT NULL,
             bank_code TEXT,
             type TEXT,
             account_number TEXT,
