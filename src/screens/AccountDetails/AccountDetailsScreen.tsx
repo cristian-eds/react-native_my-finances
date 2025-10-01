@@ -19,14 +19,14 @@ import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/Button
 import { RowWithLeftLabel } from '../../components/RowWithLeftLabel/RowWithLeftLabel';
 import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
 
-import { useStore } from '../../../store';
+import { useAccountStore } from '../../stores/AccountStore';
 import { TypeAccount } from '../../domain/typeAccountEnum';
 import { Status } from '../../domain/statusEnum';
 import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
 
 export function AccountDetails() {
 
-    const { activeAccount, updateAccount, toggleStatusAccount } = useStore();
+    const { activeAccount, updateAccount, toggleStatusAccount } = useAccountStore();
     const db = useSQLiteContext();
 
     const [showModalAddAccount, setShowModalAddAccount] = useState(false);
@@ -95,7 +95,7 @@ export function AccountDetails() {
                 <Text style={[styles.title_section, { marginTop: 15 }]}>Informações</Text>
 
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    <Text>20/09/2025</Text>
+                    <Text>{activeAccount?.creationDate}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.status}</Text>
@@ -112,7 +112,7 @@ export function AccountDetails() {
                 </>}
 
             </View>
-            <ModalAddAccount isShow={showModalAddAccount} />
+            <ModalAddAccount isShow={showModalAddAccount} closeModal={() => setShowModalAddAccount(false)}/>
         </ScrollView>
     );
 }
