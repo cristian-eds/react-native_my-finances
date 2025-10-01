@@ -5,7 +5,6 @@ import { styles } from './ButtonPlusStyles';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-
 type Props = TouchableOpacityProps
 
 export function ButtonPlus({...props}: Props) {
