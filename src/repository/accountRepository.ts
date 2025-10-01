@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
-import { AccountRecord } from "./models/AccountRecord";
+import { AccountRecord } from "./records/AccountRecord";
 import { Status } from "../domain/statusEnum";
 
 export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord[] | undefined> {
@@ -25,7 +25,7 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
     }
 }
 
-export async function create(account: Omit<Account, "id">, userId: string, database: SQLiteDatabase): Promise<Number | undefined> {
+export async function create(account: Omit<Account, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
     const statement = await database.prepareAsync(` 
             INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id)
             VALUES ($name, $balance, $bankCode, $type, $accountNumber, $agency, $holderName, $status, $userId);

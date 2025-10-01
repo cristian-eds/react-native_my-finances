@@ -12,15 +12,14 @@ import { Table } from '../../components/Table/Table';
 import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useStore } from '../../../store';
-import { set } from 'zod';
+import { useAccountStore} from '../../stores/AccountStore';
 
 export function HomeScreen() {
 
     const {user} = useUserContext();
     const database = useSQLiteContext();
 
-    const {accounts, activeAccount, setActiveAccount, setAccounts} = useStore();
+    const {accounts, activeAccount, setActiveAccount, setAccounts} = useAccountStore();
     
     useEffect(()=> {
         const fetchAccount = async () => {

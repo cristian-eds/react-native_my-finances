@@ -5,18 +5,17 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './CardAccountStyles';
-import { Account } from '../../domain/accountModel';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
-import { useStore } from '../../../store';
+import { useAccountStore } from '../../stores/AccountStore';
 
 
 export function CardAccount() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    const {activeAccount} = useStore();
+    const {activeAccount} = useAccountStore();
 
     const handleNavigateToAccountDetails = () => {
         if(activeAccount) {
