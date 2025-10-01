@@ -19,7 +19,7 @@ export function HomeScreen() {
     const {user} = useUserContext();
     const database = useSQLiteContext();
 
-    const {accounts, activeAccount, setActiveAccount, setAccounts} = useAccountStore();
+    const {setActiveAccount, setAccounts} = useAccountStore();
     
     useEffect(()=> {
         const fetchAccount = async () => {

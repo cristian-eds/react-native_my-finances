@@ -38,7 +38,7 @@ export function PickerWithLeftLabel({ labelText, required, name, control, errors
                         field.onChange(newValue)}
                 }
                 items={itemsToDropDown}
-                containerStyle={styles.cotainer_picker}
+                containerStyle={styles.container_picker}
                 style={styles.picker}
                 textStyle={styles.picker_text}
                 dropDownContainerStyle={styles.dropdownList}

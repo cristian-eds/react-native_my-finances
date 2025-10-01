@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  cotainer_picker: {
+  container_picker: {
     flex: 1,
     height: 45,
     fontSize: 16,

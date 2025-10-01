@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
 import { useAccountStore } from '../../stores/AccountStore';
+import { SelectAccount } from '../SelectAccount/SelectAccount';
 
 
 export function CardAccount() {
@@ -25,16 +26,13 @@ export function CardAccount() {
 
     return (
         <TouchableOpacity style={styles.card} onPress={handleNavigateToAccountDetails}>
+            <Text style={{fontSize: 14,textAlign: 'center'}}>Conta</Text>
             <View style={styles.card_header}>
-                <MaterialIcons name="key" size={28} color="black" />
-                <View style={{alignItems: 'center'}}>
-                    <Text style={{fontSize: 14}}>Conta</Text>
-                    <View style={styles.card_header_account}>
-                        <Text style={styles.card_header_account_title}>{activeAccount?.name}</Text>
-                        <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
-                    </View>
+                <MaterialIcons name="key" size={28} color="black" style={{flex:1}}/>
+                <View style={{alignItems: 'center', flex:4}}>
+                    <SelectAccount />
                 </View>
-                <MaterialIcons name="add" size={28} color="black" />
+                <MaterialIcons name="add" size={28} color="black" style={{flex:1, textAlign: 'right'}}/>
             </View>
             <View>
                 <Text style={{fontSize: 22}}>Saldo:</Text>
