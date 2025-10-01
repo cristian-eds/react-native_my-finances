@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { Account } from "./src/domain/accountModel";
+import { Account } from "../domain/accountModel";
 
-import * as accountService from './src/services/accountService';
+import * as accountService from '../services/accountService';
 import { SQLiteDatabase } from "expo-sqlite";
-import { UpdateAccountModel } from "./src/domain/updateAccountModel";
-import { Status } from "./src/domain/statusEnum";
+import { UpdateAccountModel } from "../domain/updateAccountModel";
+import { Status } from "../domain/statusEnum";
 
 type Store = {
     accounts: Account[];
@@ -13,11 +13,12 @@ type Store = {
     setAccounts: (accounts: Account[]) => void;
     setActiveAccount: (account: Account) => void;
 
+    createAccount: (account: Omit<Account, "id">, userId: number ,database: SQLiteDatabase) => Promise<boolean>;
     updateAccount: (account: UpdateAccountModel, database: SQLiteDatabase) => Promise<boolean>;
-    toggleStatusAccount: (accountId: Number, database: SQLiteDatabase) => Promise<boolean>;
+    toggleStatusAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
 }
 
-export const useStore = create<Store>((set, get) => ({
+export const useAccountStore = create<Store>((set, get) => ({
     accounts: [],
     activeAccount: null,
 
@@ -61,5 +62,17 @@ export const useStore = create<Store>((set, get) => ({
             return false;
         }
     },
+    createAccount: async (account, userId,database) => {
+        try {
+            const accountId = await accountService.save(account, userId, database);
+            if (!accountId) return false;
+            set({ accounts: [...get().accounts, { ...account, id: accountId }] });
+            set({ activeAccount: { ...account, id: accountId } });
+            return true;
+        }   catch (error) {
+            return false;
+        }
+    }
+    
 }));
 
