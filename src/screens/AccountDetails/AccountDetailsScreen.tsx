@@ -1,4 +1,4 @@
-import React from 'react';
+import  { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -22,10 +22,14 @@ import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
 import { useStore } from '../../../store';
 import { TypeAccount } from '../../domain/typeAccountEnum';
 import { Status } from '../../domain/statusEnum';
+import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
 
 export function AccountDetails() {
 
     const { activeAccount, updateAccount, toggleStatusAccount } = useStore();
+    const db = useSQLiteContext();
+
+    const [showModalAddAccount, setShowModalAddAccount] = useState(false);
 
     const { control, handleSubmit, watch, formState: { errors, isDirty }, reset } = useForm({
         resolver: zodResolver(updateAccountSchemas),
@@ -39,7 +43,7 @@ export function AccountDetails() {
         }
     })
 
-    const db = useSQLiteContext();
+
 
     const handleUpdateAccount = async () => {
         const formValues = watch();
@@ -63,6 +67,10 @@ export function AccountDetails() {
         toggleStatusAccount(activeAccount?.id as number, db);
     }
 
+    const handleShowModalAddAccount = () => {
+        setShowModalAddAccount(true);
+    }
+
     return (
         <ScrollView style={[GlobalStyles.container_screens_normal, { paddingBottom: 100 }]}>
             <View style={styles.header}>
@@ -73,7 +81,7 @@ export function AccountDetails() {
                         <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
                     </View>
                 </View>
-                <ButtonPlus />
+                <ButtonPlus onPress={handleShowModalAddAccount}/>
             </View>
             <View>
                 <Text style={[styles.title_section,{marginTop: 10}]}>Dados da conta</Text>
@@ -104,6 +112,7 @@ export function AccountDetails() {
                 </>}
 
             </View>
+            <ModalAddAccount isShow={showModalAddAccount} />
         </ScrollView>
     );
 }
