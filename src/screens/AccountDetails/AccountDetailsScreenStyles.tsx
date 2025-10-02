@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        zIndex: 5,
     },
     title_account: {
         fontSize: 36,

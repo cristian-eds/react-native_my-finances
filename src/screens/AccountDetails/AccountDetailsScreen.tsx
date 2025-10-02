@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -23,6 +23,8 @@ import { useAccountStore } from '../../stores/AccountStore';
 import { TypeAccount } from '../../domain/typeAccountEnum';
 import { Status } from '../../domain/statusEnum';
 import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
+import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
+import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 
 export function AccountDetails() {
 
@@ -42,7 +44,6 @@ export function AccountDetails() {
             type: activeAccount?.type ?? TypeAccount.Corrente
         }
     })
-
 
 
     const handleUpdateAccount = async () => {
@@ -73,18 +74,13 @@ export function AccountDetails() {
 
     return (
         <ScrollView style={[GlobalStyles.container_screens_normal, { paddingBottom: 100 }]}>
+            <Text style={{ fontSize: 16 }}>Conta</Text>
             <View style={styles.header}>
-                <View>
-                    <Text style={{ fontSize: 16 }}>Conta</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.title_account}>{activeAccount?.name}</Text>
-                        <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
-                    </View>
-                </View>
-                <ButtonPlus onPress={handleShowModalAddAccount}/>
+                <SelectAccount containerStyle={{width: '50%'}} labelStyle={{textAlign:'left'}}/>
+                <ButtonPlus onPress={handleShowModalAddAccount} />
             </View>
             <View>
-                <Text style={[styles.title_section,{marginTop: 10}]}>Dados da conta</Text>
+                <Text style={[styles.title_section, { marginTop: 10 }]}>Dados da conta</Text>
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
                 <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
@@ -95,7 +91,7 @@ export function AccountDetails() {
                 <Text style={[styles.title_section, { marginTop: 15 }]}>Informações</Text>
 
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    <Text>{activeAccount?.creationDate}</Text>
+                    <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)): ""}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.status}</Text>
@@ -112,7 +108,7 @@ export function AccountDetails() {
                 </>}
 
             </View>
-            <ModalAddAccount isShow={showModalAddAccount} closeModal={() => setShowModalAddAccount(false)}/>
+            <ModalAddAccount isShow={showModalAddAccount} closeModal={() => setShowModalAddAccount(false)} />
         </ScrollView>
     );
 }

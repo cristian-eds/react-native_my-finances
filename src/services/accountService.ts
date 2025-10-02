@@ -5,7 +5,7 @@ import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { toAccountDomainModelList } from "../mappers/accountMapper";
 
-export async function getAccountByUser(userId: number, database: SQLiteDatabase): Promise<Account[] | undefined> {
+export async function getAccountsByUser(userId: number, database: SQLiteDatabase): Promise<Account[] | undefined> {
     const accounts = await accountRepository.findAccountByUser(userId.toLocaleString(), database);
     if(!accounts) return undefined;
     return toAccountDomainModelList(accounts) ;

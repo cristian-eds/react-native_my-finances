@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     padding: 0,
     width: 200,
+    zIndex: 2
   },
   picker: {
     flex:1,

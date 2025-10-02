@@ -52,7 +52,7 @@ const ModalAddAccount = ({ isShow, closeModal }: ModalAddAccountProps) => {
             name: formValues.name,
             status: Status.Ativo,
             type: formValues.type,
-            creationDate: new Date().toISOString(),
+            creationDate: new Date().toISOString()
         };
 
         const idNewAccount = await createAccount(newAccount, context.user?.id as number, db);

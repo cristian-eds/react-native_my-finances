@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
 
 import { styles } from './SelectAccountStyles';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useAccountStore } from '../../stores/AccountStore';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
+interface SelectAccountProps {
+    containerStyle?: StyleProp<ViewStyle>;
+    labelStyle?: StyleProp<TextStyle>;
+}
 
-export function SelectAccount() {
+export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps) {
 
     const [open, setOpen] = useState(false);
     const { accounts, activeAccount, setActiveAccount } = useAccountStore();
@@ -30,10 +34,15 @@ export function SelectAccount() {
                 handleSetNewAccount(newValue);
             }}
             items={itemsToDropDown}
-            containerStyle={styles.container_dropdown}
+
+            containerStyle={[styles.container_dropdown, containerStyle]}
             style={styles.dropdown}
-            textStyle={styles.labelText}
-            labelStyle={styles.dropdown_text}
+            textStyle={styles.dropdown_text}
+            labelStyle={[styles.dropdown_label, labelStyle]}
+            dropDownContainerStyle={styles.dropDownContainerStyle}
+
+            listItemContainerStyle={{borderBottomColor: '#ccc', borderBottomWidth: 1}}
+            
             placeholder='Selecione um item'
             maxHeight={200}
             listMode='SCROLLVIEW'

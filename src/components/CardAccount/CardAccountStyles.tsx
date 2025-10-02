@@ -6,7 +6,8 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical:10,
     paddingHorizontal: 25,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    zIndex: 5,
   },
   card_header: {
     flexDirection: 'row',

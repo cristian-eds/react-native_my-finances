@@ -15,6 +15,7 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
         const params = { $userId: userId };
         const result = await statement.executeAsync<AccountRecord>(params);
         const accounts = await result.getAllAsync();
+        console.log(accounts)
         if (accounts) {
             return accounts
         }
@@ -27,8 +28,8 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
 
 export async function create(account: Omit<Account, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
     const statement = await database.prepareAsync(` 
-            INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id)
-            VALUES ($name, $balance, $bankCode, $type, $accountNumber, $agency, $holderName, $status, $userId);
+            INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id, creation_date)
+            VALUES ($name, $balance, $bankCode, $type, $accountNumber, $agency, $holderName, $status, $userId, $creation_date);
         `);
 
     try {
@@ -41,7 +42,8 @@ export async function create(account: Omit<Account, "id">, userId: string, datab
             $agency: account.agency,
             $holderName: account.holderName,
             $status: account.status,
-            $userId: userId
+            $userId: userId,
+            $creation_date: new Date().toISOString()
         };
 
         const result = await statement.executeAsync<Account>(params);

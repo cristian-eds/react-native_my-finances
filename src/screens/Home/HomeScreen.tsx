@@ -10,7 +10,7 @@ import { CardAccount } from '../../components/CardAccount/CardAccount';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
 import { Table } from '../../components/Table/Table';
 import { useUserContext } from '../../hooks/useUserContext';
-import { getAccountByUser } from '../../services/accountService';
+import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore} from '../../stores/AccountStore';
 
@@ -23,7 +23,7 @@ export function HomeScreen() {
     
     useEffect(()=> {
         const fetchAccount = async () => {
-            const accountsUser = await getAccountByUser(Number(user?.id),database);
+            const accountsUser = await getAccountsByUser(Number(user?.id),database);
             if(accountsUser) {
                 setAccounts(accountsUser);
                 setActiveAccount(accountsUser[0])
