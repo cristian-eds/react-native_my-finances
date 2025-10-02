@@ -15,7 +15,6 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
         const params = { $userId: userId };
         const result = await statement.executeAsync<AccountRecord>(params);
         const accounts = await result.getAllAsync();
-        console.log(accounts)
         if (accounts) {
             return accounts
         }

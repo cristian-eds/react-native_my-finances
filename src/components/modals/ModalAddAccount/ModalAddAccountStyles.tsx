@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',  
+        borderBottomWidth: 1,
+        borderBottomColor: '#9d9d9dff',
+        paddingBottom: 10,
+        marginBottom: 10,
     },
     title: {
         fontSize: 24,

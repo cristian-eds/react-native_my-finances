@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -10,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
 import { useAccountStore } from '../../stores/AccountStore';
 import { SelectAccount } from '../SelectAccount/SelectAccount';
+import ModalAddAccount from '../modals/ModalAddAccount/ModalAddAccount';
 
 
 export function CardAccount() {
@@ -17,6 +18,8 @@ export function CardAccount() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
     const {activeAccount} = useAccountStore();
+
+    const [showModalAddAccount, setShowModalAddAccount] = useState(false);
 
     const handleNavigateToAccountDetails = () => {
         if(activeAccount) {
@@ -32,7 +35,7 @@ export function CardAccount() {
                 <View style={{alignItems: 'center', flex:4}}>
                     <SelectAccount />
                 </View>
-                <MaterialIcons name="add" size={28} color="black" style={{flex:1, textAlign: 'right'}}/>
+                <MaterialIcons name="add" size={28} color="black" style={{flex:1, textAlign: 'right'}} onPress={() => setShowModalAddAccount(true)}/>
             </View>
             <View>
                 <Text style={{fontSize: 22}}>Saldo:</Text>
@@ -41,6 +44,7 @@ export function CardAccount() {
                     <MaterialIcons name="visibility" size={24} color="black" />
                 </View>
             </View>
+            <ModalAddAccount isShow={showModalAddAccount} closeModal={() => setShowModalAddAccount(false)} />
         </TouchableOpacity>
     );
 }
