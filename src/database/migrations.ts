@@ -32,8 +32,46 @@ const migrations = [
     `,
     `
         ALTER TABLE account ADD COLUMN creation_date DATETIME;
+    `,
     `
+        CREATE TABLE IF NOT EXISTS category (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            description TEXT NOT NULL,
+            movement_type TEXT NOT NULL,
+            hex_color TEXT NOT NULL
+    );
+    `,
+    `
+        CREATE TABLE IF NOT EXISTS duplicate (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,   
+            issued_date DATETIME NOT NULL,
+            due_date DATETIME NOT NULL,
+            total_value INTEGER NOT NULL,
+            description TEXT,
+            account_id INTEGER NOT NULL,
+            category_id INTEGER,
+            movement_type TEXT NOT NULL,
+        FOREIGN KEY (account_id) REFERENCES account(id) 
+        FOREIGN KEY (category_id) REFERENCES category(id)
+    );    
+    `,
+    `
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            description TEXT NOT NULL,
+            value INTEGER NOT NULL,
+            payment_date DATETIME NOT NULL,
+            account_id INTEGER NOT NULL,
+            category_id INTEGER,
+            duplicate_id INTEGER,
+            FOREIGN KEY (account_id) REFERENCES account(id),
+            FOREIGN KEY (category_id) REFERENCES category(id),
+            FOREIGN KEY (duplicate_id) REFERENCES duplicate(id)
+    );
+    `,
     
+
+
 ];
 
 export default migrations;
