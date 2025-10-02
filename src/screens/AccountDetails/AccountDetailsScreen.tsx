@@ -24,13 +24,16 @@ import { Status } from '../../domain/statusEnum';
 import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
 import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
+import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
+
 
 export function AccountDetails() {
 
-    const { activeAccount, updateAccount, toggleStatusAccount } = useAccountStore();
+    const { activeAccount, updateAccount, toggleStatusAccount, deleteAccount } = useAccountStore();
     const db = useSQLiteContext();
 
     const [showModalAddAccount, setShowModalAddAccount] = useState(false);
+    const [showModalConfirmDelete, setModalConfirmDelete] = useState(false);
 
     const { control, handleSubmit, watch, formState: { errors, isDirty }, reset } = useForm({
         resolver: zodResolver(updateAccountSchemas),
@@ -62,12 +65,20 @@ export function AccountDetails() {
         }
     }
 
-    const handleToggleStatusAccount = () => {
-        toggleStatusAccount(activeAccount?.id as number, db);
+    const handleToggleStatusAccount = async () => {
+        await toggleStatusAccount(activeAccount?.id as number, db);
     }
 
     const handleShowModalAddAccount = () => {
         setShowModalAddAccount(true);
+    }
+
+    const handleDeleteAccount = async () => {
+        const isDeleted = await deleteAccount(activeAccount?.id as number, db);
+        if (isDeleted) {
+            Alert.alert("Conta excluída com sucesso!");
+            setModalConfirmDelete(false);
+        }
     }
 
     useEffect(() => {
@@ -108,11 +119,12 @@ export function AccountDetails() {
                     <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
                 </> : <>
                     <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar' : 'Ativar'} conta`} style={{ marginTop: 15, marginBottom: 0 }} onPress={handleToggleStatusAccount} />
-                    <ButtonPrincipal title='Excluir conta' style={{ marginTop: 15 }} />
+                    <ButtonPrincipal title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }}  />
                 </>}
 
             </View>
-            <ModalAddAccount isShow={showModalAddAccount} closeModal={() => setShowModalAddAccount(false)} />
+            <ModalAddAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
+            <ModalConfirm isShow={showModalConfirmDelete} onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
         </ScrollView>
     );
 }

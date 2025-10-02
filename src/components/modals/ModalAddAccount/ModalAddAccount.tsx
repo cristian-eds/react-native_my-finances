@@ -18,10 +18,10 @@ import { useAccountStore } from '../../../stores/AccountStore';
 
 interface ModalAddAccountProps {
     isShow: boolean;
-    closeModal: () => void;
+    onClose: () => void;
 }
 
-const ModalAddAccount = ({ isShow, closeModal }: ModalAddAccountProps) => {
+const ModalAddAccount = ({ isShow, onClose }: ModalAddAccountProps) => {
 
     const context = useUserContext();
     const db = useSQLiteContext();
@@ -61,12 +61,11 @@ const ModalAddAccount = ({ isShow, closeModal }: ModalAddAccountProps) => {
             Alert.alert("Sucesso", "Conta criada com sucesso!");
             handleCloseModal();
         }
-
     }
 
     const handleCloseModal = () => {
         reset();
-        closeModal();
+        onClose();
     }
 
     return (
