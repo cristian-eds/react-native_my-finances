@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { TypeAccount } from '../domain/typeAccountEnum';
-import { Status } from '../domain/statusEnum';
+import { TypeAccount } from '../domain/enums/typeAccountEnum';
+import { Status } from '../domain/enums/statusEnum';
 
 export const accountSchemas = z.object({
     name: z.string()

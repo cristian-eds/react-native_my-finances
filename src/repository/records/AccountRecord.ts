@@ -1,5 +1,5 @@
-import { Status } from "../../domain/statusEnum";
-import { TypeAccount } from "../../domain/typeAccountEnum";
+import { Status } from "../../domain/enums/statusEnum";
+import { TypeAccount } from "../../domain/enums/typeAccountEnum";
 
 export interface AccountRecord {
     id: number;

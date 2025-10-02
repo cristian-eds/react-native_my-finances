@@ -4,7 +4,7 @@ import { Account } from "../domain/accountModel";
 import * as accountService from '../services/accountService';
 import { SQLiteDatabase } from "expo-sqlite";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
-import { Status } from "../domain/statusEnum";
+import { Status } from "../domain/enums/statusEnum";
 
 type Store = {
     accounts: Account[];

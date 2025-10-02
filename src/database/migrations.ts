@@ -69,9 +69,9 @@ const migrations = [
             FOREIGN KEY (duplicate_id) REFERENCES duplicate(id)
     );
     `,
-    
-
-
+    `
+        ALTER TABLE transactions ADD COLUMN movement_type TEXT NOT NULL;
+    `
 ];
 
 export default migrations;

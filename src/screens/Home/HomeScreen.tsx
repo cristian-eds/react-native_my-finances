@@ -13,6 +13,7 @@ import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore} from '../../stores/AccountStore';
+import { ModalAddTransaction } from '../../components/modals/ModalAddTransaction/ModalAddTransaction';
 
 export function HomeScreen() {
 
@@ -20,6 +21,8 @@ export function HomeScreen() {
     const database = useSQLiteContext();
 
     const {setActiveAccount, setAccounts} = useAccountStore();
+
+    const [showModalAddTransaction, setShowModalAddTransaction] = useState(false);
     
     useEffect(()=> {
         const fetchAccount = async () => {
@@ -42,7 +45,7 @@ export function HomeScreen() {
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
                             <MaterialIcons name="leaderboard" size={24} color="black" />
                         </View>
-                        <ButtonPlus />
+                        <ButtonPlus onPress={() => setShowModalAddTransaction(true)}/>
                     </View>
                     <View style={styles.transactions_infos_item}>
                         <Text style={styles.transactions_infos_h2}>Período</Text>
@@ -69,6 +72,7 @@ export function HomeScreen() {
                 </View>
             </View>
             <Table flexArray={[1,2,3,]}/>
+            <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)}/>
         </View>
     );
 }

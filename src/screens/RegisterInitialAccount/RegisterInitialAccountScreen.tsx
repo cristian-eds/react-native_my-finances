@@ -16,7 +16,7 @@ import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/Button
 
 import { accountSchemas } from '../../schemas/accountSchemas';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
-import { Status } from '../../domain/statusEnum';
+import { Status } from '../../domain/enums/statusEnum';
 
 import * as accountService from '../../services/accountService';
 import { UserContext } from '../../context/UserContext';

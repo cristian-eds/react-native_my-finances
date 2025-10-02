@@ -1,5 +1,5 @@
-import { Status } from "./statusEnum";
-import { TypeAccount } from "./typeAccountEnum";
+import { Status } from "./enums/statusEnum";
+import { TypeAccount } from "./enums/typeAccountEnum";
 
 export interface Account {
     id: number;

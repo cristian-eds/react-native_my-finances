@@ -9,8 +9,8 @@ import { accountSchemas } from '../../../schemas/accountSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { TypeAccount } from '../../../domain/typeAccountEnum';
-import { Status } from '../../../domain/statusEnum';
+import { TypeAccount } from '../../../domain/enums/typeAccountEnum';
+import { Status } from '../../../domain/enums/statusEnum';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -80,7 +80,7 @@ const ModalAddAccount = ({ isShow, onClose }: ModalAddAccountProps) => {
                     <View style={styles.header}>
                         <ButtonBack onPress={handleCloseModal} />
                     </View>
-                    <View style={styles.body}>
+                    <View >
                         <Text style={styles.title}>Nova Conta</Text>
                         <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
                         <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />

@@ -28,9 +28,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
-    body:{
-        
-    },
     buttons_footer: {
         justifyContent: 'center',
         flex:1

@@ -4,7 +4,7 @@ import { styles } from './PickerWithLeftLabelStyles';
 import { RowWithLeftLabel } from '../RowWithLeftLabel/RowWithLeftLabel';
 import { FieldError, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { TypeAccount } from '../../domain/typeAccountEnum';
+import { TypeAccount } from '../../domain/enums/typeAccountEnum';
 
 interface PickerWithLeftLabelProps {
     labelText: string;

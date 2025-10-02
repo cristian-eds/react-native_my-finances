@@ -1,4 +1,4 @@
-import { TypeAccount } from "./typeAccountEnum";
+import { TypeAccount } from "./enums/typeAccountEnum";
 
 export interface UpdateAccountModel {
     id: number;

@@ -2,7 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { AccountRecord } from "./records/AccountRecord";
-import { Status } from "../domain/statusEnum";
+import { Status } from "../domain/enums/statusEnum";
 
 export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord[] | undefined> {
 

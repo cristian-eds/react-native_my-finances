@@ -19,8 +19,8 @@ import { RowWithLeftLabel } from '../../components/RowWithLeftLabel/RowWithLeftL
 import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
 
 import { useAccountStore } from '../../stores/AccountStore';
-import { TypeAccount } from '../../domain/typeAccountEnum';
-import { Status } from '../../domain/statusEnum';
+import { TypeAccount } from '../../domain/enums/typeAccountEnum';
+import { Status } from '../../domain/enums/statusEnum';
 import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
 import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
