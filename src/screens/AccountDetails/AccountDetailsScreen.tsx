@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -6,7 +6,6 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { Alert, ScrollView, Text, View } from 'react-native';
 
-import { MaterialIcons } from '@expo/vector-icons';
 
 import { styles } from './AccountDetailsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -60,7 +59,6 @@ export function AccountDetails() {
         const isUpdated = await updateAccount(newData, db);
         if (isUpdated) {
             Alert.alert("Conta atualizada com sucesso!");
-            reset(newData);
         }
     }
 
@@ -71,6 +69,12 @@ export function AccountDetails() {
     const handleShowModalAddAccount = () => {
         setShowModalAddAccount(true);
     }
+
+    useEffect(() => {
+        if(activeAccount) {
+            reset(activeAccount)
+        }
+    }, [activeAccount])
 
     return (
         <ScrollView style={[GlobalStyles.container_screens_normal, { paddingBottom: 100 }]}>
