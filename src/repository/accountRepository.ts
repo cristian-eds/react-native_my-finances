@@ -130,3 +130,20 @@ async function getAccountStatus(accountId: Number, database: SQLiteDatabase): Pr
         await statement.finalizeAsync();
     }
 }   
+
+export async function deleteAccount(accountId: Number, database: SQLiteDatabase): Promise<boolean> {
+    const statement = await database.prepareAsync(` 
+            DELETE FROM account  
+            WHERE id = $id;
+        `); 
+    try {
+        const params = { $id: accountId.toLocaleString() };
+        const response = await statement.executeAsync(params);
+        return response.changes > 0;
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        return false;
+    } finally {
+        await statement.finalizeAsync();
+    }   
+}

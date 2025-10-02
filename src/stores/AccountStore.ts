@@ -16,6 +16,7 @@ type Store = {
     createAccount: (account: Omit<Account, "id">, userId: number ,database: SQLiteDatabase) => Promise<boolean>;
     updateAccount: (account: UpdateAccountModel, database: SQLiteDatabase) => Promise<boolean>;
     toggleStatusAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
+    deleteAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
 }
 
 export const useAccountStore = create<Store>((set, get) => ({
@@ -70,6 +71,20 @@ export const useAccountStore = create<Store>((set, get) => ({
             set({ activeAccount: { ...account, id: accountId } });
             return true;
         }   catch (error) {
+            return false;
+        }
+    },
+    deleteAccount: async (accountId, database) => {
+        try {
+            const isDeleted = await accountService.deleteAccount(accountId, database);
+            if (!isDeleted) return false;   
+
+            const updatedAccounts = get().accounts.filter(acc => acc.id !== accountId);
+            set({ accounts: updatedAccounts }); 
+
+            if(get().activeAccount?.id === accountId) set({ activeAccount: get().accounts.length > 0 ? get().accounts[0] : null });
+            return true;
+        } catch (error) {
             return false;
         }
     }
