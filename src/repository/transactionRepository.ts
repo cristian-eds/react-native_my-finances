@@ -1,5 +1,6 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { Transaction } from "../domain/transactionModel";
+import { TransactionRecord } from "./records/TransactionRecord";
 
 export async function create(transaction: Omit<Transaction, "id">, database: SQLiteDatabase): Promise<number | undefined> {
     const statement = await database.prepareAsync(` 
@@ -26,4 +27,28 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
     } finally {
         await statement.finalizeAsync();
     }
+}
+
+export async function getAllByAccount(accountId: number, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+    const statement = await database.prepareAsync(`
+            SELECT * FROM transactions 
+            WHERE transactions.account_id = $accountId;
+    `);
+
+    try {
+        const params = {
+            $accountId: accountId
+        };
+
+        const result = await statement.executeAsync<TransactionRecord>(params);
+        const transactions = await result.getAllAsync();
+        if(transactions) {
+            return transactions;
+        }
+    } catch (error) {
+        console.error("Error fetching transactions", error);
+    } finally {
+        statement.finalizeAsync();
+    }
+
 }

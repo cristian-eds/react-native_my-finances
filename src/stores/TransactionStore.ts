@@ -8,6 +8,7 @@ type Store = {
     transactions: Transaction[];
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, database: SQLiteDatabase) => Promise<boolean>
+    fetchTransactions: (accountId: number, database: SQLiteDatabase) => void
 }
 
 export const useTransactionStore = create<Store>((set,get) => ({
@@ -20,5 +21,13 @@ export const useTransactionStore = create<Store>((set,get) => ({
             transactions: [...get().transactions, {...transaction, id: idInsertedTransaction}]
         })
         return true;
+    },
+
+    fetchTransactions: async (accountId: number, database: SQLiteDatabase) => {
+       const transactionsFounded = await transactionService.findAllByAccount(accountId, database);
+       set({
+        transactions: [...transactionsFounded]
+       })
+       return true;
     }
 }))
