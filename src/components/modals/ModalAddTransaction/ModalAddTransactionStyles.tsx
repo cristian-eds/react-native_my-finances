@@ -3,16 +3,17 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        paddingTop: 100,
         alignItems: 'center',
         padding: 20,
+        backgroundColor: '#63636345'
     },
     container_content: {
         width: '98%',
-        height: '95%',
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
+        rowGap: 15
     },
     header: {
         flexDirection: 'row',
@@ -29,7 +30,8 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttons_footer: {
-        justifyContent: 'center',
-        flex:1
+        marginVertical: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     }
 });

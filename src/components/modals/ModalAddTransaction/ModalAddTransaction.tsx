@@ -4,12 +4,11 @@ import { Modal, Text, View } from 'react-native';
 import { styles } from './ModalAddTransactionStyles';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { TextInpuWithLeftLabel } from '../../TextInpuWithLeftLabel/TextInputWithLeftLabel';
-import { PickerWithLeftLabel } from '../../PickerWithLeftLabel/PickerWithLeftLabel';
-import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TypeAccount } from '../../../domain/enums/typeAccountEnum';
-import { accountSchemas } from '../../../schemas/accountSchemas';
+import { DateTimeInput } from '../../DateTimeInput/DateTimeInput';
+import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { transactionSchemas } from '../../../schemas/transactionSchemas';
 
 interface ModalAddTransactionProps {
     isShow: boolean;
@@ -19,21 +18,19 @@ interface ModalAddTransactionProps {
 export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProps) {
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
-        resolver: zodResolver(accountSchemas),
+        resolver: zodResolver(transactionSchemas),
         defaultValues: {
-            name: '',
-            balance: 0,
-            bankCode: '',
-            type: TypeAccount.Corrente,
-            accountNumber: '',
-            agency: '',
-            holderName: ''
+            description: '',
+            paymentDate: new Date().toISOString(),
+            value: 0
         }
     })
+
     const handleRegisterAccount = () => {
         const formValues = watch();
-        console.log(formValues);
+        console.log(formValues)
     }
+
 
     return (
         <Modal
@@ -49,12 +46,13 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                     </View>
                     <View>
                         <Text style={styles.title}>Novo Lançamento</Text>
-                        <TextInpuWithLeftLabel control={control} title='Descrição' errors={errors.name} name='name' placeholder='Insira uma descrição' required />
-                        <TextInpuWithLeftLabel control={control} title='Valor R$' errors={errors.balance} name='balance' placeholder='Valor da transação' required />
+                        <TextInpuWithLeftLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
+                        <TextInpuWithLeftLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$...' required />
+                        <DateTimeInput control={control} name='paymentDate' labelText='Data pagamento' required={true}/>
                     </View>
                     <View style={styles.buttons_footer}>
-                        <ButtonPrincipal title='Cadastrar' onPress={handleSubmit(handleRegisterAccount)} />
-                        <ButtonPrincipal title='Cancelar' onPress={onClose} />
+                        <ButtonIconAction iconName='close' onPress={onClose} />
+                        <ButtonIconAction iconName='check' onPress={handleSubmit(handleRegisterAccount)}/>
                     </View>
                 </View>
             </View>
