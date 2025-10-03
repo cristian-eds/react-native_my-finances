@@ -2,38 +2,27 @@ import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 
 import { styles } from './TableStyles';
-
-const data = [
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-    { data: '11/09/2025', description: 'Caixa', category: "Lazer", value: 200.00 },
-];
-
-interface Item {
-    data: string,
-    description: string,
-    category: string,
-    value: Number
-}
+import { HomeTableItem } from '../../domain/homeTableItem';
 
 interface TableProps {
-    flexArray: number[]
+    flexArray: number[],
+    items: HomeTableItem[],
+    titles: string[]
 }
 
 export function Table(props: TableProps) {
 
     const flexArray = [3, 2, 2, 2];
 
-    const renderItem = (item: Item) => {
+    const renderItem = (item: typeof props.items[number]) => {
         return (
             <View style={styles.table_row}>
                 {Object.values(item).map((value, index) => (
                     <View key={index} style={[styles.table_row_cell, { flex: flexArray[index] }]}>
                         <Text
-                            style={[styles.table_row_cell_text, index === 0 && { textAlign: 'left' }, index === Object.values(item).length - 1 && { textAlign: 'right' }]}>{value}</Text>
+                            style={[styles.table_row_cell_text, index === 0 && 
+                            { textAlign: 'left' }, 
+                            index === Object.values(item).length - 1 && { textAlign: 'right' }]}>{value}</Text>
                     </View>
                 ))}
             </View>
@@ -55,9 +44,9 @@ export function Table(props: TableProps) {
 
     return (
         <View style={styles.table}>
-            {renderHeader(['Data', 'Descrição', 'Categoria', 'Valor'])}
-            <FlatList
-                data={data}
+            {renderHeader(props.titles)}
+            <FlatList<HomeTableItem>
+                data={props.items}
                 keyExtractor={(item, index) => index.toLocaleString()}
                 renderItem={({ item }) => renderItem(item)}
 

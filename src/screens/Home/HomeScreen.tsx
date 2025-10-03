@@ -12,28 +12,53 @@ import { Table } from '../../components/Table/Table';
 import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useAccountStore} from '../../stores/AccountStore';
+import { useAccountStore } from '../../stores/AccountStore';
 import { ModalAddTransaction } from '../../components/modals/ModalAddTransaction/ModalAddTransaction';
+import { useTransactionStore } from '../../stores/TransactionStore';
+import { Transaction } from '../../domain/transactionModel';
+import { HomeTableItem } from '../../domain/homeTableItem';
+
 
 export function HomeScreen() {
 
-    const {user} = useUserContext();
+    const { user } = useUserContext();
     const database = useSQLiteContext();
 
-    const {setActiveAccount, setAccounts} = useAccountStore();
+    const { setActiveAccount, setAccounts, activeAccount } = useAccountStore();
+    const { fetchTransactions, transactions } = useTransactionStore();
 
     const [showModalAddTransaction, setShowModalAddTransaction] = useState(false);
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         const fetchAccount = async () => {
-            const accountsUser = await getAccountsByUser(Number(user?.id),database);
-            if(accountsUser) {
+            const accountsUser = await getAccountsByUser(Number(user?.id), database);
+            if (accountsUser) {
                 setAccounts(accountsUser);
                 setActiveAccount(accountsUser[0])
+
             };
         }
         fetchAccount();
-    },[user])
+
+    }, [user])
+
+    useEffect(() => {
+        if (activeAccount) {
+            fetchTransactions(activeAccount.id as number, database);
+        }
+    }, [activeAccount])
+
+    const formatItemsToTable = (transactions: Transaction[]): HomeTableItem[] => {
+        return transactions.map((transaction) => ({
+            data: transaction.paymentDate.toLocaleDateString(),
+            description: transaction.description,
+            categoria: "Lazer",
+            value: new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+            }).format(transaction.value),
+        }));
+    };
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -45,7 +70,7 @@ export function HomeScreen() {
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
                             <MaterialIcons name="leaderboard" size={24} color="black" />
                         </View>
-                        <ButtonPlus onPress={() => setShowModalAddTransaction(true)}/>
+                        <ButtonPlus onPress={() => setShowModalAddTransaction(true)} />
                     </View>
                     <View style={styles.transactions_infos_item}>
                         <Text style={styles.transactions_infos_h2}>Período</Text>
@@ -67,12 +92,10 @@ export function HomeScreen() {
                     </View>
 
                 </View>
-                <View>
-
-                </View>
             </View>
-            <Table flexArray={[1,2,3,]}/>
-            <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)}/>
+            <Table titles={['Data','Descrição', 'Categoria', 'Valor']} flexArray={[2,1,1,1]} items={formatItemsToTable(transactions)} />
+
+            <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)} />
         </View>
     );
 }
