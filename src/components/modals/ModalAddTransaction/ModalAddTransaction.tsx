@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalAddTransactionStyles';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
@@ -9,6 +9,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { DateTimeInput } from '../../DateTimeInput/DateTimeInput';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { transactionSchemas } from '../../../schemas/transactionSchemas';
+import { useTransactionStore } from '../../../stores/TransactionStore';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useAccountStore } from '../../../stores/AccountStore';
+import { MovementType } from '../../../domain/enums/movementTypeEnum';
 
 interface ModalAddTransactionProps {
     isShow: boolean;
@@ -24,11 +28,30 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             paymentDate: new Date().toISOString(),
             value: 0
         }
-    })
+    });
 
-    const handleRegisterAccount = () => {
+    const {addTransaction} = useTransactionStore();
+    const {activeAccount} = useAccountStore();
+
+    const database = useSQLiteContext();
+
+    const handleCreateTransaction = async () => {
         const formValues = watch();
-        console.log(formValues)
+ 
+        const newTransaction = {
+            accountId: activeAccount?.id as number,
+            value: formValues.value as number,
+            description: formValues.description,
+            movementType: MovementType.Despesa,
+            paymentDate: formValues.paymentDate as Date,
+        }
+        const isInserted = await addTransaction(newTransaction, database);
+
+        if(isInserted) {
+            Alert.alert("Transação criada com sucesso!");
+            reset();
+            onClose();
+        }
     }
 
 
@@ -38,7 +61,6 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             transparent={true}
             visible={isShow}
             statusBarTranslucent={true}>
-
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
@@ -52,7 +74,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='check' onPress={handleSubmit(handleRegisterAccount)}/>
+                        <ButtonIconAction iconName='check' onPress={handleSubmit(handleCreateTransaction)}/>
                     </View>
                 </View>
             </View>
