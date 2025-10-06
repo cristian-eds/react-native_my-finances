@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -8,7 +8,6 @@ import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
 import { CardAccount } from '../../components/CardAccount/CardAccount';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import { Table } from '../../components/Table/Table';
 import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -17,6 +16,8 @@ import { ModalAddTransaction } from '../../components/modals/ModalAddTransaction
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { Transaction } from '../../domain/transactionModel';
 import { HomeTableItem } from '../../domain/homeTableItem';
+import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
 
 
 export function HomeScreen() {
@@ -48,7 +49,7 @@ export function HomeScreen() {
         }
     }, [activeAccount])
 
-    const formatItemsToTable = (transactions: Transaction[]): HomeTableItem[] => {
+    const formatItemsToList = (transactions: Transaction[]): HomeTableItem[] => {
         return transactions.map((transaction) => ({
             data: transaction.paymentDate.toLocaleDateString(),
             description: transaction.description,
@@ -57,6 +58,7 @@ export function HomeScreen() {
                 style: "currency",
                 currency: "BRL",
             }).format(transaction.value),
+            movementType: transaction.movementType ?? MovementType.Despesa
         }));
     };
 
@@ -90,11 +92,13 @@ export function HomeScreen() {
                             <Text style={styles.transactions_infos_h3}>R$ 200,00</Text>
                         </View>
                     </View>
-
                 </View>
             </View>
-            <Table titles={['Data','Descrição', 'Categoria', 'Valor']} flexArray={[2,1,1,1]} items={formatItemsToTable(transactions)} />
-
+            <FlatList<HomeTableItem>
+                data={formatItemsToList(transactions)}
+                keyExtractor={(item, index) => index.toLocaleString()}
+                renderItem={({ item }) => <TransactionItem item={item}/>}
+            />
             <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)} />
         </View>
     );
