@@ -79,9 +79,10 @@ const ModalAddAccount = ({ isShow, onClose }: ModalAddAccountProps) => {
                 <View style={styles.container_content}>
                     <View style={styles.header}>
                         <ButtonBack onPress={handleCloseModal} />
+                        <Text style={styles.title}>Nova Conta</Text>
+                        <View style={styles.rightSpacer}></View>
                     </View>
                     <View >
-                        <Text style={styles.title}>Nova Conta</Text>
                         <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
                         <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
                         <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />

@@ -6,10 +6,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',  
         padding: 20,
+        backgroundColor: '#63636345'
     },
     container_content: {
         width: '98%',
-        height: '95%',
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',  
         borderBottomWidth: 1,
         borderBottomColor: '#9d9d9dff',
-        paddingBottom: 10,
         marginBottom: 10,
     },
     title: {
@@ -30,7 +29,10 @@ const styles = StyleSheet.create({
     },
     buttons_footer: {
         justifyContent: 'center',
-        flex:1
+        marginTop: 25,
+    },
+    rightSpacer: {
+        width: '20%'
     }
 })
 
