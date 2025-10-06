@@ -18,6 +18,7 @@ import { Transaction } from '../../domain/transactionModel';
 import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
+import { formaterNumberToBRL } from '../../utils/NumberFormater';
 
 
 export function HomeScreen() {
@@ -54,10 +55,7 @@ export function HomeScreen() {
             data: transaction.paymentDate.toLocaleDateString(),
             description: transaction.description,
             categoria: "Lazer",
-            value: new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-            }).format(transaction.value),
+            value: formaterNumberToBRL(transaction.value),
             movementType: transaction.movementType ?? MovementType.Despesa
         }));
     };

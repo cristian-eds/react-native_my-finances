@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   card_info_text_balance: {
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: '400'
   }
 });

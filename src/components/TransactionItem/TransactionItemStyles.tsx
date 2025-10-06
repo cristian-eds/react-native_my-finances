@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     columnGap: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    elevation: 2
   },
   iconBox: {
     alignItems: 'center',

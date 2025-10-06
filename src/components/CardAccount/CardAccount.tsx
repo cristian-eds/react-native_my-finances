@@ -11,6 +11,7 @@ import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamL
 import { useAccountStore } from '../../stores/AccountStore';
 import { SelectAccount } from '../SelectAccount/SelectAccount';
 import ModalAddAccount from '../modals/ModalAddAccount/ModalAddAccount';
+import { formaterNumberToBRL } from '../../utils/NumberFormater';
 
 
 export function CardAccount() {
@@ -40,7 +41,7 @@ export function CardAccount() {
             <View>
                 <Text style={{fontSize: 22}}>Saldo:</Text>
                 <View style={styles.card_info}>
-                    <Text style={styles.card_info_text_balance}>R${activeAccount?.balance.toFixed(2)}</Text>
+                    <Text style={styles.card_info_text_balance}>{formaterNumberToBRL(activeAccount?.balance)}</Text>
                     <Ionicons name="eye-outline" size={24} color="black" />
                 </View>
             </View>
