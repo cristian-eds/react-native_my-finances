@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text, TextStyle } from 'react-native';
 
 import { styles } from './TransactionItemStyles';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
 import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 
@@ -12,7 +13,7 @@ interface TransactionItemProps {
 }
 
 interface IconConfig {
-    name: keyof typeof MaterialIcons.glyphMap;
+    name: keyof typeof Ionicons.glyphMap;
     color: string;
 }
 
@@ -28,12 +29,12 @@ export function TransactionItem({ item }: TransactionItemProps) {
     const ICON_MAP: IconMapStructure = {
         prefix: {
             [MovementType.Despesa]: { name: 'remove', color: 'red' },
-            [MovementType.Transferencia]: { name: 'swap-horiz', color: 'blue' },
+            [MovementType.Transferencia]: { name: 'swap-horizontal-outline', color: 'blue' },
             default: { name: 'add', color: 'green' },
         },
         suffix: {
-            [MovementType.Despesa]: { name: 'south-east', color: 'red' },
-            [MovementType.Receita]: { name: 'arrow-outward', color: 'green' },
+            [MovementType.Despesa]: { name: 'trending-down', color: 'red' },
+            [MovementType.Receita]: { name: 'trending-up', color: 'green' },
         },
         stylesText: {
             [MovementType.Despesa]: { color: 'red' },
@@ -41,8 +42,8 @@ export function TransactionItem({ item }: TransactionItemProps) {
         }
     };
 
-    const renderIcon = (iconProps: { name: keyof typeof MaterialIcons.glyphMap, color: string }) => (
-        <MaterialIcons
+    const renderIcon = (iconProps: { name: keyof typeof Ionicons.glyphMap, color: string }) => (
+        <Ionicons
             name={iconProps.name}
             size={16}
             color={iconProps.color}
@@ -78,7 +79,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
     return (
         <View style={styles.container}>
             <View style={styles.iconBox}>
-                <MaterialIcons name="shopping-cart" size={30} color="black" />
+                <Ionicons name="cart-outline" size={30} color="black" />
             </View>
             <View style={styles.central_info}>
                 <Text style={styles.central_info_description}>{item.description}</Text>

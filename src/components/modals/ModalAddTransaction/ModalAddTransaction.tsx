@@ -74,7 +74,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='check' onPress={handleSubmit(handleCreateTransaction)}/>
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)}/>
                     </View>
                 </View>
             </View>

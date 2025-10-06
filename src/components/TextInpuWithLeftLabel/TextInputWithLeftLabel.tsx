@@ -1,10 +1,9 @@
 import React from 'react';
-import { Text, TextInput, TextInputProps, View } from 'react-native';
-
-import { styles } from './TextInputWithLeftLabelStyles';
+import { TextInput, TextInputProps } from 'react-native';
 import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
 import { RowWithLeftLabel } from '../RowWithLeftLabel/RowWithLeftLabel';
-import { TypeAccount } from '../../domain/enums/typeAccountEnum';
+
+import { styles } from './TextInputWithLeftLabelStyles';
 
 interface TextInputWithLeftLabelProps {
   name: string;

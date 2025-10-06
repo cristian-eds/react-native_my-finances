@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FieldErrors, useController } from 'react-hook-form';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { Text, TouchableOpacity } from 'react-native';
@@ -7,7 +8,7 @@ import { RowWithLeftLabel } from '../RowWithLeftLabel/RowWithLeftLabel';
 
 import { formaterIsoDateToDefaultPatternWithTime } from '../../utils/DateFormater';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './DateTimeInputSyles';
 
@@ -40,7 +41,7 @@ export function DateTimeInput({ labelText, name, required, errors, control }: Da
     <RowWithLeftLabel labelText={labelText} required={required}>
       <TouchableOpacity onPress={showDatePicker} style={styles.input}>
         <Text style={styles.text_input}>{formaterIsoDateToDefaultPatternWithTime(new Date(field.value))}</Text>
-        <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+        <Ionicons name="chevron-down" size={24} color="black" />
       </TouchableOpacity>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

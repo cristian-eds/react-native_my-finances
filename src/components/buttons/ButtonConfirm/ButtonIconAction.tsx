@@ -1,19 +1,19 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './ButtonIconActionStyles';
 
 interface ButtonIconActionProps {
-  iconName?: keyof typeof MaterialIcons.glyphMap;
+  iconName?: keyof typeof Ionicons.glyphMap;
   onPress?: () => void;
 }
 
-export function ButtonIconAction({ iconName = "check", onPress }: ButtonIconActionProps) {
+export function ButtonIconAction({ iconName = "checkmark", onPress }: ButtonIconActionProps) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-        <MaterialIcons name={iconName} size={30} color="black" />
+        <Ionicons name={iconName} size={30} color="black" />
     </TouchableOpacity>
   );
 }

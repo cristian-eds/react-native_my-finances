@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 import { styles } from './ButtonPrincipalStyles';
 

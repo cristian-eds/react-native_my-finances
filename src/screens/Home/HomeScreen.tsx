@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './HomeScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -70,7 +70,7 @@ export function HomeScreen() {
                     <View style={styles.transactions_infos_item}>
                         <View style={{ flexDirection: 'row', columnGap: 8, alignItems: 'center' }}>
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
-                            <MaterialIcons name="leaderboard" size={24} color="black" />
+                            <Ionicons name="stats-chart-outline" size={24} color="black" />
                         </View>
                         <ButtonPlus onPress={() => setShowModalAddTransaction(true)} />
                     </View>

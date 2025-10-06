@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { useAccountStore } from '../../stores/AccountStore';
+
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { styles } from './SelectAccountStyles';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { useAccountStore } from '../../stores/AccountStore';
-import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 interface SelectAccountProps {
     containerStyle?: StyleProp<ViewStyle>;

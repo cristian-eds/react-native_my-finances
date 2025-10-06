@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacityProps } from "react-native";
 import { TouchableOpacity } from "react-native";
 
@@ -9,7 +9,7 @@ type Props = TouchableOpacityProps;
 export function ButtonBack({...props}: Props) {
   return (
     <TouchableOpacity {...props} style={styles.container} >
-        <MaterialIcons name="arrow-back" size={28} color="black" />
+        <Ionicons name="arrow-back" size={24} color="black" />
     </TouchableOpacity>
   );
 }

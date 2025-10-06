@@ -1,16 +1,16 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 import { styles } from './ButtonPlusStyles';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = TouchableOpacityProps
 
 export function ButtonPlus({...props}: Props) {
   return (
     <TouchableOpacity {...props} style={styles.container} >
-        <MaterialIcons name="add" size={28} color="black" />
+        <Ionicons name="add" size={28} color="black" />
     </TouchableOpacity>
   );
 }
