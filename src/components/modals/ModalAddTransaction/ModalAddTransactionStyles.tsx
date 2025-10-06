@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        rowGap: 15
+        rowGap: 10
     },
     header: {
         flexDirection: 'row',
@@ -33,5 +33,8 @@ export const styles = StyleSheet.create({
         marginVertical: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
+    },
+    rightSpacer: {
+        width: '20%'
     }
 });

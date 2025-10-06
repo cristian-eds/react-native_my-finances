@@ -30,14 +30,14 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
         }
     });
 
-    const {addTransaction} = useTransactionStore();
-    const {activeAccount} = useAccountStore();
+    const { addTransaction } = useTransactionStore();
+    const { activeAccount } = useAccountStore();
 
     const database = useSQLiteContext();
 
     const handleCreateTransaction = async () => {
         const formValues = watch();
- 
+
         const newTransaction = {
             accountId: activeAccount?.id as number,
             value: formValues.value as number,
@@ -47,7 +47,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
         }
         const isInserted = await addTransaction(newTransaction, database);
 
-        if(isInserted) {
+        if (isInserted) {
             Alert.alert("Transação criada com sucesso!");
             reset();
             onClose();
@@ -65,16 +65,17 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                 <View style={styles.container_content}>
                     <View style={styles.header}>
                         <ButtonBack onPress={onClose} />
+                        <Text style={styles.title}>Novo Lançamento</Text>
+                        <View style={styles.rightSpacer}></View>
                     </View>
                     <View>
-                        <Text style={styles.title}>Novo Lançamento</Text>
                         <TextInpuWithLeftLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
                         <TextInpuWithLeftLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$...' required />
-                        <DateTimeInput control={control} name='paymentDate' labelText='Data pagamento' required={true}/>
+                        <DateTimeInput control={control} name='paymentDate' labelText='Data pagamento' required={true} />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)}/>
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)} />
                     </View>
                 </View>
             </View>
