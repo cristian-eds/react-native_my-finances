@@ -92,11 +92,13 @@ export function HomeScreen() {
                     </View>
                 </View>
             </View>
-            <FlatList<HomeTableItem>
+            {transactions.length > 0 ? <FlatList<HomeTableItem>
                 data={formatItemsToList(transactions)}
                 keyExtractor={(item, index) => index.toLocaleString()}
-                renderItem={({ item }) => <TransactionItem item={item}/>}
-            />
+                renderItem={({ item }) => <TransactionItem item={item} />}
+            /> : <View>
+                <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
+            </View>}
             <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)} />
         </View>
     );

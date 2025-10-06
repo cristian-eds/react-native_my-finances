@@ -21,5 +21,10 @@ export const styles = StyleSheet.create({
   transactions_infos_h3: {
     fontSize: 18
   },
+  transactions_infos_h4: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 15
+  },
   
 });
