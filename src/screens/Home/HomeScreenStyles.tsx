@@ -8,6 +8,16 @@ export const styles = StyleSheet.create({
   transactions_infos: {
     rowGap: 10
   },
+  period: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    width: '100%',
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 10,
+  },
   transactions_infos_item: {
     flexDirection: 'row',
     justifyContent: 'space-between'
@@ -26,5 +36,5 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 15
   },
-  
+
 });

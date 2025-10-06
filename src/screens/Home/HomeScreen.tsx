@@ -19,6 +19,7 @@ import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
+import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 
 
 export function HomeScreen() {
@@ -72,9 +73,10 @@ export function HomeScreen() {
                         </View>
                         <ButtonPlus onPress={() => setShowModalAddTransaction(true)} />
                     </View>
-                    <View style={styles.transactions_infos_item}>
-                        <Text style={styles.transactions_infos_h2}>Período</Text>
-                        <Text style={styles.transactions_infos_h2}>Set-2025</Text>
+                    <View style={styles.period}>
+                        <Ionicons name="chevron-back" size={24} color="black" />
+                        <PeriodFilter />
+                        <Ionicons name="chevron-forward" size={24} color="black" />
                     </View>
                     <View>
                         <View style={styles.transactions_infos_item}>

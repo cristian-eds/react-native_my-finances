@@ -17,3 +17,10 @@ export const formaterIsoDateToDefaultPatternWithTime = (data: Date): string => {
         timeZone: 'America/Sao_Paulo'
     }).format(data)
 };
+
+export const formaterToday = (date: Date) => {
+    return Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: 'long'
+    })
+}
