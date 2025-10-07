@@ -1,35 +1,56 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+
+import DropDownPicker from 'react-native-dropdown-picker';
+import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
+import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilterDropdownItem';
 
 import { styles } from './PeriodFilterStyles';
-import DropDownPicker from 'react-native-dropdown-picker';
 
-
+export type Mode =  'TODAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
 export function PeriodFilter() {
 
     const [open, setOpen] = useState(false);
-    const [mode, setMode] = useState('TODAY');
+    const [mode, setMode] = useState<Mode>('MONTH');
+    const [activeDate, setActiveDate] = useState(new Date());
+
+    const [periodInitialDate, setPeriodInitialDate] = useState<Date>();
+    const [periodFinalDate, setPeriodFinalDate] = useState<Date>();
+    
+    const { firstDay, lastDay } = getWeekBounds(activeDate);
 
     const items = [
-        {label:'HOJE', value: 'TODAY'},
-        {label:'SEMANA',  value: 'WEEK'},
-        {label:'MÊS',  value: 'MONTH'},
-        {label:'PERIODO',  value: 'PERIOD'}
+        { label: `Hoje | ${getPatterDateDayMonthDigit(activeDate)}`, value: 'TODAY' },
+        { label: `Semana | ${getPatterDateDayMonthDigit(firstDay)} - ${getPatterDateDayMonthDigit(lastDay)}`, value: 'WEEK' },
+        { label: `Mês | ${getDatePatternMonthShortYearDigit(activeDate)}`, value: 'MONTH' },
+        { label: 
+            `Periodo | ${periodInitialDate ? formaterIsoDateToDefaultPattern(periodInitialDate) : ''} - ${periodFinalDate? formaterIsoDateToDefaultPattern(periodFinalDate) : ''}`, 
+            value: 'PERIOD' }
     ]
 
-
+    const handleSetPeriodDates = (initialDate: Date, finalDate: Date) => {
+        setPeriodInitialDate(initialDate);
+        setPeriodFinalDate(finalDate);
+    }
 
     return (
-        <TouchableOpacity style={styles.container_period}>
-            <Text style={styles.title}>Set-2025</Text>
+        <>
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}
                 items={items}
                 setValue={setMode}
                 value={mode}
+
+                style={styles.dropDownStyle}
+                containerStyle={styles.containerPeriod}
+                dropDownContainerStyle={styles.dropDownContainerStyle}
+                labelStyle={styles.labelStyle}
+
+                renderListItem={(props) => <PeriodFilterDropdownItem {...props} handleSetPeriodDates={handleSetPeriodDates}/> }
             />
-        </TouchableOpacity>
+            
+        </>
+
     );
 } 

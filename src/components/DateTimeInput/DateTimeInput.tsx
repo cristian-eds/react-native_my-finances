@@ -49,7 +49,6 @@ export function DateTimeInput({ labelText, name, required, errors, control }: Da
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
         is24Hour={true}
-        
       />
     </RowWithLeftLabel>
   );

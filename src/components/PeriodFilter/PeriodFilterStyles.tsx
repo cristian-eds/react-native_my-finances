@@ -1,11 +1,21 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container_period: {
+  containerPeriod: {
     alignItems: 'center',
-    flex: 1
+    width: "85%",
+    borderWidth: 0,
   },
-  title: {
-    fontSize: 20
+  dropDownStyle: {
+    borderWidth: 0
+  },
+  dropDownContainerStyle: {
+    borderWidth: 0,
+    elevation: 2
+  },
+  labelStyle: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '500'
   }
 });
