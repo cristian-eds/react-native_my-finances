@@ -43,7 +43,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             value: formValues.value as number,
             description: formValues.description,
             movementType: MovementType.Despesa,
-            paymentDate: formValues.paymentDate as Date,
+            paymentDate: new Date(formValues.paymentDate as Date),
         }
         const isInserted = await addTransaction(newTransaction, database);
 

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
+import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getDateWithNextMonth, getDateWithPrevMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
 import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilterDropdownItem';
 
 import { styles } from './PeriodFilterStyles';
+import { Ionicons } from '@expo/vector-icons';
 
-export type Mode =  'TODAY' | 'MONTH' | 'WEEK' | 'PERIOD';
+export type Mode =  'DAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
 export function PeriodFilter() {
 
@@ -20,7 +21,7 @@ export function PeriodFilter() {
     const { firstDay, lastDay } = getWeekBounds(activeDate);
 
     const items = [
-        { label: `Hoje | ${getPatterDateDayMonthDigit(activeDate)}`, value: 'TODAY' },
+        { label: `Dia | ${getPatterDateDayMonthDigit(activeDate)}`, value: 'DAY' },
         { label: `Semana | ${getPatterDateDayMonthDigit(firstDay)} - ${getPatterDateDayMonthDigit(lastDay)}`, value: 'WEEK' },
         { label: `Mês | ${getDatePatternMonthShortYearDigit(activeDate)}`, value: 'MONTH' },
         { label: 
@@ -33,8 +34,36 @@ export function PeriodFilter() {
         setPeriodFinalDate(finalDate);
     }
 
+    const handleBackPeriod = () => {
+        if(mode === 'DAY') {
+            setActiveDate(prevDate => {
+                const newDate = new Date(prevDate).setDate(prevDate.getDate()-1);
+                return new Date(newDate);
+            })
+        } else if (mode === 'WEEK') {
+            setActiveDate(prevDate => new Date(prevDate.setDate(firstDay.getDate() - 1)))
+        } else if (mode === 'MONTH') {
+            setActiveDate(getDateWithPrevMonth(activeDate));
+        }
+    }
+
+    const handleNextPeriod = () => {
+        if(mode === 'DAY') {
+            setActiveDate(prevDate => {
+                const newDate = new Date(prevDate).setDate(prevDate.getDate()+1);
+                return new Date(newDate);
+            })
+        } else if (mode === 'WEEK') {
+            setActiveDate(prevDate => new Date(prevDate.setDate(lastDay.getDate() + 1)))
+        }  else if (mode === 'MONTH') {
+            setActiveDate(getDateWithNextMonth(activeDate));
+        }
+    }
+
+
     return (
         <>
+            <Ionicons name="chevron-back" size={24} color="black" onPress={handleBackPeriod}/>
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}
@@ -49,7 +78,7 @@ export function PeriodFilter() {
 
                 renderListItem={(props) => <PeriodFilterDropdownItem {...props} handleSetPeriodDates={handleSetPeriodDates}/> }
             />
-            
+            <Ionicons name="chevron-forward" size={24} color="black" onPress={handleNextPeriod}/>
         </>
 
     );

@@ -74,9 +74,7 @@ export function HomeScreen() {
                         <ButtonPlus onPress={() => setShowModalAddTransaction(true)} />
                     </View>
                     <View style={styles.period}>
-                        <Ionicons name="chevron-back" size={24} color="black" />
                         <PeriodFilter />
-                        <Ionicons name="chevron-forward" size={24} color="black" />
                     </View>
                     <View>
                         <View style={styles.transactions_infos_item}>
