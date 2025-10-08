@@ -1,4 +1,5 @@
 import z from "zod";
+import { MovementType } from "../domain/enums/movementTypeEnum";
 
 export const transactionSchemas = z.object({
     description: z.string()
@@ -6,6 +7,7 @@ export const transactionSchemas = z.object({
     value: z.coerce.number("O valor é obrigatório")
         .positive("O valor deve ser positivo"),
     paymentDate: z.coerce.date('Data inválida'),
+    movementType: z.enum(MovementType, "Tipo movimento inválido"),
     })
 ;
 

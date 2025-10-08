@@ -13,7 +13,7 @@ import { useAccountStore } from '../../../stores/AccountStore';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
 import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
-
+import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 
 interface ModalAddTransactionProps {
     isShow: boolean;
@@ -27,7 +27,8 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
         defaultValues: {
             description: '',
             paymentDate: new Date().toISOString(),
-            value: 0
+            value: 0,
+            movementType: MovementType.Despesa
         }
     });
 
@@ -69,10 +70,11 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                         <Text style={styles.title}>Novo Lançamento</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
-                    <View style={{rowGap: 10}}>
+                    <View style={{rowGap: 10, elevation: 2}}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required/>
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required/>
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' optionsEnum={MovementType}/>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />

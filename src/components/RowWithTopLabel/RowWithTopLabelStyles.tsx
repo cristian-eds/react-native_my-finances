@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     error_message: {
         color: 'red',
