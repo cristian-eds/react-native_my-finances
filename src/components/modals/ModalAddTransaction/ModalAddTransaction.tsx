@@ -44,7 +44,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             accountId: activeAccount?.id as number,
             value: formValues.value as number,
             description: formValues.description,
-            movementType: MovementType.Despesa,
+            movementType: formValues.movementType,
             paymentDate: new Date(formValues.paymentDate as Date),
         }
 
