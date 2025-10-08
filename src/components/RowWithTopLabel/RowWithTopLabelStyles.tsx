@@ -16,4 +16,13 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    error_message: {
+        color: 'red',
+        fontSize: 12,
+        marginTop: 4,
+        right: 10,
+        position: 'absolute',
+        bottom: -6,
+        backgroundColor: 'white'
+    },
 });
