@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
+        borderColor: '#4d4d4d9f',
         padding: 8,
         borderRadius: 10,
         flexDirection: 'row',

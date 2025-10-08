@@ -13,6 +13,7 @@ import { useTransactionStore } from '../../../stores/TransactionStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
+import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
 
 interface ModalAddTransactionProps {
     isShow: boolean;
@@ -68,9 +69,9 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                         <Text style={styles.title}>Novo Lançamento</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
-                    <View>
-                        <TextInpuWithLeftLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
-                        <TextInpuWithLeftLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$...' required />
+                    <View style={{rowGap: 10}}>
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required/>
+                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DateTimeInput control={control} name='paymentDate' labelText='Data pagamento' required={true} />
                     </View>
                     <View style={styles.buttons_footer}>
