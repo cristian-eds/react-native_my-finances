@@ -3,8 +3,11 @@ import { Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalSelectPeriodStyles';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
+import {  DatePickerWithTopLabel} from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { periodDatesSchemas } from '../../../schemas/periodDatesSchemas';
 
 interface ModalSelectPeriodProps {
     isShow: boolean,
@@ -15,11 +18,17 @@ interface ModalSelectPeriodProps {
 
 export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handleConfirmValue }: ModalSelectPeriodProps) {
 
-    const [initialDate, setInitialDate] = useState<Date>(new Date());
-    const [finalDate, setFinalDate] = useState<Date>(new Date());
+    const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
+            resolver: zodResolver(periodDatesSchemas),
+            defaultValues: {
+                initialDate: new Date(),
+                finalDate: new Date()
+            }
+        });
 
     const handleConfirm = () => {
-        handleSetPeriodDates(initialDate, finalDate);
+        const formValues = watch();
+        handleSetPeriodDates(formValues.initialDate as Date, formValues.finalDate as Date);
         handleConfirmValue();
     }
 
@@ -37,11 +46,11 @@ export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handl
                         <Text style={styles.title}>Escolha as datas</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
-                    <PickerWithTopLabel date={initialDate} title='Data inicial:' setDate={setInitialDate} />
-                    <PickerWithTopLabel date={finalDate} title='Data final:' setDate={setFinalDate} />
+                    <DatePickerWithTopLabel control={control} name='initialDate' title='Data inicial:'  />
+                    <DatePickerWithTopLabel control={control} name='finalDate' title='Data final:' />
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleConfirm} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
                     </View>
                 </View>
             </View>

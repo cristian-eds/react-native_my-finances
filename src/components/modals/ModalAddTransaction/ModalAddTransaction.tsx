@@ -3,10 +3,8 @@ import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalAddTransactionStyles';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { TextInpuWithLeftLabel } from '../../TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DateTimeInput } from '../../DateTimeInput/DateTimeInput';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { transactionSchemas } from '../../../schemas/transactionSchemas';
 import { useTransactionStore } from '../../../stores/TransactionStore';
@@ -14,6 +12,8 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
+import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
+
 
 interface ModalAddTransactionProps {
     isShow: boolean;
@@ -46,6 +46,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             movementType: MovementType.Despesa,
             paymentDate: new Date(formValues.paymentDate as Date),
         }
+
         const isInserted = await addTransaction(newTransaction, database);
 
         if (isInserted) {
@@ -54,7 +55,6 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
             onClose();
         }
     }
-
 
     return (
         <Modal
@@ -72,7 +72,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                     <View style={{rowGap: 10}}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required/>
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
-                        <DateTimeInput control={control} name='paymentDate' labelText='Data pagamento' required={true} />
+                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required/>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
