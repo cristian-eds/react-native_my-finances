@@ -56,3 +56,17 @@ export const getWeekBounds = (date: Date = new Date()) => {
     lastDay,
   };
 };
+
+export const getLastDayOfMonth = (year: number, monthIndex: number) => {
+    const firstDayOfNextMonth = new Date(year, monthIndex + 1, 1);
+    const lastDay = new Date(firstDayOfNextMonth.setDate(0));
+    return lastDay;
+}
+
+export const getDateWithNextMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+}
+
+export const getDateWithPrevMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() - 1, 1);
+}
