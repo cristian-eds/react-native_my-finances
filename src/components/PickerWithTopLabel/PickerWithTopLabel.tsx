@@ -30,7 +30,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
 
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{padding:0}} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} >
             <DropDownPicker
                 value={field.value}
                 open={open}
@@ -38,7 +38,8 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 setValue={
                     (callback) => {
                         const newValue = callback(field.value);
-                        field.onChange(newValue)}
+                        field.onChange(newValue)
+                    }
                 }
                 items={itemsToDropDown}
                 containerStyle={styles.container_picker}

@@ -13,13 +13,18 @@ interface RowWithTopLabelProps {
     stylesProp?: ViewStyle
 }
 
+
+
 export function RowWithTopLabel({title, children, onPress, required = false, errors, stylesProp}: RowWithTopLabelProps) {
+  
+  const Wrapper = onPress ? TouchableOpacity : View
+  
   return (
     <View style={styles.container}>
         <Text style={styles.label}>{title}{required && '*'}:</Text>
-        <TouchableOpacity style={[styles.input, stylesProp]} onPress={onPress}>
+        <Wrapper style={[styles.input, stylesProp]} onPress={onPress}>
             {children}
-        </TouchableOpacity>
+        </Wrapper>
          {errors && <Text style={styles.error_message}>{errors.message}</Text>}
     </View>
   );

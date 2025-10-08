@@ -70,7 +70,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                         <Text style={styles.title}>Novo Lançamento</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
-                    <View style={{rowGap: 10, elevation: 2}}>
+                    <View style={{rowGap: 10}}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required/>
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required/>

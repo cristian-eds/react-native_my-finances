@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     width: 200,
-    zIndex: 5,
   },
   picker: {
     borderColor: 'white',
@@ -15,12 +14,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'left',
   },
-   dropdownList: {
+  dropdownList: {
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingVertical: 0,
-    elevation: 1
   },
 
 });
