@@ -20,6 +20,7 @@ import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
+import { toHomeTableItemList } from '../../mappers/transactionMapper';
 
 
 export function HomeScreen() {
@@ -50,16 +51,6 @@ export function HomeScreen() {
             fetchTransactions(activeAccount.id as number, database);
         }
     }, [activeAccount])
-
-    const formatItemsToList = (transactions: Transaction[]): HomeTableItem[] => {
-        return transactions.map((transaction) => ({
-            data: transaction.paymentDate.toLocaleDateString(),
-            description: transaction.description,
-            categoria: "Lazer",
-            value: formaterNumberToBRL(transaction.value),
-            movementType: transaction.movementType ?? MovementType.Despesa
-        }));
-    };
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -93,7 +84,7 @@ export function HomeScreen() {
                 </View>
             </View>
             {transactions.length > 0 ? <FlatList<HomeTableItem>
-                data={formatItemsToList(transactions)}
+                data={toHomeTableItemList(transactions)}
                 keyExtractor={(item, index) => index.toLocaleString()}
                 renderItem={({ item }) => <TransactionItem item={item} />}
             /> : <View>

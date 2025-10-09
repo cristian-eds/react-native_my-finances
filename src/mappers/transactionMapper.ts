@@ -1,7 +1,10 @@
+import { MovementType } from "../domain/enums/movementTypeEnum";
+import { HomeTableItem } from "../domain/homeTableItem";
 import { Transaction } from "../domain/transactionModel";
 import { TransactionRecord } from "../repository/records/TransactionRecord";
+import { formaterNumberToBRL } from "../utils/NumberFormater";
 
-export function toTransactionModel(record: TransactionRecord) : Transaction{
+export function toTransactionModel(record: TransactionRecord): Transaction {
     return {
         id: record.id,
         accountId: record.account_id,
@@ -14,6 +17,16 @@ export function toTransactionModel(record: TransactionRecord) : Transaction{
     }
 }
 
-export function toTransactionModelList(records: TransactionRecord[]) : Transaction[] {
+export function toTransactionModelList(records: TransactionRecord[]): Transaction[] {
     return records.map(toTransactionModel);
+}
+
+export function toHomeTableItemList(transactions: Transaction[]): HomeTableItem[] {
+    return transactions.map((transaction) => ({
+        data: transaction.paymentDate.toLocaleDateString(),
+        description: transaction.description,
+        categoria: "Lazer",
+        value: formaterNumberToBRL(transaction.value),
+        movementType: transaction.movementType ?? MovementType.Despesa
+    }));
 }
