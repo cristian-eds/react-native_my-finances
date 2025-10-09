@@ -65,6 +65,12 @@ export const getLastDayOfMonth = (year: number, monthIndex: number) => {
     return lastDay;
 }
 
+export const getInitialDateOfMonth = (year: number, monthIndex: number) => {
+    const firstDayOfMonth = new Date(year, monthIndex, 1);
+    return firstDayOfMonth;
+}
+
+
 export const getInitialDateForNextMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 1);
 }
