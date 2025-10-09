@@ -52,6 +52,18 @@ export function HomeScreen() {
         }
     }, [activeAccount])
 
+    const renderCaptionItem = (title: string, movementType: MovementType) => {
+        const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
+                    .map(transaction => transaction.value)
+                    .reduce((prevValue, current) => prevValue + current,0);
+        return (
+            <View style={styles.transactions_infos_item}>
+                <Text style={styles.transactions_infos_h3}>{title}</Text>
+                <Text style={styles.transactions_infos_h3}>{formaterNumberToBRL(totalValue)}</Text>
+            </View>
+        )
+    }
+
     return (
         <View style={GlobalStyles.container_screens_normal}>
             <CardAccount />
@@ -68,18 +80,9 @@ export function HomeScreen() {
                         <PeriodFilter />
                     </View>
                     <View>
-                        <View style={styles.transactions_infos_item}>
-                            <Text style={styles.transactions_infos_h3}>Créditos</Text>
-                            <Text style={styles.transactions_infos_h3}>R$ 200,00</Text>
-                        </View>
-                        <View style={styles.transactions_infos_item}>
-                            <Text style={styles.transactions_infos_h3}>Débitos</Text>
-                            <Text style={styles.transactions_infos_h3}>R$ 200,00</Text>
-                        </View>
-                        <View style={styles.transactions_infos_item}>
-                            <Text style={styles.transactions_infos_h3}>Transferência</Text>
-                            <Text style={styles.transactions_infos_h3}>R$ 200,00</Text>
-                        </View>
+                        {renderCaptionItem('Créditos', MovementType.Receita)}
+                        {renderCaptionItem('Débitos', MovementType.Despesa)}
+                        {renderCaptionItem('Transfêrencia', MovementType.Transferencia)}
                     </View>
                 </View>
             </View>
