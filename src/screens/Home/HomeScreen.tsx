@@ -42,7 +42,7 @@ export function HomeScreen() {
         }
         fetchAccount();
 
-    }, [user, filters])
+    }, [user, filters.initialDate, filters.finalDate])
 
     useEffect(() => {
         if (activeAccount) {

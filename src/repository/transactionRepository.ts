@@ -35,8 +35,8 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
     const statement = await database.prepareAsync(`
             SELECT * FROM transactions 
             WHERE account_id = $accountId 
-            AND DATETIME(payment_date) >= DATETIME($initialDate) 
-            AND DATETIME(payment_date) <= DATETIME($finalDate);
+            AND DATE(payment_date) >= DATE($initialDate) 
+            AND DATE(payment_date) <= DATE($finalDate);
     `);
 
     try {
@@ -46,11 +46,9 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
             $finalDate: formaterToSqlite(filter.finalDate)
         };
 
-        console.log(params);
         const result = await statement.executeAsync<TransactionRecord>(params);
         const transactions = await result.getAllAsync();
 
-        console.log(transactions);
 
         if(transactions) {
             return transactions;

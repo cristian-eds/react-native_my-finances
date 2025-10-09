@@ -5,6 +5,8 @@ import { styles } from './PeriodFilterDropdownItemStyles';
 import { ModalSelectPeriod } from '../modals/ModalSelectPeriod/ModalSelectPeriod';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useTransactionStore } from '../../stores/TransactionStore';
+import { getInitialDateOfMonth, getLastDayOfMonth, getWeekBounds } from '../../utils/DateFormater';
 
 interface PeriodFilterDropdownItemProps {
     item: { label?: string | undefined; value?: any };
@@ -17,11 +19,23 @@ export function PeriodFilterDropdownItem({ item, onPress, isSelected, handleSetP
 
     const [showModalPeriod, setShowModalPeriod] = useState(false);
 
+    const {filters} = useTransactionStore();
+
     const handleSelect = () => {
         if(item.value === 'PERIOD') {
             setShowModalPeriod(true);
             return;
+        } else if (item.value === 'MONTH') {
+            const newInitialDate = getInitialDateOfMonth(filters.initialDate.getFullYear(), filters.initialDate.getMonth());
+            const newLastDate = getLastDayOfMonth(filters.initialDate.getFullYear(), filters.initialDate.getMonth());
+            handleSetPeriodDates(newInitialDate, newLastDate);
+        } else if (item.value === 'DAY') {
+            handleSetPeriodDates(filters.initialDate, filters.initialDate);
+        } else if (item.value === 'WEEK') {
+            const { firstDay, lastDay } = getWeekBounds(filters.initialDate);
+            handleSetPeriodDates(firstDay, lastDay);
         }
+
         onPress(item);
     }
 

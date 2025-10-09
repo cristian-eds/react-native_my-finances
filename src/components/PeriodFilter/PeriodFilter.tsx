@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getInitialDateForNextMonth, getInitialDateForPrevMonth, getLastDayOfMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
+import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getInitialDateForNextMonth, getInitialDateForPrevMonth, getInitialDateOfMonth, getLastDayOfMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
 import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilterDropdownItem';
 
 import { styles } from './PeriodFilterStyles';
@@ -54,7 +54,7 @@ export function PeriodFilter() {
             const {firstDay: newFirstDay, lastDay: newLastDay} = getWeekBounds(new Date(lastDay.setDate(lastDay.getDate() +1)));
             setFiltersDates(newFirstDay,newLastDay);
         }  else if (mode === 'MONTH') {
-            const newInitialDate = getInitialDateForNextMonth(filters.initialDate);
+            const newInitialDate = getInitialDateOfMonth(filters.initialDate.getFullYear(), filters.initialDate.getMonth()+1);
             const newLastDate = getLastDayOfMonth(newInitialDate.getFullYear(), newInitialDate.getMonth());
             setFiltersDates(newInitialDate,newLastDate);
         }
