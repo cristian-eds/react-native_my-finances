@@ -1,6 +1,8 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { Transaction } from "../domain/transactionModel";
 import { TransactionRecord } from "./records/TransactionRecord";
+import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
+import { formaterIsoDateToDefaultPattern, formaterToSqlite } from "../utils/DateFormater";
 
 export async function create(transaction: Omit<Transaction, "id">, database: SQLiteDatabase): Promise<number | undefined> {
     const statement = await database.prepareAsync(` 
@@ -12,7 +14,7 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
         const params = {
             $description: transaction.description,
             $value: transaction.value,
-            $paymentDate: transaction.paymentDate.toISOString(),
+            $paymentDate: formaterToSqlite(transaction.paymentDate),
             $accountId: transaction.accountId,
             $categoryId: transaction.categoryId ?? null,
             $duplicateId: transaction.duplicateId ?? null,
@@ -29,19 +31,27 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
     }
 }
 
-export async function getAllByAccount(accountId: number, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+export async function getAllByAccount(accountId: number, filter: TransactionFiltersModel ,database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
     const statement = await database.prepareAsync(`
             SELECT * FROM transactions 
-            WHERE transactions.account_id = $accountId;
+            WHERE account_id = $accountId 
+            AND DATETIME(payment_date) >= DATETIME($initialDate) 
+            AND DATETIME(payment_date) <= DATETIME($finalDate);
     `);
 
     try {
         const params = {
-            $accountId: accountId
+            $accountId: accountId,
+            $initialDate: formaterToSqlite(filter.initialDate),
+            $finalDate: formaterToSqlite(filter.finalDate)
         };
 
+        console.log(params);
         const result = await statement.executeAsync<TransactionRecord>(params);
         const transactions = await result.getAllAsync();
+
+        console.log(transactions);
+
         if(transactions) {
             return transactions;
         }

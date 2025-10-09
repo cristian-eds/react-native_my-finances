@@ -28,7 +28,7 @@ export function HomeScreen() {
     const database = useSQLiteContext();
 
     const { setActiveAccount, setAccounts, activeAccount } = useAccountStore();
-    const { fetchTransactions, transactions } = useTransactionStore();
+    const { fetchTransactions, transactions, filters } = useTransactionStore();
 
     const [showModalAddTransaction, setShowModalAddTransaction] = useState(false);
 
@@ -42,7 +42,7 @@ export function HomeScreen() {
         }
         fetchAccount();
 
-    }, [user])
+    }, [user, filters])
 
     useEffect(() => {
         if (activeAccount) {

@@ -1,5 +1,7 @@
 import { capitalizeWord } from "./StringFormater";
 
+export const formaterToSqlite = (date: Date) => date.toISOString().replace('T', ' ').replace('Z', '').split('.')[0];
+
 export const formaterIsoDateToDefaultPattern = (data: Date): string => {
     return new Intl.DateTimeFormat('pt-BR', {
         year: 'numeric',

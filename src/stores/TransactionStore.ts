@@ -3,15 +3,11 @@ import { Transaction } from "../domain/transactionModel";
 import { SQLiteDatabase } from "expo-sqlite";
 
 import * as transactionService from '../services/transactionService';
-
-interface TransactionFilter {
-    initialDate: Date,
-    finalDate: Date,
-}
+import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
 
 type Store = {
     transactions: Transaction[];
-    filters: TransactionFilter;
+    filters: TransactionFiltersModel;
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactions: (accountId: number, database: SQLiteDatabase) => void
@@ -35,7 +31,7 @@ export const useTransactionStore = create<Store>((set,get) => ({
     },
 
     fetchTransactions: async (accountId: number, database: SQLiteDatabase) => {
-       const transactionsFounded = await transactionService.findAllByAccount(accountId, database);
+       const transactionsFounded = await transactionService.findAllByAccount(accountId, get().filters ,database);
        set({
         transactions: [...transactionsFounded]
        })
