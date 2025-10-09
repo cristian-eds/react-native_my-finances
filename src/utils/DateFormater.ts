@@ -63,10 +63,10 @@ export const getLastDayOfMonth = (year: number, monthIndex: number) => {
     return lastDay;
 }
 
-export const getDateWithNextMonth = (date: Date) => {
+export const getInitialDateForNextMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 1);
 }
 
-export const getDateWithPrevMonth = (date: Date) => {
+export const getInitialDateForPrevMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() - 1, 1);
 }

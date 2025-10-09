@@ -1,62 +1,62 @@
 import React, { useState } from 'react';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getDateWithNextMonth, getDateWithPrevMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
+import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getInitialDateForNextMonth, getInitialDateForPrevMonth, getLastDayOfMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
 import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilterDropdownItem';
 
 import { styles } from './PeriodFilterStyles';
 import { Ionicons } from '@expo/vector-icons';
+import { useTransactionStore } from '../../stores/TransactionStore';
 
 export type Mode =  'DAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
 export function PeriodFilter() {
 
+    const {filters, setFiltersDates} = useTransactionStore();
+
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<Mode>('MONTH');
-    const [activeDate, setActiveDate] = useState(new Date());
-
-    const [periodInitialDate, setPeriodInitialDate] = useState<Date>();
-    const [periodFinalDate, setPeriodFinalDate] = useState<Date>();
     
-    const { firstDay, lastDay } = getWeekBounds(activeDate);
+    const { firstDay, lastDay } = getWeekBounds(filters.initialDate);
 
     const items = [
-        { label: `Dia | ${getPatterDateDayMonthDigit(activeDate)}`, value: 'DAY' },
+        { label: `Dia | ${getPatterDateDayMonthDigit(filters.initialDate)}`, value: 'DAY' },
         { label: `Semana | ${getPatterDateDayMonthDigit(firstDay)} - ${getPatterDateDayMonthDigit(lastDay)}`, value: 'WEEK' },
-        { label: `Mês | ${getDatePatternMonthShortYearDigit(activeDate)}`, value: 'MONTH' },
+        { label: `Mês | ${getDatePatternMonthShortYearDigit(filters.initialDate)}`, value: 'MONTH' },
         { label: 
-            `Periodo | ${periodInitialDate ? formaterIsoDateToDefaultPattern(periodInitialDate) : ''} - ${periodFinalDate? formaterIsoDateToDefaultPattern(periodFinalDate) : ''}`, 
+            `Periodo | ${formaterIsoDateToDefaultPattern(filters.initialDate)} - ${formaterIsoDateToDefaultPattern(filters.finalDate)}`, 
             value: 'PERIOD' }
     ]
 
     const handleSetPeriodDates = (initialDate: Date, finalDate: Date) => {
-        setPeriodInitialDate(initialDate);
-        setPeriodFinalDate(finalDate);
+        setFiltersDates(initialDate, finalDate);
     }
 
     const handleBackPeriod = () => {
         if(mode === 'DAY') {
-            setActiveDate(prevDate => {
-                const newDate = new Date(prevDate).setDate(prevDate.getDate()-1);
-                return new Date(newDate);
-            })
+            const newDate = new Date(filters.initialDate.setDate(filters.initialDate.getDate() - 1));
+            setFiltersDates(newDate,newDate);
         } else if (mode === 'WEEK') {
-            setActiveDate(prevDate => new Date(prevDate.setDate(firstDay.getDate() - 1)))
+            const {firstDay: newFirstDay, lastDay: newLastDay} = getWeekBounds(new Date(firstDay.setDate(firstDay.getDate() -1)));
+            setFiltersDates(newFirstDay,newLastDay);
         } else if (mode === 'MONTH') {
-            setActiveDate(getDateWithPrevMonth(activeDate));
+            const newInitialDate = getInitialDateForPrevMonth(filters.initialDate);
+            const newLastDate = getLastDayOfMonth(newInitialDate.getFullYear(), newInitialDate.getMonth());
+            setFiltersDates(newInitialDate,newLastDate);
         }
     }
 
     const handleNextPeriod = () => {
         if(mode === 'DAY') {
-            setActiveDate(prevDate => {
-                const newDate = new Date(prevDate).setDate(prevDate.getDate()+1);
-                return new Date(newDate);
-            })
+            const newDate = new Date(filters.initialDate.setDate(filters.initialDate.getDate() + 1));
+            setFiltersDates(newDate,newDate);
         } else if (mode === 'WEEK') {
-            setActiveDate(prevDate => new Date(prevDate.setDate(lastDay.getDate() + 1)))
+            const {firstDay: newFirstDay, lastDay: newLastDay} = getWeekBounds(new Date(lastDay.setDate(lastDay.getDate() +1)));
+            setFiltersDates(newFirstDay,newLastDay);
         }  else if (mode === 'MONTH') {
-            setActiveDate(getDateWithNextMonth(activeDate));
+            const newInitialDate = getInitialDateForNextMonth(filters.initialDate);
+            const newLastDate = getLastDayOfMonth(newInitialDate.getFullYear(), newInitialDate.getMonth());
+            setFiltersDates(newInitialDate,newLastDate);
         }
     }
 

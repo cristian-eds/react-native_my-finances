@@ -6,7 +6,7 @@ import { login, loginWithSessionToken } from "../services/authService";
 import { ResponseUser } from "../domain/responseUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { getAccountByUser } from "../services/accountService";
+import { getAccountsByUser } from "../services/accountService";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthStackParamList } from "../routes/types/AuthStackParamList";
 
@@ -30,7 +30,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const loginUser = async (data: UserLogin, navigation: StackNavigationProp<AuthStackParamList>): Promise<ResponseUser> => {
         const response = await login(db, data);
         if (response?.data) {
-            const account = await getAccountByUser(response.data.id, db);
+            const account = await getAccountsByUser(response.data.id, db);
             if (account) {
                 setUser(response?.data)
             } else {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -14,7 +14,6 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../stores/AccountStore';
 import { ModalAddTransaction } from '../../components/modals/ModalAddTransaction/ModalAddTransaction';
 import { useTransactionStore } from '../../stores/TransactionStore';
-import { Transaction } from '../../domain/transactionModel';
 import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
@@ -39,7 +38,6 @@ export function HomeScreen() {
             if (accountsUser) {
                 setAccounts(accountsUser);
                 setActiveAccount(accountsUser[0])
-
             };
         }
         fetchAccount();
