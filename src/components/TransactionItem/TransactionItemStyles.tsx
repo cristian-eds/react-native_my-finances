@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
-    height: 40
   },
   central_info: {
     flex: 1
@@ -23,7 +22,7 @@ export const styles = StyleSheet.create({
     fontSize: 18
   },
   central_info_data: {
-    fontSize: 14,
+    fontSize: 12,
     fontStyle: 'italic'
   },
   value_info: {
