@@ -23,6 +23,7 @@ export function toTransactionModelList(records: TransactionRecord[]): Transactio
 
 export function toHomeTableItemList(transactions: Transaction[]): HomeTableItem[] {
     return transactions.map((transaction) => ({
+        id: transaction.id,
         data: transaction.paymentDate.toLocaleString(),
         description: transaction.description,
         categoria: "Lazer",
