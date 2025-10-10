@@ -21,10 +21,10 @@ import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
 import { useAccountStore } from '../../stores/AccountStore';
 import { TypeAccount } from '../../domain/enums/typeAccountEnum';
 import { Status } from '../../domain/enums/statusEnum';
-import ModalAddAccount from '../../components/modals/ModalAddAccount/ModalAddAccount';
 import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
+import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
 
 
 export function AccountDetails() {
@@ -123,7 +123,7 @@ export function AccountDetails() {
                 </>}
 
             </View>
-            <ModalAddAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
+            <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
             <ModalConfirm isShow={showModalConfirmDelete} onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
         </ScrollView>
     );

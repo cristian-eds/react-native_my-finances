@@ -12,7 +12,7 @@ import { useUserContext } from '../../hooks/useUserContext';
 import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../stores/AccountStore';
-import { ModalAddTransaction } from '../../components/modals/ModalAddTransaction/ModalAddTransaction';
+import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
@@ -30,7 +30,7 @@ export function HomeScreen() {
     const { setActiveAccount, setAccounts, activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
 
-    const [showModalAddTransaction, setShowModalAddTransaction] = useState(false);
+    const [showModalTransaction, setShowModalTransaction] = useState(false);
 
     useEffect(() => {
         const fetchAccount = async () => {
@@ -72,7 +72,7 @@ export function HomeScreen() {
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
                             <Ionicons name="stats-chart-outline" size={24} color="black" />
                         </View>
-                        <ButtonPlus onPress={() => setShowModalAddTransaction(true)} />
+                        <ButtonPlus onPress={() => setShowModalTransaction(true)} />
                     </View>
                     <View style={styles.period}>
                         <PeriodFilter />
@@ -91,7 +91,7 @@ export function HomeScreen() {
             /> : <View>
                 <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
             </View>}
-            <ModalAddTransaction isShow={showModalAddTransaction} onClose={() => setShowModalAddTransaction(false)} />
+            <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add'/>
         </View>
     );
 }

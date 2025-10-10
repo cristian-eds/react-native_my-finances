@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Modal, Text, View } from 'react-native';
 
-import { styles } from './ModalAddTransactionStyles';
+import { styles } from './ModalTransactionStyles';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,12 +15,13 @@ import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWith
 import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 
-interface ModalAddTransactionProps {
+interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
+    mode: 'add' | 'edit'
 }
 
-export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProps) {
+export function ModalTransaction({ isShow, onClose, mode }: ModalTransactionProps) {
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -67,7 +68,7 @@ export function ModalAddTransaction({ isShow, onClose }: ModalAddTransactionProp
                 <View style={styles.container_content}>
                     <View style={styles.header}>
                         <ButtonBack onPress={onClose} />
-                        <Text style={styles.title}>Novo Lançamento</Text>
+                        <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
                     <View style={{rowGap: 10}}>

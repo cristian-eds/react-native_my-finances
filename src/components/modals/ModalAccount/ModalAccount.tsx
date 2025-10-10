@@ -1,7 +1,7 @@
 import { Text, View, Modal, Alert } from 'react-native'
 import React from 'react'
 
-import { styles } from './ModalAddAccountStyles'
+import { styles } from './ModaAccountStyles'
 import { TextInpuWithLeftLabel } from '../../TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { PickerWithLeftLabel } from '../../PickerWithLeftLabel/PickerWithLeftLabel';
 import { useForm } from 'react-hook-form';
@@ -16,12 +16,12 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { useAccountStore } from '../../../stores/AccountStore';
 
-interface ModalAddAccountProps {
+interface ModalAccountProps {
     isShow: boolean;
     onClose: () => void;
 }
 
-const ModalAddAccount = ({ isShow, onClose }: ModalAddAccountProps) => {
+const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
 
     const context = useUserContext();
     const db = useSQLiteContext();
@@ -101,5 +101,5 @@ const ModalAddAccount = ({ isShow, onClose }: ModalAddAccountProps) => {
     )
 }
 
-export default ModalAddAccount
+export default ModalAccount
 

@@ -10,7 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
 import { useAccountStore } from '../../stores/AccountStore';
 import { SelectAccount } from '../SelectAccount/SelectAccount';
-import ModalAddAccount from '../modals/ModalAddAccount/ModalAddAccount';
+import ModalAccount from '../modals/ModalAccount/ModalAccount';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 
 
@@ -45,7 +45,7 @@ export function CardAccount() {
                     <Ionicons name="eye-outline" size={24} color="black" />
                 </View>
             </View>
-            <ModalAddAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
+            <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
         </TouchableOpacity>
     );
 }
