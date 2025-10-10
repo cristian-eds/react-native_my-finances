@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import { formaterIsoDateToDefaultPattern, getDatePatternMonthShortYearDigit, getInitialDateForNextMonth, getInitialDateForPrevMonth, getInitialDateOfMonth, getLastDayOfMonth, getPatterDateDayMonthDigit, getWeekBounds } from '../../utils/DateFormater';
@@ -60,6 +60,11 @@ export function PeriodFilter() {
         }
     }
 
+    useEffect(() => {
+        const monthIndex = filters.initialDate.getMonth();
+        const year = filters.initialDate.getFullYear();
+        handleSetPeriodDates(getInitialDateOfMonth(year, monthIndex), getLastDayOfMonth(year, monthIndex))
+    },[])
 
     return (
         <>
