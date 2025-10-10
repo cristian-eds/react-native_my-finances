@@ -10,7 +10,7 @@ export function toTransactionModel(record: TransactionRecord): Transaction {
         accountId: record.account_id,
         description: record.description,
         movementType: record.movement_type,
-        paymentDate: new Date(record.payment_date),
+        paymentDate: new Date(`${record.payment_date}Z`),
         value: record.value,
         categoryId: record.category_id,
         duplicateId: record.duplicate_id
@@ -23,7 +23,7 @@ export function toTransactionModelList(records: TransactionRecord[]): Transactio
 
 export function toHomeTableItemList(transactions: Transaction[]): HomeTableItem[] {
     return transactions.map((transaction) => ({
-        data: transaction.paymentDate.toLocaleDateString(),
+        data: transaction.paymentDate.toLocaleString(),
         description: transaction.description,
         categoria: "Lazer",
         value: formaterNumberToBRL(transaction.value),
