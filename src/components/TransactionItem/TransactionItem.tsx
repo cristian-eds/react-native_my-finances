@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextStyle } from 'react-native';
 
 import { styles } from './TransactionItemStyles';
@@ -7,6 +7,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
+import { useTransactionStore } from '../../stores/TransactionStore';
+import { TouchableOpacity } from 'react-native';
 
 interface TransactionItemProps {
     item: HomeTableItem
@@ -25,6 +28,11 @@ interface IconMapStructure {
 
 
 export function TransactionItem({ item }: TransactionItemProps) {
+
+    const [showModalTransaction, setShowModalTransaction] = useState(false);
+    const {transactions} = useTransactionStore();
+
+    const transactionData = transactions.find(transaction => transaction.id === item.id);
 
     const ICON_MAP: IconMapStructure = {
         prefix: {
@@ -77,7 +85,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
     }
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
             <View style={styles.iconBox}>
                 <Ionicons name="cart-outline" size={30} color="black" />
             </View>
@@ -86,6 +94,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
                 <Text style={styles.central_info_data}>{item.data}</Text>
             </View>
             {renderValueInfo()}
-        </View>
+            <ModalTransaction transactionData={transactionData} isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='edit'/>
+        </TouchableOpacity>
     );
 }

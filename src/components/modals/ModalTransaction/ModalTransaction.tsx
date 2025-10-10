@@ -14,26 +14,28 @@ import { MovementType } from '../../../domain/enums/movementTypeEnum';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
 import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
+import { Transaction } from '../../../domain/transactionModel';
 
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
-    mode: 'add' | 'edit'
+    mode: 'add' | 'edit',
+    transactionData? : Transaction
 }
 
-export function ModalTransaction({ isShow, onClose, mode }: ModalTransactionProps) {
+export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
         defaultValues: {
-            description: '',
-            paymentDate: new Date().toISOString(),
-            value: 0,
-            movementType: MovementType.Despesa
+            description: transactionData?.description ?? '',
+            paymentDate: transactionData?.paymentDate ?? new Date().toISOString(),
+            value: transactionData?.value.toFixed(2) ?? 0,
+            movementType: transactionData?.movementType ?? MovementType.Despesa
         }
     });
 
-    const { addTransaction } = useTransactionStore();
+    const { addTransaction,updateTransaction } = useTransactionStore();
     const { activeAccount } = useAccountStore();
 
     const database = useSQLiteContext();
@@ -43,16 +45,23 @@ export function ModalTransaction({ isShow, onClose, mode }: ModalTransactionProp
 
         const newTransaction = {
             accountId: activeAccount?.id as number,
-            value: formValues.value as number,
+            value: Number(formValues.value),
             description: formValues.description,
             movementType: formValues.movementType,
             paymentDate: new Date(formValues.paymentDate as Date),
+            id: transactionData?.id as number
         }
 
-        const isInserted = await addTransaction(newTransaction, database);
+        let isSaved = false;
 
-        if (isInserted) {
-            Alert.alert("Transação criada com sucesso!");
+        if(mode === 'add') {
+            isSaved = await addTransaction(newTransaction, database);
+        } else if (mode === 'edit') {
+            isSaved = await updateTransaction(newTransaction, database);
+        }
+
+        if (isSaved) {
+            Alert.alert("Transação salva com sucesso!");
             reset();
             onClose();
         }

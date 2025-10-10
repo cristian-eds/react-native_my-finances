@@ -11,11 +11,13 @@ type Store = {
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactions: (accountId: number, database: SQLiteDatabase) => void
+    updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
+
 }
 
-export const useTransactionStore = create<Store>((set,get) => ({
+export const useTransactionStore = create<Store>((set, get) => ({
     transactions: [],
     filters: {
         initialDate: new Date(),
@@ -23,19 +25,19 @@ export const useTransactionStore = create<Store>((set,get) => ({
     },
     addTransaction: async (transaction: Omit<Transaction, 'id'>, database) => {
         const idInsertedTransaction = await transactionService.create(transaction, database);
-        if(!idInsertedTransaction) return false;
+        if (!idInsertedTransaction) return false;
         set({
-            transactions: [...get().transactions, {...transaction, id: idInsertedTransaction}]
+            transactions: [...get().transactions, { ...transaction, id: idInsertedTransaction }]
         })
         return true;
     },
 
     fetchTransactions: async (accountId: number, database: SQLiteDatabase) => {
-       const transactionsFounded = await transactionService.findAllByAccount(accountId, get().filters ,database);
-       set({
-        transactions: [...transactionsFounded]
-       })
-       return true;
+        const transactionsFounded = await transactionService.findAllByAccount(accountId, get().filters, database);
+        set({
+            transactions: [...transactionsFounded]
+        })
+        return true;
     },
 
     setFiltersDates(initialDate, finalDate) {
@@ -45,5 +47,20 @@ export const useTransactionStore = create<Store>((set,get) => ({
                 finalDate
             }
         })
+    },
+
+    updateTransaction: async (transaction, database) => {
+        try {
+            const isUpdated = await transactionService.update(transaction, database);
+            if (!isUpdated) return false;
+            set({
+                transactions: [...get().transactions.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
+            })
+            return true;
+        } catch (error) {
+            return false;
+        }
+
+
     },
 }))

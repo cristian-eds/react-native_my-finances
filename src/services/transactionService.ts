@@ -13,3 +13,7 @@ export async function findAllByAccount(accountId: number, filters: TransactionFi
     if (!transactions) return [];
     return toTransactionModelList(transactions);
 }
+
+export async function update(transaction : Transaction, database: SQLiteDatabase): Promise<boolean> {
+    return await transactionRepository.update(transaction, database);
+}
