@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalSelectPeriodStyles';
-import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import {  DatePickerWithTopLabel} from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { periodDatesSchemas } from '../../../schemas/periodDatesSchemas';
+import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 
 interface ModalSelectPeriodProps {
     isShow: boolean,
@@ -42,7 +42,7 @@ export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handl
             <View style={styles.container}>
                 <View style={styles.containerContent}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={onClose} />
+                        <ButtonIconSimple iconName='arrow-back' onPress={onClose} />
                         <Text style={styles.title}>Escolha as datas</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>

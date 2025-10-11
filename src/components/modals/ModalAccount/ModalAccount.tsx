@@ -8,13 +8,13 @@ import { useForm } from 'react-hook-form';
 import { accountSchemas } from '../../../schemas/accountSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
-import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { TypeAccount } from '../../../domain/enums/typeAccountEnum';
 import { Status } from '../../../domain/enums/statusEnum';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 
 import { useAccountStore } from '../../../stores/AccountStore';
+import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 
 interface ModalAccountProps {
     isShow: boolean;
@@ -57,7 +57,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
 
         const idNewAccount = await createAccount(newAccount, context.user?.id as number, db);
 
-        if(idNewAccount) {
+        if (idNewAccount) {
             Alert.alert("Sucesso", "Conta criada com sucesso!");
             handleCloseModal();
         }
@@ -78,9 +78,10 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={handleCloseModal} />
+                        <ButtonIconSimple iconName='arrow-back' onPress={handleCloseModal} />
                         <Text style={styles.title}>Nova Conta</Text>
-                        <View style={styles.rightSpacer}></View>
+                        <View style={styles.rightSpacer}>
+                        </View>
                     </View>
                     <View >
                         <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />

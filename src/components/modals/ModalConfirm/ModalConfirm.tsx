@@ -9,9 +9,10 @@ interface ModalConfirmProps {
     isShow: boolean;
     onClose: () => void;
     onConfirm?: () => void;
+    title: string
 }
 
-export function ModalConfirm({ isShow, onClose, onConfirm }: ModalConfirmProps) {
+export function ModalConfirm({ isShow, onClose, onConfirm, title }: ModalConfirmProps) {
 
     return (
         <Modal
@@ -22,7 +23,7 @@ export function ModalConfirm({ isShow, onClose, onConfirm }: ModalConfirmProps) 
         >
             <View style={styles.container}>
                 <View style={styles.container_content}>
-                    <Text style={styles.title}>Confirma a exclusão da conta?</Text>
+                    <Text style={styles.title}>{title}</Text>
                     <View style={styles.buttons}>
                         <ButtonIconAction iconName='close' onPress={onClose}/>
                         <ButtonIconAction onPress={onConfirm}/>

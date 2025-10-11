@@ -124,7 +124,7 @@ export function AccountDetails() {
 
             </View>
             <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
-            <ModalConfirm isShow={showModalConfirmDelete} onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
+            <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
         </ScrollView>
     );
 }
