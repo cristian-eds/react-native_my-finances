@@ -1,8 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../screens/Home/HomeScreen";
-import { Button } from "react-native";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
 import { Ionicons } from "@expo/vector-icons";
 
 import {styles} from './TabBottomNavigationStyles'
@@ -11,15 +8,11 @@ const Tab = createBottomTabNavigator();
 
 export function TabBottomNavigationRoutes() {
 
-  const context = useContext(UserContext);
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({route}) => ({
-        headerStyle: { borderBottomLeftRadius: 20, borderBottomRightRadius: 20 },
-        headerTitleAlign: 'center',
-        headerRight: () => <Button onPress={context?.logout} title="Logout"></Button>,
+        headerShown: false,
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'grey',
         tabBarStyle: styles.tabBar,
