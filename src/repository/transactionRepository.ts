@@ -59,6 +59,8 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
     }
 }
 
+
+
 export async function update(transaction: Transaction, database: SQLiteDatabase) : Promise<boolean> {
 
     const statement = await database.prepareAsync(`
@@ -95,3 +97,21 @@ export async function update(transaction: Transaction, database: SQLiteDatabase)
     }
 
 }
+
+export async function deleteById(idTransaction : number, database: SQLiteDatabase) : Promise<boolean> {
+
+    try {
+        const result = await database.runAsync(
+            `DELETE FROM transactions WHERE id = ?;`,
+            idTransaction
+        );
+        
+        return result.changes > 0; 
+        
+    } catch (error) {
+        console.error("Erro ao deletar transação", error); 
+        return false;
+    }
+}
+
+

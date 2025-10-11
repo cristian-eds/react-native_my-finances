@@ -12,6 +12,7 @@ type Store = {
     addTransaction: (transaction: Omit<Transaction, 'id'>, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactions: (accountId: number, database: SQLiteDatabase) => void
     updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
+    deleteTransaction: (idTransaction : number, database: SQLiteDatabase) => Promise<boolean>
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
 
@@ -60,7 +61,19 @@ export const useTransactionStore = create<Store>((set, get) => ({
         } catch (error) {
             return false;
         }
-
-
     },
+
+    deleteTransaction: async (idTransaction, database) => {
+        try {
+            const isDeleted = await transactionService.deleteById(idTransaction,database);
+            if(!isDeleted) return false;
+            set({
+                transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)]
+            })
+            return true;
+        } catch (error) {
+            console.log("Error deleting transaction", error)
+            return false;
+        }
+    }
 }))

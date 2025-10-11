@@ -14,6 +14,10 @@ export async function findAllByAccount(accountId: number, filters: TransactionFi
     return toTransactionModelList(transactions);
 }
 
-export async function update(transaction : Transaction, database: SQLiteDatabase): Promise<boolean> {
+export async function update(transaction: Transaction, database: SQLiteDatabase): Promise<boolean> {
     return await transactionRepository.update(transaction, database);
+}
+
+export async function deleteById(idTransaction: number, database: SQLiteDatabase): Promise<boolean> {
+    return await transactionRepository.deleteById(idTransaction, database);
 }
