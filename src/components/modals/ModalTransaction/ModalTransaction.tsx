@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalTransactionStyles';
-import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
@@ -15,12 +14,14 @@ import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWith
 import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 import { Transaction } from '../../../domain/transactionModel';
+import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
+import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
     mode: 'add' | 'edit',
-    transactionData? : Transaction
+    transactionData?: Transaction
 }
 
 export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
@@ -35,8 +36,10 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         }
     });
 
-    const { addTransaction,updateTransaction } = useTransactionStore();
+    const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
     const { activeAccount } = useAccountStore();
+
+    const [showModalConfirmDelete, setShowModalConfirmDelete] = useState(false);
 
     const database = useSQLiteContext();
 
@@ -54,7 +57,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         let isSaved = false;
 
-        if(mode === 'add') {
+        if (mode === 'add') {
             isSaved = await addTransaction(newTransaction, database);
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
@@ -62,6 +65,15 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
+            reset();
+            onClose();
+        }
+    }
+
+    const handleDeleteTransaction = async () => {
+        const isDeleted = await deleteTransaction(transactionData?.id as number, database);
+        if (isDeleted) {
+            Alert.alert("Transação deletada com sucesso!");
             reset();
             onClose();
         }
@@ -76,15 +88,17 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={onClose} />
+                        <ButtonIconSimple iconName='arrow-back' onPress={onClose} style={{ width: '15%' }} />
                         <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
-                        <View style={styles.rightSpacer}></View>
+                        {mode === 'edit' ?
+                            <ButtonIconSimple iconName='trash-outline' onPress={()=>setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
+                            <View style={styles.rightSpacer}></View>}
                     </View>
-                    <View style={{rowGap: 10}}>
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required/>
+                    <View style={{ rowGap: 10 }}>
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
-                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required/>
-                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' optionsEnum={MovementType}/>
+                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' optionsEnum={MovementType} />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
@@ -92,6 +106,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                     </View>
                 </View>
             </View>
+            <ModalConfirm isShow={showModalConfirmDelete} title='Confirma exclusão da transação?' onClose={() => setShowModalConfirmDelete(false)} onConfirm={handleDeleteTransaction}/>
         </Modal>
     );
 }
