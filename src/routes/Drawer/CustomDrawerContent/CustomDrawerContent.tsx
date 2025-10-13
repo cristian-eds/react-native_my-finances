@@ -8,6 +8,7 @@ import { styles } from './CustomDrawerContentStyles';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { ButtonIconSimple } from '../../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 import { useAccountStore } from '../../../stores/AccountStore';
+import { useUserContext } from '../../../hooks/useUserContext';
 
 export function CustomDrawerContent({ navigation, ...props }: DrawerContentComponentProps) {
 
@@ -15,6 +16,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
     const [expandTransactions, setExpandTransactions] = useState(false);
 
     const { accounts } = useAccountStore()
+    const { logout } = useUserContext();
 
     return (
         <View style={styles.container}>
@@ -57,6 +59,14 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         <Text style={styles.subItemText}>Categorias</Text>
                     </TouchableOpacity>
                 }
+            </View>
+            <View style={styles.footer}>
+                <View style={styles.item}>
+                    <TouchableOpacity style={styles.itemLink} onPress={logout}>
+                        <Ionicons name="exit-outline" size={24} color="black" />
+                        <Text style={styles.itemText}>Sair</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
 

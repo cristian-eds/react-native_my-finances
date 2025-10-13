@@ -8,8 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getAccountsByUser } from "../services/accountService";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AuthStackParamList } from "../routes/types/AuthStackParamList";
-
+import { AuthStackParamList } from "../routes/Stack/types/AuthStackParamList";
 
 interface ContentContext {
     user: Omit<User, 'password'> | null,

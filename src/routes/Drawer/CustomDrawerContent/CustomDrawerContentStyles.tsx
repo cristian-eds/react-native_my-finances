@@ -5,13 +5,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     borderTopEndRadius: 10,
     borderBottomRightRadius: 10,
-    padding: 20
+    paddingHorizontal: 20,
+    paddingVertical: 30
   },
   header: {
     marginBottom: 20
   },
   tab: {
-    rowGap: 8
+    rowGap: 8,
+    flex: 1,
   },
   item: {
     flexDirection: 'row',
@@ -37,5 +39,8 @@ export const styles = StyleSheet.create({
   },
   subItemText: {
     fontSize: 18
+  },
+  footer: {
+
   }
 });
