@@ -22,7 +22,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
             </View>
             <View style={styles.tab}>
                 <TouchableOpacity style={styles.item}>
-                    <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStak', {screen: 'AccountDetails'})}>
+                    <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', {screen: 'Main', params: { screen: 'Home'} })}>
                         <Ionicons name="wallet-outline" size={24} color="black" />
                         <Text style={styles.itemText}>Contas</Text>
                     </TouchableOpacity>
@@ -30,7 +30,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                 </TouchableOpacity>
                 {expandAccounts && accounts &&
                     accounts.map(account => (
-                        <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => navigation.navigate('PrincipalStak', {screen: 'AccountDetails'})}>
+                        <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => navigation.navigate('PrincipalStack', {screen: 'AccountDetails'})}>
                             <Ionicons name="wallet-outline" size={22} color="black" />
                             <Text  style={styles.subItemText}>{account.name}</Text>
                         </TouchableOpacity>

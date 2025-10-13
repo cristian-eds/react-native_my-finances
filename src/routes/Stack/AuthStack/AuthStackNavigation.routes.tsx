@@ -1,9 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { LoginScreen } from "../screens/Login/LoginScreen";
-import { RegisterScreen } from "../screens/Register/RegisterScreen";
-import { RegisterInitialAccountScreen } from "../screens/RegisterInitialAccount/RegisterInitialAccountScreen";
-import { AuthStackParamList } from "./types/AuthStackParamList";
-import { WelcomeRegisterScreen } from "../screens/WelcomeRegister/WelcomeRegisterScreen";
+import { LoginScreen } from "../../../screens/Login/LoginScreen";
+import { RegisterScreen } from "../../../screens/Register/RegisterScreen";
+import { RegisterInitialAccountScreen } from "../../../screens/RegisterInitialAccount/RegisterInitialAccountScreen";
+import { WelcomeRegisterScreen } from "../../../screens/WelcomeRegister/WelcomeRegisterScreen";
+import { AuthStackParamList } from "../types/AuthStackParamList";
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
