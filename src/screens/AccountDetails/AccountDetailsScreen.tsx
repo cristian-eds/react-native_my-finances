@@ -85,20 +85,31 @@ export function AccountDetails() {
     }
 
     useEffect(() => {
-        if(activeAccount) {
+        if (activeAccount) {
             reset(activeAccount)
         }
-    }, [activeAccount])
+    }, [activeAccount]);
+
+    useEffect(() => {
+        navigation.getParent()?.setOptions(
+            { title: 'Detalhes da conta' }
+        )
+
+        return () => {
+            navigation.getParent()?.setOptions(
+                { title: '' }
+            )
+        }
+    }, [])
 
     return (
-        <ScrollView style={[GlobalStyles.container_screens_normal]}>
+        <ScrollView style={GlobalStyles.container_screens_normal}>
             <View style={styles.containerBack}>
-                <ButtonIconSimple iconName='arrow-back' style={styles.containerBackIconButton} onPress={() => navigation.goBack()}/>
-                <Text style={styles.containerBackText}>Detalhes da conta</Text>
+                <ButtonIconSimple iconName='arrow-back' style={styles.containerBackIconButton} onPress={() => navigation.goBack()} />
             </View>
-            <Text style={{ fontSize: 16 }}>Conta</Text>
+
             <View style={styles.header}>
-                <SelectAccount containerStyle={{width: '50%'}} labelStyle={{textAlign:'left'}}/>
+                <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </View>
             <View>
@@ -113,7 +124,7 @@ export function AccountDetails() {
                 <Text style={[styles.title_section, { marginTop: 15 }]}>Informações</Text>
 
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)): ""}</Text>
+                    <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.status}</Text>
@@ -126,12 +137,14 @@ export function AccountDetails() {
                     <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
                 </> : <>
                     <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar' : 'Ativar'} conta`} style={{ marginTop: 15, marginBottom: 0 }} onPress={handleToggleStatusAccount} />
-                    <ButtonPrincipal title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }}  />
+                    <ButtonPrincipal title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }} />
                 </>}
 
             </View>
-            <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
-            <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
+            <View style={{ paddingBottom: 100 }}>
+                <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
+                <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
+            </View>
         </ScrollView>
     );
 }

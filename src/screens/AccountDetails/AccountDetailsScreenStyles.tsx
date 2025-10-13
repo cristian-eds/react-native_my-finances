@@ -4,13 +4,13 @@ export const styles = StyleSheet.create({
     containerBack: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 15
     },
     containerBackText: {
         fontSize: 20
     },
     containerBackIconButton: {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        width: '10%'
     },
     header: {
         flexDirection: 'row',
