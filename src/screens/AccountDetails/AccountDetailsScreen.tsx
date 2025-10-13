@@ -25,12 +25,15 @@ import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
 import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
+import { ButtonIconSimple } from '../../components/buttons/ButtonIconSimple/ButtonIconSimple';
+import { useNavigation } from '@react-navigation/native';
 
 
 export function AccountDetails() {
 
     const { activeAccount, updateAccount, toggleStatusAccount, deleteAccount } = useAccountStore();
     const db = useSQLiteContext();
+    const navigation = useNavigation();
 
     const [showModalAddAccount, setShowModalAddAccount] = useState(false);
     const [showModalConfirmDelete, setModalConfirmDelete] = useState(false);
@@ -88,7 +91,11 @@ export function AccountDetails() {
     }, [activeAccount])
 
     return (
-        <ScrollView style={[GlobalStyles.container_screens_normal, { paddingBottom: 100 }]}>
+        <ScrollView style={[GlobalStyles.container_screens_normal]}>
+            <View style={styles.containerBack}>
+                <ButtonIconSimple iconName='arrow-back' style={styles.containerBackIconButton} onPress={() => navigation.goBack()}/>
+                <Text style={styles.containerBackText}>Detalhes da conta</Text>
+            </View>
             <Text style={{ fontSize: 16 }}>Conta</Text>
             <View style={styles.header}>
                 <SelectAccount containerStyle={{width: '50%'}} labelStyle={{textAlign:'left'}}/>

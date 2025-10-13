@@ -1,6 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+    containerBack: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15
+    },
+    containerBackText: {
+        fontSize: 20
+    },
+    containerBackIconButton: {
+        backgroundColor: 'transparent'
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',

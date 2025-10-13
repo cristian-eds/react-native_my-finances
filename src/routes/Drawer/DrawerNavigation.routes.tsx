@@ -14,7 +14,8 @@ export const DrawerNagivationRoutes = () => {
         <Drawer.Navigator screenOptions={{
             headerTitleAlign: 'center',
             headerRight: () => <Button onPress={context.logout} title="Sair"></Button>,
-            drawerStyle: { height: '80%', marginTop: 75 }
+            drawerStyle: { height: '80%', marginTop: 75 },
+            title: ""
         }}
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             initialRouteName="PrincipalStack"
