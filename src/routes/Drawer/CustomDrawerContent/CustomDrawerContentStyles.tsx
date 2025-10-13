@@ -16,7 +16,10 @@ export const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    padding: 10,
+    borderBottomColor: '#9e9e9e81'
   },
   itemLink: {
     flexDirection: 'row',

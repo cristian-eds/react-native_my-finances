@@ -22,7 +22,7 @@ export function TabBottomNavigationRoutes() {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Financas') {
             iconName = focused ? 'cash' : 'cash-outline';
-          } else if (route.name === 'Lancamentos') {
+          } else if (route.name === 'Transacoes') {
             iconName = 'swap-horizontal';
           }
           return <Ionicons name={iconName} size={24} color={color}/>
@@ -31,8 +31,9 @@ export function TabBottomNavigationRoutes() {
       })}
     >
       <Tab.Screen
-        name="Lancamentos"
+        name="Transacoes"
         component={HomeScreen}
+        options={{title: 'Transações'}}
       />
       <Tab.Screen
         name="Home"
@@ -41,6 +42,7 @@ export function TabBottomNavigationRoutes() {
       <Tab.Screen
         name="Financas"
         component={HomeScreen}
+        options={{title: 'Finanças'}}
       />
     </Tab.Navigator>
   );
