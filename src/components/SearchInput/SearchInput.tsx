@@ -4,7 +4,6 @@ import { TextInput, TextInputProps, View } from 'react-native';
 import { styles } from './SearchInputStyles';
 import { Ionicons } from '@expo/vector-icons';
 
-type Props = TextInputProps
 
 export function SearchInput({...props} : TextInputProps) {
     return (
