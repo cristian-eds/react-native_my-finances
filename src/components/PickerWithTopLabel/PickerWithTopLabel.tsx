@@ -22,8 +22,6 @@ interface PickerWithTopLabelProps {
     items: ItemDropdown[]
 }
 
-type PickerEnums = typeof MovementType | typeof TypeAccount;
-
 export function PickerWithTopLabel({ labelText, required, name, control, errors, items }: PickerWithTopLabelProps) {
 
     const { field } = useController({
