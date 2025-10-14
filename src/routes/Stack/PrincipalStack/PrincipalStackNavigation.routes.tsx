@@ -4,6 +4,7 @@ import { AccountDetails } from "../../../screens/AccountDetails/AccountDetailsSc
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { PrincipalStackParamList } from "../types/PrincipalStackParamList";
 import { TabBottomNavigationRoutes } from "../../TabBottom/TabBottomNavigation.routes";
+import { CategoriesScreen } from "../../../screens/Categories/CategoriesScreen";
 
 
 const Stack = createNativeStackNavigator<PrincipalStackParamList>();
@@ -16,6 +17,7 @@ export function PrincipalStackNavigationRoutes() {
             initialRouteName="Main">
             <Stack.Screen name="Main" component={TabBottomNavigationRoutes}/>
             <Stack.Screen name="AccountDetails" component={AccountDetails} />
+            <Stack.Screen name="Categories" component={CategoriesScreen}/>
         </Stack.Navigator>
     )
 }

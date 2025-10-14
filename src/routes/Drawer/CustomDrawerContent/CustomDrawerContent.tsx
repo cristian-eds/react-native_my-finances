@@ -54,7 +54,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                     <Ionicons name={expandTransactions ? 'chevron-up' : 'chevron-down'} size={24} color="black" onPress={() => setExpandTransactions(!expandTransactions)} />
                 </TouchableOpacity>
                 {
-                    expandTransactions && <TouchableOpacity style={styles.subItem} onPress={() => navigation.navigate('PrincipalStack', { screen: 'AccountDetails' })}>
+                    expandTransactions && <TouchableOpacity style={styles.subItem} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Categories' })}>
                         <Ionicons name="grid-outline" size={22} color="black" />
                         <Text style={styles.subItemText}>Categorias</Text>
                     </TouchableOpacity>
