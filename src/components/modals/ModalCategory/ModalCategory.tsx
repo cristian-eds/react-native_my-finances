@@ -51,9 +51,9 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                     <View style={{ rowGap: 10 }}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
-                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} />
-                        <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} />
-                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Icone' items={hexColorOptions} />
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={40000}/>
+                        <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} />
+                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Icone' items={hexColorOptions} zIndex={2000}/>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />

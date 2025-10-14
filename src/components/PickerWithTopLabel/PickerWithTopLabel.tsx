@@ -19,10 +19,11 @@ interface PickerWithTopLabelProps {
     required?: boolean;
     errors?: FieldError | undefined;
     control: any;
-    items: ItemDropdown[]
+    items: ItemDropdown[];
+    zIndex?: number
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1 }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
@@ -32,7 +33,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
     const [open, setOpen] = useState(false);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0, zIndex }} >
             <DropDownPicker
                 value={field.value}
                 open={open}
@@ -51,6 +52,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 placeholder='Selecione um item'
                 maxHeight={200}
                 listMode='SCROLLVIEW'
+                zIndex={zIndex}
 
             />
         </RowWithTopLabel>
