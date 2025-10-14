@@ -38,7 +38,8 @@ const migrations = [
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             description TEXT NOT NULL,
             movement_type TEXT NOT NULL,
-            hex_color TEXT NOT NULL
+            hex_color TEXT NOT NULL,
+            iconName TEXT NOT NULL
     );
     `,
     `
