@@ -33,7 +33,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
     const [open, setOpen] = useState(false);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0, zIndex }} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0}} >
             <DropDownPicker
                 value={field.value}
                 open={open}
@@ -51,8 +51,9 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 dropDownContainerStyle={styles.dropdownList}
                 placeholder='Selecione um item'
                 maxHeight={200}
-                listMode='SCROLLVIEW'
+                listMode='FLATLIST'
                 zIndex={zIndex}
+                zIndexInverse={1000}
 
             />
         </RowWithTopLabel>

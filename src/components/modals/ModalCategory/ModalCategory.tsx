@@ -36,6 +36,10 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
 
+    const handleConfirm = () => {
+        console.log(watch());
+    }
+
     return (
         <Modal
             visible={isShow}
@@ -57,7 +61,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
                     </View>
                 </View>
             </View>

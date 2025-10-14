@@ -26,12 +26,10 @@ const migrations = [
             agency TEXT,
             holder_name TEXT,
             status TEXT,
+            creation_date DATETIME,
             user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
-    `,
-    `
-        ALTER TABLE account ADD COLUMN creation_date DATETIME;
     `,
     `
         CREATE TABLE IF NOT EXISTS category (
@@ -39,7 +37,9 @@ const migrations = [
             description TEXT NOT NULL,
             movement_type TEXT NOT NULL,
             hex_color TEXT NOT NULL,
-            iconName TEXT NOT NULL
+            icon_name TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
     );
     `,
     `
