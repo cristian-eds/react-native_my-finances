@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { styles } from './PickerWithTopLabelStyles';
 
 import { FieldError, useController } from 'react-hook-form';
@@ -7,27 +7,31 @@ import { TypeAccount } from '../../domain/enums/typeAccountEnum';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 
-interface PickerWithTopLabelProps<T> {
+interface ItemDropdown {
+    label: string,
+    value: string,
+    icon?: () => ReactElement
+}
+
+interface PickerWithTopLabelProps {
     labelText: string;
     name: string;
     required?: boolean;
     errors?: FieldError | undefined;
     control: any;
-    optionsEnum: T
+    items: ItemDropdown[]
 }
 
 type PickerEnums = typeof MovementType | typeof TypeAccount;
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, optionsEnum }: PickerWithTopLabelProps<PickerEnums>) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
         control,
     });
 
-    const itemsToDropDown = Object.keys(optionsEnum).map((text) => { return { label: text, value: optionsEnum[text as keyof typeof optionsEnum] } })
     const [open, setOpen] = useState(false);
-
 
     return (
         <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} >
@@ -41,7 +45,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                         field.onChange(newValue)
                     }
                 }
-                items={itemsToDropDown}
+                items={items}
                 containerStyle={styles.container_picker}
                 style={styles.picker}
                 textStyle={styles.picker_text}
