@@ -43,6 +43,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
     const database = useSQLiteContext();
 
+    const movementTypeItems =  Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
+    
+
     const handleCreateTransaction = async () => {
         const formValues = watch();
 
@@ -98,7 +101,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
-                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' optionsEnum={MovementType} />
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />

@@ -11,6 +11,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { CategoryModel } from '../../domain/categoryModel';
+import { ModalCategory } from '../../components/modals/ModalCategory/ModalCategory';
 
 const categorias: CategoryModel[] = [
     {
@@ -34,6 +35,7 @@ export function CategoriesScreen() {
     const navigation = useNavigation();
 
     const [captionActive, setCaptionActive] = useState("Despesas");
+    const [showModalCategory, setShowModalCategory] = useState(false);
 
 
     useEffect(() => {
@@ -82,7 +84,8 @@ export function CategoriesScreen() {
             <View style={styles.containerItems}>
                 {renderItems()}
             </View>
-            <CircularActionButton />
+            <CircularActionButton onPress={() => setShowModalCategory(true)}/>
+            <ModalCategory isShow={showModalCategory} onClose={() => setShowModalCategory(false)} mode='add'/>
         </View>
     );
 }
