@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalCategoryStyles';
 import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
@@ -13,6 +13,10 @@ import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel'
 import { iconsOptions } from '../../../utils/IconOptions';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { hexColorOptions } from '../../../utils/HexColorOptions';
+import { useCategoryStore } from '../../../stores/CategoryStore';
+import { Ionicons } from '@expo/vector-icons';
+import { useUserContext } from '../../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
 
 
 interface ModalCategoryProps {
@@ -34,10 +38,30 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
         }
     });
 
+    const {createCategory} = useCategoryStore();
+    const {user} = useUserContext();
+    const database = useSQLiteContext();
+
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
 
-    const handleConfirm = () => {
-        console.log(watch());
+    const handleConfirm = async () => {
+        const formValues = watch();
+        const newCategory: Omit<CategoryModel,'id'> = {
+            description: formValues.description,
+            hexColor: formValues.hexColor,
+            iconName: formValues.iconName as  keyof typeof Ionicons.glyphMap,
+            movementType: formValues.movementType
+        }
+
+        if(mode === 'add') {
+            const insertedId = await createCategory(user?.id as number,newCategory, database);
+            if(insertedId) {
+                Alert.alert("Categoria cadastrado com sucesso!");
+                onClose();
+            }
+        }
+        console.log(errors);
+        console.log(newCategory);
     }
 
     return (
@@ -57,7 +81,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
                         <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={40000}/>
                         <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} />
-                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Icone' items={hexColorOptions} zIndex={2000}/>
+                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000}/>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />

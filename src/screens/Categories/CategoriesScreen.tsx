@@ -62,7 +62,7 @@ export function CategoriesScreen() {
 
     const renderItems = () => {
         return categorias.map(categoria => (
-            <View style={styles.categoryItem} id={categoria.id.toString()}>
+            <View id={categoria.id.toString()} style={styles.categoryItem} >
                 <View style={styles.iconCircle}>
                     <Ionicons name={categoria.iconName} size={24} color="black" />
                 </View>
