@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './CategoriesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonIconSimple } from '../../components/buttons/ButtonIconSimple/ButtonIconSimple';
-import { MovementType } from '../../domain/enums/movementTypeEnum';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
-import { CategoryModel } from '../../domain/categoryModel';
 import { ModalCategory } from '../../components/modals/ModalCategory/ModalCategory';
 import { useCategoryStore } from '../../stores/CategoryStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../hooks/useUserContext';
+import { CategoryItem } from '../../components/CategoryItem/CategoryItem';
 
 export function CategoriesScreen() {
 
@@ -58,15 +56,7 @@ export function CategoriesScreen() {
     }
 
     const renderItems = () => {
-        return categories.map(category => (
-            <View id={category.id.toString()} style={styles.categoryItem} >
-                <View style={[styles.iconCircle, { backgroundColor: `${category.hexColor}` }]}>
-                    <Ionicons name={category.iconName} size={24} color="black" />
-                </View>
-                <Text style={styles.categoryItemTitle}>{category.description}</Text>
-                <Ionicons name='ellipsis-vertical-outline' size={24} color="black" />
-            </View>
-        ))
+        return categories.map(category => ( <CategoryItem category={category}/> ))
     }
 
     return (

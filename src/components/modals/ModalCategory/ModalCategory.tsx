@@ -60,8 +60,6 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                 onClose();
             }
         }
-        console.log(errors);
-        console.log(newCategory);
     }
 
     return (
