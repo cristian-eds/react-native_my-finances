@@ -14,6 +14,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
+    borderRadius: 50,
+
   },
   central_info: {
     flex: 1

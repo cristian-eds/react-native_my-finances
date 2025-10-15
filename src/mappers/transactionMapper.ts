@@ -26,7 +26,7 @@ export function toHomeTableItemList(transactions: Transaction[]): HomeTableItem[
         id: transaction.id,
         data: transaction.paymentDate.toLocaleString(),
         description: transaction.description,
-        categoria: "Lazer",
+        category: transaction.categoryId ?? 0,
         value: formaterNumberToBRL(transaction.value),
         movementType: transaction.movementType ?? MovementType.Despesa
     }));

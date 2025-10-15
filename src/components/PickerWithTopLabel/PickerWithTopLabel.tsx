@@ -3,14 +3,12 @@ import { styles } from './PickerWithTopLabelStyles';
 
 import { FieldError, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { TypeAccount } from '../../domain/enums/typeAccountEnum';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
-import { MovementType } from '../../domain/enums/movementTypeEnum';
 
 interface ItemDropdown {
     label: string,
     value: string,
-    icon?: () => ReactElement
+    icon?: () => ReactElement 
 }
 
 interface PickerWithTopLabelProps {

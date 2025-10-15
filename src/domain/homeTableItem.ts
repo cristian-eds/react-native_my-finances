@@ -4,7 +4,7 @@ export type HomeTableItem = {
     id: number,
     data: string;
     description: string;
-    categoria: string;
+    category: number;
     value: string;
     movementType: MovementType
 };

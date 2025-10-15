@@ -7,6 +7,7 @@ export const transactionSchemas = z.object({
     value: z.coerce.number("O valor é obrigatório"),
     paymentDate: z.coerce.date('Data inválida'),
     movementType: z.enum(MovementType, "Tipo movimento inválido"),
+    category: z.string('Categoria inválida!').optional()
     })
 ;
 

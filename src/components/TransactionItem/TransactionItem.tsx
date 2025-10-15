@@ -10,6 +10,7 @@ import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { TouchableOpacity } from 'react-native';
+import { useCategoryStore } from '../../stores/CategoryStore';
 
 interface TransactionItemProps {
     item: HomeTableItem
@@ -31,6 +32,8 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const {transactions} = useTransactionStore();
+    const {categories} = useCategoryStore();
+    const category = categories.find(category => category.id === item.category);
 
     const transactionData = transactions.find(transaction => transaction.id === item.id);
 
@@ -86,8 +89,8 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
-            <View style={styles.iconBox}>
-                <Ionicons name="cart-outline" size={30} color="black" />
+            <View style={[styles.iconBox, {backgroundColor: category?.hexColor}]}>
+                <Ionicons name={category?.iconName ?? 'cart-outline'} size={30} color="black" />
             </View>
             <View style={styles.central_info}>
                 <Text style={styles.central_info_description}>{item.description}</Text>
