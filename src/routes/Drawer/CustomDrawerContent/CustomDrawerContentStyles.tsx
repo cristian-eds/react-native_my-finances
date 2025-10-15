@@ -32,6 +32,10 @@ export const styles = StyleSheet.create({
   itemText: {
     fontSize: 20
   },
+  boxChevron: {
+    width: '15%',
+    alignItems: 'flex-end'
+  },
   subItem: {
     flexDirection: 'row',
     columnGap: 20,

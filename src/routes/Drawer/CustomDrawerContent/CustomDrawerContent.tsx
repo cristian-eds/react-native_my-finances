@@ -9,6 +9,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { ButtonIconSimple } from '../../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useUserContext } from '../../../hooks/useUserContext';
+import { ButtonBack } from '../../../components/buttons/ButtonBack/ButtonBack';
 
 export function CustomDrawerContent({ navigation, ...props }: DrawerContentComponentProps) {
 
@@ -21,7 +22,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.closeDrawer()} />
+                <ButtonBack onPress={() => navigation.closeDrawer()} />
             </View>
             <View style={styles.tab}>
                 <TouchableOpacity style={styles.item}>
@@ -29,7 +30,9 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         <Ionicons name="wallet-outline" size={24} color="black" />
                         <Text style={styles.itemText}>Contas</Text>
                     </TouchableOpacity>
-                    <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={24} color="black" onPress={() => setExpandAccounts(!expandAccounts)} />
+                    <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandAccounts(!expandAccounts)}>
+                        <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
+                    </TouchableOpacity>
                 </TouchableOpacity>
                 {expandAccounts && accounts &&
                     accounts.map(account => (
@@ -51,7 +54,9 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         <Ionicons name="swap-horizontal" size={24} color="black" />
                         <Text style={styles.itemText}>Transações</Text>
                     </TouchableOpacity>
-                    <Ionicons name={expandTransactions ? 'chevron-up' : 'chevron-down'} size={24} color="black" onPress={() => setExpandTransactions(!expandTransactions)} />
+                    <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandTransactions(!expandTransactions)}>
+                        <Ionicons name={expandTransactions ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
+                    </TouchableOpacity>
                 </TouchableOpacity>
                 {
                     expandTransactions && <TouchableOpacity style={styles.subItem} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Categories' })}>
