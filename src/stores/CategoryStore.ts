@@ -10,6 +10,7 @@ type Store = {
 
     fetchCategories: (userId: number, database: SQLiteDatabase) => Promise<boolean>;
     createCategory: (userId: number,category: Omit<CategoryModel, 'id'>, database: SQLiteDatabase) => Promise<boolean>;
+    updateCategory: (category: CategoryModel, database: SQLiteDatabase) => Promise<boolean>;
 }
 
 
@@ -34,6 +35,17 @@ export const useCategoryStore = create<Store>((set, get) => ({
         set({
             categories: [...get().categories, { ...category, id: insertedId }]
         })
+        return true;
+    },
+
+    updateCategory : async (category, database) => {
+        const updated = await categoryService.updateCategory(category, database);
+        if(!updated) return false;
+
+        set({
+            categories: [...get().categories.map(categoryState => categoryState.id === category.id ? category: categoryState)]
+        })
+
         return true;
     }
 }))

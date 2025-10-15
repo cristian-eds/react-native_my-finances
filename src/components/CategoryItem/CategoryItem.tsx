@@ -15,7 +15,7 @@ export function CategoryItem({category}: CategoryItemProps) {
     const [showModalCategory, setShowModalCategory] = useState(false);
 
     return (
-        <TouchableOpacity id={category.id.toString()} style={styles.categoryItem} onPress={() => setShowModalCategory(true)}>
+        <TouchableOpacity key={category.id.toString()} style={styles.categoryItem} onPress={() => setShowModalCategory(true)}>
             <View style={[styles.iconCircle, { backgroundColor: `${category.hexColor}` }]}>
                 <Ionicons name={category.iconName} size={24} color="black" />
             </View>

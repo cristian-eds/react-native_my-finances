@@ -38,25 +38,32 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
         }
     });
 
-    const {createCategory} = useCategoryStore();
-    const {user} = useUserContext();
+    const { createCategory, updateCategory } = useCategoryStore();
+    const { user } = useUserContext();
     const database = useSQLiteContext();
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
 
     const handleConfirm = async () => {
         const formValues = watch();
-        const newCategory: Omit<CategoryModel,'id'> = {
+        const newCategory: CategoryModel = {
             description: formValues.description,
             hexColor: formValues.hexColor,
-            iconName: formValues.iconName as  keyof typeof Ionicons.glyphMap,
-            movementType: formValues.movementType
+            iconName: formValues.iconName as keyof typeof Ionicons.glyphMap,
+            movementType: formValues.movementType,
+            id: categoryData ? categoryData.id : 0
         }
 
-        if(mode === 'add') {
-            const insertedId = await createCategory(user?.id as number,newCategory, database);
-            if(insertedId) {
+        if (mode === 'add') {
+            const insertedId = await createCategory(user?.id as number, newCategory, database);
+            if (insertedId) {
                 Alert.alert("Categoria cadastrado com sucesso!");
+                onClose();
+            }
+        } else if (mode === 'edit') {
+            const updated = await updateCategory(newCategory, database);
+            if(updated) {
+                Alert.alert("Categoria atualizada com sucesso!");
                 onClose();
             }
         }
@@ -77,9 +84,9 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                     <View style={{ rowGap: 10 }}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
-                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={40000}/>
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={40000} />
                         <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} />
-                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000}/>
+                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />

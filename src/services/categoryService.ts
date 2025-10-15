@@ -15,3 +15,7 @@ export const getAllCategories = async (userId: number,database: SQLiteDatabase) 
     if(!categories) return;
     return toModelList(categories);
 }
+
+export const updateCategory = async (category: CategoryModel, database: SQLiteDatabase) => {
+    return await categoryRepository.update(category, database);
+}

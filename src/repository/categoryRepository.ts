@@ -38,3 +38,20 @@ export async function getAll(userId: string, database: SQLiteDatabase): Promise<
         statement.finalizeAsync();
     }
 }
+
+export async function update(category: CategoryModel, database: SQLiteDatabase): Promise<boolean | undefined> {
+    try {
+        const result = await database.runAsync(` 
+            UPDATE categories
+            SET movement_type = ?,
+                hex_color = ?,
+                icon_name = ?,
+                description = ?
+            WHERE id = ?;
+        `,[category.movementType, category.hexColor, category.iconName, category.description, category.id]);
+
+        return result.changes > 0;
+    } catch (error) {
+        console.error("Error updating category:", error);
+    } 
+}

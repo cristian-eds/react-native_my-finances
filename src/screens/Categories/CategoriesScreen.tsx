@@ -49,7 +49,7 @@ export function CategoriesScreen() {
     const renderCaptionItem = (description: string) => {
         const isActive = description === captionActive;
         return (
-            <TouchableOpacity id={description} style={[styles.captionItem, isActive ? styles.captionItemActive : null]} onPress={() => setCaptionActive(description)} >
+            <TouchableOpacity key={description} style={[styles.captionItem, isActive ? styles.captionItemActive : null]} onPress={() => setCaptionActive(description)} >
                 <Text style={[styles.captionItemText, isActive ? styles.captionItemTextActive : null]}>{description}</Text>
             </TouchableOpacity>
         )
