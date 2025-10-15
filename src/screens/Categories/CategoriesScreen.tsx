@@ -12,31 +12,19 @@ import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { CategoryModel } from '../../domain/categoryModel';
 import { ModalCategory } from '../../components/modals/ModalCategory/ModalCategory';
-
-const categorias: CategoryModel[] = [
-    {
-        id: 1,
-        description: 'Saúde',
-        movementType: MovementType.Despesa,
-        hexColor: '#000000',
-        iconName: 'medkit-outline'
-    },
-    {
-        id: 2,
-        description: 'Lazer',
-        movementType: MovementType.Despesa,
-        hexColor: '#000000',
-        iconName: 'game-controller-outline'
-    }
-]
+import { useCategoryStore } from '../../stores/CategoryStore';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useUserContext } from '../../hooks/useUserContext';
 
 export function CategoriesScreen() {
 
     const navigation = useNavigation();
+    const { categories, fetchCategories } = useCategoryStore();
+    const database = useSQLiteContext();
+    const { user } = useUserContext();
 
     const [captionActive, setCaptionActive] = useState("Despesas");
     const [showModalCategory, setShowModalCategory] = useState(false);
-
 
     useEffect(() => {
         navigation.getParent()?.setOptions(
@@ -50,6 +38,15 @@ export function CategoriesScreen() {
         }
     }, [])
 
+    useEffect(() => {
+        const fetch = async () => {
+            if (user) {
+                await fetchCategories(user.id, database);
+            }
+        }
+
+        fetch();
+    }, [user])
 
     const renderCaptionItem = (description: string) => {
         const isActive = description === captionActive;
@@ -61,12 +58,12 @@ export function CategoriesScreen() {
     }
 
     const renderItems = () => {
-        return categorias.map(categoria => (
-            <View id={categoria.id.toString()} style={styles.categoryItem} >
-                <View style={styles.iconCircle}>
-                    <Ionicons name={categoria.iconName} size={24} color="black" />
+        return categories.map(category => (
+            <View id={category.id.toString()} style={styles.categoryItem} >
+                <View style={[styles.iconCircle, { backgroundColor: `${category.hexColor}` }]}>
+                    <Ionicons name={category.iconName} size={24} color="black" />
                 </View>
-                <Text style={styles.categoryItemTitle}>{categoria.description}</Text>
+                <Text style={styles.categoryItemTitle}>{category.description}</Text>
                 <Ionicons name='ellipsis-vertical-outline' size={24} color="black" />
             </View>
         ))
@@ -74,7 +71,7 @@ export function CategoriesScreen() {
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.goBack()} style={styles.buttonBack}/>
+            <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.goBack()} style={styles.buttonBack} />
             <SearchInput placeholder='Pesquisar categoria...' />
             <View style={styles.captions}>
                 {renderCaptionItem('Receitas')}
@@ -84,8 +81,8 @@ export function CategoriesScreen() {
             <View style={styles.containerItems}>
                 {renderItems()}
             </View>
-            <CircularActionButton onPress={() => setShowModalCategory(true)}/>
-            <ModalCategory isShow={showModalCategory} onClose={() => setShowModalCategory(false)} mode='add'/>
+            <CircularActionButton onPress={() => setShowModalCategory(true)} />
+            <ModalCategory isShow={showModalCategory} onClose={() => setShowModalCategory(false)} mode='add' />
         </View>
     );
 }

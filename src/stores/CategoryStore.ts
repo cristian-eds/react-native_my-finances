@@ -8,7 +8,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 type Store = {
     categories: CategoryModel[];
 
-    fetchCategories: () => Promise<boolean>;
+    fetchCategories: (userId: number, database: SQLiteDatabase) => Promise<boolean>;
     createCategory: (userId: number,category: Omit<CategoryModel, 'id'>, database: SQLiteDatabase) => Promise<boolean>;
 }
 
@@ -17,7 +17,13 @@ export const useCategoryStore = create<Store>((set, get) => ({
 
     categories: [],
 
-    fetchCategories: async () => {
+    fetchCategories: async (userId, database) => {
+        const categories = await categoryService.getAllCategories(userId, database);
+        if(!categories) return false;
+
+        set({
+            categories: [...categories]
+        })
         return true;
     },
 
