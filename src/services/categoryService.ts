@@ -9,9 +9,9 @@ export const createCategory = async (userId: number,category: Omit<CategoryModel
     return await categoryRepository.create(userId.toString() ,category, database);
 }
 
-export const getAllCategories = async (userId: number,database: SQLiteDatabase) => {
+export const getAllCategories = async (userId: number,database: SQLiteDatabase, search?: string) => {
     if(!userId) return;
-    const categories = await categoryRepository.getAll(userId.toString(), database);
+    const categories = await categoryRepository.getAll(userId.toString(), database, search);
     if(!categories) return;
     return toModelList(categories);
 }

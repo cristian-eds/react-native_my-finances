@@ -16,10 +16,11 @@ export async function create(userId: string, category: Omit<CategoryModel, 'id'>
     } 
 }
 
-export async function getAll(userId: string, database: SQLiteDatabase): Promise<CategoryRecord[] | undefined> {
+export async function getAll(userId: string, database: SQLiteDatabase, search?: string): Promise<CategoryRecord[] | undefined> {
     const statement = await database.prepareAsync(`
             SELECT * FROM categories 
-            WHERE user_id = $userId
+            WHERE user_id = $userId 
+            ${search ? 'AND description like "%'+search+'%"': ""};
     `);
 
     try {

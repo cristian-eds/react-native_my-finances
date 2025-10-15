@@ -21,6 +21,7 @@ export function CategoriesScreen() {
     const database = useSQLiteContext();
     const { user } = useUserContext();
 
+    const [search, setSearch] = useState("");
     const [captionActive, setCaptionActive] = useState("Despesas");
     const [showModalCategory, setShowModalCategory] = useState(false);
 
@@ -39,12 +40,12 @@ export function CategoriesScreen() {
     useEffect(() => {
         const fetch = async () => {
             if (user) {
-                await fetchCategories(user.id, database);
+                await fetchCategories(user.id, database,search);
             }
         }
 
         fetch();
-    }, [user])
+    }, [user,search])
 
     const renderCaptionItem = (description: string) => {
         const isActive = description === captionActive;
@@ -62,7 +63,7 @@ export function CategoriesScreen() {
     return (
         <View style={GlobalStyles.container_screens_normal}>
             <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.goBack()} style={styles.buttonBack} />
-            <SearchInput placeholder='Pesquisar categoria...' />
+            <SearchInput placeholder='Pesquisar categoria...' value={search} onChangeText={(e) => setSearch(e)}/>
             <View style={styles.captions}>
                 {renderCaptionItem('Receitas')}
                 {renderCaptionItem('Despesas')}
