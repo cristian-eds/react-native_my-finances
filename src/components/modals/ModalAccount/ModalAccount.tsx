@@ -15,6 +15,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { useAccountStore } from '../../../stores/AccountStore';
 import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
+import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 
 interface ModalAccountProps {
     isShow: boolean;
@@ -78,7 +79,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonIconSimple iconName='arrow-back' onPress={handleCloseModal} />
+                        <ButtonBack onPress={handleCloseModal}/>
                         <Text style={styles.title}>Nova Conta</Text>
                         <View style={styles.rightSpacer}>
                         </View>

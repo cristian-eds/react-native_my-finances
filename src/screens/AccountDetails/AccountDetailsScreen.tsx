@@ -27,6 +27,7 @@ import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm'
 import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
 import { ButtonIconSimple } from '../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 import { useNavigation } from '@react-navigation/native';
+import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 
 
 export function AccountDetails() {
@@ -105,7 +106,7 @@ export function AccountDetails() {
     return (
         <ScrollView style={GlobalStyles.container_screens_normal}>
             <View style={styles.containerBack}>
-                <ButtonIconSimple iconName='arrow-back' style={styles.containerBackIconButton} onPress={() => navigation.goBack()} />
+                <ButtonBack  onPress={() => navigation.goBack()} />
             </View>
 
             <View style={styles.header}>

@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
+import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 
 
 interface ModalCategoryProps {
@@ -91,7 +92,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonIconSimple iconName='arrow-back' onPress={onClose} style={{ width: '15%' }} />
+                        <ButtonBack onPress={onClose}/>
                         <Text style={styles.title}>{mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}</Text>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :

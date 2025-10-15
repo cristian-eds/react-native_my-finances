@@ -16,6 +16,7 @@ import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel'
 import { Transaction } from '../../../domain/transactionModel';
 import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
+import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -91,7 +92,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonIconSimple iconName='arrow-back' onPress={onClose} style={{ width: '15%' }} />
+                        <ButtonBack onPress={onClose}/>
                         <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={()=>setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :

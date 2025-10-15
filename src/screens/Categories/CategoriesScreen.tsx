@@ -14,6 +14,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../hooks/useUserContext';
 import { CategoryItem } from '../../components/CategoryItem/CategoryItem';
 import { capitalizeWord } from '../../utils/StringFormater';
+import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 
 export function CategoriesScreen() {
 
@@ -82,7 +83,7 @@ export function CategoriesScreen() {
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.goBack()} style={styles.buttonBack} />
+            <ButtonBack onPress={() => navigation.goBack()}/>
             <SearchInput placeholder='Pesquisar categoria...' value={search} onChangeText={(e) => setSearch(e)}/>
             <View style={styles.captions}>
                 {renderCaptionItem('RECEITA')}
