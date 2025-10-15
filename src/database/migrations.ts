@@ -32,7 +32,7 @@ const migrations = [
     );
     `,
     `
-        CREATE TABLE IF NOT EXISTS category (
+        CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             description TEXT NOT NULL,
             movement_type TEXT NOT NULL,
