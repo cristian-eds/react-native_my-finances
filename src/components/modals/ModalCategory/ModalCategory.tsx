@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalCategoryStyles';
@@ -17,6 +17,7 @@ import { useCategoryStore } from '../../../stores/CategoryStore';
 import { Ionicons } from '@expo/vector-icons';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
+import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 
 
 interface ModalCategoryProps {
@@ -38,9 +39,11 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
         }
     });
 
-    const { createCategory, updateCategory } = useCategoryStore();
+    const { createCategory, updateCategory, deleteCategory } = useCategoryStore();
     const { user } = useUserContext();
     const database = useSQLiteContext();
+
+    const [showModalDelete, setShowModalDelete] = useState(false);
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
 
@@ -62,10 +65,20 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
             }
         } else if (mode === 'edit') {
             const updated = await updateCategory(newCategory, database);
-            if(updated) {
+            if (updated) {
                 Alert.alert("Categoria atualizada com sucesso!");
                 onClose();
             }
+        }
+    }
+
+    const handleDelete = async () => {
+        if(!categoryData) return;
+        const deleted = await deleteCategory(categoryData?.id, database);
+        if(deleted) {
+            Alert.alert("Categoria deletada com sucesso!");
+            setShowModalDelete(false);
+            onClose();
         }
     }
 
@@ -80,7 +93,9 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     <View style={styles.header}>
                         <ButtonIconSimple iconName='arrow-back' onPress={onClose} style={{ width: '15%' }} />
                         <Text style={styles.title}>{mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}</Text>
-                        <View style={styles.rightSpacer}></View>
+                        {mode === 'edit' ?
+                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
+                            <View style={styles.rightSpacer}></View>}
                     </View>
                     <View style={{ rowGap: 10 }}>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
@@ -94,6 +109,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                 </View>
             </View>
+            <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} title='Confirma a exclusão da categoria?' onConfirm={handleDelete}/>
         </Modal>
     );
 }

@@ -11,6 +11,7 @@ type Store = {
     fetchCategories: (userId: number, database: SQLiteDatabase) => Promise<boolean>;
     createCategory: (userId: number,category: Omit<CategoryModel, 'id'>, database: SQLiteDatabase) => Promise<boolean>;
     updateCategory: (category: CategoryModel, database: SQLiteDatabase) => Promise<boolean>;
+    deleteCategory: (categoryId: number, database: SQLiteDatabase) => Promise<boolean>
 }
 
 
@@ -46,6 +47,16 @@ export const useCategoryStore = create<Store>((set, get) => ({
             categories: [...get().categories.map(categoryState => categoryState.id === category.id ? category: categoryState)]
         })
 
+        return true;
+    },
+
+    deleteCategory: async (categoryId, database) => {
+        const deleted = await categoryService.deleteCategory(categoryId, database);
+        if(!deleted) return false;
+
+        set({
+            categories: [...get().categories.filter(categoryState => categoryState.id !== categoryId)]
+        })
         return true;
     }
 }))

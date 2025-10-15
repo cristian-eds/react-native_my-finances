@@ -19,3 +19,7 @@ export const getAllCategories = async (userId: number,database: SQLiteDatabase) 
 export const updateCategory = async (category: CategoryModel, database: SQLiteDatabase) => {
     return await categoryRepository.update(category, database);
 }
+
+export const deleteCategory = async (categoryId: number, database: SQLiteDatabase) => {
+    return await categoryRepository.deleteCategory(categoryId, database);
+}

@@ -55,3 +55,16 @@ export async function update(category: CategoryModel, database: SQLiteDatabase):
         console.error("Error updating category:", error);
     } 
 }
+
+export async function deleteCategory(categoryId: number, database: SQLiteDatabase): Promise<boolean | undefined> {
+    try {
+        const result = await database.runAsync(` 
+            DELETE FROM categories
+            WHERE id = ?;
+        `,[categoryId]);
+
+        return result.changes > 0;
+    } catch (error) {
+        console.error("Error deleting category:", error);
+    } 
+}

@@ -56,7 +56,7 @@ export function CategoriesScreen() {
     }
 
     const renderItems = () => {
-        return categories.map(category => ( <CategoryItem category={category}/> ))
+        return categories.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
     }
 
     return (
