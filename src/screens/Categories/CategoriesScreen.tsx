@@ -93,7 +93,7 @@ export function CategoriesScreen() {
             <View style={styles.containerItems}>
                 {renderItems()}
             </View>
-            <CircularActionButton onPress={() => setShowModalCategory(true)} />
+            <CircularActionButton onPress={() => setShowModalCategory(true)} style={{bottom: '10%'}} />
             <ModalCategory isShow={showModalCategory} onClose={() => setShowModalCategory(false)} mode='add' />
         </View>
     );

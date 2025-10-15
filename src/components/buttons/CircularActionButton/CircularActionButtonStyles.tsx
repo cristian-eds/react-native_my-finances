@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    bottom: '10%',
+    bottom: '5%',
     right: '10%',
     elevation: 2
   }

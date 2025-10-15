@@ -20,6 +20,7 @@ import { TransactionItem } from '../../components/TransactionItem/TransactionIte
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { toHomeTableItemList } from '../../mappers/transactionMapper';
+import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 
 
 export function HomeScreen() {
@@ -91,6 +92,7 @@ export function HomeScreen() {
             /> : <View>
                 <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
             </View>}
+            <CircularActionButton onPress={() => setShowModalTransaction(true)} />
             <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add'/>
         </View>
     );
