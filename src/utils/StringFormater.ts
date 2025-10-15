@@ -1,9 +1,9 @@
 export const capitalizeWord = (word: string) => {
     const lower = word.toLocaleLowerCase();
 
-    const firstLetter = word.charAt(0).toLocaleUpperCase();
+    const firstLetter = lower.charAt(0).toLocaleUpperCase();
 
-    const restWord = word.slice(1);
+    const restWord = lower.slice(1);
 
     return firstLetter + restWord;
 

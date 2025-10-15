@@ -13,6 +13,7 @@ import { useCategoryStore } from '../../stores/CategoryStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../hooks/useUserContext';
 import { CategoryItem } from '../../components/CategoryItem/CategoryItem';
+import { capitalizeWord } from '../../utils/StringFormater';
 
 export function CategoriesScreen() {
 
@@ -22,7 +23,7 @@ export function CategoriesScreen() {
     const { user } = useUserContext();
 
     const [search, setSearch] = useState("");
-    const [captionActive, setCaptionActive] = useState("Despesas");
+    const [captionActive, setCaptionActive] = useState("");
     const [showModalCategory, setShowModalCategory] = useState(false);
 
     useEffect(() => {
@@ -47,17 +48,36 @@ export function CategoriesScreen() {
         fetch();
     }, [user,search])
 
+    
+
     const renderCaptionItem = (description: string) => {
         const isActive = description === captionActive;
         return (
-            <TouchableOpacity key={description} style={[styles.captionItem, isActive ? styles.captionItemActive : null]} onPress={() => setCaptionActive(description)} >
-                <Text style={[styles.captionItemText, isActive ? styles.captionItemTextActive : null]}>{description}</Text>
+            <TouchableOpacity key={description} style={[styles.captionItem, isActive ? styles.captionItemActive : null]} onPress={() => handleCaptionActive(description)} >
+                <Text style={[styles.captionItemText, isActive ? styles.captionItemTextActive : null]}>{capitalizeWord(description)}</Text>
             </TouchableOpacity>
         )
     }
 
     const renderItems = () => {
-        return categories.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
+        const categoriesFiltered = filterCategories();
+        return categoriesFiltered.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
+    }
+
+    const filterCategories = () => {
+        if(captionActive) {
+            return categories.filter(category => category.movementType === captionActive)
+        }
+        return categories;
+    }
+
+    const handleCaptionActive = (caption: string) => {
+        setCaptionActive(prevCaption => {
+            if(prevCaption === caption) {
+                return "";
+            }
+            return caption;
+        })
     }
 
     return (
@@ -65,9 +85,9 @@ export function CategoriesScreen() {
             <ButtonIconSimple iconName='arrow-back' onPress={() => navigation.goBack()} style={styles.buttonBack} />
             <SearchInput placeholder='Pesquisar categoria...' value={search} onChangeText={(e) => setSearch(e)}/>
             <View style={styles.captions}>
-                {renderCaptionItem('Receitas')}
-                {renderCaptionItem('Despesas')}
-                {renderCaptionItem('Transferências')}
+                {renderCaptionItem('RECEITA')}
+                {renderCaptionItem('DESPESA')}
+                {renderCaptionItem('TRANSFERENCIA')}
             </View>
             <View style={styles.containerItems}>
                 {renderItems()}
