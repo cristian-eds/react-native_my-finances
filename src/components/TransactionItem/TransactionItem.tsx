@@ -97,7 +97,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
                 <Text style={styles.central_info_data}>{item.data}</Text>
             </View>
             {renderValueInfo()}
-            <ModalTransaction transactionData={transactionData} isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='edit'/>
+            {showModalTransaction && <ModalTransaction transactionData={transactionData} isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='edit'/>}
         </TouchableOpacity>
     );
 }

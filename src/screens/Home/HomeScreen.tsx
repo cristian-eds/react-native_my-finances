@@ -21,6 +21,7 @@ import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { toHomeTableItemList } from '../../mappers/transactionMapper';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
+import { useCategoryStore } from '../../stores/CategoryStore';
 
 
 export function HomeScreen() {
@@ -30,11 +31,13 @@ export function HomeScreen() {
 
     const { setActiveAccount, setAccounts, activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
+    const { fetchCategories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
 
     useEffect(() => {
         const fetchAccount = async () => {
+            await fetchCategories(Number(user?.id), database);
             const accountsUser = await getAccountsByUser(Number(user?.id), database);
             if (accountsUser) {
                 setAccounts(accountsUser);
@@ -53,8 +56,8 @@ export function HomeScreen() {
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
-                    .map(transaction => transaction.value)
-                    .reduce((prevValue, current) => prevValue + current,0);
+            .map(transaction => transaction.value)
+            .reduce((prevValue, current) => prevValue + current, 0);
         return (
             <View style={styles.transactions_infos_item}>
                 <Text style={styles.transactions_infos_h3}>{title}</Text>
@@ -87,13 +90,13 @@ export function HomeScreen() {
             </View>
             {transactions.length > 0 ? <FlatList<HomeTableItem>
                 data={toHomeTableItemList(transactions)}
-                keyExtractor={(item, index) => index.toLocaleString()}
+                keyExtractor={(item, index) => item.id.toString()}
                 renderItem={({ item }) => <TransactionItem item={item} />}
             /> : <View>
                 <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
             </View>}
             <CircularActionButton onPress={() => setShowModalTransaction(true)} />
-            <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add'/>
+            <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' />
         </View>
     );
 }

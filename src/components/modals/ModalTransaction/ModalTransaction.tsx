@@ -37,9 +37,10 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             paymentDate: transactionData?.paymentDate ?? new Date().toISOString(),
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
-            category: transactionData?.categoryId?.toString() ?? ""
+            category: transactionData?.categoryId?.toString() ?? undefined
         }
     });
+
 
     const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
     const { categories } = useCategoryStore();
@@ -55,7 +56,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         return {
             label: category.description,
             value: category.id.toString(),
-            icon: () =>  <View style={{backgroundColor: category.hexColor, borderRadius: 50, padding:2}}><Ionicons name={category.iconName} size={24} color="black" /></View>
+            icon: () =>  <View key={category.id} style={{backgroundColor: category.hexColor, borderRadius: 50, padding:2}}><Ionicons name={category.iconName} size={24} color="black" /></View>
         }
     })
 
@@ -96,6 +97,11 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         }
     }
 
+    const handleClose = () => {
+        reset();
+        onClose();
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -105,7 +111,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={onClose} />
+                        <ButtonBack onPress={handleClose} />
                         <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
@@ -119,7 +125,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                         <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000}/>
                     </View>
                     <View style={styles.buttons_footer}>
-                        <ButtonIconAction iconName='close' onPress={onClose} />
+                        <ButtonIconAction iconName='close' onPress={handleClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)} />
                     </View>
                 </View>
