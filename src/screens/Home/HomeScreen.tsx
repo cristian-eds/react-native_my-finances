@@ -29,22 +29,18 @@ export function HomeScreen() {
     const { user } = useUserContext();
     const database = useSQLiteContext();
 
-    const { setActiveAccount, setAccounts, activeAccount, accounts } = useAccountStore();
+    const { fetchAccounts,activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
     const { fetchCategories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
 
     useEffect(() => {
-        const fetchAccount = async () => {
+        const fetch= async () => {
             await fetchCategories(Number(user?.id), database);
-            const accountsUser = await getAccountsByUser(Number(user?.id), database);
-            if (accountsUser) {
-                setAccounts(accountsUser);
-                setActiveAccount(accountsUser[0])
-            };
+            await fetchAccounts(Number(user?.id), database);
         }
-        fetchAccount();
+        fetch();
 
     }, [user])
 

@@ -18,28 +18,28 @@ export function CardAccount() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    const {activeAccount} = useAccountStore();
+    const { activeAccount } = useAccountStore();
 
     const [showModalAddAccount, setShowModalAddAccount] = useState(false);
 
     const handleNavigateToAccountDetails = () => {
-        if(activeAccount) {
-            navigation.navigate('AccountDetails', {account: activeAccount});
+        if (activeAccount) {
+            navigation.navigate('AccountDetails', { account: activeAccount });
         }
     }
 
     return (
         <TouchableOpacity style={styles.card} onPress={handleNavigateToAccountDetails}>
-            <Text style={{fontSize: 14,textAlign: 'center'}}>Conta</Text>
+            <Text style={{ fontSize: 14, textAlign: 'center' }}>Conta</Text>
             <View style={styles.card_header}>
-                <Ionicons name="key-outline" size={28} color="black" style={{flex:1}}/>
-                <View style={{alignItems: 'center', flex:4}}>
+                <Ionicons name="key-outline" size={28} color="black" style={{ flex: 1 }} />
+                <View style={{ alignItems: 'center', flex: 4 }}>
                     <SelectAccount />
                 </View>
-                <Ionicons name="add" size={28} color="black" style={{flex:1, textAlign: 'right'}} onPress={() => setShowModalAddAccount(true)}/>
+                <Ionicons name="add" size={28} color="black" style={{ flex: 1, textAlign: 'right' }} onPress={() => setShowModalAddAccount(true)} />
             </View>
             <View>
-                <Text style={{fontSize: 22}}>Saldo:</Text>
+                <Text style={{ fontSize: 22 }}>Saldo:</Text>
                 <View style={styles.card_info}>
                     <Text style={styles.card_info_text_balance}>{formaterNumberToBRL(activeAccount?.balance)}</Text>
                     <Ionicons name="eye-outline" size={24} color="black" />

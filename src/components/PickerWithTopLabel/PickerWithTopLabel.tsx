@@ -7,7 +7,7 @@ import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 
 interface ItemDropdown {
     label: string,
-    value: string,
+    value: string | number,
     icon?: () => ReactElement 
 }
 
@@ -18,10 +18,11 @@ interface PickerWithTopLabelProps {
     errors?: FieldError | undefined;
     control: any;
     items: ItemDropdown[];
-    zIndex?: number
+    zIndex?: number,
+    zIndexInverse?: number
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1 }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse= 10000 }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
@@ -51,7 +52,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 maxHeight={200}
                 listMode='FLATLIST'
                 zIndex={zIndex}
-                zIndexInverse={1000}
+                zIndexInverse={zIndexInverse}
 
             />
         </RowWithTopLabel>

@@ -21,6 +21,7 @@ import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 
+
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
@@ -30,6 +31,8 @@ interface ModalTransactionProps {
 
 export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
 
+    const { activeAccount, accounts } = useAccountStore();
+
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
         defaultValues: {
@@ -37,21 +40,20 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             paymentDate: transactionData?.paymentDate ?? new Date().toISOString(),
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
-            category: transactionData?.categoryId?.toString() ?? undefined
+            category: transactionData?.categoryId?.toString() ?? undefined,
+            accountId: transactionData?.accountId ?? Number(activeAccount?.id) 
         }
     });
 
-
     const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
     const { categories } = useCategoryStore();
-    const { activeAccount } = useAccountStore();
 
     const [showModalConfirmDelete, setShowModalConfirmDelete] = useState(false);
 
     const database = useSQLiteContext();
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
-
+    const accountItems = accounts.map(acc => {return {label: acc.name, value: acc.id}})
     const categoriesItems = categories.map(category => {
         return {
             label: category.description,
@@ -60,11 +62,12 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         }
     })
 
+
     const handleCreateTransaction = async () => {
         const formValues = watch();
 
         const newTransaction = {
-            accountId: activeAccount?.id as number,
+            accountId: formValues.accountId,
             value: Number(formValues.value),
             description: formValues.description,
             movementType: formValues.movementType,
@@ -91,7 +94,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         const isDeleted = await deleteTransaction(transactionData?.id as number, database);
         if (isDeleted) {
             Alert.alert("Transação deletada com sucesso!");
-            handleClose();
+            handleClose()
         }
     }
 
@@ -120,7 +123,8 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
                         <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000}/>
-                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000}/>
+                        <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} />
+                        <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000}/>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleClose} />

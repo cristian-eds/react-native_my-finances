@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
         right: 10,
         position: 'absolute',
         bottom: -6,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        zIndex: 1000000
     },
 });

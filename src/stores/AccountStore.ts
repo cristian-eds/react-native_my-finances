@@ -11,9 +11,9 @@ type Store = {
     accounts: Account[];
     activeAccount: Account | null;
 
-    setAccounts: (accounts: Account[]) => void;
     setActiveAccount: (account: Account) => void;
 
+    fetchAccounts: (userId: number, database: SQLiteDatabase) => Promise<void>;
     createAccount: (account: Omit<Account, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>;
     updateAccount: (account: UpdateAccountModel, database: SQLiteDatabase) => Promise<boolean>;
     toggleStatusAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
@@ -27,9 +27,19 @@ export const useAccountStore = create<Store>((set, get) => ({
     accounts: [],
     activeAccount: null,
 
-    setAccounts: (accounts) => set({ accounts }),
+    setActiveAccount: (account) => {
+        set({activeAccount: account})
+    },
 
-    setActiveAccount: (account) => set({ activeAccount: account }),
+    fetchAccounts: async (userId, database) => {
+        const accountsUser = await accountService.getAccountsByUser(userId, database);
+        if (accountsUser) {
+            set({
+                accounts: [...accountsUser],
+                activeAccount: accountsUser[0]
+            })
+        };
+    },
 
     updateAccount: async (account, database) => {
         try {
@@ -100,9 +110,9 @@ export const useAccountStore = create<Store>((set, get) => ({
         const updatedAccount = { ...account, balance: newBalance };
         const updated = await accountService.updateAccountBalance(accountId, updatedAccount.balance, database);
         if (!updated) return;
-        
+
         set({
-            accounts: [...get().accounts.map(acc => account.id === accountId ? updatedAccount : acc)],
+            accounts: [...get().accounts.map(acc => acc.id === accountId ? updatedAccount : acc)],
             activeAccount: get().activeAccount?.id === accountId ? updatedAccount : get().activeAccount
         })
     }
