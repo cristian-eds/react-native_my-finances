@@ -28,8 +28,6 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
         name,
         control
     });
-
-    if (name === 'accountId') console.log(field.value);
     
     const [open, setOpen] = useState(false);
 
@@ -50,7 +48,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 style={styles.picker}
                 textStyle={styles.picker_text}
                 dropDownContainerStyle={styles.dropdownList}
-                placeholder='Selecione um item'
+                placeholder='Selecione'
                 maxHeight={200}
                 listMode='FLATLIST'
                 zIndex={zIndex}
