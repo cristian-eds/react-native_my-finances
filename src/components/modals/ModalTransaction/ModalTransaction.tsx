@@ -83,8 +83,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
-            reset();
-            onClose();
+            handleClose();
         }
     }
 
@@ -92,8 +91,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         const isDeleted = await deleteTransaction(transactionData?.id as number, database);
         if (isDeleted) {
             Alert.alert("Transação deletada com sucesso!");
-            reset();
-            onClose();
+            handleClose();
         }
     }
 

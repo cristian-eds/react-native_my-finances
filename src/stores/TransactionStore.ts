@@ -81,6 +81,13 @@ export const useTransactionStore = create<Store>((set, get) => ({
         try {
             const isDeleted = await transactionService.deleteById(idTransaction,database);
             if(!isDeleted) return false;
+            const oldTransaction = get().transactions.find(transaction => transaction.id === idTransaction);
+            if(oldTransaction) {
+                const {updateBalanceAccount} = useAccountStore.getState();
+                oldTransaction.movementType === MovementType.Receita ? 
+                    updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa) : 
+                    updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
+            }
             set({
                 transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)]
             })
