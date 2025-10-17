@@ -92,10 +92,12 @@ export function HomeScreen() {
                 data={toHomeTableItemList(transactions)}
                 keyExtractor={(item, index) => item.id.toString()}
                 renderItem={({ item }) => <TransactionItem item={item} />}
-            /> : <View>
+                contentContainerStyle={{paddingBottom: 80}}
+            /> : 
+            <View>
                 <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
             </View>}
-            <CircularActionButton onPress={() => setShowModalTransaction(true)} />
+            <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{opacity: 0.9}} />
             <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' />
         </View>
     );
