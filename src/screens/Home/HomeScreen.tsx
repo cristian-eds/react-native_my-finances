@@ -46,13 +46,13 @@ export function HomeScreen() {
         }
         fetchAccount();
 
-    }, [user, filters.initialDate, filters.finalDate])
+    }, [user])
 
     useEffect(() => {
         if (activeAccount) {
             fetchTransactions(activeAccount.id as number, database);
         }
-    }, [activeAccount])
+    }, [activeAccount,filters.initialDate, filters.finalDate])
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
