@@ -58,6 +58,16 @@ export const useTransactionStore = create<Store>((set, get) => ({
         try {
             const isUpdated = await transactionService.update(transaction, database);
             if (!isUpdated) return false;
+            const oldTransaction = get().transactions.find(transac => transac.id === transaction.id);
+            if (oldTransaction) {
+                const {updateBalanceAccount} = useAccountStore.getState();
+                oldTransaction?.movementType === MovementType.Receita ? 
+                    await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa) :
+                    await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
+
+                await updateBalanceAccount(transaction.accountId, transaction.value, database, transaction.movementType);
+            }
+
             set({
                 transactions: [...get().transactions.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
             })
