@@ -7,11 +7,11 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './CardAccountStyles';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { PrincipalStackParamList } from '../../routes/types/PrincipalStackParamList';
 import { useAccountStore } from '../../stores/AccountStore';
 import { SelectAccount } from '../SelectAccount/SelectAccount';
 import ModalAccount from '../modals/ModalAccount/ModalAccount';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
+import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 
 
 export function CardAccount() {

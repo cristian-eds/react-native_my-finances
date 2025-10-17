@@ -4,6 +4,8 @@ import { SQLiteDatabase } from "expo-sqlite";
 
 import * as transactionService from '../services/transactionService';
 import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
+import { useAccountStore } from "./AccountStore";
+import { MovementType } from "../domain/enums/movementTypeEnum";
 
 type Store = {
     transactions: Transaction[];
@@ -27,6 +29,8 @@ export const useTransactionStore = create<Store>((set, get) => ({
     addTransaction: async (transaction: Omit<Transaction, 'id'>, database) => {
         const idInsertedTransaction = await transactionService.create(transaction, database);
         if (!idInsertedTransaction) return false;
+        const {updateBalanceAccount} = useAccountStore.getState();
+        await updateBalanceAccount(transaction.accountId, transaction.value, database, transaction.movementType);
         set({
             transactions: [...get().transactions, { ...transaction, id: idInsertedTransaction }]
         })

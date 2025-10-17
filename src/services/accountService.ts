@@ -26,3 +26,8 @@ export async function toggleStatusAccount(accountId: number, database: SQLiteDat
 export async function deleteAccount(accountId: number, database: SQLiteDatabase): Promise<boolean>  {
     return await accountRepository.deleteAccount(accountId, database);
 }
+
+export async function updateAccountBalance(accountId: number, newBalance: number,database: SQLiteDatabase) {
+    return await accountRepository.updateAccountBalance(accountId, newBalance, database);
+}
+

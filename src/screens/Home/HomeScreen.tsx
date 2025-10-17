@@ -29,7 +29,7 @@ export function HomeScreen() {
     const { user } = useUserContext();
     const database = useSQLiteContext();
 
-    const { setActiveAccount, setAccounts, activeAccount } = useAccountStore();
+    const { setActiveAccount, setAccounts, activeAccount, accounts } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
     const { fetchCategories } = useCategoryStore();
 
