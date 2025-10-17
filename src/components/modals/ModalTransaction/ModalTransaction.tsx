@@ -20,18 +20,19 @@ import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimpl
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
-
+import { Account } from '../../../domain/accountModel';
 
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
     mode: 'add' | 'edit',
-    transactionData?: Transaction
+    transactionData?: Transaction,
+    activeAccount?: Account | null
 }
 
-export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
+export function ModalTransaction({ isShow, onClose, mode, transactionData, activeAccount }: ModalTransactionProps) {
 
-    const { activeAccount, accounts } = useAccountStore();
+    const { accounts } = useAccountStore();
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -41,7 +42,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
-            accountId: transactionData?.accountId ?? Number(activeAccount?.id) 
+            accountId: transactionData?.accountId.toString() ?? activeAccount?.id.toString()
         }
     });
 
@@ -53,27 +54,26 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
     const database = useSQLiteContext();
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
-    const accountItems = accounts.map(acc => {return {label: acc.name, value: acc.id}})
+    const accountItems = accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } })
     const categoriesItems = categories.map(category => {
         return {
             label: category.description,
             value: category.id.toString(),
-            icon: () =>  <View key={category.id} style={{backgroundColor: category.hexColor, borderRadius: 50, padding:2}}><Ionicons name={category.iconName} size={24} color="black" /></View>
+            icon: () => <View key={category.id} style={{ backgroundColor: category.hexColor, borderRadius: 50, padding: 2 }}><Ionicons name={category.iconName} size={24} color="black" /></View>
         }
     })
-
 
     const handleCreateTransaction = async () => {
         const formValues = watch();
 
         const newTransaction = {
-            accountId: formValues.accountId,
+            accountId: Number(formValues.accountId),
             value: Number(formValues.value),
             description: formValues.description,
             movementType: formValues.movementType,
             paymentDate: new Date(formValues.paymentDate as Date),
             id: transactionData?.id as number,
-            categoryId: Number(formValues.category)  ?? undefined
+            categoryId: Number(formValues.category) ?? undefined
         }
 
         let isSaved = false;
@@ -122,9 +122,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
                         <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
-                        <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000}/>
+                        <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} />
                         <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} />
-                        <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000}/>
+                        <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleClose} />

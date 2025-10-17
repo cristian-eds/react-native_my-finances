@@ -29,7 +29,7 @@ export function HomeScreen() {
     const { user } = useUserContext();
     const database = useSQLiteContext();
 
-    const { fetchAccounts,activeAccount } = useAccountStore();
+    const { fetchAccounts, activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
     const { fetchCategories } = useCategoryStore();
 
@@ -93,8 +93,8 @@ export function HomeScreen() {
             <View>
                 <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
             </View>}
-            <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{opacity: 0.9}} />
-            <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' />
+            <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{opacity: 0.8}} />
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount}/>}
         </View>
     );
 }

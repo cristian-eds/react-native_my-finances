@@ -28,7 +28,7 @@ export const useAccountStore = create<Store>((set, get) => ({
     activeAccount: null,
 
     setActiveAccount: (account) => {
-        set({activeAccount: account})
+        set({ activeAccount: account })
     },
 
     fetchAccounts: async (userId, database) => {
@@ -116,8 +116,5 @@ export const useAccountStore = create<Store>((set, get) => ({
             activeAccount: get().activeAccount?.id === accountId ? updatedAccount : get().activeAccount
         })
     }
-
-
-
 }));
 

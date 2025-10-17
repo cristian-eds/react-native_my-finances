@@ -1,14 +1,14 @@
 import React, { ReactElement, useState } from 'react';
 import { styles } from './PickerWithTopLabelStyles';
 
-import { FieldError, useController } from 'react-hook-form';
+import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 
 interface ItemDropdown {
     label: string,
-    value: string | number,
-    icon?: () => ReactElement 
+    value: string,
+    icon?: () => ReactElement
 }
 
 interface PickerWithTopLabelProps {
@@ -22,17 +22,19 @@ interface PickerWithTopLabelProps {
     zIndexInverse?: number
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse= 10000 }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000 }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
-        control,
+        control
     });
 
+    if (name === 'accountId') console.log(field.value);
+    
     const [open, setOpen] = useState(false);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0}} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} >
             <DropDownPicker
                 value={field.value}
                 open={open}
