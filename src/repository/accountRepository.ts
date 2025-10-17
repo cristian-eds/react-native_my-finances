@@ -87,7 +87,7 @@ export async function update(account: UpdateAccountModel, database: SQLiteDataba
     }
 }
 
-export async function toggleStatusAccount(accountId: Number, database: SQLiteDatabase): Promise<boolean> {
+export async function toggleStatusAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
     const statement = await database.prepareAsync(` 
             UPDATE account  
             SET status = $status
@@ -95,7 +95,7 @@ export async function toggleStatusAccount(accountId: Number, database: SQLiteDat
         `);
     try {
         const currentStatus = await getAccountStatus(accountId, database);
-    
+
         if (!currentStatus) return false;
 
         const params = { $id: accountId.toLocaleString(), $status: currentStatus === Status.Ativo ? Status.Inativo : Status.Ativo };
@@ -109,33 +109,33 @@ export async function toggleStatusAccount(accountId: Number, database: SQLiteDat
     }
 }
 
-async function getAccountStatus(accountId: Number, database: SQLiteDatabase): Promise<string | undefined> {
+async function getAccountStatus(accountId: number, database: SQLiteDatabase): Promise<string | undefined> {
     const statement = await database.prepareAsync(` 
             SELECT status FROM account 
             WHERE id = $id;
-        `); 
+        `);
 
-    try { 
+    try {
         const params = { $id: accountId.toLocaleString() };
         const result = await statement.executeAsync<Account>(params);
-        const account = await result.getFirstAsync();    
+        const account = await result.getFirstAsync();
         if (account) {
             return account.status;
-        }   
+        }
         return undefined;
     } catch (error) {
         console.error("Error getting account status:", error);
         return undefined;
-    }   finally {
+    } finally {
         await statement.finalizeAsync();
     }
-}   
+}
 
-export async function deleteAccount(accountId: Number, database: SQLiteDatabase): Promise<boolean> {
+export async function deleteAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
     const statement = await database.prepareAsync(` 
             DELETE FROM account  
             WHERE id = $id;
-        `); 
+        `);
     try {
         const params = { $id: accountId.toLocaleString() };
         const response = await statement.executeAsync(params);
@@ -145,5 +145,19 @@ export async function deleteAccount(accountId: Number, database: SQLiteDatabase)
         return false;
     } finally {
         await statement.finalizeAsync();
-    }   
+    }
+}
+
+export async function updateAccountBalance(accountId: number, newBalance: number, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const result = await database.runAsync(`
+                UPDATE account 
+                SET  balance = ?
+                WHERE id = ?
+                `, [newBalance, accountId]);
+        return result.changes > 0;
+    } catch (error) {
+        console.error('Error updating account balance',error);
+        return false;
+    }
 }
