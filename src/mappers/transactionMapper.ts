@@ -13,7 +13,8 @@ export function toTransactionModel(record: TransactionRecord): Transaction {
         paymentDate: new Date(`${record.payment_date}Z`),
         value: record.value,
         categoryId: record.category_id,
-        duplicateId: record.duplicate_id
+        duplicateId: record.duplicate_id,
+        destinationAccountId: record.destination_account_id
     }
 }
 

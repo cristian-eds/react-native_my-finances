@@ -63,10 +63,12 @@ const migrations = [
             value INTEGER NOT NULL,
             payment_date DATETIME NOT NULL,
             account_id INTEGER NOT NULL,
+            destination_account_id INTERGER,
             category_id INTEGER,
             duplicate_id INTEGER,
             movement_type TEXT NOT NULL,
             FOREIGN KEY (account_id) REFERENCES account(id),
+            FOREIGN KEY (destination_account_id) REFERENCES account(id),
             FOREIGN KEY (category_id) REFERENCES category(id),
             FOREIGN KEY (duplicate_id) REFERENCES duplicate(id)
     );
