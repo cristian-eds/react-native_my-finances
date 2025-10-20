@@ -21,3 +21,7 @@ export async function update(transaction: Transaction, database: SQLiteDatabase)
 export async function deleteById(idTransaction: number, database: SQLiteDatabase): Promise<boolean> {
     return await transactionRepository.deleteById(idTransaction, database);
 }
+
+export async function deleteByFatherId(idTransaction: number, database: SQLiteDatabase): Promise<boolean>  {
+    return await transactionRepository.deleteByFatherId(idTransaction, database);
+}

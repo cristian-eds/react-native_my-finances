@@ -9,7 +9,7 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
     try {
         const result = await database.runAsync(` 
             INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id, transaction_father_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);
         `, [transaction.description,
             transaction.value,
             formaterToSqlite(transaction.paymentDate),
@@ -92,6 +92,22 @@ export async function deleteById(idTransaction: number, database: SQLiteDatabase
     try {
         const result = await database.runAsync(
             `DELETE FROM transactions WHERE id = ?;`,
+            idTransaction
+        );
+
+        return result.changes > 0;
+
+    } catch (error) {
+        console.error("Erro ao deletar transação", error);
+        return false;
+    }
+}
+
+export async function deleteByFatherId(idTransaction: number, database: SQLiteDatabase): Promise<boolean> {
+
+    try {
+        const result = await database.runAsync(
+            `DELETE FROM transactions WHERE transaction_father_id = ?;`,
             idTransaction
         );
 
