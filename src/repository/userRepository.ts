@@ -1,29 +1,20 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { User } from "../domain/userModel";
 
-import { hash } from 'react-native-simple-bcrypt';
-
-
 async function create(data: Omit<User, "id">, database: SQLiteDatabase): Promise<User | undefined> {
-
-    const statement = await database.prepareAsync(` 
-            INSERT INTO users (name, cpf, password)
-            VALUES ($name, $cpf, $password);
-        `);
-
     try {
+        const res = await database.runAsync(` 
+            INSERT INTO users (name, cpf, password)
+            VALUES (?, ?, ?);
+        `,[data.name, data.cpf, data.password])
         //const passwordHashed = await hash(data.password, Number(10));
-        const params = { $name: data.name, $cpf: data.cpf, $password: data.password };
 
-        const result = await statement.executeAsync(params);
-        const insertId = result.lastInsertRowId.toLocaleString();
+        const insertId = res.lastInsertRowId.toLocaleString();
 
         return { id: Number(insertId), ...data };
     } catch (error) {
         console.error("Error creating user:", error);
-    } finally {
-        await statement.finalizeAsync();
-    }
+    } 
 }
 
 async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<User | undefined> {
