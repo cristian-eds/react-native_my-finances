@@ -8,7 +8,7 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
 
     try {
         const result = await database.runAsync(` 
-            INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id)
+            INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id, transaction_father_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `, [transaction.description,
             transaction.value,
@@ -17,7 +17,8 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
             transaction.accountId,
             transaction.categoryId ?? null,
             transaction.duplicateId ?? null,
-            transaction.destinationAccountId ?? null
+            transaction.destinationAccountId ?? null,
+            transaction.transactionFatherId ?? null
         ])
 
         return result.lastInsertRowId;

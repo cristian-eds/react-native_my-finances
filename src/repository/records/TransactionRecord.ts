@@ -9,5 +9,6 @@ export interface TransactionRecord {
     account_id: number,
     category_id?: number,
     duplicate_id?: number
-    destination_account_id?: number
+    destination_account_id?: number,
+    transacation_father_id?: number
 }

@@ -14,7 +14,8 @@ export function toTransactionModel(record: TransactionRecord): Transaction {
         value: record.value,
         categoryId: record.category_id,
         duplicateId: record.duplicate_id,
-        destinationAccountId: record.destination_account_id
+        destinationAccountId: record.destination_account_id,
+        transactionFatherId: record.transacation_father_id
     }
 }
 
