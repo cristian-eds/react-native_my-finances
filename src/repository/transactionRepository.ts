@@ -58,39 +58,32 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
 
 export async function update(transaction: Transaction, database: SQLiteDatabase): Promise<boolean> {
 
-    const statement = await database.prepareAsync(`
-            UPDATE transactions
-            SET description = $description,
-                value = $value,
-                payment_date = $paymentDate,
-                movement_type = $movementType,
-                account_id = $accountId,
-                category_id = $categoryId,
-                duplicate_id = $duplicateId
-            WHERE id = $id;
-        `);
-
     try {
-        const params = {
-            $description: transaction.description,
-            $value: transaction.value,
-            $paymentDate: formaterToSqlite(transaction.paymentDate),
-            $movementType: transaction.movementType,
-            $accountId: transaction.accountId,
-            $categoryId: transaction.categoryId ?? null,
-            $duplicateId: transaction.duplicateId ?? null,
-            $id: transaction.id
-        };
+        const res = await database.runAsync(`
+            UPDATE transactions
+            SET description = ?,
+                value = ?,
+                payment_date = ?,
+                movement_type = ?,
+                account_id = ?,
+                category_id = ?,
+                duplicate_id = ?
+            WHERE id = ?;
+        `,[
+            transaction.description,
+            transaction.value,formaterToSqlite(transaction.paymentDate),
+            transaction.movementType,
+            transaction.accountId,
+            transaction.categoryId ?? null,
+            transaction.duplicateId ?? null,
+            transaction.id
+        ])
 
-        const result = await statement.executeAsync<TransactionRecord>(params);
-        return result.changes > 0;
+        return res.changes > 0;
     } catch (error) {
         console.error("Error fetching transactions", error);
         return false;
-    } finally {
-        statement.finalizeAsync();
-    }
-
+    } 
 }
 
 export async function deleteById(idTransaction: number, database: SQLiteDatabase): Promise<boolean> {
