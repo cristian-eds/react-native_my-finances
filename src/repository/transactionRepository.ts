@@ -30,7 +30,7 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
 export async function getAllByAccount(accountId: number, filter: TransactionFiltersModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
     const statement = await database.prepareAsync(`
             SELECT * FROM transactions 
-            WHERE account_id = $accountId 
+            WHERE (account_id = $accountId OR destination_account_id = $accountId)
             AND DATETIME(payment_date) >= DATETIME($initialDate) 
             AND DATETIME(payment_date) <= DATETIME($finalDate);
     `);
