@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',  
+        alignItems: 'center',
         padding: 20,
         backgroundColor: '#63636345'
     },
@@ -16,10 +16,11 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',  
+        justifyContent: 'space-between',
         borderBottomWidth: 1,
         borderBottomColor: '#9d9d9dff',
         marginBottom: 10,
+        paddingBottom: 7
     },
     title: {
         fontSize: 24,
@@ -28,12 +29,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttons_footer: {
-        justifyContent: 'center',
-        marginTop: 25,
+        marginVertical: 40,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     },
     rightSpacer: {
         width: '20%'
     }
 })
 
-export {styles}
+export { styles }
