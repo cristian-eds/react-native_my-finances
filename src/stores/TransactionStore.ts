@@ -44,9 +44,8 @@ export const useTransactionStore = create<Store>((set, get) => ({
         }
 
         const { updateBalanceAccount, activeAccount } = useAccountStore.getState(); 
+
         await updateBalanceAccount(transaction.accountId, transaction.value, database, transaction.movementType);
-
-
          if(transaction.movementType === MovementType.Transferencia && transaction.destinationAccountId) {
             await updateBalanceAccount(transaction.destinationAccountId, transaction.value, database, MovementType.Receita);
         }
@@ -105,9 +104,10 @@ export const useTransactionStore = create<Store>((set, get) => ({
             const oldTransaction = get().transactions.find(transaction => transaction.id === idTransaction);
             if (oldTransaction) {
                 const { updateBalanceAccount } = useAccountStore.getState();
-                if (oldTransaction?.movementType === MovementType.Receita) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa);
-                if (oldTransaction?.movementType === MovementType.Despesa) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
 
+                if (oldTransaction.movementType === MovementType.Receita) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa);
+                if (oldTransaction.movementType === MovementType.Despesa) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
+           
             }
             set({
                 transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)]
