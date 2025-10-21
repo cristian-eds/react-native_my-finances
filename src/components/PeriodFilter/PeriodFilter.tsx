@@ -7,6 +7,7 @@ import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilt
 import { styles } from './PeriodFilterStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { useTransactionStore } from '../../stores/TransactionStore';
+import { View } from 'react-native';
 
 export type Mode = 'DAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
@@ -69,7 +70,7 @@ export function PeriodFilter() {
     }, [])
 
     return (
-        <>
+        <View style={styles.period}>
             <Ionicons name="chevron-back" size={24} color="black" onPress={handleBackPeriod}/>
             <DropDownPicker
                 open={open}
@@ -81,11 +82,10 @@ export function PeriodFilter() {
                 containerStyle={styles.containerPeriod}
                 dropDownContainerStyle={styles.dropDownContainerStyle}
                 labelStyle={styles.labelStyle}
-
                 renderListItem={(props) => <PeriodFilterDropdownItem {...props} handleSetPeriodDates={handleSetPeriodDates} />}
             />
             <Ionicons name="chevron-forward" size={24} color="black" onPress={handleNextPeriod} />
-        </>
+        </View>
 
     );
 } 

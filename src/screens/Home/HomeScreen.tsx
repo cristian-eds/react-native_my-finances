@@ -22,12 +22,16 @@ import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { toHomeTableItemList } from '../../mappers/transactionMapper';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { useCategoryStore } from '../../stores/CategoryStore';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 
 
 export function HomeScreen() {
 
     const { user } = useUserContext();
     const database = useSQLiteContext();
+    const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
     const { fetchAccounts, activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
@@ -36,7 +40,7 @@ export function HomeScreen() {
     const [showModalTransaction, setShowModalTransaction] = useState(false);
 
     useEffect(() => {
-        const fetch= async () => {
+        const fetch = async () => {
             await fetchCategories(Number(user?.id), database);
             await fetchAccounts(Number(user?.id), database);
         }
@@ -70,13 +74,11 @@ export function HomeScreen() {
                     <View style={styles.transactions_infos_item}>
                         <View style={{ flexDirection: 'row', columnGap: 8, alignItems: 'center' }}>
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
-                            <Ionicons name="stats-chart-outline" size={24} color="black" />
+                            <Ionicons name="stats-chart-outline" size={24} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
                         </View>
                         <ButtonPlus onPress={() => setShowModalTransaction(true)} />
                     </View>
-                    <View style={styles.period}>
-                        <PeriodFilter />
-                    </View>
+                    <PeriodFilter />
                     <View style={styles.captions}>
                         {renderCaptionItem('Créditos', MovementType.Receita)}
                         {renderCaptionItem('Débitos', MovementType.Despesa)}
@@ -88,13 +90,13 @@ export function HomeScreen() {
                 data={toHomeTableItemList(transactions)}
                 keyExtractor={(item, index) => item.id.toString()}
                 renderItem={({ item }) => <TransactionItem item={item} />}
-                contentContainerStyle={{paddingBottom: 80}}
-            /> : 
-            <View>
-                <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
-            </View>}
-            <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{opacity: 0.8}} />
-            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount}/>}
+                contentContainerStyle={{ paddingBottom: 80 }}
+            /> :
+                <View>
+                    <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
+                </View>}
+            <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount} />}
         </View>
     );
 }

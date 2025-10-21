@@ -20,5 +20,15 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '500'
-  }
+  },
+    period: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    width: '100%',
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 10,
+  },
 });
