@@ -22,7 +22,7 @@ export function PeriodFilter() {
     const items = [
         { label: `Diário | ${getPatterDateDayMonthDigit(filters.initialDate)}`, value: 'DAY' },
         { label: `Semanal | ${getPatterDateDayMonthDigit(firstDay)} - ${getPatterDateDayMonthDigit(lastDay)}`, value: 'WEEK' },
-        { label: `Mensal | ${getDatePatternMonthShortYearDigit(filters.initialDate)}`, value: 'MONTH'},
+        { label: `Mensal | ${getDatePatternMonthShortYearDigit(filters.initialDate)}`, value: 'MONTH' },
         {
             label:
                 `Periodo | ${formaterIsoDateToDefaultPattern(filters.initialDate)} - ${formaterIsoDateToDefaultPattern(filters.finalDate)}`,
@@ -70,7 +70,7 @@ export function PeriodFilter() {
 
     return (
         <>
-            <Ionicons name="chevron-back" size={24} color="black" onPress={handleBackPeriod} />
+            <Ionicons name="chevron-back" size={24} color="black" />
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}

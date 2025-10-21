@@ -25,7 +25,7 @@ export const formaterIsoDateToDefaultPatternWithTime = (data: Date): string => {
 export const getPatterDateDayMonthDigit = (date: Date = new Date()) => {
     return Intl.DateTimeFormat('pt-BR', {
         day: '2-digit',
-        month: 'numeric'
+        month: '2-digit'
     }).format(date);
 }
 
