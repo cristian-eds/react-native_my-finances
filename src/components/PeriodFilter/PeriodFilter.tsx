@@ -70,7 +70,7 @@ export function PeriodFilter() {
 
     return (
         <>
-            <Ionicons name="chevron-back" size={24} color="black" />
+            <Ionicons name="chevron-back" size={24} color="black" onPress={handleBackPeriod}/>
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}

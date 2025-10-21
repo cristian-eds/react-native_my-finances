@@ -1,8 +1,9 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Button } from "react-native";
+import { Button, TouchableOpacity } from "react-native";
 import { useUserContext } from "../../hooks/useUserContext";
 import { CustomDrawerContent } from "./CustomDrawerContent/CustomDrawerContent";
 import { PrincipalStackNavigationRoutes } from "../Stack/PrincipalStack/PrincipalStackNavigation.routes";
+import { Ionicons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
@@ -14,7 +15,10 @@ export const DrawerNagivationRoutes = () => {
         <Drawer.Navigator screenOptions={{
             headerTitleAlign: 'center',
             drawerStyle: { height: '80%', marginTop: 75 },
-            title: ""
+            title: "",
+            headerRightContainerStyle: {paddingRight: 20, paddingTop: 5},
+            headerLeftContainerStyle: {paddingLeft: 5},
+            headerRight: () => <Ionicons name="person-outline" size={24} color="black" />
         }}
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             initialRouteName="PrincipalStack"
