@@ -32,11 +32,11 @@ export function CardAccount() {
         <TouchableOpacity style={styles.card} onPress={handleNavigateToAccountDetails}>
             <Text style={{ fontSize: 14, textAlign: 'center' }}>Conta</Text>
             <View style={styles.card_header}>
-                <Ionicons name="key-outline" size={28} color="black" style={{ flex: 1 }} />
+                <Ionicons name="key-outline" size={24} color="black" style={{ flex: 1 }} />
                 <View style={{ alignItems: 'center', flex: 4 }}>
                     <SelectAccount />
                 </View>
-                <Ionicons name="add" size={28} color="black" style={{ flex: 1, textAlign: 'right' }} onPress={() => setShowModalAddAccount(true)} />
+                <Ionicons name="add" size={25} color="black" style={{ flex: 1, textAlign: 'right' }} onPress={() => setShowModalAddAccount(true)} />
             </View>
             <View>
                 <Text style={{ fontSize: 22 }}>Saldo:</Text>

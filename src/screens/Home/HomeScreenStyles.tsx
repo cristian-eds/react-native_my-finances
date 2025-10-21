@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {},
   transactions: {
     marginBottom: 5
   },
@@ -17,6 +16,17 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 60,
     borderRadius: 10,
+  },
+  captions: {
+    rowGap: 5
+  },
+  captionItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
   },
   transactions_infos_item: {
     flexDirection: 'row',

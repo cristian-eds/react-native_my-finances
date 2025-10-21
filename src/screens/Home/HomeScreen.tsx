@@ -55,7 +55,7 @@ export function HomeScreen() {
             .map(transaction => transaction.value)
             .reduce((prevValue, current) => prevValue + current, 0);
         return (
-            <View style={styles.transactions_infos_item}>
+            <View style={styles.captionItem}>
                 <Text style={styles.transactions_infos_h3}>{title}</Text>
                 <Text style={styles.transactions_infos_h3}>{formaterNumberToBRL(totalValue)}</Text>
             </View>
@@ -77,7 +77,7 @@ export function HomeScreen() {
                     <View style={styles.period}>
                         <PeriodFilter />
                     </View>
-                    <View>
+                    <View style={styles.captions}>
                         {renderCaptionItem('Créditos', MovementType.Receita)}
                         {renderCaptionItem('Débitos', MovementType.Despesa)}
                         {renderCaptionItem('Transfêrencia', MovementType.Transferencia)}
