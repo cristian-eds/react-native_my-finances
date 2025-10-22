@@ -1,6 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 import * as userRepository from "../repository/userRepository";
+import { createInitialCategories } from "./migrationsService";
 
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
@@ -17,6 +18,8 @@ async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Pro
     if( !savedUser ) {
         return { data: null, error: "Erro ao criar usuário" };
     }
+
+    await createInitialCategories(savedUser.id, database);
 
     return { data: savedUser }; 
 }
