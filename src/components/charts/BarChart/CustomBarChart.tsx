@@ -5,15 +5,19 @@ import { BarChart } from 'react-native-gifted-charts';
 
 const screenWidth = Dimensions.get('window').width;
 
-export function CustomBarChart() {
+interface Item {
+    value: number,
+    label: string,
+    frontColor: string
+}
 
-    const data = [
-        { value: 50, label: 'Rendimento', frontColor: '#177AD5' },
-        { value: 90, label: 'Salário', frontColor: '#213547ff' },
-        { value: 120, label: 'Rendimento', frontColor: '#646464ff' },
-    ]
+interface CustomBarChartProps {
+    items: Item[]
+}
 
-    const barCount = data.length;
+export function CustomBarChart({items}: CustomBarChartProps) {
+
+    const barCount = items.length;
     const CHART_WIDTH = screenWidth - 160;
     const FIXED_BAR_WIDHT = 30;
     const TOTAL_SPACE_BARS = FIXED_BAR_WIDHT * barCount;
@@ -23,7 +27,7 @@ export function CustomBarChart() {
     return (
         <View style={styles.container}>
             <BarChart
-                data={data}
+                data={items}
                 barWidth={FIXED_BAR_WIDHT}
                 yAxisLabelPrefix='R$ '
                 yAxisTextStyle={{ color: '#555', fontSize: 15, textAlign: 'left' }}
@@ -31,19 +35,18 @@ export function CustomBarChart() {
                 showYAxisIndices
                 width={CHART_WIDTH}
                 spacing={SPACING}
-                roundedTop
-                yAxisThickness={1}
+                yAxisThickness={0}
                 xAxisThickness={0}
                 isAnimated
                 noOfSections={5}
                 animationDuration={800}
-                showValuesAsTopLabel
-                barBorderRadius={6}
-                
+                barBorderRadius={10}
+                hideRules
+
             />
             <View style={styles.footerTotal}>
-                <Text>Total: </Text>
-                <Text>R$ {data.reduce((prev, current) => prev + current.value,0).toFixed(2)}</Text>
+                <Text style={styles.footerText}>Total: </Text>
+                <Text style={styles.footerText}>R$ {items.reduce((prev, current) => prev + current.value,0).toFixed(2)}</Text>
             </View>
         </View>
     );
