@@ -10,7 +10,7 @@ type Props = TouchableOpacityProps
 export function ButtonPlus({...props}: Props) {
   return (
     <TouchableOpacity {...props} style={styles.container} >
-        <Ionicons name="add" size={28} color="black" />
+        <Ionicons name="add" size={24} color="black" />
     </TouchableOpacity>
   );
 }

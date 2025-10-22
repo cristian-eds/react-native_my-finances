@@ -21,6 +21,6 @@ export const styles = StyleSheet.create({
     flex:1,
     paddingVertical: 10,
     paddingHorizontal: 25,
-    rowGap: 12,
+    rowGap: 20,
   }
 });

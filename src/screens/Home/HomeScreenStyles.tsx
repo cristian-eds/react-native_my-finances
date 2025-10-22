@@ -8,15 +8,23 @@ export const styles = StyleSheet.create({
     rowGap: 10
   },
   captions: {
-    rowGap: 5
+    rowGap: 5,
+    flexDirection: 'row',
+    columnGap: 5,
+    marginTop: 5
   },
   captionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    flex: 1,
+    rowGap: 8,
     paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     borderRadius: 5,
     backgroundColor: 'white',
+  },
+  captionItemText: {
+    fontSize: 14,
+    textAlign: 'center'
   },
   transactions_infos_item: {
     flexDirection: 'row',
@@ -29,7 +37,8 @@ export const styles = StyleSheet.create({
     fontSize: 20
   },
   transactions_infos_h3: {
-    fontSize: 16
+    fontSize: 16,
+    textAlign: 'center'
   },
   transactions_infos_h4: {
     fontSize: 16,

@@ -60,7 +60,7 @@ export function HomeScreen() {
             .reduce((prevValue, current) => prevValue + current, 0);
         return (
             <View style={styles.captionItem}>
-                <Text style={styles.transactions_infos_h3}>{title}</Text>
+                <Text style={styles.captionItemText}>{title}</Text>
                 <Text style={styles.transactions_infos_h3}>{formaterNumberToBRL(totalValue)}</Text>
             </View>
         )
@@ -74,7 +74,7 @@ export function HomeScreen() {
                     <View style={styles.transactions_infos_item}>
                         <View style={{ flexDirection: 'row', columnGap: 8, alignItems: 'center' }}>
                             <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
-                            <Ionicons name="stats-chart-outline" size={24} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
+                            <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
                         </View>
                         <ButtonPlus onPress={() => setShowModalTransaction(true)} />
                     </View>
@@ -82,7 +82,7 @@ export function HomeScreen() {
                     <View style={styles.captions}>
                         {renderCaptionItem('Créditos', MovementType.Receita)}
                         {renderCaptionItem('Débitos', MovementType.Despesa)}
-                        {renderCaptionItem('Transfêrencia', MovementType.Transferencia)}
+                        {renderCaptionItem('Transfêrencias', MovementType.Transferencia)}
                     </View>
                 </View>
             </View>

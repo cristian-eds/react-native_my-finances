@@ -21,14 +21,14 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500'
   },
-    period: {
+  period: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 5,
     width: '100%',
     backgroundColor: 'white',
-    height: 60,
+    height: 50,
     borderRadius: 10,
   },
 });
