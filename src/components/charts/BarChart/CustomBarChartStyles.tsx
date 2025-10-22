@@ -10,5 +10,12 @@ export const styles = StyleSheet.create({
   containerChart: {
     marginVertical: 8, 
     borderRadius: 16,
+  },
+  footerTotal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingTop:10
   }
 });

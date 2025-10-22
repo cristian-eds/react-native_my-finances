@@ -52,11 +52,7 @@ export function HomeScreen() {
         if (activeAccount) {
             fetchTransactions(activeAccount.id as number, database);
         }
-<<<<<<< HEAD
     }, [activeAccount,filters.initialDate, filters.finalDate])
-=======
-    }, [activeAccount, filters.initialDate, filters.finalDate])
->>>>>>> cb15caa0c70968b029d2b8e6ec1b8da0bff4731f
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)

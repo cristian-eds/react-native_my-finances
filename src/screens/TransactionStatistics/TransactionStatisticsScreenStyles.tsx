@@ -16,7 +16,9 @@ export const styles = StyleSheet.create({
   captionItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 10
   },
   captionItemText: {
     fontSize: 20
