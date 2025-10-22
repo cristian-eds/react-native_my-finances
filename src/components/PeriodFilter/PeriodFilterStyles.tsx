@@ -11,11 +11,24 @@ export const styles = StyleSheet.create({
   },
   dropDownContainerStyle: {
     borderWidth: 0,
-    elevation: 2
+    elevation: 3,
+    width: 320,
+    marginTop: 5,
+    borderRadius: 10
   },
   labelStyle: {
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '500'
-  }
+  },
+    period: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 5,
+    width: '100%',
+    backgroundColor: 'white',
+    height: 60,
+    borderRadius: 10,
+  },
 });

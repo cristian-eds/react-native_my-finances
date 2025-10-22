@@ -1,22 +1,22 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {},
   transactions: {
     marginBottom: 5
   },
   transactions_infos: {
     rowGap: 10
   },
-  period: {
+  captions: {
+    rowGap: 5
+  },
+  captionItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 5,
-    width: '100%',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
     backgroundColor: 'white',
-    height: 60,
-    borderRadius: 10,
   },
   transactions_infos_item: {
     flexDirection: 'row',

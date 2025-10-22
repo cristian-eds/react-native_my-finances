@@ -1,14 +1,14 @@
 import React, { ReactElement, useState } from 'react';
 import { styles } from './PickerWithTopLabelStyles';
 
-import { FieldError, useController } from 'react-hook-form';
+import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 
 interface ItemDropdown {
     label: string,
     value: string,
-    icon?: () => ReactElement 
+    icon?: () => ReactElement
 }
 
 interface PickerWithTopLabelProps {
@@ -18,20 +18,21 @@ interface PickerWithTopLabelProps {
     errors?: FieldError | undefined;
     control: any;
     items: ItemDropdown[];
-    zIndex?: number
+    zIndex?: number,
+    zIndexInverse?: number
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1 }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000 }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
-        control,
+        control
     });
-
+    
     const [open, setOpen] = useState(false);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0}} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} >
             <DropDownPicker
                 value={field.value}
                 open={open}
@@ -47,11 +48,11 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 style={styles.picker}
                 textStyle={styles.picker_text}
                 dropDownContainerStyle={styles.dropdownList}
-                placeholder='Selecione um item'
+                placeholder='Selecione'
                 maxHeight={200}
                 listMode='FLATLIST'
                 zIndex={zIndex}
-                zIndexInverse={1000}
+                zIndexInverse={zIndexInverse}
 
             />
         </RowWithTopLabel>

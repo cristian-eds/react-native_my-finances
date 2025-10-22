@@ -62,13 +62,13 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
             const insertedId = await createCategory(user?.id as number, newCategory, database);
             if (insertedId) {
                 Alert.alert("Categoria cadastrado com sucesso!");
-                onClose();
+                handleClose();
             }
         } else if (mode === 'edit') {
             const updated = await updateCategory(newCategory, database);
             if (updated) {
                 Alert.alert("Categoria atualizada com sucesso!");
-                onClose();
+                handleClose();
             }
         }
     }
@@ -79,8 +79,13 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
         if(deleted) {
             Alert.alert("Categoria deletada com sucesso!");
             setShowModalDelete(false);
-            onClose();
+            handleClose();
         }
+    }
+
+    const handleClose = () => {
+        reset();
+        onClose();
     }
 
     return (
@@ -92,7 +97,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={onClose}/>
+                        <ButtonBack onPress={handleClose}/>
                         <Text style={styles.title}>{mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}</Text>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
@@ -105,7 +110,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                         <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} />
                     </View>
                     <View style={styles.buttons_footer}>
-                        <ButtonIconAction iconName='close' onPress={onClose} />
+                        <ButtonIconAction iconName='close' onPress={handleClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
                     </View>
                 </View>

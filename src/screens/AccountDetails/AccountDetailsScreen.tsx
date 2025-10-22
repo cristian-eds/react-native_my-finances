@@ -25,7 +25,6 @@ import { SelectAccount } from '../../components/SelectAccount/SelectAccount';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
 import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
-import { ButtonIconSimple } from '../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 

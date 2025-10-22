@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './PeriodFilterDropdownItemStyles';
 import { ModalSelectPeriod } from '../modals/ModalSelectPeriod/ModalSelectPeriod';
@@ -19,10 +19,10 @@ export function PeriodFilterDropdownItem({ item, onPress, isSelected, handleSetP
 
     const [showModalPeriod, setShowModalPeriod] = useState(false);
 
-    const {filters} = useTransactionStore();
+    const { filters } = useTransactionStore();
 
     const handleSelect = () => {
-        if(item.value === 'PERIOD') {
+        if (item.value === 'PERIOD') {
             setShowModalPeriod(true);
             return;
         } else if (item.value === 'MONTH') {
@@ -44,15 +44,35 @@ export function PeriodFilterDropdownItem({ item, onPress, isSelected, handleSetP
         onPress(item);
     }
 
+    const iconNameAccordingMode = (mode: string): keyof typeof Ionicons.glyphMap  => {
+        switch (mode) {
+            case 'DAY':
+                return 'calendar-number-outline'
+            case 'WEEK':
+                return 'today-outline'
+            case 'MONTH':
+                return 'calendar-outline'
+            default:
+                return 'calendar-clear-outline'
+        }
+    }
+
+
     return (
-        <TouchableOpacity style={styles.container} onPress={handleSelect}>
-            <Text style={styles.text}>{item.label}</Text>
-            {isSelected && <Ionicons name="checkmark" size={18} color="black" />}
-            <ModalSelectPeriod 
-                isShow={showModalPeriod} 
-                onClose={() => setShowModalPeriod(false)} 
-                handleSetPeriodDates={handleSetPeriodDates} 
-                handleConfirmValue={handleConfirmValuePeriod}/>
+        <TouchableOpacity style={[styles.container, isSelected && styles.selectedItem]} onPress={handleSelect}>
+            <View style={styles.groupItems}>
+                <Ionicons name={iconNameAccordingMode(item.value)} size={18} color={isSelected ? 'white' : 'black'}/>
+                <Text style={[styles.text, isSelected && styles.textSelected]}>{item.label?.split("|")[0]}</Text>
+            </View>
+            <View style={styles.groupItems}>
+                <Text style={[styles.text, isSelected && styles.textSelected]}>{item.label?.split("|")[1]}</Text>
+                {isSelected && <Ionicons name="checkmark" size={18} color={isSelected ? 'white' : 'black'} />}
+            </View>
+            <ModalSelectPeriod
+                isShow={showModalPeriod}
+                onClose={() => setShowModalPeriod(false)}
+                handleSetPeriodDates={handleSetPeriodDates}
+                handleConfirmValue={handleConfirmValuePeriod} />
         </TouchableOpacity>
     );
 }

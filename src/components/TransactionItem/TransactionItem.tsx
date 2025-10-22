@@ -11,6 +11,7 @@ import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { TouchableOpacity } from 'react-native';
 import { useCategoryStore } from '../../stores/CategoryStore';
+import { useAccountStore } from '../../stores/AccountStore';
 
 interface TransactionItemProps {
     item: HomeTableItem
@@ -33,6 +34,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const {transactions} = useTransactionStore();
     const {categories} = useCategoryStore();
+    const {activeAccount} = useAccountStore();
     const category = categories.find(category => category.id === item.category);
 
     const transactionData = transactions.find(transaction => transaction.id === item.id);
@@ -40,12 +42,13 @@ export function TransactionItem({ item }: TransactionItemProps) {
     const ICON_MAP: IconMapStructure = {
         prefix: {
             [MovementType.Despesa]: { name: 'remove', color: 'red' },
-            [MovementType.Transferencia]: { name: 'swap-horizontal-outline', color: 'blue' },
+            [MovementType.Transferencia]: transactionData?.destinationAccountId !== activeAccount?.id ? { name: 'remove', color: 'red' } : { name: 'add', color: 'green' },
             default: { name: 'add', color: 'green' },
         },
         suffix: {
             [MovementType.Despesa]: { name: 'trending-down', color: 'red' },
             [MovementType.Receita]: { name: 'trending-up', color: 'green' },
+            [MovementType.Transferencia]: { name: 'swap-horizontal-outline', color: 'blue' },
         },
         stylesText: {
             [MovementType.Despesa]: { color: 'red' },

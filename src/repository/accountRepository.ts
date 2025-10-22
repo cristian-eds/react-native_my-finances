@@ -26,86 +26,53 @@ export async function findAccountByUser(userId: string, database: SQLiteDatabase
 }
 
 export async function create(account: Omit<Account, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
-    const statement = await database.prepareAsync(` 
-            INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id, creation_date)
-            VALUES ($name, $balance, $bankCode, $type, $accountNumber, $agency, $holderName, $status, $userId, $creation_date);
-        `);
-
     try {
-        const params = {
-            $name: account.name,
-            $balance: account.balance,
-            $bankCode: account.bankCode,
-            $type: account.type,
-            $accountNumber: account.accountNumber,
-            $agency: account.agency,
-            $holderName: account.holderName,
-            $status: account.status,
-            $userId: userId,
-            $creation_date: new Date().toISOString()
-        };
+        const res = await database.runAsync(
+            ` 
+            INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id, creation_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        `,[account.name,account.balance,account.bankCode,account.type,account.accountNumber, account.agency, account.holderName, account.status, userId, new Date().toISOString()]
+        )
 
-        const result = await statement.executeAsync<Account>(params);
-
-        return result.lastInsertRowId;
+        return res.lastInsertRowId;
     } catch (error) {
         console.error("Error creating account:", error);
-    } finally {
-        await statement.finalizeAsync();
-    }
+    } 
 }
 
 export async function update(account: UpdateAccountModel, database: SQLiteDatabase): Promise<boolean> {
-    const statement = await database.prepareAsync(` 
-            UPDATE account  
-            SET name = $name, 
-                bank_code = $bankCode,  
-                type = $type,
-                account_number = $accountNumber,
-                agency = $agency,
-                holder_name = $holderName
-            WHERE id = $id;
-        `);
-
     try {
-        const params = {
-            $name: account.name,
-            $bankCode: account.bankCode,
-            $type: account.type,
-            $accountNumber: account.accountNumber,
-            $agency: account.agency,
-            $holderName: account.holderName,
-            $id: account.id
-        };
-        const response = await statement.executeAsync(params);
+        const response = await database.runAsync(` 
+            UPDATE account  
+            SET name = ?, 
+                bank_code = ?,  
+                type = ?,
+                account_number = ?,
+                agency = ?,
+                holder_name = ?
+            WHERE id = ?;
+        `, [account.name, account.bankCode, account.type, account.accountNumber, account.agency, account.holderName, account.id])
+
         return response.changes > 0;
     } catch (error) {
         console.error("Error updating account:", error);
         return false;
-    } finally {
-        await statement.finalizeAsync();
     }
 }
 
 export async function toggleStatusAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
-    const statement = await database.prepareAsync(` 
-            UPDATE account  
-            SET status = $status
-            WHERE id = $id;
-        `);
     try {
         const currentStatus = await getAccountStatus(accountId, database);
+        const res = await database.runAsync(` 
+            UPDATE account  
+            SET status = ?
+            WHERE id = ?;
+        `, [accountId.toLocaleString(), currentStatus === Status.Ativo ? Status.Inativo : Status.Ativo]);
 
-        if (!currentStatus) return false;
-
-        const params = { $id: accountId.toLocaleString(), $status: currentStatus === Status.Ativo ? Status.Inativo : Status.Ativo };
-        const response = await statement.executeAsync(params);
-        return response.changes > 0;
+        return res.changes > 0;
     } catch (error) {
         console.error("Error inactivating account:", error);
         return false;
-    } finally {
-        await statement.finalizeAsync();
     }
 }
 
@@ -132,19 +99,16 @@ async function getAccountStatus(accountId: number, database: SQLiteDatabase): Pr
 }
 
 export async function deleteAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
-    const statement = await database.prepareAsync(` 
-            DELETE FROM account  
-            WHERE id = $id;
-        `);
     try {
-        const params = { $id: accountId.toLocaleString() };
-        const response = await statement.executeAsync(params);
+        const response = await database.runAsync(` 
+            DELETE FROM account  
+            WHERE id = ?;
+        `, [accountId.toLocaleString()]);
+
         return response.changes > 0;
     } catch (error) {
         console.error("Error deleting account:", error);
         return false;
-    } finally {
-        await statement.finalizeAsync();
     }
 }
 
@@ -157,7 +121,7 @@ export async function updateAccountBalance(accountId: number, newBalance: number
                 `, [newBalance, accountId]);
         return result.changes > 0;
     } catch (error) {
-        console.error('Error updating account balance',error);
+        console.error('Error updating account balance', error);
         return false;
     }
 }
