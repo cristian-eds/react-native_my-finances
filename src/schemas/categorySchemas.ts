@@ -10,6 +10,6 @@ export const categorySchemas = z.object({
     description: z.string()
         .nonempty('A descrição é obrigatória.'),
     movementType: z.enum(MovementType, "Tipo movimento inválido"),
-    iconName: z.enum(iconValues, 'Nome icone inválido'),
+    iconName: z.enum(iconValues, 'Nome icone inválido').or(z.literal('')),
     hexColor: z.enum(hexColorValues, 'Cor inválida'),
 })

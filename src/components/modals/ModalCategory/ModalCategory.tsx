@@ -35,7 +35,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
         defaultValues: {
             description: categoryData?.description ?? '',
             hexColor: categoryData?.hexColor ?? '',
-            iconName: categoryData?.iconName ?? '',
+            iconName: categoryData?.iconName ?? undefined,
             movementType: categoryData?.movementType ?? MovementType.Despesa
         }
     });
