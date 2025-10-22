@@ -7,7 +7,7 @@ export async function create(userId: string, category: Omit<CategoryModel, 'id'>
     try {
         const result = await database.runAsync(` 
             INSERT INTO categories (user_id, hex_color, icon_name, description)
-            VALUES (?, ?, ?, ?, ?);
+            VALUES (?, ?, ?, ?);
         `,[userId, category.hexColor, category.iconName, category.description]);
 
         return result.lastInsertRowId;
