@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './TransactionStatisticsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -11,10 +11,50 @@ import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStack
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
 import { CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
+import { useTransactionStore } from '../../stores/TransactionStore';
+import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { useCategoryStore } from '../../stores/CategoryStore';
 
 export function TransactionStatistics() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
+    const { transactions } = useTransactionStore();
+    const { categories } = useCategoryStore();
+    const [activeMovementType, setActiveMovementType] = useState(MovementType.Despesa);
+
+    const mapTransactionToChartItem = (type: MovementType) => {
+        return transactions.filter(transaction => transaction.movementType === type)
+            .map(transaction => {
+                const category = categories.find(cat => cat.id === transaction.categoryId);
+                return {
+                    value: transaction.value,
+                    label: category?.description ?? " ",
+                    frontColor: category?.hexColor ?? "#000"
+                }
+            });
+    }
+
+    const textTitle = () => {
+        switch (activeMovementType) {
+            case MovementType.Despesa:
+                return 'Débitos'
+            case MovementType.Receita:
+                return 'Créditos'
+            default:
+                return 'Transferências'
+        }
+    }
+
+    const renderCaptionMovementType = (movementType: MovementType, title: string) => {
+        const isActive = activeMovementType === movementType;
+        return (
+            <TouchableOpacity
+                onPress={() => setActiveMovementType(movementType)}
+                style={[styles.captionMovementTypeItem, isActive && styles.captionMovementTypeItemActive]}>
+                <Text style={[styles.captionMovementTypeItemText, isActive && styles.captionMovementTypeItemTextActive]}>{title}</Text>
+            </TouchableOpacity>
+        )
+    }
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -26,17 +66,21 @@ export function TransactionStatistics() {
                 </View>
             </View>
             <View style={styles.period}>
-                <Text>Período</Text>
                 <View style={{ flexDirection: 'row' }}>
                     <PeriodFilter />
                 </View>
             </View>
-            <View>
-                <View style={styles.captionItem}>
-                    <Text style={styles.captionItemText}>Créditos</Text>
+            <View style={styles.chart}>
+                <View style={styles.sectionChartHeader}>
+                    <Text style={styles.sectionChartHeaderText}>{textTitle()}</Text>
                     <ButtonPlus />
                 </View>
-                <CustomBarChart />
+                <CustomBarChart items={mapTransactionToChartItem(activeMovementType)} />
+            </View>
+            <View style={styles.captionMovementType}>
+                {renderCaptionMovementType(MovementType.Despesa, 'Débitos')}
+                {renderCaptionMovementType(MovementType.Receita, 'Créditos')}
+                {renderCaptionMovementType(MovementType.Transferencia, 'Transfêrencia')}
             </View>
         </View>
     );

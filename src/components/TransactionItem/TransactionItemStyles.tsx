@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     borderRadius: 10,
     columnGap: 10,
@@ -14,6 +15,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
+    height: 40,
     borderRadius: 50,
 
   },
