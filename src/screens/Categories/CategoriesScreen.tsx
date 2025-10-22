@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './CategoriesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -61,15 +61,7 @@ export function CategoriesScreen() {
     }
 
     const renderItems = () => {
-        const categoriesFiltered = filterCategories();
-        return categoriesFiltered.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
-    }
-
-    const filterCategories = () => {
-        if(captionActive) {
-            return categories.filter(category => category.movementType === captionActive)
-        }
-        return categories;
+        return categories.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
     }
 
     const handleCaptionActive = (caption: string) => {
@@ -85,14 +77,10 @@ export function CategoriesScreen() {
         <View style={GlobalStyles.container_screens_normal}>
             <ButtonBack onPress={() => navigation.goBack()}/>
             <SearchInput placeholder='Pesquisar categoria...' value={search} onChangeText={(e) => setSearch(e)}/>
-            <View style={styles.captions}>
-                {renderCaptionItem('RECEITA')}
-                {renderCaptionItem('DESPESA')}
-                {renderCaptionItem('TRANSFERENCIA')}
-            </View>
-            <View style={styles.containerItems}>
+
+            <ScrollView contentContainerStyle={styles.containerItems}>
                 {renderItems()}
-            </View>
+            </ScrollView>
             <CircularActionButton onPress={() => setShowModalCategory(true)} style={{bottom: '10%'}} />
             <ModalCategory isShow={showModalCategory} onClose={() => setShowModalCategory(false)} mode='add' />
         </View>

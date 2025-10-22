@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
- 
   captions: {
     flexDirection: 'row',
     padding: 5,
@@ -24,6 +23,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5
   },
   containerItems: {
-    rowGap: 10
+    rowGap: 10,
+    paddingBottom: 80
   }
 });
