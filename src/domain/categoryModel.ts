@@ -4,7 +4,8 @@ import { MovementType } from "./enums/movementTypeEnum";
 export interface CategoryModel {
     id: number,
     description: string,
-    movementType: MovementType,
     hexColor: string,
-    iconName: keyof typeof Ionicons.glyphMap
+    iconName: keyof typeof Ionicons.glyphMap,
+    expenseFavorite?: boolean,
+    incomeFavorite?: boolean
 }

@@ -35,10 +35,11 @@ const migrations = [
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             description TEXT NOT NULL,
-            movement_type TEXT NOT NULL,
             hex_color TEXT NOT NULL,
             icon_name TEXT NOT NULL,
             user_id INTEGER NOT NULL,
+            expense_favorite INTEGER,
+            income_favorite INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
     `,

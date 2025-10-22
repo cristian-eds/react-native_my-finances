@@ -1,6 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import { ReactElement } from 'react';
 
-export const iconsOptions = [
+interface IconOption {
+    label: string,
+    value: keyof typeof Ionicons.glyphMap,
+    icon: () => ReactElement
+}
+
+export const iconsOptions : IconOption[] = [
     {
         label: "Viajem",
         value: "airplane-outline",
@@ -13,7 +20,7 @@ export const iconsOptions = [
     },
     {
         label: "Carro",
-        value: "cart-outline-outline",
+        value: "cart-outline",
         icon: () => <Ionicons name="car-outline" size = { 20} color="#555" />,
     },
     {

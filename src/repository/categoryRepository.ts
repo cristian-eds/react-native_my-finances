@@ -6,9 +6,9 @@ import { CategoryRecord } from "./records/CategoryRecord";
 export async function create(userId: string, category: Omit<CategoryModel, 'id'>, database: SQLiteDatabase): Promise<number | undefined> {
     try {
         const result = await database.runAsync(` 
-            INSERT INTO categories (user_id, movement_type, hex_color, icon_name, description)
+            INSERT INTO categories (user_id, hex_color, icon_name, description)
             VALUES (?, ?, ?, ?, ?);
-        `,[userId,category.movementType, category.hexColor, category.iconName, category.description]);
+        `,[userId, category.hexColor, category.iconName, category.description]);
 
         return result.lastInsertRowId;
     } catch (error) {
@@ -44,12 +44,11 @@ export async function update(category: CategoryModel, database: SQLiteDatabase):
     try {
         const result = await database.runAsync(` 
             UPDATE categories
-            SET movement_type = ?,
-                hex_color = ?,
+            SET hex_color = ?,
                 icon_name = ?,
                 description = ?
             WHERE id = ?;
-        `,[category.movementType, category.hexColor, category.iconName, category.description, category.id]);
+        `,[category.hexColor, category.iconName, category.description, category.id]);
 
         return result.changes > 0;
     } catch (error) {

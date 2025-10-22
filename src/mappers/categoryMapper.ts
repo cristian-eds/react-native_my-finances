@@ -8,7 +8,8 @@ export function toModel(categoryRecod: CategoryRecord): CategoryModel {
         description: categoryRecod.description,
         hexColor: categoryRecod.hex_color,
         iconName: categoryRecod.icon_name,
-        movementType: categoryRecod.movement_type
+        expenseFavorite: Boolean(categoryRecod.expense_favorite),
+        incomeFavorite: Boolean(categoryRecod.income_favorite)
     }
 }
 
