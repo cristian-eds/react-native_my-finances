@@ -17,7 +17,7 @@ export function CategoryItem({category}: CategoryItemProps) {
     return (
         <TouchableOpacity style={styles.categoryItem} onPress={() => setShowModalCategory(true)}>
             <View style={[styles.iconCircle, { backgroundColor: `${category.hexColor}` }]}>
-                <Ionicons name={category.iconName} size={24} color="black" />
+                <Ionicons name={category.iconName} size={24} color="white" />
             </View>
             <Text style={styles.categoryItemTitle}>{category.description}</Text>
             <Ionicons name='ellipsis-vertical-outline' size={24} color="black" />

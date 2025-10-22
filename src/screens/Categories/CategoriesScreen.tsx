@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { styles } from './CategoriesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { useNavigation } from '@react-navigation/native';
-import { ButtonIconSimple } from '../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
@@ -13,7 +12,6 @@ import { useCategoryStore } from '../../stores/CategoryStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../hooks/useUserContext';
 import { CategoryItem } from '../../components/CategoryItem/CategoryItem';
-import { capitalizeWord } from '../../utils/StringFormater';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 
 export function CategoriesScreen() {
@@ -49,28 +47,9 @@ export function CategoriesScreen() {
         fetch();
     }, [user,search])
 
-    
-
-    const renderCaptionItem = (description: string) => {
-        const isActive = description === captionActive;
-        return (
-            <TouchableOpacity key={description} style={[styles.captionItem, isActive ? styles.captionItemActive : null]} onPress={() => handleCaptionActive(description)} >
-                <Text style={[styles.captionItemText, isActive ? styles.captionItemTextActive : null]}>{capitalizeWord(description)}</Text>
-            </TouchableOpacity>
-        )
-    }
 
     const renderItems = () => {
         return categories.map(category => ( <CategoryItem  key={category.id} category={category}/> ))
-    }
-
-    const handleCaptionActive = (caption: string) => {
-        setCaptionActive(prevCaption => {
-            if(prevCaption === caption) {
-                return "";
-            }
-            return caption;
-        })
     }
 
     return (
