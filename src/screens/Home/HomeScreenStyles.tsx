@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   captionItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 5,
+    paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 5,
     backgroundColor: 'white',
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     fontSize: 20
   },
   transactions_infos_h3: {
-    fontSize: 18
+    fontSize: 16
   },
   transactions_infos_h4: {
     fontSize: 16,

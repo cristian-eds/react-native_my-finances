@@ -14,8 +14,8 @@ export const styles = StyleSheet.create({
   iconBox: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 50,
 
   },
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   value_info_text: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '600'
   }
 });

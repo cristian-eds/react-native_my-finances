@@ -47,6 +47,8 @@ export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps
             placeholder='Selecione um item'
             maxHeight={200}
             listMode='SCROLLVIEW'
+            zIndex={30000}
+            zIndexInverse={10000}
         />
 
     );

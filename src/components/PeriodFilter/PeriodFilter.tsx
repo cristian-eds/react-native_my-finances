@@ -83,6 +83,8 @@ export function PeriodFilter() {
                 dropDownContainerStyle={styles.dropDownContainerStyle}
                 labelStyle={styles.labelStyle}
                 renderListItem={(props) => <PeriodFilterDropdownItem {...props} handleSetPeriodDates={handleSetPeriodDates} />}
+                zIndex={2000}
+                zIndexInverse={900}
             />
             <Ionicons name="chevron-forward" size={24} color="black" onPress={handleNextPeriod} />
         </View>
