@@ -52,7 +52,7 @@ export function HomeScreen() {
         if (activeAccount) {
             fetchTransactions(activeAccount.id as number, database);
         }
-    }, [activeAccount,filters.initialDate, filters.finalDate])
+    }, [activeAccount, filters.initialDate, filters.finalDate])
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
@@ -72,11 +72,8 @@ export function HomeScreen() {
             <View style={styles.transactions}>
                 <View style={styles.transactions_infos}>
                     <View style={styles.transactions_infos_item}>
-                        <View style={{ flexDirection: 'row', columnGap: 8, alignItems: 'center' }}>
-                            <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
-                            <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
-                        </View>
-                        <ButtonPlus onPress={() => setShowModalTransaction(true)} />
+                        <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
+                        <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
                     </View>
                     <PeriodFilter />
                     <View style={styles.captions}>

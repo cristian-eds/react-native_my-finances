@@ -28,7 +28,9 @@ export const styles = StyleSheet.create({
   },
   transactions_infos_item: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10
   },
   transactions_infos_h1: {
     fontSize: 24
