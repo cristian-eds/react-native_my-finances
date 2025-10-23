@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -38,6 +38,7 @@ export function HomeScreen() {
     const { fetchCategories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
+    const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
     useEffect(() => {
         const fetch = async () => {
@@ -58,12 +59,21 @@ export function HomeScreen() {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
             .map(transaction => transaction.value)
             .reduce((prevValue, current) => prevValue + current, 0);
+        const isActualActive = movementType === activeMovementType;
         return (
-            <View style={styles.captionItem}>
-                <Text style={styles.captionItemText}>{title}</Text>
-                <Text style={styles.transactions_infos_h3}>{formaterNumberToBRL(totalValue)}</Text>
-            </View>
+            <TouchableOpacity 
+                style={[styles.captionItem, isActualActive && styles.captionItemActive]}
+                onPress={() => setActiveMovementType(prevMovement => prevMovement === movementType? null : movementType)}>
+                <Text style={[styles.captionItemText, isActualActive && styles.captionItemTextActive]}>{title}</Text>
+                <Text style={[styles.transactions_infos_h3, isActualActive && styles.captionItemTextActive]}>{formaterNumberToBRL(totalValue)}</Text>
+            </TouchableOpacity>
         )
+    }
+
+    const filterTransactionActiveMovementType = () => {
+        if(!activeMovementType) return toHomeTableItemList(transactions);
+        const filteredTransactions = transactions.filter(transaction => transaction.movementType === activeMovementType);
+        return toHomeTableItemList(filteredTransactions);
     }
 
     return (
@@ -84,7 +94,7 @@ export function HomeScreen() {
                 </View>
             </View>
             {transactions.length > 0 ? <FlatList<HomeTableItem>
-                data={toHomeTableItemList(transactions)}
+                data={filterTransactionActiveMovementType()}
                 keyExtractor={(item, index) => item.id.toString()}
                 renderItem={({ item }) => <TransactionItem item={item} />}
                 contentContainerStyle={{ paddingBottom: 80 }}

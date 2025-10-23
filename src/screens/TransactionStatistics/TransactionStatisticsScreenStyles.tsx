@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   captionMovementTypeItemActive: {
-    backgroundColor: '#0e5affa8',
+    backgroundColor: '#1a4296a8',
     borderRadius: 5
   },
   captionMovementTypeItemText: {

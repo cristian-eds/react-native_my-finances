@@ -20,11 +20,18 @@ export const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 5,
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: '#fffffff2',
+  },
+  captionItemActive: {
+    elevation: 10,
+    backgroundColor: '#fff',
   },
   captionItemText: {
     fontSize: 14,
     textAlign: 'center'
+  },
+  captionItemTextActive: {
+    fontWeight: '600'
   },
   transactions_infos_item: {
     flexDirection: 'row',
