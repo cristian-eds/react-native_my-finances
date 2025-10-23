@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './TransactionStatisticsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -10,10 +10,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import { CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
+import {  ChartItem, CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { useCategoryStore } from '../../stores/CategoryStore';
+
+type GroupChartItem = {
+    [category: number]: ChartItem
+}
 
 export function TransactionStatistics() {
 
@@ -23,15 +27,27 @@ export function TransactionStatistics() {
     const [activeMovementType, setActiveMovementType] = useState(MovementType.Despesa);
 
     const mapTransactionToChartItem = (type: MovementType) => {
-        return transactions.filter(transaction => transaction.movementType === type)
-            .map(transaction => {
-                const category = categories.find(cat => cat.id === transaction.categoryId);
-                return {
-                    value: transaction.value,
-                    label: category?.description ?? " ",
-                    frontColor: category?.hexColor ?? "#000"
+        const transactionsFiltered = transactions.filter(transaction => transaction.movementType === type);
+        
+        const items = transactionsFiltered.reduce((acumulator, transaction) => {
+            const actualCategory = transaction.categoryId as number;
+            const foundedCategory = categories.find(cat => cat.id === transaction.categoryId);
+
+            if(!acumulator[actualCategory]) {
+                acumulator[actualCategory] = {
+                    frontColor: foundedCategory?.hexColor ?? '#4770eaff',
+                    label: foundedCategory?.description ?? ' ',
+                    value: 0
                 }
-            });
+            }
+
+            acumulator[actualCategory].value += transaction.value
+
+            return acumulator;
+
+        },{}  as GroupChartItem,)
+
+       return Object.values(items);
     }
 
     const textTitle = () => {

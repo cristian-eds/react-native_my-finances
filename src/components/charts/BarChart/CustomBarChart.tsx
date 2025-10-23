@@ -5,14 +5,14 @@ import { BarChart } from 'react-native-gifted-charts';
 
 const screenWidth = Dimensions.get('window').width;
 
-interface Item {
+export interface ChartItem {
     value: number,
     label: string,
     frontColor: string
 }
 
 interface CustomBarChartProps {
-    items: Item[]
+    items: ChartItem[]
 }
 
 export function CustomBarChart({items}: CustomBarChartProps) {
