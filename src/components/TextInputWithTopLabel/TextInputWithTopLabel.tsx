@@ -10,12 +10,13 @@ interface TextInputWithLeftLabelProps {
     title: string,
     control: any,
     required?: boolean;
+    showLabel?: boolean,
     errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> | undefined;
 }
 
 type Props = TextInputWithLeftLabelProps & TextInputProps;
 
-export function TextInputWithTopLabel({ name, title, control, required = false, errors, ...props }: Props) {
+export function TextInputWithTopLabel({ name, title, control, showLabel = true,required = false, errors, ...props }: Props) {
 
     const { field } = useController({
         name,
@@ -23,7 +24,7 @@ export function TextInputWithTopLabel({ name, title, control, required = false, 
     })
 
     return (
-        <RowWithTopLabel title={title} required={required} errors={errors}>
+        <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel}>
             <TextInput {...props} value={field.value} onChangeText={field.onChange} placeholderTextColor='#090909e8' style={{padding: 4, flex: 1}}/>
         </RowWithTopLabel>
     );

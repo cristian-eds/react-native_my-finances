@@ -10,18 +10,19 @@ interface RowWithTopLabelProps {
     required?: boolean,
     errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> |undefined;
     children: React.ReactNode,
+    showLabel?: boolean,
     stylesProp?: ViewStyle
 }
 
 
 
-export function RowWithTopLabel({title, children, onPress, required = false, errors, stylesProp}: RowWithTopLabelProps) {
+export function RowWithTopLabel({title, children, onPress, required = false, errors, showLabel = true,stylesProp}: RowWithTopLabelProps) {
   
   const Wrapper = onPress ? TouchableOpacity : View
   
   return (
     <View style={styles.container}>
-        <Text style={styles.label}>{title}{required && '*'}:</Text>
+        {showLabel && <Text style={styles.label}>{title}{required && '*'}:</Text>}
         <Wrapper style={[styles.input, stylesProp]} onPress={onPress}>
             {children}
         </Wrapper>
