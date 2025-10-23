@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { styles } from './PickerWithTopLabelStyles';
 
-import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
+import { FieldError, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 

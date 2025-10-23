@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
     container_content: {
         width: '98%',
         backgroundColor: 'white',
-        padding: 20,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         borderRadius: 10,
     },
     header: {
@@ -28,8 +29,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
+    inputs:{
+        rowGap: 5
+    },
     buttons_footer: {
-        marginVertical: 40,
+        marginTop: 30,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },

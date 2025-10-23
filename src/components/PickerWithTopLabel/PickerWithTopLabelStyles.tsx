@@ -9,6 +9,8 @@ export const styles = StyleSheet.create({
   picker: {
     borderColor: 'white',
     borderRadius: 10,
+    height: 45,
+    minHeight: 45
   },
   picker_text: {
     fontSize: 14,

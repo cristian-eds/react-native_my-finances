@@ -2,21 +2,20 @@ import { Text, View, Modal, Alert } from 'react-native'
 import React from 'react'
 
 import { styles } from './ModaAccountStyles'
-import { TextInpuWithLeftLabel } from '../../TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { PickerWithLeftLabel } from '../../PickerWithLeftLabel/PickerWithLeftLabel';
 import { useForm } from 'react-hook-form';
 import { accountSchemas } from '../../../schemas/accountSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { TypeAccount } from '../../../domain/enums/typeAccountEnum';
 import { Status } from '../../../domain/enums/statusEnum';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 
 import { useAccountStore } from '../../../stores/AccountStore';
-import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
+import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 
 interface ModalAccountProps {
     isShow: boolean;
@@ -70,6 +69,8 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
         onClose();
     }
 
+    const itemsToDropDown = Object.keys(TypeAccount).map((text) => { return { label: text, value: TypeAccount[text as keyof typeof TypeAccount] } })
+
     return (
         <Modal
             animationType="slide"
@@ -85,14 +86,14 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                         <View style={styles.rightSpacer}>
                         </View>
                     </View>
-                    <View >
-                        <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
-                        <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
-                        <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
-                        <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
-                        <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
-                        <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
-                        <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
+                    <View style={styles.inputs}>
+                        <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required/>
+                        <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
+                        <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type' />
+                        <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
+                        <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
+                        <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
+                        <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleCloseModal} />

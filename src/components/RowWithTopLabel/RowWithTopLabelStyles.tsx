@@ -5,16 +5,19 @@ export const styles = StyleSheet.create({
         rowGap: 5,
     },
     label: {
-        fontSize: 18,
-        paddingLeft: 8
+        fontSize: 17,
+        paddingLeft: 8,
+        color: '#242424e1'
     },
     input: {
         borderWidth: 1,
-        borderColor: '#4d4d4d9f',
+        borderColor: '#8989899f',
         padding: 8,
         borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems:'center',
+        height: 46.9
     },
     error_message: {
         color: 'red',
