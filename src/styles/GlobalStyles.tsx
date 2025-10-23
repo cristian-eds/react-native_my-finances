@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container_screens_auth: {
-    backgroundColor: '#E5EBF1',
+    backgroundColor: '#b7bec5ff',
     flex:1,
     paddingTop: 80,
     paddingBottom: 60,
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   container_screens_normal: {
-    backgroundColor: '#E5EBF1',
+    backgroundColor: '#b7bec5ff',
     flex:1,
     paddingVertical: 10,
     paddingHorizontal: 25,
