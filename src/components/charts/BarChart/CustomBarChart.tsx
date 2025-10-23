@@ -18,26 +18,38 @@ interface CustomBarChartProps {
 export function CustomBarChart({items}: CustomBarChartProps) {
 
     const barCount = items.length;
-    const CHART_WIDTH = screenWidth - 160;
-    const FIXED_BAR_WIDHT = 30;
-    const TOTAL_SPACE_BARS = FIXED_BAR_WIDHT * barCount;
-    const SPACE_REMAINING = CHART_WIDTH - TOTAL_SPACE_BARS;
-    const SPACING = SPACE_REMAINING / (barCount + 1)
+    const chartWidth = screenWidth - 160;
+    const fixedBarWidth = 30;
+    const totalSpaceBars = fixedBarWidth * barCount;
+    const spaceRemaining = chartWidth - totalSpaceBars;
+    const spacing = spaceRemaining / (barCount + 1)
+    const STEP = 5;
+
+    const calculateMaxChartValue = (maxItemValue: number, step: number, baseMultiple: number) => {
+        const nextMultiple = Math.ceil(maxItemValue / step / baseMultiple) + 1;
+        return nextMultiple * step * baseMultiple;
+    }
+
+    const maxItemValue = items.reduce((prevItem, currentValue) => currentValue.value > prevItem ? currentValue.value : prevItem,0);
+    const maxChartValue = calculateMaxChartValue(maxItemValue, STEP, 10)
+
+
 
     return (
         <View style={styles.container}>
             <BarChart
                 data={items}
-                barWidth={FIXED_BAR_WIDHT}
+                barWidth={fixedBarWidth}
                 yAxisLabelPrefix='R$ '
                 yAxisTextStyle={{ color: '#555', fontSize: 15, textAlign: 'left' }}
                 yAxisLabelWidth={70}  
                 showYAxisIndices
-                width={CHART_WIDTH}
-                spacing={SPACING}
+                width={chartWidth}
+                spacing={spacing}
                 yAxisThickness={0}
                 xAxisThickness={0}
                 isAnimated
+                maxValue={maxChartValue}
                 noOfSections={5}
                 animationDuration={800}
                 barBorderRadius={10}
