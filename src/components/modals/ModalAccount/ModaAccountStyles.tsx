@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        borderBottomColor: '#9d9d9dff',
+        alignItems: 'center',
+        borderBottomWidth: 0.6,
+        borderBottomColor: '#cdcdcdde',
         marginBottom: 10,
         paddingBottom: 7
     },
@@ -29,11 +30,31 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
-    inputs:{
-        rowGap: 5
+    inputs: {
+        rowGap: 10
+    },
+    inputsTitle: {
+        fontSize: 13,
+        fontWeight: "600",
+        paddingLeft: 5,
+        marginTop: 7
+    },
+    showMore: {
+        flexDirection: 'row',
+        paddingHorizontal: 8,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    showMoreText: {
+        fontStyle: "italic",
+        color: '#000925ff'
     },
     buttons_footer: {
-        marginTop: 30,
+        borderTopWidth: 0.5,
+        borderTopColor: '#cdcdcdde',
+        paddingTop: 20,
+        marginTop: 20,
         marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
