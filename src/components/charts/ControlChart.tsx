@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './ControlChartStyles';
 import { formaterNumberToBRL } from '../../utils/NumberFormater'
 import { Row } from '../modals/structure/Row/Row';
@@ -7,6 +7,7 @@ import { MovementType, textMovementType } from '../../domain/enums/movementTypeE
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { CustomBarChart } from './BarChart/CustomBarChart';
+import { CustomPieChart } from './PieChart/CustomPieChart';
 
 export interface ChartItem {
     value: number,
@@ -19,7 +20,11 @@ interface ControlChartProps {
     activeMovementType: MovementType | null
 }
 
+type TypeChart = 'BAR' | 'PIE'
+
 export function ControlChart({ activeMovementType, items }: ControlChartProps) {
+
+    const [typeChartActive, setTypeChartActive] = useState<TypeChart>('BAR');
 
     const renderTotals = () => (
         items.map((item, index) => (
@@ -42,30 +47,61 @@ export function ControlChart({ activeMovementType, items }: ControlChartProps) {
 
     const renderHeaderChart = () => (
         <View style={styles.headerChart}>
-            <View style={{flex:1}}></View>
             <Text style={styles.headerChartTitle}>{textMovementType(activeMovementType)}</Text>
-            {renderTypeChart()}
+            {renderTypesChart()}
         </View>
     )
 
-    const renderTypeChart = () => (
-        <Row>
-            <TouchableOpacity>
-                <Ionicons name="bar-chart-outline" size={20} color="black" style={{top: -3}} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <Ionicons name="pie-chart-outline" size={20} color="black" style={{top: -3}}/>
-            </TouchableOpacity>
-        </Row>
-    )
+    const renderTypesChart = () => {
+        const renderType = (type: TypeChart) => {
+            const isActive = typeChartActive === type;
+            const iconName = `${type.toLocaleLowerCase()}-chart${!isActive ? '-outline' : ''}` as keyof typeof Ionicons.glyphMap;
+            return (
+                <TouchableOpacity onPress={() => setTypeChartActive(type)} >
+                    <Ionicons name={iconName} size={isActive ? 22 : 20} color={isActive ? '#072b79ff' : '#575757ff'} style={{ top: -3 }} />
+                </TouchableOpacity>
+            )
+        }
+
+        return (
+            <Row>
+                {renderType('BAR')}
+                {renderType('PIE')}
+            </Row>
+        )
+    }
+
+
+
+    const convertToPieChartItems = () => {
+        return items.map(item => {
+            return {
+                value: item.value,
+                color: item.frontColor
+            }
+        })
+    }
+
+    const renderChart = () => {
+        switch (typeChartActive) {
+            case 'BAR':
+                return <CustomBarChart items={items} />
+            default:
+                return <CustomPieChart items={convertToPieChartItems()} />
+        }
+    }
 
     return (
         <View style={styles.container}>
             {renderHeaderChart()}
-            <CustomBarChart items={items}/>
+            {renderChart()}
             <View style={styles.footerTotal}>
                 <Text style={[styles.footerTitles, { marginBottom: 10 }]}>TOTAIS: </Text>
-                {renderTotals()}
+                <ScrollView horizontal>
+                    <View style={{flexWrap: 'wrap', height: 100, columnGap: 5}}>
+                        {renderTotals()}
+                    </View>
+                </ScrollView>
                 {renderGeneralTotal()}
             </View>
         </View>
