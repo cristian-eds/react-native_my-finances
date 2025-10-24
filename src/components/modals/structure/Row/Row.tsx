@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { View, ViewProps, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 
 interface RowProps {
   style?: ViewStyle

@@ -14,7 +14,7 @@ export function CustomBarChart({ items }: CustomBarChartProps) {
 
     const barCount = items.length;
     const chartWidth = screenWidth - 160;
-    const fixedBarWidth = 36;
+    const fixedBarWidth = 30;
     const totalSpaceBars = fixedBarWidth * barCount;
     const spaceRemaining = chartWidth - totalSpaceBars;
     const spacing = spaceRemaining / (barCount + 1)
@@ -42,7 +42,7 @@ export function CustomBarChart({ items }: CustomBarChartProps) {
             yAxisLabelWidth={72}
             showYAxisIndices
             width={chartWidth}
-            height={160}
+            height={120}
             spacing={spacing}
             yAxisThickness={0}
             xAxisThickness={0}

@@ -22,7 +22,8 @@ export const styles = StyleSheet.create({
   },
   chart: {
     rowGap: 10,
-    marginBottom: 20
+    marginBottom: 20,
+    flex: 1
   },
   period: {
     marginBottom: 15
@@ -38,6 +39,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: 'white',
     borderRadius: 4,
+    marginBottom: 60
   },
   captionMovementTypeItem: {
     flex: 1,

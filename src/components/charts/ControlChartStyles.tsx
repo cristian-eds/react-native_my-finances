@@ -14,6 +14,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: '#8888883d',
     borderBottomWidth: 0.5,
+    paddingHorizontal: 15,
+    marginBottom: 10
   },
   headerChartTitle: {
     fontSize: 18,
@@ -33,7 +35,6 @@ export const styles = StyleSheet.create({
   footerTotalItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: 40,
   },
   footerTotalItemColor: {
     width:12,
