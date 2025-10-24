@@ -10,13 +10,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import {  ChartItem, CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
+import { ChartItem, CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
 import { useTransactionStore } from '../../stores/TransactionStore';
-import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { frontColorByMovementType, MovementType, textMovementType } from '../../domain/enums/movementTypeEnum';
 import { useCategoryStore } from '../../stores/CategoryStore';
 
 type GroupChartItem = {
-    [category: number]: ChartItem
+    [category: number | string]: ChartItem
 }
 
 export function TransactionStatistics() {
@@ -24,16 +24,36 @@ export function TransactionStatistics() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
     const { transactions } = useTransactionStore();
     const { categories } = useCategoryStore();
-    const [activeMovementType, setActiveMovementType] = useState(MovementType.Despesa);
+    const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
-    const mapTransactionToChartItem = (type: MovementType) => {
+    const generateGeneralChart = () : ChartItem[]=> {
+        return [
+            ...Object.values(MovementType).map(generateChartItemByMovementType)
+        ]
+    }
+
+    const generateChartItemByMovementType = (movementType: MovementType) : ChartItem => {
+        return {
+            frontColor: frontColorByMovementType(movementType),
+            label: textMovementType(movementType),
+            value: someTotalValueByMovementType(movementType)
+        }
+    }
+
+    const someTotalValueByMovementType = (movementType: MovementType) => {
+        return transactions.filter(transaction => transaction.movementType === movementType)
+                .reduce((acumulator, current) => acumulator += current.value, 0)
+    }
+
+    const mapTransactionToChartItem = (type: MovementType | null) => {
+        if(!type) return generateGeneralChart()
         const transactionsFiltered = transactions.filter(transaction => transaction.movementType === type);
-        
+
         const items = transactionsFiltered.reduce((acumulator, transaction) => {
             const actualCategory = transaction.categoryId as number;
             const foundedCategory = categories.find(cat => cat.id === transaction.categoryId);
 
-            if(!acumulator[actualCategory]) {
+            if (!acumulator[actualCategory]) {
                 acumulator[actualCategory] = {
                     frontColor: foundedCategory?.hexColor ?? '#4770eaff',
                     label: foundedCategory?.description ?? ' ',
@@ -45,27 +65,16 @@ export function TransactionStatistics() {
 
             return acumulator;
 
-        },{}  as GroupChartItem,)
+        }, {} as GroupChartItem,)
 
-       return Object.values(items);
-    }
-
-    const textTitle = () => {
-        switch (activeMovementType) {
-            case MovementType.Despesa:
-                return 'Débitos'
-            case MovementType.Receita:
-                return 'Créditos'
-            default:
-                return 'Transferências'
-        }
+        return Object.values(items);
     }
 
     const renderCaptionMovementType = (movementType: MovementType, title: string) => {
         const isActive = activeMovementType === movementType;
         return (
             <TouchableOpacity
-                onPress={() => setActiveMovementType(movementType)}
+                onPress={() => setActiveMovementType(prevMovement => movementType === prevMovement ? null : movementType)}
                 style={[styles.captionMovementTypeItem, isActive && styles.captionMovementTypeItemActive]}>
                 <Text style={[styles.captionMovementTypeItemText, isActive && styles.captionMovementTypeItemTextActive]}>{title}</Text>
             </TouchableOpacity>
@@ -87,10 +96,6 @@ export function TransactionStatistics() {
                 </View>
             </View>
             <View style={styles.chart}>
-                <View style={styles.sectionChartHeader}>
-                    <Text style={styles.sectionChartHeaderText}>{textTitle()}</Text>
-                    <ButtonPlus />
-                </View>
                 <CustomBarChart items={mapTransactionToChartItem(activeMovementType)} />
             </View>
             <View style={styles.captionMovementType}>
