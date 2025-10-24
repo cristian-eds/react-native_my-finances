@@ -9,11 +9,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
-import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import { ChartItem, CustomBarChart } from '../../components/charts/BarChart/CustomBarChart';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { frontColorByMovementType, MovementType, textMovementType } from '../../domain/enums/movementTypeEnum';
 import { useCategoryStore } from '../../stores/CategoryStore';
+import { ChartItem, ControlChart } from '../../components/charts/ControlChart';
 
 type GroupChartItem = {
     [category: number | string]: ChartItem
@@ -96,7 +95,7 @@ export function TransactionStatistics() {
                 </View>
             </View>
             <View style={styles.chart}>
-                <CustomBarChart items={mapTransactionToChartItem(activeMovementType)} />
+                <ControlChart items={mapTransactionToChartItem(activeMovementType)} activeMovementType={activeMovementType}/>
             </View>
             <View style={styles.captionMovementType}>
                 {renderCaptionMovementType(MovementType.Despesa, 'Débitos')}
