@@ -18,6 +18,7 @@ type Store = {
     updateAccount: (account: UpdateAccountModel, database: SQLiteDatabase) => Promise<boolean>;
     toggleStatusAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
     deleteAccount: (accountId: number, database: SQLiteDatabase) => Promise<boolean>;
+    getAccountName: (accountId: number) => string | undefined;
 
     updateBalanceAccount: (accountId: number, value: number, database: SQLiteDatabase, movementType: MovementType) => Promise<void>;
 
@@ -101,6 +102,10 @@ export const useAccountStore = create<Store>((set, get) => ({
         } catch (error) {
             return false;
         }
+    },
+
+    getAccountName: (accountId) => {
+        return get().accounts.find(acc => acc.id === accountId)?.name;
     },
 
     updateBalanceAccount: async (accountId, value, database, movementType) => {

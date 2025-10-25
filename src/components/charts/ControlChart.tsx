@@ -12,7 +12,8 @@ import { CustomPieChart } from './PieChart/CustomPieChart';
 export interface ChartItem {
     value: number,
     label: string,
-    frontColor: string
+    frontColor: string,
+    movement?: 'CREDIT' | 'DEBIT' 
 }
 
 interface ControlChartProps {
@@ -41,7 +42,10 @@ export function ControlChart({ activeMovementType, items }: ControlChartProps) {
     const renderGeneralTotal = () => (
         <Row style={{ marginTop: 10 }}>
             <Text style={styles.footerTitles}>GERAL:</Text>
-            <Text style={styles.footerText}>{formaterNumberToBRL(items.reduce((prev, current) => prev + current.value, 0))}</Text>
+            <Text style={styles.footerText}>{formaterNumberToBRL(items.reduce((prev, current) => {
+                if(current.movement === 'CREDIT') return prev + current.value;
+                return prev - current.value;
+                }, 0))}</Text>
         </Row>
     )
 

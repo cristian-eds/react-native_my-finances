@@ -13,9 +13,15 @@ import { useTransactionStore } from '../../stores/TransactionStore';
 import { frontColorByMovementType, MovementType, textMovementType } from '../../domain/enums/movementTypeEnum';
 import { useCategoryStore } from '../../stores/CategoryStore';
 import { ChartItem, ControlChart } from '../../components/charts/ControlChart';
+import { Transaction } from '../../domain/transactionModel';
+import { useAccountStore } from '../../stores/AccountStore';
 
 type GroupChartItem = {
     [category: number | string]: ChartItem
+}
+
+type GroupChartTransferItem = {
+    [accountsKey: number | string]: ChartItem
 }
 
 export function TransactionStatistics() {
@@ -23,6 +29,8 @@ export function TransactionStatistics() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
     const { transactions } = useTransactionStore();
     const { categories } = useCategoryStore();
+    const { getAccountName, activeAccount } = useAccountStore();
+
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
     const generateGeneralChart = () : ChartItem[]=> {
@@ -31,22 +39,50 @@ export function TransactionStatistics() {
         ]
     }
 
+    const generateTransferItems = (filterTransactions: Transaction[]): ChartItem[] => {
+        const items = filterTransactions.reduce((acumulator, transaction) => {
+            const actualAccountsKey = `${transaction.accountId}-${transaction.destinationAccountId}`
+            const label = `De: ${getAccountName(transaction.accountId)} - Para: ${getAccountName(transaction.destinationAccountId ?? 0) ?? ' '}`
+            const isAccountDestination = activeAccount?.id === transaction.destinationAccountId;
+            const frontColor =  isAccountDestination ? '#28a326ff' : '#fe5e5eff';
+
+            if (!acumulator[actualAccountsKey]) {
+                acumulator[actualAccountsKey] = {
+                    frontColor: frontColor,
+                    label: label,
+                    value: 0,
+                    movement: isAccountDestination ? 'CREDIT' : 'DEBIT'
+                }
+            }
+
+            acumulator[actualAccountsKey].value += transaction.value
+
+            return acumulator;
+
+        }, {} as GroupChartTransferItem)
+
+        return Object.values(items);
+    }
+
     const generateChartItemByMovementType = (movementType: MovementType) : ChartItem => {
         return {
             frontColor: frontColorByMovementType(movementType),
             label: textMovementType(movementType),
-            value: someTotalValueByMovementType(movementType)
+            value: someTotalValueByMovementType(movementType),
+            movement: movementType === MovementType.Despesa ? 'DEBIT' : 'CREDIT'
+
         }
     }
 
     const someTotalValueByMovementType = (movementType: MovementType) => {
         return transactions.filter(transaction => transaction.movementType === movementType)
-                .reduce((acumulator, current) => acumulator += current.value, 0)
+                .reduce((acumulator, current) => acumulator += current.value, 0);
     }
 
     const mapTransactionToChartItem = (type: MovementType | null) => {
         if(!type) return generateGeneralChart()
         const transactionsFiltered = transactions.filter(transaction => transaction.movementType === type);
+        if(type === MovementType.Transferencia) return generateTransferItems(transactionsFiltered);
 
         const items = transactionsFiltered.reduce((acumulator, transaction) => {
             const actualCategory = transaction.categoryId as number;
@@ -56,7 +92,8 @@ export function TransactionStatistics() {
                 acumulator[actualCategory] = {
                     frontColor: foundedCategory?.hexColor ?? '#4770eaff',
                     label: foundedCategory?.description ?? ' ',
-                    value: 0
+                    value: 0,
+                    movement: transaction.movementType === MovementType.Despesa ? 'DEBIT' : 'CREDIT'
                 }
             }
 
