@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
     },
      title: {
-        fontSize: 24,
+        fontSize: 22,
         textAlign: 'center',
         marginBottom: 10,
         fontWeight: 'bold',
@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     rightSpacer: {
-        width: '20%'
+        width: '20%',
+        flex: 1
     }
 });

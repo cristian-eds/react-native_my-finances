@@ -21,6 +21,7 @@ import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { Account } from '../../../domain/accountModel';
+import { Row } from '../structure/Row/Row';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -114,10 +115,13 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={handleClose} />
-                        <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
+                        <ButtonBack onPress={handleClose}  />
+                        <Row style={{flex: 4}}>
+                            <Ionicons name="receipt-outline" size={18} color="green" style={{top: -3}} />
+                            <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
+                        </Row>
                         {mode === 'edit' ?
-                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
+                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
                             <View style={styles.rightSpacer}></View>}
                     </View>
                     <View style={{ rowGap: 10 }}>
@@ -132,7 +136,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                                 <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} />
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', columnGap:10 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', columnGap: 10 }}>
                             <View style={{ flex: 1 }}>
                                 <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} />
                             </View>

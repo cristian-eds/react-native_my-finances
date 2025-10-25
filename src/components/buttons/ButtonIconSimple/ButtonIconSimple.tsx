@@ -13,7 +13,7 @@ type Props = ButtonIconSimple & TouchableOpacityProps;
 export function ButtonIconSimple({iconName, ...props}: Props) {
   return (
     <TouchableOpacity {...props} style={[styles.container, props.style]} >
-        <Ionicons name={iconName} size={24} color="black" />
+        <Ionicons name={iconName} size={22} color="black" />
     </TouchableOpacity>
   );
 }

@@ -18,7 +18,7 @@ interface ModalSelectPeriodProps {
 
 export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handleConfirmValue }: ModalSelectPeriodProps) {
 
-    const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, watch } = useForm({
             resolver: zodResolver(periodDatesSchemas),
             defaultValues: {
                 initialDate: new Date(),
@@ -46,8 +46,8 @@ export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handl
                         <Text style={styles.title}>Escolha as datas</Text>
                         <View style={styles.rightSpacer}></View>
                     </View>
-                    <DatePickerWithTopLabel control={control} name='initialDate' title='Data inicial:'  />
-                    <DatePickerWithTopLabel control={control} name='finalDate' title='Data final:' />
+                    <DatePickerWithTopLabel control={control} name='initialDate' title='Data inicial'  />
+                    <DatePickerWithTopLabel control={control} name='finalDate' title='Data final' />
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
