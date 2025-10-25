@@ -5,13 +5,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    containerBackText: {
-        fontSize: 20
-    },
-    containerBackIconButton: {
-        backgroundColor: 'transparent',
-        width: '10%'
-    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -22,10 +15,13 @@ export const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: 'bold',
     },
-    title_section: {
-        fontSize: 20,
-        paddingLeft:5,
-        fontStyle: 'italic',
-        textAlign: 'center'
+    containerContent: {
+        backgroundColor: 'white',
+        paddingHorizontal: 10,
+        paddingTop: 5,
+        paddingBottom: 15,
+        borderRadius: 8,
+        marginVertical: 9
     }
+
 });

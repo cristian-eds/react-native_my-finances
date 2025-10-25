@@ -112,8 +112,8 @@ export function AccountDetails() {
                 <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </View>
-            <View>
-                <Text style={[styles.title_section, { marginTop: 10 }]}>Dados da conta</Text>
+            <View style={styles.containerContent}>
+                <Text style={[GlobalStyles.sectionInputsText, {fontSize: 16 ,marginTop: 10, textAlign: 'center' }]}>DADOS DA CONTA</Text>
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
                 <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
@@ -121,7 +121,7 @@ export function AccountDetails() {
                 <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
                 <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
 
-                <Text style={[styles.title_section, { marginTop: 15 }]}>Informações</Text>
+                <Text style={[GlobalStyles.sectionInputsText, {fontSize: 16 ,marginTop: 10, textAlign: 'center' }]}>INFORMAÇÕES</Text>
 
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container_screens_auth: {
     backgroundColor: '#b7bec5ff',
-    flex:1,
+    flex: 1,
     paddingTop: 80,
     paddingBottom: 60,
     rowGap: 35,
@@ -18,9 +18,15 @@ export const styles = StyleSheet.create({
   },
   container_screens_normal: {
     backgroundColor: '#b7bec5ff',
-    flex:1,
+    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 25,
     rowGap: 20,
+  },
+  sectionInputsText: {
+    fontSize: 13,
+    fontWeight: "600",
+    paddingLeft: 5,
+    marginTop: 7
   }
 });
