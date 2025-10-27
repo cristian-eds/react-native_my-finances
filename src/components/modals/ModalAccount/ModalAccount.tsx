@@ -88,7 +88,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                     <View style={styles.header}>
                         <ButtonBack onPress={handleCloseModal} />
                         <Row>
-                            <Ionicons name="card-outline" size={24} color="green" style={{top: -4}} />
+                            <Ionicons name="card-outline" size={24} color="green" style={{ top: -4 }} />
                             <Text style={styles.title}>Nova Conta</Text>
                         </Row>
                         <View style={styles.rightSpacer}>
@@ -98,30 +98,23 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                         <Text style={styles.inputsTitle}>INFORMAÇÕES BÁSICAS</Text>
                         <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Nome*:' showLabel={false} required />
                         <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' showLabel={false} required />
+                        <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type' showLabel={false} />
                         <TouchableOpacity style={styles.showMore} onPress={() => setShowMoreInputs(!showMoreInputs)}>
                             <Text style={styles.showMoreText}>Preencher detalhes da conta...</Text>
                             <Ionicons name={showMoreInputs ? 'chevron-up' : 'chevron-down'} size={20} color="black" />
                         </TouchableOpacity>
                         {showMoreInputs && <>
                             <Text style={styles.inputsTitle}>DETALHES DA CONTA</Text>
+                            <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' showLabel={false}/>
                             <Row>
                                 <Cell>
-                                    <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type' />
+                                    <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' showLabel={false}/>
                                 </Cell>
                                 <Cell>
-                                    <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
+                                    <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' showLabel={false}/>
                                 </Cell>
                             </Row>
-                            <Row>
-                                <Cell>
-                                    <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
-                                </Cell>
-                                <Cell>
-                                    <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
-                                </Cell>
-                            </Row>
-
-                            <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
+                            <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' showLabel={false}/>
                         </>}
                     </View>
                     <View style={styles.buttons_footer}>
