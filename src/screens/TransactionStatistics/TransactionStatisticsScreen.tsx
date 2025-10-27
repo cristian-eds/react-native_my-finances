@@ -34,8 +34,25 @@ export function TransactionStatistics() {
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
     const generateGeneralChart = (): ChartItem[] => {
+        const transferTransactions = transactions.filter(transaction => transaction.movementType === MovementType.Transferencia);
+        const incomeTransfers = transferTransactions.filter(transaction => transaction.destinationAccountId === activeAccount?.id);
+        const expenseTransfers = transferTransactions.filter(transaction => transaction.accountId === activeAccount?.id);
+
         return [
-            ...Object.values(MovementType).map(generateChartItemByMovementType)
+            generateChartItemByMovementType(MovementType.Receita),
+            generateChartItemByMovementType(MovementType.Despesa),
+            {
+                frontColor: '#1da49eff',
+                label: textMovementType(MovementType.Transferencia) + ' (Entrada)',
+                value: incomeTransfers.reduce((acumulator, current) => acumulator + current.value, 0),
+                movement: 'CREDIT'
+            },
+            {
+                frontColor: '#ef6930ff',
+                label: textMovementType(MovementType.Transferencia) + ' (Saída)',
+                value: expenseTransfers.reduce((acumulator, current) => acumulator + current.value, 0),
+                movement: 'DEBIT'
+            }
         ]
     }
 
