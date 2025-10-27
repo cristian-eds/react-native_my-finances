@@ -22,6 +22,7 @@ import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { Account } from '../../../domain/accountModel';
 import { Row } from '../structure/Row/Row';
+import { Cell } from '../structure/Cell/Cell';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -125,26 +126,28 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                             <View style={styles.rightSpacer}></View>}
                     </View>
                     <View style={{ rowGap: 10 }}>
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
-                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='R$ 00,00' required />
-                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ width: '48%' }}>
-                                <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} />
-                            </View>
-                            <View style={{ width: '49%' }}>
-                                <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} />
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', columnGap: 10 }}>
-                            <View style={{ flex: 1 }}>
-                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} />
-                            </View>
+                        <Text style={styles.inputsTitle}>INFORMAÇÕES LANÇAMENTO</Text>
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false}/>
+                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='Valor*: R$ 00,00' required showLabel={false}/>
+                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required showLabel={false}/>
+                        <Row>
+                            <Cell>
+                                <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} placeholder='Tipo Movimento:' showLabel={false}/>
+                            </Cell>
+                            <Cell>
+                                <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} placeholder='Categoria:' showLabel={false}/>
+                            </Cell>
+                        </Row>
+                        <Text style={[styles.inputsTitle, {marginTop: 7}]}>CONTAS</Text>
+                        <Row>
+                            <Cell>
+                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta origem'/>
+                            </Cell>
                             {watch().movementType === MovementType.Transferencia &&
-                                <View style={{ flex: 1 }}>
-                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={accountItems} zIndex={20000} zIndexInverse={30000} />
-                                </View>}
-                        </View>
+                                <Cell>
+                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={accountItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta Destino'/>
+                                </Cell>}
+                        </Row>
 
                     </View>
                     <View style={styles.buttons_footer}>

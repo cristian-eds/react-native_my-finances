@@ -15,9 +15,10 @@ interface PickerWithTopLabelProps {
     mode?: 'date' | 'datetime',
     name: string,
     errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> |undefined;
+    showLabel?: boolean;
 }
 
-export function DatePickerWithTopLabel({ title, name, control, required=false, mode='date' ,errors }: PickerWithTopLabelProps) {
+export function DatePickerWithTopLabel({ title, name, control, required=false, mode='date' ,errors, showLabel }: PickerWithTopLabelProps) {
 
     const [showPicker, setShowPicker] = useState<boolean>(false);
 
@@ -32,7 +33,7 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
     }
 
     return (
-        <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors}>
+        <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors} showLabel={showLabel}>
             <Text style={styles.inputText}>{formaterIsoDateToDefaultPatternWithTime(new Date(field.value))}</Text>
             <Ionicons name="calendar-outline" size={24} color="black" />
             <DateTimePickerModal

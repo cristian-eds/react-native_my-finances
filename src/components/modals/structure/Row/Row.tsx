@@ -7,7 +7,7 @@ interface RowProps {
 
 export function Row({style, children}:PropsWithChildren<RowProps>) {
   return (
-    <View style={[{flexDirection: 'row', justifyContent: 'space-between', columnGap: 10, alignItems: 'center'}, style]}>
+    <View style={[{flexDirection: 'row', justifyContent: 'space-between', columnGap: 8, alignItems: 'center'}, style]}>
         {children}
     </View>
   );

@@ -21,9 +21,10 @@ interface PickerWithTopLabelProps {
     zIndex?: number,
     zIndexInverse?: number,
     showLabel?: boolean;
+    placeholder?: string;
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, showLabel }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, showLabel, placeholder = 'Selecione' }: PickerWithTopLabelProps) {
 
     const { field } = useController({
         name,
@@ -49,12 +50,12 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 style={styles.picker}
                 textStyle={styles.picker_text}
                 dropDownContainerStyle={styles.dropdownList}
-                placeholder='Selecione'
+                placeholder={placeholder}
                 maxHeight={200}
                 listMode='FLATLIST'
                 zIndex={zIndex}
                 zIndexInverse={zIndexInverse}
-
+    
             />
         </RowWithTopLabel>
 

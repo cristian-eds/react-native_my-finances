@@ -38,5 +38,10 @@ export const styles = StyleSheet.create({
     rightSpacer: {
         width: '20%',
         flex: 1
-    }
+    },
+    inputsTitle: {
+        fontSize: 13,
+        fontWeight: "600",
+        paddingLeft: 5,
+    },
 });
