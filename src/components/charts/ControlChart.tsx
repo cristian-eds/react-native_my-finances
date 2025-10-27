@@ -104,6 +104,9 @@ export function ControlChart({ activeMovementType, items }: ControlChartProps) {
                 <ScrollView horizontal>
                     <View style={{flexWrap: 'wrap', height: 100, columnGap: 5}}>
                         {renderTotals()}
+                        {items.length === 0 && (
+                            <Text style={styles.footerText}>Sem dados para exibir</Text>
+                        )}
                     </View>
                 </ScrollView>
                 {renderGeneralTotal()}

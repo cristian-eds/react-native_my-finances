@@ -33,7 +33,7 @@ export function TransactionStatistics() {
 
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
-    const generateGeneralChart = () : ChartItem[]=> {
+    const generateGeneralChart = (): ChartItem[] => {
         return [
             ...Object.values(MovementType).map(generateChartItemByMovementType)
         ]
@@ -44,7 +44,7 @@ export function TransactionStatistics() {
             const actualAccountsKey = `${transaction.accountId}-${transaction.destinationAccountId}`
             const label = `De: ${getAccountName(transaction.accountId)} - Para: ${getAccountName(transaction.destinationAccountId ?? 0) ?? ' '}`
             const isAccountDestination = activeAccount?.id === transaction.destinationAccountId;
-            const frontColor =  isAccountDestination ? '#28a326ff' : '#fe5e5eff';
+            const frontColor = isAccountDestination ? '#28a326ff' : '#fe5e5eff';
 
             if (!acumulator[actualAccountsKey]) {
                 acumulator[actualAccountsKey] = {
@@ -64,7 +64,7 @@ export function TransactionStatistics() {
         return Object.values(items);
     }
 
-    const generateChartItemByMovementType = (movementType: MovementType) : ChartItem => {
+    const generateChartItemByMovementType = (movementType: MovementType): ChartItem => {
         return {
             frontColor: frontColorByMovementType(movementType),
             label: textMovementType(movementType),
@@ -76,13 +76,13 @@ export function TransactionStatistics() {
 
     const someTotalValueByMovementType = (movementType: MovementType) => {
         return transactions.filter(transaction => transaction.movementType === movementType)
-                .reduce((acumulator, current) => acumulator += current.value, 0);
+            .reduce((acumulator, current) => acumulator += current.value, 0);
     }
 
     const mapTransactionToChartItem = (type: MovementType | null) => {
-        if(!type) return generateGeneralChart()
+        if (!type) return generateGeneralChart()
         const transactionsFiltered = transactions.filter(transaction => transaction.movementType === type);
-        if(type === MovementType.Transferencia) return generateTransferItems(transactionsFiltered);
+        if (type === MovementType.Transferencia) return generateTransferItems(transactionsFiltered);
 
         const items = transactionsFiltered.reduce((acumulator, transaction) => {
             const actualCategory = transaction.categoryId as number;
@@ -132,7 +132,7 @@ export function TransactionStatistics() {
                 </View>
             </View>
             <View style={styles.chart}>
-                <ControlChart items={mapTransactionToChartItem(activeMovementType)} activeMovementType={activeMovementType}/>
+                <ControlChart items={mapTransactionToChartItem(activeMovementType)} activeMovementType={activeMovementType} />
             </View>
             <View style={styles.captionMovementType}>
                 {renderCaptionMovementType(MovementType.Despesa, 'Débitos')}

@@ -15,9 +15,11 @@ interface CustomBarChartProps {
 
 export function CustomPieChart({ items }: CustomBarChartProps) {
 
+  const itemsToChart = items.length > 0 ? items: [{value: 100, color: '#ccccccff', text: 'Sem dados'}]; 
+
   return (
     <PieChart
-      data={items}
+      data={itemsToChart}
       radius={60}
     />
   );
