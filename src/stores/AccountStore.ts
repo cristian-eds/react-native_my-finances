@@ -62,10 +62,9 @@ export const useAccountStore = create<Store>((set, get) => ({
 
     toggleStatusAccount: async (accountId, database) => {
         try {
-            const isToggled = await accountService.toggleStatusAccount(accountId, database);
-            if (!isToggled) return false;
-
             const newStatus = get().accounts.find(acc => acc.id === accountId)?.status === Status.Ativo ? Status.Inativo : Status.Ativo;
+            const isToggled = await accountService.toggleStatusAccount(accountId, newStatus, database);
+            if (!isToggled) return false;
             const updatedAccounts = get().accounts.map((acc) =>
                 acc.id === accountId ? { ...acc, status: newStatus } : acc
             );

@@ -60,14 +60,14 @@ export async function update(account: UpdateAccountModel, database: SQLiteDataba
     }
 }
 
-export async function toggleStatusAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
+export async function toggleStatusAccount(accountId: number, newStatus: Status,database: SQLiteDatabase): Promise<boolean> {
     try {
         const currentStatus = await getAccountStatus(accountId, database);
         const res = await database.runAsync(` 
             UPDATE account  
             SET status = ?
             WHERE id = ?;
-        `, [accountId.toLocaleString(), currentStatus === Status.Ativo ? Status.Inativo : Status.Ativo]);
+        `, [newStatus, accountId.toLocaleString()]);
 
         return res.changes > 0;
     } catch (error) {

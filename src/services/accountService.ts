@@ -4,6 +4,7 @@ import * as accountRepository from '../repository/accountRepository'
 import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { toAccountDomainModelList } from "../mappers/accountMapper";
+import { Status } from "../domain/enums/statusEnum";
 
 export async function getAccountsByUser(userId: number, database: SQLiteDatabase): Promise<Account[] | undefined> {
     const accounts = await accountRepository.findAccountByUser(userId.toLocaleString(), database);
@@ -19,8 +20,8 @@ export async function update(account: UpdateAccountModel, database: SQLiteDataba
     return await accountRepository.update(account, database);
 }
 
-export async function toggleStatusAccount(accountId: number, database: SQLiteDatabase): Promise<boolean>  {
-    return await accountRepository.toggleStatusAccount(accountId, database);
+export async function toggleStatusAccount(accountId: number, newStatus: Status,database: SQLiteDatabase): Promise<boolean>  {
+    return await accountRepository.toggleStatusAccount(accountId,newStatus, database);
 }
 
 export async function deleteAccount(accountId: number, database: SQLiteDatabase): Promise<boolean>  {
