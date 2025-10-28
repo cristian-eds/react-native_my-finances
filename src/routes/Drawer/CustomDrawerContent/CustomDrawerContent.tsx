@@ -27,48 +27,48 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
             <View style={styles.tab}>
                 <TouchableOpacity style={styles.item}>
                     <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Main', params: { screen: 'Home' } })}>
-                        <Ionicons name="wallet-outline" size={24} color="black" />
+                        <Ionicons name="wallet-outline" size={22} color="black" />
                         <Text style={styles.itemText}>Contas</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandAccounts(!expandAccounts)}>
-                        <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
+                        <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={22} color="black" />
                     </TouchableOpacity>
                 </TouchableOpacity>
                 {expandAccounts && accounts &&
                     accounts.map(account => (
                         <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => navigation.navigate('PrincipalStack', { screen: 'AccountDetails' })}>
-                            <Ionicons name="wallet-outline" size={22} color="black" />
+                            <Ionicons name="wallet-outline" size={20} color="black" />
                             <Text style={styles.subItemText}>{account.name}</Text>
                         </TouchableOpacity>
                     ))
                 }
                 <TouchableOpacity style={styles.item}>
                     <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Main', params: { screen: 'Financas' } })}>
-                        <Ionicons name="cash-outline" size={24} color="black" />
+                        <Ionicons name="cash-outline" size={22} color="black" />
                         <Text style={styles.itemText}>Finanças</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.item}>
                     <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Main', params: { screen: 'Transacoes' } })}>
-                        <Ionicons name="swap-horizontal" size={24} color="black" />
+                        <Ionicons name="swap-horizontal" size={22} color="black" />
                         <Text style={styles.itemText}>Transações</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandTransactions(!expandTransactions)}>
-                        <Ionicons name={expandTransactions ? 'chevron-up' : 'chevron-down'} size={24} color="black" />
+                        <Ionicons name={expandTransactions ? 'chevron-up' : 'chevron-down'} size={22} color="black" />
                     </TouchableOpacity>
                 </TouchableOpacity>
                 {
                     expandTransactions && <TouchableOpacity style={styles.subItem} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Categories' })}>
-                        <Ionicons name="grid-outline" size={22} color="black" />
+                        <Ionicons name="grid-outline" size={20} color="black" />
                         <Text style={styles.subItemText}>Categorias</Text>
                     </TouchableOpacity>
                 }
             </View>
-            <View style={styles.footer}>
+            <View>
                 <View style={styles.item}>
                     <TouchableOpacity style={styles.itemLink} onPress={logout}>
-                        <Ionicons name="exit-outline" size={24} color="black" />
+                        <Ionicons name="exit-outline" size={22} color="black" />
                         <Text style={styles.itemText}>Sair</Text>
                     </TouchableOpacity>
                 </View>

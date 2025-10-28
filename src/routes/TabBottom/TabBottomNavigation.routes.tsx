@@ -13,7 +13,7 @@ export function TabBottomNavigationRoutes() {
       initialRouteName="Home"
       screenOptions={({route}) => ({
         headerShown: false,
-        tabBarActiveTintColor: 'black',
+        tabBarActiveTintColor: '#01144dd5',
         tabBarInactiveTintColor: 'grey',
         tabBarStyle: styles.tabBar,
         tabBarIcon: ({ focused, color }) => {

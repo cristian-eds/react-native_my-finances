@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 30
   },
   header: {
-    marginBottom: 20
+    marginBottom: 15
   },
   tab: {
     rowGap: 8,
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: .7,
     padding: 10,
     borderBottomColor: '#9e9e9e81'
   },
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   itemText: {
-    fontSize: 20
+    fontSize: 18
   },
   boxChevron: {
     width: '15%',
@@ -42,9 +42,6 @@ export const styles = StyleSheet.create({
     paddingLeft: 25
   },
   subItemText: {
-    fontSize: 18
+    fontSize: 16
   },
-  footer: {
-
-  }
 });

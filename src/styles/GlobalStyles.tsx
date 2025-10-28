@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   container_screens_normal: {
-    backgroundColor: '#b7bec5ff',
+    backgroundColor: '#b6c1ccff',
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 25,

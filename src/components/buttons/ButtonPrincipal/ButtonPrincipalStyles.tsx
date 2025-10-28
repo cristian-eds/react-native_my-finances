@@ -2,9 +2,9 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     container_button: {
-        width: '80%',
+        width: '70%',
         backgroundColor: '#ffffffff',
-        elevation: 3,
+        elevation: 2,
         marginHorizontal: 'auto',
         alignItems: 'center',
         justifyContent: 'center',
@@ -15,6 +15,6 @@ export const styles = StyleSheet.create({
         gap: 5
     },
     text_button: {
-        fontSize: 20
+        fontSize: 18
     }
 });

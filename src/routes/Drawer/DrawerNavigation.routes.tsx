@@ -21,8 +21,6 @@ export const DrawerNagivationRoutes = () => {
                     backgroundColor: '#01144dd5'
                 },
                 headerTintColor: '#fff',
-                
-                
             }}
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             initialRouteName="PrincipalStack"
