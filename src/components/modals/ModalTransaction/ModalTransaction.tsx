@@ -57,7 +57,8 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
     const database = useSQLiteContext();
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
-    const accountItems = accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } })
+    const accountItems = accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } });
+    const destinationAccountsItems = accounts.filter(acc => acc.id.toString() !== watch().accountId).map(acc => { return { label: acc.name, value: acc.id.toString() } });  
     const categoriesItems = categories.map(category => {
         return {
             label: category.description,
@@ -145,7 +146,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                             </Cell>
                             {watch().movementType === MovementType.Transferencia &&
                                 <Cell>
-                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={accountItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta Destino'/>
+                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={destinationAccountsItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta Destino'/>
                                 </Cell>}
                         </Row>
 
