@@ -27,6 +27,7 @@ import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm'
 import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
+import { Row } from '../../components/modals/structure/Row/Row';
 
 
 export function AccountDetails() {
@@ -104,16 +105,15 @@ export function AccountDetails() {
 
     return (
         <ScrollView style={GlobalStyles.container_screens_normal}>
-            <View style={styles.containerBack}>
-                <ButtonBack  onPress={() => navigation.goBack()} />
-            </View>
-
-            <View style={styles.header}>
-                <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
+            <Row>
+                <ButtonBack onPress={() => navigation.goBack()} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
-            </View>
+            </Row>
+
+
             <View style={styles.containerContent}>
-                <Text style={[GlobalStyles.sectionInputsText, {fontSize: 16 ,marginTop: 10, textAlign: 'center' }]}>DADOS DA CONTA</Text>
+                <Text style={[GlobalStyles.sectionInputsText, { fontSize: 16, marginVertical: 10, textAlign: 'center' }]}>DADOS DA CONTA</Text>
+                <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
                 <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
@@ -121,7 +121,10 @@ export function AccountDetails() {
                 <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
                 <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
 
-                <Text style={[GlobalStyles.sectionInputsText, {fontSize: 16 ,marginTop: 10, textAlign: 'center' }]}>INFORMAÇÕES</Text>
+
+            </View>
+            <View style={styles.containerContent}>
+                <Text style={[GlobalStyles.sectionInputsText, { fontSize: 16, marginVertical: 10, textAlign: 'center' }]}>INFORMAÇÕES</Text>
 
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
@@ -129,7 +132,6 @@ export function AccountDetails() {
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.status}</Text>
                 </RowWithLeftLabel>
-
             </View>
             <View>
                 {isDirty ? <>

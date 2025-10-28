@@ -12,7 +12,7 @@ export function Routes() {
 
   return (
     <NavigationContainer >
-      <StatusBar style="auto" />
+      <StatusBar backgroundColor='#e0e0e0a6' style='light' />
       {context?.user ? <DrawerNagivationRoutes /> : <AuthStackNavigationRoutes />}
     </NavigationContainer>
   );
