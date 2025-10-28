@@ -22,6 +22,14 @@ export const styles = StyleSheet.create({
         paddingBottom: 15,
         borderRadius: 8,
         marginVertical: 9
+    },
+    statusIndicator: {
+        width: 10,
+        height: 10,
+        borderRadius: 5
+    },
+    statusLabel: {
+        fontWeight: 'bold',
     }
 
 });

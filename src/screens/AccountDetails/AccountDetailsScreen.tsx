@@ -103,6 +103,24 @@ export function AccountDetails() {
         }
     }, [])
 
+    const renderStatusLabel = () => {
+        if (activeAccount?.status === Status.Ativo) {
+            return (
+                <Row>
+                    <View style={[styles.statusIndicator,{ backgroundColor: 'green' }]}></View>
+                    <Text style={[styles.statusLabel,{ color: 'green' }]}>{activeAccount.status}</Text>
+                </Row>
+                )
+            
+        }
+        return (
+                <Row>
+                    <View style={[styles.statusIndicator,{ backgroundColor: 'red' }]}></View>
+                    <Text style={[styles.statusLabel,{ color: 'red' }]}>{activeAccount?.status}</Text>
+                </Row>
+        )
+    }
+
     return (
         <ScrollView style={GlobalStyles.container_screens_normal}>
             <Row>
@@ -130,7 +148,7 @@ export function AccountDetails() {
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    <Text>{activeAccount?.status}</Text>
+                    {renderStatusLabel()}
                 </RowWithLeftLabel>
             </View>
             <View>
