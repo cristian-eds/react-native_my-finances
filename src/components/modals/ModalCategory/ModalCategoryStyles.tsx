@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#9d9d9dff',
         paddingBottom: 10,
@@ -36,5 +37,10 @@ export const styles = StyleSheet.create({
         marginVertical: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
+    },
+    inputsTitle: {
+        fontSize: 13,
+        fontWeight: "600",
+        paddingLeft: 5,
     },
 });

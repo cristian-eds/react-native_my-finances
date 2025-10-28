@@ -19,6 +19,8 @@ import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
+import { Row } from '../structure/Row/Row';
+import { Cell } from '../structure/Cell/Cell';
 
 
 interface ModalCategoryProps {
@@ -72,9 +74,9 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
     }
 
     const handleDelete = async () => {
-        if(!categoryData) return;
+        if (!categoryData) return;
         const deleted = await deleteCategory(categoryData?.id, database);
-        if(deleted) {
+        if (deleted) {
             Alert.alert("Categoria deletada com sucesso!");
             setShowModalDelete(false);
             handleClose();
@@ -95,16 +97,26 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
             <View style={styles.container}>
                 <View style={styles.container_content}>
                     <View style={styles.header}>
-                        <ButtonBack onPress={handleClose}/>
-                        <Text style={styles.title}>{mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}</Text>
+                        <ButtonBack onPress={handleClose} />
+                        <Row>
+                            <Ionicons name="grid-outline" size={20} color="green" style={{top: -3}}/>
+                            <Text style={styles.title}>{mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}</Text>
+                        </Row>
                         {mode === 'edit' ?
-                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end" }} /> :
+                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
                             <View style={styles.rightSpacer}></View>}
                     </View>
                     <View style={{ rowGap: 10 }}>
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Insira uma descrição' required />
-                        <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} />
-                        <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} />
+                        <Text style={styles.inputsTitle}>INFORMAÇÕES</Text>
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
+                        <Row>
+                            <Cell>
+                                <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} showLabel={false} placeholder='Icone*:' />
+                            </Cell>
+                            <Cell>
+                                <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} showLabel={false} placeholder='Cor*:' />
+                            </Cell>
+                        </Row>
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleClose} />
@@ -112,7 +124,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                 </View>
             </View>
-            <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} title='Confirma a exclusão da categoria?' onConfirm={handleDelete}/>
+            <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} title='Confirma a exclusão da categoria?' onConfirm={handleDelete} />
         </Modal>
     );
 }
