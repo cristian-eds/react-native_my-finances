@@ -9,12 +9,14 @@ import { MovementType } from "../domain/enums/movementTypeEnum";
 
 type Store = {
     transactions: Transaction[];
+    transactionsUser: Transaction[];
     filters: TransactionFiltersModel;
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactions: (accountId: number ,database: SQLiteDatabase) => void
     updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
     deleteTransaction: (idTransaction: number, database: SQLiteDatabase) => Promise<boolean>
+    fetchTransactionsByUser: (userId: number, database: SQLiteDatabase) => void
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
 
@@ -22,6 +24,7 @@ type Store = {
 
 export const useTransactionStore = create<Store>((set, get) => ({
     transactions: [],
+    transactionsUser: [],
     filters: {
         initialDate: new Date(),
         finalDate: new Date()
@@ -49,6 +52,14 @@ export const useTransactionStore = create<Store>((set, get) => ({
         const transactionsFounded = await transactionService.findAllByAccount(accountId, get().filters, database);
         set({
             transactions: [...transactionsFounded]
+        })
+        return true;
+    },
+
+    fetchTransactionsByUser: async (userId, database) => {
+        const transactionsFounded = await transactionService.findAllByUser(userId.toLocaleString(), get().filters,database);
+        set({
+            transactionsUser: [...transactionsFounded]
         })
         return true;
     },

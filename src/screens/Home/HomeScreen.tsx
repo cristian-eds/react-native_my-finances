@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -7,7 +7,6 @@ import { styles } from './HomeScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
 import { CardAccount } from '../../components/CardAccount/CardAccount';
-import { useUserContext } from '../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../stores/AccountStore';
 import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
@@ -17,41 +16,35 @@ import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { useCategoryStore } from '../../stores/CategoryStore';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
 import { TransactionItemData } from '../../domain/transactionItemData';
 import { toTransactionItemData } from '../../mappers/transactionMapper';
 
-
 export function HomeScreen() {
 
-    const { user } = useUserContext();
     const database = useSQLiteContext();
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    const { accounts, fetchAccounts, activeAccount } = useAccountStore();
-    const { fetchTransactions, transactions, filters } = useTransactionStore();
-    const { categories, fetchCategories } = useCategoryStore();
+    const { accounts, activeAccount } = useAccountStore();
+    const { fetchTransactions, transactions } = useTransactionStore();
+    const { categories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
-    useEffect(() => {
-        const fetch = async () => {
-            await fetchCategories(Number(user?.id), database);
-            await fetchAccounts(Number(user?.id), database);
-        }
-        fetch();
-
-    }, [user])
-
-    useEffect(() => {
-        if (activeAccount) {
-            fetchTransactions(activeAccount.id as number, database);
-        }
-    }, [activeAccount, filters.initialDate, filters.finalDate])
+    useFocusEffect(
+        useCallback(() => {     
+            const fetch = async () => {
+                if (activeAccount) {
+                    await fetchTransactions(activeAccount.id as number, database);
+                }   
+            }
+            fetch();
+        }, [activeAccount])
+    );  
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
         const totalValue = transactions.filter(transaction => transaction.movementType === movementType)

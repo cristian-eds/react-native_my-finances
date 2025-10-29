@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -16,17 +16,20 @@ import { useAccountStore } from '../../stores/AccountStore';
 import { TransactionItemData } from '../../domain/transactionItemData';
 import { toTransactionItemData } from '../../mappers/transactionMapper';
 import { useSQLiteContext } from 'expo-sqlite';
+import { useFocusEffect } from '@react-navigation/native';
+import { useUserContext } from '../../hooks/useUserContext';
 
 export function TransactionsScreen() {
 
-  const { transactions, fetchTransactions } = useTransactionStore();
+  const { allTransactions, fetchTransactionsByUser } = useTransactionStore();
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
+  const {user} = useUserContext();
 
   const database = useSQLiteContext();
 
   const mapTransactions = () => {
-    const items = transactions.map<TransactionItemData>(transaction => {
+    const items = allTransactions.map<TransactionItemData>(transaction => {
       const category = categories.find(cat => cat.id === transaction.categoryId);
       const account = accounts.find(acc => acc.id === transaction.accountId);
       const destinationAccount = accounts.find(acc => acc.id === transaction.destinationAccountId);
@@ -35,12 +38,15 @@ export function TransactionsScreen() {
     return items;
   }
 
-  useEffect(() => {
-    const fetch = async () => {
-      await fetchTransactions(0, database);
-    }
-    fetch();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const fetch = async () => {
+        fetchTransactionsByUser(user?.id as number, database);
+      }
+      fetch();
+    }, []
+    )
+  );
 
   return (
     <View style={[GlobalStyles.container_screens_normal, { paddingTop: 18 }]}>

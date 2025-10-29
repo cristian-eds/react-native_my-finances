@@ -56,6 +56,34 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
     }
 }
 
+export async function getAllByUser(userId: string, filter: TransactionFiltersModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+    const statement = await database.prepareAsync(`
+            SELECT * FROM transactions 
+            WHERE user_id = $userId
+            AND DATETIME(payment_date) >= DATETIME($initialDate) 
+            AND DATETIME(payment_date) <= DATETIME($finalDate);
+    `);
+
+    try {
+        const params = {
+            $userId: userId,
+            $initialDate: formaterToSqlite(new Date(filter.initialDate.setHours(0, 0, 1))),
+            $finalDate: formaterToSqlite(new Date(filter.finalDate.setHours(23, 59, 59)))
+        };
+
+        const result = await statement.executeAsync<TransactionRecord>(params);
+        const transactions = await result.getAllAsync();
+
+        if (transactions) {
+            return transactions;
+        }
+    } catch (error) {
+        console.error("Error fetching transactions", error);
+    } finally {
+        statement.finalizeAsync();
+    }
+}
+
 
 
 export async function update(transaction: Transaction, database: SQLiteDatabase): Promise<boolean> {

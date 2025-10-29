@@ -14,6 +14,14 @@ export async function findAllByAccount(accountId: number, filters: TransactionFi
     return toTransactionModelList(transactions);
 }
 
+export async function findAllByUser( userId: string, filters: TransactionFiltersModel, database: SQLiteDatabase) {
+    const transactions = await transactionRepository.getAllByUser(userId,filters, database);
+    console.log(userId)
+    if (!transactions) return [];
+    return toTransactionModelList(transactions);
+}
+
+
 export async function update(transaction: Transaction, database: SQLiteDatabase): Promise<boolean> {
     return await transactionRepository.update(transaction, database);
 }
