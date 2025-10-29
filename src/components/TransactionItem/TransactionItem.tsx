@@ -12,6 +12,8 @@ import { useTransactionStore } from '../../stores/TransactionStore';
 import { TouchableOpacity } from 'react-native';
 import { useCategoryStore } from '../../stores/CategoryStore';
 import { useAccountStore } from '../../stores/AccountStore';
+import { Row } from '../modals/structure/Row/Row';
+import { Cell } from '../modals/structure/Cell/Cell';
 
 interface TransactionItemProps {
     item: HomeTableItem
@@ -32,12 +34,13 @@ interface IconMapStructure {
 export function TransactionItem({ item }: TransactionItemProps) {
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
-    const {transactions} = useTransactionStore();
-    const {categories} = useCategoryStore();
-    const {activeAccount} = useAccountStore();
+    const { transactions } = useTransactionStore();
+    const { categories } = useCategoryStore();
+    const { activeAccount, accounts } = useAccountStore();
     const category = categories.find(category => category.id === item.category);
 
     const transactionData = transactions.find(transaction => transaction.id === item.id);
+    const accountData = accounts.find(account => account.id === transactionData?.accountId);
 
     const ICON_MAP: IconMapStructure = {
         prefix: {
@@ -92,15 +95,21 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
-            <View style={[styles.iconBox, {backgroundColor: category?.hexColor}]}>
+            <View style={[styles.iconBox, { backgroundColor: category?.hexColor }]}>
                 <Ionicons name={category?.iconName ?? 'cart-outline'} size={18} color="white" />
             </View>
-            <View style={styles.central_info}>
-                <Text style={styles.central_info_description}>{item.description}</Text>
-                <Text style={styles.central_info_data}>{item.data}</Text>
-            </View>
-            {renderValueInfo()}
-            {showModalTransaction && <ModalTransaction transactionData={transactionData} isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='edit'/>}
+            <Cell>
+                <Row>
+                    <Text style={styles.central_info_description}>{item.description}</Text>
+                    <Text style={styles.central_info_data}>{item.data}</Text>
+                </Row>
+                <Row>
+                    <Text>{accountData?.name}</Text>
+                    {renderValueInfo()}
+                </Row>
+            </Cell>
+
+            {showModalTransaction && <ModalTransaction transactionData={transactionData} isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='edit' />}
         </TouchableOpacity>
     );
 }

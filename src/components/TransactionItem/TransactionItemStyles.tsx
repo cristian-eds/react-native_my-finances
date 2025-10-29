@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
     borderRadius: 10,
     columnGap: 10,
     marginBottom: 10,
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
     fontSize: 18
   },
   central_info_data: {
-    fontSize: 12,
+    fontSize: 13,
     fontStyle: 'italic'
   },
   value_info: {
