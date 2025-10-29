@@ -1,5 +1,7 @@
+import { Account } from "../domain/accountModel";
+import { CategoryModel } from "../domain/categoryModel";
 import { MovementType } from "../domain/enums/movementTypeEnum";
-import { HomeTableItem } from "../domain/homeTableItem";
+import { TransactionItemData } from "../domain/transactionItemData";
 import { Transaction } from "../domain/transactionModel";
 import { TransactionRecord } from "../repository/records/TransactionRecord";
 import { formaterNumberToBRL } from "../utils/NumberFormater";
@@ -23,13 +25,20 @@ export function toTransactionModelList(records: TransactionRecord[]): Transactio
     return records.map(toTransactionModel);
 }
 
-export function toHomeTableItemList(transactions: Transaction[]): HomeTableItem[] {
-    return transactions.map((transaction) => ({
-        id: transaction.id,
-        data: transaction.paymentDate.toLocaleString(),
-        description: transaction.description,
-        category: transaction.categoryId ?? 0,
-        value: formaterNumberToBRL(transaction.value),
-        movementType: transaction.movementType ?? MovementType.Despesa
-    }));
+export function toTransactionItemData(transacation: Transaction, account: Account, category: CategoryModel, destinationAccount: Account) : TransactionItemData {
+    return {
+        id: transacation.id,
+        description: transacation.description,
+        value: transacation.value,
+        paymentDate: transacation.paymentDate,
+        movementType: transacation.movementType,
+        accountId: transacation.accountId,
+        accountName: account.name,
+        categoryId: transacation.categoryId ?? 0,
+        categoryName: category.description,
+        categoryHexColor: category.hexColor,
+        categoryIconName: category.iconName,
+        destinationAccountId: transacation.destinationAccountId,
+        destinationAccountName: destinationAccount?.name,
+    }
 }

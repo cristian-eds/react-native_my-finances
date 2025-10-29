@@ -7,24 +7,22 @@ import { styles } from './HomeScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
 import { CardAccount } from '../../components/CardAccount/CardAccount';
-import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
 import { useUserContext } from '../../hooks/useUserContext';
-import { getAccountsByUser } from '../../services/accountService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../stores/AccountStore';
 import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
 import { useTransactionStore } from '../../stores/TransactionStore';
-import { HomeTableItem } from '../../domain/homeTableItem';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
-import { TransactionItem } from '../../components/TransactionItem/TransactionItem';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
-import { toHomeTableItemList } from '../../mappers/transactionMapper';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { useCategoryStore } from '../../stores/CategoryStore';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
+import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
+import { TransactionItemData } from '../../domain/transactionItemData';
+import { toTransactionItemData } from '../../mappers/transactionMapper';
 
 
 export function HomeScreen() {
@@ -33,9 +31,9 @@ export function HomeScreen() {
     const database = useSQLiteContext();
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    const { fetchAccounts, activeAccount } = useAccountStore();
+    const { accounts, fetchAccounts, activeAccount } = useAccountStore();
     const { fetchTransactions, transactions, filters } = useTransactionStore();
-    const { fetchCategories } = useCategoryStore();
+    const { categories, fetchCategories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
@@ -61,9 +59,9 @@ export function HomeScreen() {
             .reduce((prevValue, current) => prevValue + current, 0);
         const isActualActive = movementType === activeMovementType;
         return (
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={[styles.captionItem, isActualActive && styles.captionItemActive]}
-                onPress={() => setActiveMovementType(prevMovement => prevMovement === movementType? null : movementType)}>
+                onPress={() => setActiveMovementType(prevMovement => prevMovement === movementType ? null : movementType)}>
                 <Text style={[styles.captionItemText, isActualActive && styles.captionItemTextActive]}>{title}</Text>
                 <Text style={[styles.transactions_infos_h3, isActualActive && styles.captionItemTextActive]}>{formaterNumberToBRL(totalValue)}</Text>
             </TouchableOpacity>
@@ -71,9 +69,15 @@ export function HomeScreen() {
     }
 
     const filterTransactionActiveMovementType = () => {
-        if(!activeMovementType) return toHomeTableItemList(transactions);
-        const filteredTransactions = transactions.filter(transaction => transaction.movementType === activeMovementType);
-        return toHomeTableItemList(filteredTransactions);
+        const items = transactions.map<TransactionItemData>(transaction => {
+            const category = categories.find(cat => cat.id === transaction.categoryId);
+            const account = accounts.find(acc => acc.id === transaction.accountId);
+            const destinationAccount = accounts.find(acc => acc.id === transaction.destinationAccountId);
+            return toTransactionItemData(transaction, account!, category!, destinationAccount!);
+        });
+        if (!activeMovementType) return items;
+        const filteredItems = items.filter(transaction => transaction.movementType === activeMovementType);
+        return filteredItems;
     }
 
     return (
@@ -93,15 +97,7 @@ export function HomeScreen() {
                     </View>
                 </View>
             </View>
-            {transactions.length > 0 ? <FlatList<HomeTableItem>
-                data={filterTransactionActiveMovementType()}
-                keyExtractor={(item, index) => item.id.toString()}
-                renderItem={({ item }) => <TransactionItem item={item} />}
-                contentContainerStyle={{ paddingBottom: 80 }}
-            /> :
-                <View>
-                    <Text style={styles.transactions_infos_h4}>Nenhuma transação nesse período...</Text>
-                </View>}
+            {transactions.length > 0 && <TransactionsItemList data={filterTransactionActiveMovementType()} />}
             <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
             {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount} />}
         </View>
