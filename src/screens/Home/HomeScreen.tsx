@@ -43,7 +43,7 @@ export function HomeScreen() {
                 }   
             }
             fetch();
-        }, [activeAccount, filters])
+        }, [activeAccount, filters.initialDate, filters.finalDate])
     );  
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {

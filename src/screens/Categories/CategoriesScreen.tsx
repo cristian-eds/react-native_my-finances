@@ -22,7 +22,6 @@ export function CategoriesScreen() {
     const { user } = useUserContext();
 
     const [search, setSearch] = useState("");
-    const [captionActive, setCaptionActive] = useState("");
     const [showModalCategory, setShowModalCategory] = useState(false);
 
     useEffect(() => {
@@ -43,7 +42,6 @@ export function CategoriesScreen() {
                 await fetchCategories(user.id, database,search);
             }
         }
-
         fetch();
     }, [user,search])
 

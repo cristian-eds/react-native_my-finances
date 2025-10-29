@@ -61,15 +61,20 @@ export async function getAllByUser(userId: string, filter: TransactionFiltersMod
             SELECT * FROM transactions 
             WHERE user_id = $userId
             AND DATETIME(payment_date) >= DATETIME($initialDate) 
-            AND DATETIME(payment_date) <= DATETIME($finalDate);
+            AND DATETIME(payment_date) <= DATETIME($finalDate)
+            ${filter.textSearch ? "AND description LIKE $textSearchQuery ;": ";" }
     `);
 
     try {
         const params = {
             $userId: userId,
             $initialDate: formaterToSqlite(new Date(filter.initialDate.setHours(0, 0, 1))),
-            $finalDate: formaterToSqlite(new Date(filter.finalDate.setHours(23, 59, 59)))
+            $finalDate: formaterToSqlite(new Date(filter.finalDate.setHours(23, 59, 59))),
         };
+
+        if(filter.textSearch) {
+            Object.assign(params, { $textSearchQuery: `%${filter.textSearch}%` });
+        }
 
         const result = await statement.executeAsync<TransactionRecord>(params);
         const transactions = await result.getAllAsync();

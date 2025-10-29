@@ -19,6 +19,7 @@ type Store = {
     fetchTransactionsByUser: (userId: number, database: SQLiteDatabase) => void
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
+    setFilterText: (text: string) => void
 
 }
 
@@ -70,6 +71,12 @@ export const useTransactionStore = create<Store>((set, get) => ({
                 initialDate,
                 finalDate
             }
+        })
+    },
+
+    setFilterText(text) {
+        set({
+            filters: {textSearch: text, initialDate: get().filters.initialDate, finalDate: get().filters.finalDate}
         })
     },
 

@@ -21,10 +21,10 @@ import { useUserContext } from '../../hooks/useUserContext';
 
 export function TransactionsScreen() {
 
-  const { transactionsUser, fetchTransactionsByUser, filters } = useTransactionStore();
+  const { transactionsUser, fetchTransactionsByUser, filters, setFilterText } = useTransactionStore();
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
-  const {user} = useUserContext();
+  const { user } = useUserContext();
 
   const database = useSQLiteContext();
 
@@ -48,9 +48,11 @@ export function TransactionsScreen() {
     )
   );
 
+
+
   return (
     <View style={[GlobalStyles.container_screens_normal, { paddingTop: 18 }]}>
-      <SearchInput placeholder="Search Transactions" />
+      <SearchInput placeholder="Search Transactions" value={filters.textSearch} onChangeText={setFilterText}/>
       <Row style={{ paddingHorizontal: 5 }}>
         <Row>
           <Text style={{ fontSize: 22 }}>Filtros</Text>
