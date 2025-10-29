@@ -1,19 +1,36 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthStackNavigationRoutes } from './Stack/AuthStack/AuthStackNavigation.routes';
 import { StatusBar } from 'expo-status-bar';
-import { UserContext } from '../context/UserContext';
 import { DrawerNagivationRoutes } from './Drawer/DrawerNavigation.routes';
+import { useUserContext } from '../hooks/useUserContext';
+import { useAccountStore } from '../stores/AccountStore';
+import { useCategoryStore } from '../stores/CategoryStore';
+import { useSQLiteContext } from 'expo-sqlite';
 
 export function Routes() {
 
-  const context = useContext(UserContext);
+  const {user} = useUserContext();
+
+  const {fetchAccounts} = useAccountStore();
+  const {fetchCategories} = useCategoryStore();
+
+  const database = useSQLiteContext();
+
+  useEffect(() => {
+    const fetch = async () => {
+      await fetchCategories(Number(user?.id), database);
+      await fetchAccounts(Number(user?.id), database);
+    }
+    fetch();
+
+  }, [user])
 
   return (
     <NavigationContainer >
       <StatusBar backgroundColor='#e0e0e0a6' style='light' />
-      {context?.user ? <DrawerNagivationRoutes /> : <AuthStackNavigationRoutes />}
+      {user ? <DrawerNagivationRoutes /> : <AuthStackNavigationRoutes />}
     </NavigationContainer>
   );
 }
