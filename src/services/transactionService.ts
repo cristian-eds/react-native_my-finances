@@ -4,8 +4,8 @@ import { Transaction } from '../domain/transactionModel';
 import { toTransactionModelList } from '../mappers/transactionMapper';
 import { TransactionFiltersModel } from '../domain/transactionFiltersModel';
 
-export async function create(transaction: Omit<Transaction, 'id'>, database: SQLiteDatabase) {
-    return transactionRepository.create(transaction, database);
+export async function create(transaction: Omit<Transaction, 'id'>, userId: string, database: SQLiteDatabase) {
+    return transactionRepository.create(transaction, userId, database);
 }
 
 export async function findAllByAccount(accountId: number, filters: TransactionFiltersModel, database: SQLiteDatabase) {

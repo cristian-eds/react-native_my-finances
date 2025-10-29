@@ -4,12 +4,12 @@ import { TransactionRecord } from "./records/TransactionRecord";
 import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
 import { formaterToSqlite } from "../utils/DateFormater";
 
-export async function create(transaction: Omit<Transaction, "id">, database: SQLiteDatabase): Promise<number | undefined> {
+export async function create(transaction: Omit<Transaction, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
 
     try {
         const result = await database.runAsync(` 
-            INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id, transaction_father_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);
+            INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id, transaction_father_id,user_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?);
         `, [transaction.description,
             transaction.value,
             formaterToSqlite(transaction.paymentDate),
@@ -18,7 +18,8 @@ export async function create(transaction: Omit<Transaction, "id">, database: SQL
             transaction.categoryId ?? null,
             transaction.duplicateId ?? null,
             transaction.destinationAccountId ?? null,
-            transaction.transactionFatherId ?? null
+            transaction.transactionFatherId ?? null,
+            userId
         ])
 
         return result.lastInsertRowId;

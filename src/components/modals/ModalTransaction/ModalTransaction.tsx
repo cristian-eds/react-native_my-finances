@@ -23,6 +23,7 @@ import { useCategoryStore } from '../../../stores/CategoryStore';
 import { Account } from '../../../domain/accountModel';
 import { Row } from '../structure/Row/Row';
 import { Cell } from '../structure/Cell/Cell';
+import { useUserContext } from '../../../hooks/useUserContext';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -35,6 +36,7 @@ interface ModalTransactionProps {
 export function ModalTransaction({ isShow, onClose, mode, transactionData, activeAccount }: ModalTransactionProps) {
 
     const { accounts } = useAccountStore();
+    const {user} = useUserContext()
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -84,7 +86,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
         let isSaved = false;
 
         if (mode === 'add') {
-            isSaved = await addTransaction(newTransaction, database);
+            isSaved = await addTransaction(newTransaction, user?.id as number,database);
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
         }
