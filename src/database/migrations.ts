@@ -69,6 +69,8 @@ const migrations = [
             duplicate_id INTEGER,
             movement_type TEXT NOT NULL,
             transaction_father_id INTEGER,
+            user_id INTEGER NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
             FOREIGN KEY (account_id) REFERENCES account(id),
             FOREIGN KEY (destination_account_id) REFERENCES account(id),
             FOREIGN KEY (category_id) REFERENCES category(id),
