@@ -33,7 +33,8 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
             SELECT * FROM transactions 
             WHERE (account_id = $accountId OR destination_account_id = $accountId)
             AND DATETIME(payment_date) >= DATETIME($initialDate) 
-            AND DATETIME(payment_date) <= DATETIME($finalDate);
+            AND DATETIME(payment_date) <= DATETIME($finalDate)
+            ORDER BY DATETIME(payment_date) DESC;
     `);
 
     try {
@@ -62,7 +63,8 @@ export async function getAllByUser(userId: string, filter: TransactionFiltersMod
             WHERE user_id = $userId
             AND DATETIME(payment_date) >= DATETIME($initialDate) 
             AND DATETIME(payment_date) <= DATETIME($finalDate)
-            ${filter.textSearch ? "AND description LIKE $textSearchQuery ;": ";" }
+            ${filter.textSearch ? "AND description LIKE $textSearchQuery ;": "" }
+            ORDER BY DATETIME(payment_date) DESC;
     `);
 
     try {
