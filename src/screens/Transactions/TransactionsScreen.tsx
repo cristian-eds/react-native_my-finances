@@ -21,7 +21,7 @@ import { useUserContext } from '../../hooks/useUserContext';
 
 export function TransactionsScreen() {
 
-  const { allTransactions, fetchTransactionsByUser } = useTransactionStore();
+  const { transactionsUser, fetchTransactionsByUser, filters } = useTransactionStore();
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
   const {user} = useUserContext();
@@ -29,7 +29,7 @@ export function TransactionsScreen() {
   const database = useSQLiteContext();
 
   const mapTransactions = () => {
-    const items = allTransactions.map<TransactionItemData>(transaction => {
+    const items = transactionsUser.map<TransactionItemData>(transaction => {
       const category = categories.find(cat => cat.id === transaction.categoryId);
       const account = accounts.find(acc => acc.id === transaction.accountId);
       const destinationAccount = accounts.find(acc => acc.id === transaction.destinationAccountId);
@@ -44,7 +44,7 @@ export function TransactionsScreen() {
         fetchTransactionsByUser(user?.id as number, database);
       }
       fetch();
-    }, []
+    }, [filters]
     )
   );
 

@@ -29,7 +29,7 @@ export function HomeScreen() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
     const { accounts, activeAccount } = useAccountStore();
-    const { fetchTransactions, transactions } = useTransactionStore();
+    const { fetchTransactions, transactions, filters } = useTransactionStore();
     const { categories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
@@ -43,7 +43,7 @@ export function HomeScreen() {
                 }   
             }
             fetch();
-        }, [activeAccount])
+        }, [activeAccount, filters])
     );  
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {

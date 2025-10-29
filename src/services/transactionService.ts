@@ -16,7 +16,6 @@ export async function findAllByAccount(accountId: number, filters: TransactionFi
 
 export async function findAllByUser( userId: string, filters: TransactionFiltersModel, database: SQLiteDatabase) {
     const transactions = await transactionRepository.getAllByUser(userId,filters, database);
-    console.log(userId)
     if (!transactions) return [];
     return toTransactionModelList(transactions);
 }
