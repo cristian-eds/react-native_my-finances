@@ -6,7 +6,7 @@ import {  DatePickerWithTopLabel} from '../../DatePickerWithTopLabel/DatePickerW
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { periodDatesSchemas } from '../../../schemas/periodDatesSchemas';
+import { periodDatesSchemas } from '../../../utils/schemas/periodDatesSchemas';
 import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 
 interface ModalSelectPeriodProps {

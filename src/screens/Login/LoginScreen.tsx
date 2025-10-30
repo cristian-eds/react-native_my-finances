@@ -4,7 +4,6 @@ import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
 
 import { styles } from './LogingScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
@@ -13,9 +12,10 @@ import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/Button
 import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchemas } from '../../schemas/loginSchemas';
+import { loginSchemas } from '../../utils/schemas/loginSchemas';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
 import { UserContext } from '../../context/UserContext';
+import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 
 export function LoginScreen() {
 

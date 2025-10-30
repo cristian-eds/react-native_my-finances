@@ -21,7 +21,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
 import { TransactionItemData } from '../../domain/transactionItemData';
-import { toTransactionItemData } from '../../mappers/transactionMapper';
+import { toTransactionItemData } from '../../utils/mappers/transactionMapper';
 
 export function HomeScreen() {
 

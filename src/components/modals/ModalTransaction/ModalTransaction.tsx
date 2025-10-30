@@ -7,7 +7,6 @@ import { styles } from './ModalTransactionStyles';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
-import { transactionSchemas } from '../../../schemas/transactionSchemas';
 import { useTransactionStore } from '../../../stores/TransactionStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../../stores/AccountStore';
@@ -28,6 +27,9 @@ import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
 import { ModalContent } from '../structure/ModalContent/ModalContent';
 import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
+import { Spacer } from '../../Spacer/Spacer';
+import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
+import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -63,15 +65,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
     const database = useSQLiteContext();
 
     const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
-    const accountItems = accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } });
-    const destinationAccountsItems = accounts.filter(acc => acc.id.toString() !== watch().accountId).map(acc => { return { label: acc.name, value: acc.id.toString() } });  
-    const categoriesItems = categories.map(category => {
-        return {
-            label: category.description,
-            value: category.id.toString(),
-            icon: () => <View key={category.id} style={{ backgroundColor: category.hexColor, borderRadius: 50, padding: 2 }}><Ionicons name={category.iconName} size={24} color="black" /></View>
-        }
-    })
+    const accountItems = mapAccountsToItemsDropdown(accounts);
+    const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));  
+    const categoriesItems = mapCategoriesToItemsDropdown(categories);
 
     const handleCreateTransaction = async () => {
         const formValues = watch();
@@ -130,7 +126,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                         </Row>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
-                            <View style={styles.rightSpacer}></View>}
+                            <Spacer />}
                     </ModalHeader>
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES LANÇAMENTO</Text>

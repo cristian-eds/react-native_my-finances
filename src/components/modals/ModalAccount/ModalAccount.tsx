@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './ModaAccountStyles'
 import { useForm } from 'react-hook-form';
-import { accountSchemas } from '../../../schemas/accountSchemas';
+import { accountSchemas } from '../../../utils/schemas/accountSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TypeAccount } from '../../../domain/enums/typeAccountEnum';
 import { Status } from '../../../domain/enums/statusEnum';

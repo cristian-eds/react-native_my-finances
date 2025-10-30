@@ -1,5 +1,5 @@
-import { CategoryModel } from "../domain/categoryModel";
-import { CategoryRecord } from "../repository/records/CategoryRecord";
+import { CategoryModel } from "../../domain/categoryModel";
+import { CategoryRecord } from "../../repository/records/CategoryRecord";
 
 export function toModel(categoryRecod: CategoryRecord): CategoryModel {
     return {

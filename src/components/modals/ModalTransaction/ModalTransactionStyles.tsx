@@ -7,10 +7,6 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
-    rightSpacer: {
-        width: '20%',
-        flex: 1
-    },
     inputsTitle: {
         fontSize: 13,
         fontWeight: "600",

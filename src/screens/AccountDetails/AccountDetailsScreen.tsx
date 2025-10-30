@@ -16,7 +16,7 @@ import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/Picker
 
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 import { RowWithLeftLabel } from '../../components/RowWithLeftLabel/RowWithLeftLabel';
-import { updateAccountSchemas } from '../../schemas/updateAccountSchemas';
+import { updateAccountSchemas } from '../../utils/schemas/updateAccountSchemas';
 
 import { useAccountStore } from '../../stores/AccountStore';
 import { TypeAccount } from '../../domain/enums/typeAccountEnum';

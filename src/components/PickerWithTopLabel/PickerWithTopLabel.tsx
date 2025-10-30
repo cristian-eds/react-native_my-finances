@@ -4,12 +4,8 @@ import { styles } from './PickerWithTopLabelStyles';
 import { FieldError, useController } from 'react-hook-form';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
+import { ItemDropdown } from '../../utils/mappers/itemsPickerMapper';
 
-interface ItemDropdown {
-    label: string,
-    value: string,
-    icon?: () => ReactElement
-}
 
 interface PickerWithTopLabelProps {
     labelText: string;

@@ -1,5 +1,5 @@
-import { Account } from "../domain/accountModel";
-import { AccountRecord } from "../repository/records/AccountRecord";
+import { Account } from "../../domain/accountModel";
+import { AccountRecord } from "../../repository/records/AccountRecord";
 
 export function toAccountDomainModel(record: AccountRecord): Account {
     return {

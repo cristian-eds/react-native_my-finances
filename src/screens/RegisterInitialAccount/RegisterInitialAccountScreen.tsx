@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -14,12 +13,13 @@ import { styles as globalStyles } from '../../styles/GlobalStyles';
 import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 
-import { accountSchemas } from '../../schemas/accountSchemas';
+import { accountSchemas } from '../../utils/schemas/accountSchemas';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 import { Status } from '../../domain/enums/statusEnum';
 
 import * as accountService from '../../services/accountService';
 import { UserContext } from '../../context/UserContext';
+import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 
 
 export function RegisterInitialAccountScreen() {

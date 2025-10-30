@@ -14,11 +14,13 @@ import { TransactionsItemList } from '../../components/TransactionsItemList/Tran
 import { useCategoryStore } from '../../stores/CategoryStore';
 import { useAccountStore } from '../../stores/AccountStore';
 import { TransactionItemData } from '../../domain/transactionItemData';
-import { toTransactionItemData } from '../../mappers/transactionMapper';
+import { toTransactionItemData } from '../../utils/mappers/transactionMapper';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/useUserContext';
 import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
+import { TouchableOpacity } from 'react-native';
+import { ModalFiltersTransaction } from '../../components/modals/ModalFiltersTransaction/ModalFiltersTransaction';
 
 export function TransactionsScreen() {
 
@@ -30,6 +32,7 @@ export function TransactionsScreen() {
   const database = useSQLiteContext();
 
   const [showModalTransaction, setShowModalTransaction] = useState(false);
+  const [showModalFilters, setShowModalFilters] = useState(false);
 
   const mapTransactions = () => {
     const items = transactionsUser.map<TransactionItemData>(transaction => {
@@ -55,18 +58,17 @@ export function TransactionsScreen() {
     <View style={[GlobalStyles.container_screens_normal, { paddingTop: 18 }]}>
       <SearchInput placeholder="Search Transactions" value={filters.textSearch} onChangeText={setFilterText} />
       <Row style={{ paddingHorizontal: 5 }}>
-        <Row>
+        <TouchableOpacity onPress={() => setShowModalFilters(true)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <Text style={{ fontSize: 22 }}>Filtros</Text>
           <Ionicons name="filter" size={20} color="black" />
-        </Row>
+        </TouchableOpacity>
         <Text style={{ fontSize: 22 }}>Limpar Filtros</Text>
       </Row>
       <PeriodFilter />
-
       <TransactionsItemList data={mapTransactions()} />
-
       <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
       <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)} />
+      <ModalFiltersTransaction isShow={showModalFilters} onClose={() => setShowModalFilters(false)}/>
     </View>
   );
 }

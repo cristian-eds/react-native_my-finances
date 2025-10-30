@@ -1,10 +1,10 @@
-import { Account } from "../domain/accountModel";
-import { CategoryModel } from "../domain/categoryModel";
-import { MovementType } from "../domain/enums/movementTypeEnum";
-import { TransactionItemData } from "../domain/transactionItemData";
-import { Transaction } from "../domain/transactionModel";
-import { TransactionRecord } from "../repository/records/TransactionRecord";
-import { formaterNumberToBRL } from "../utils/NumberFormater";
+import { Account } from "../../domain/accountModel";
+import { CategoryModel } from "../../domain/categoryModel";
+import { MovementType } from "../../domain/enums/movementTypeEnum";
+import { TransactionItemData } from "../../domain/transactionItemData";
+import { Transaction } from "../../domain/transactionModel";
+import { TransactionRecord } from "../../repository/records/TransactionRecord";
+import { formaterNumberToBRL } from "../NumberFormater";
 
 export function toTransactionModel(record: TransactionRecord): Transaction {
     return {

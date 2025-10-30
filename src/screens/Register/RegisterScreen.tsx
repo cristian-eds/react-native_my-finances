@@ -2,8 +2,6 @@ import { Alert, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { AuthStackParamList } from '../../routes/types/AuthStackParamList';
-
 import { styles } from './RegisterScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
 
@@ -13,8 +11,9 @@ import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTex
 import { createUser } from '../../services/userService';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useForm } from 'react-hook-form';
-import { userSchemas } from '../../schemas/userSchemas';
+import { userSchemas } from '../../utils/schemas/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 
 
 export function RegisterScreen() {

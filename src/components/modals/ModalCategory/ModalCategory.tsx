@@ -8,7 +8,7 @@ import { CategoryModel } from '../../../domain/categoryModel';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { categorySchemas } from '../../../schemas/categorySchemas';
+import { categorySchemas } from '../../../utils/schemas/categorySchemas';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 import { iconsOptions } from '../../../utils/IconOptions';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';

@@ -3,6 +3,9 @@ import { CategoryModel } from "../domain/categoryModel"
 
 import * as categoryService from '../services/categoryService';
 import { SQLiteDatabase } from "expo-sqlite";
+import { ItemDropdown } from "../components/PickerWithTopLabel/PickerWithTopLabel";
+import { ca } from "zod/locales";
+import { View } from "react-native";
 
 
 type Store = {

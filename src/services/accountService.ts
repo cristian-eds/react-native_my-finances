@@ -3,7 +3,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import * as accountRepository from '../repository/accountRepository'
 import { Account } from "../domain/accountModel";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
-import { toAccountDomainModelList } from "../mappers/accountMapper";
+import { toAccountDomainModelList } from "../utils/mappers/accountMapper";
 import { Status } from "../domain/enums/statusEnum";
 
 export async function getAccountsByUser(userId: number, database: SQLiteDatabase): Promise<Account[] | undefined> {

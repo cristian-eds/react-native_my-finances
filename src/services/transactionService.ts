@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import * as transactionRepository from '../repository/transactionRepository';
 import { Transaction } from '../domain/transactionModel';
-import { toTransactionModelList } from '../mappers/transactionMapper';
+import { toTransactionModelList } from '../utils/mappers/transactionMapper';
 import { TransactionFiltersModel } from '../domain/transactionFiltersModel';
 
 export async function create(transaction: Omit<Transaction, 'id'>, userId: string, database: SQLiteDatabase) {

@@ -2,7 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { CategoryModel } from "../domain/categoryModel";
 
 import * as categoryRepository from '../repository/categoryRepository';
-import {toModelList} from '../mappers/categoryMapper'
+import {toModelList} from '../utils/mappers/categoryMapper'
 
 export const createCategory = async (userId: number,category: Omit<CategoryModel,'id'>, database: SQLiteDatabase) => {
     if(!userId) return false;
