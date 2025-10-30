@@ -24,6 +24,10 @@ import { Account } from '../../../domain/accountModel';
 import { Row } from '../structure/Row/Row';
 import { Cell } from '../structure/Cell/Cell';
 import { useUserContext } from '../../../hooks/useUserContext';
+import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
+import { ModalContent } from '../structure/ModalContent/ModalContent';
+import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
+import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -116,9 +120,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
             transparent={true}
             visible={isShow}
             statusBarTranslucent={true}>
-            <View style={styles.container}>
-                <View style={styles.container_content}>
-                    <View style={styles.header}>
+            <ModalContainer>
+                <ModalContent>
+                    <ModalHeader>
                         <ButtonBack onPress={handleClose}  />
                         <Row style={{flex: 4}}>
                             <Ionicons name="receipt-outline" size={18} color="green" style={{top: -3}} />
@@ -127,7 +131,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
                             <View style={styles.rightSpacer}></View>}
-                    </View>
+                    </ModalHeader>
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES LANÇAMENTO</Text>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false}/>
@@ -153,12 +157,12 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                         </Row>
 
                     </View>
-                    <View style={styles.buttons_footer}>
+                    <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={handleClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)} />
-                    </View>
-                </View>
-            </View>
+                    </ModalFooter>
+                </ModalContent>
+            </ModalContainer>
             <ModalConfirm isShow={showModalConfirmDelete} title='Confirma exclusão da transação?' onClose={() => setShowModalConfirmDelete(false)} onConfirm={handleDeleteTransaction} />
         </Modal>
     );
