@@ -5,7 +5,7 @@ import { styles } from './RowWithTopLabelStyles';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 interface RowWithTopLabelProps {
-    title: string,
+    title?: string,
     onPress?: () => void,
     required?: boolean,
     errors?: FieldError | Merge<FieldError, FieldErrorsImpl<{}>> |undefined;

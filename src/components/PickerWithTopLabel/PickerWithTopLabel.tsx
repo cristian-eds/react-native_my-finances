@@ -1,14 +1,15 @@
-import React, { ReactElement, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styles } from './PickerWithTopLabelStyles';
 
 import { FieldError, useController } from 'react-hook-form';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { ItemDropdown } from '../../utils/mappers/itemsPickerMapper';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { set } from 'zod';
 
 
 interface PickerWithTopLabelProps {
-    labelText: string;
+    labelText?: string;
     name: string;
     required?: boolean;
     errors?: FieldError | undefined;
@@ -18,29 +19,51 @@ interface PickerWithTopLabelProps {
     zIndexInverse?: number,
     showLabel?: boolean;
     placeholder?: string;
+    multiple?: boolean;
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, showLabel, placeholder = 'Selecione' }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, showLabel, placeholder = 'Selecione', multiple }: PickerWithTopLabelProps) {
+
 
     const { field } = useController({
         name,
         control
     });
-    
+
     const [open, setOpen] = useState(false);
+    const [localValue, setLocalValue] = useState(field.value);
+
+    const firstRender = useRef(true);
+    const prevValue = useRef(localValue);
+
+    useEffect(() => {
+        if (JSON.stringify(field.value) !== JSON.stringify(localValue)) {
+            setLocalValue(field.value || (multiple ? [] : null));
+        }
+    }, [field.value]);
+
+    useEffect(() => {
+        prevValue.current = localValue;
+    }, [localValue]);
 
     return (
         <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} showLabel={showLabel} >
             <DropDownPicker
-                value={field.value}
+                value={localValue}
                 open={open}
                 setOpen={setOpen}
-                setValue={
-                    (callback) => {
-                        const newValue = callback(field.value);
-                        field.onChange(newValue)
+                setValue={setLocalValue}
+                onChangeValue={(value: any) => {
+                    if (firstRender.current) {
+                        firstRender.current = false;
+                        return;
                     }
-                }
+                    if (JSON.stringify(value) === JSON.stringify(prevValue.current)) {
+                        return;
+                    }
+                    console.log('value picker', value);
+                    field.onChange(value);
+                }}
                 items={items}
                 containerStyle={styles.container_picker}
                 style={styles.picker}
@@ -51,7 +74,8 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 listMode='FLATLIST'
                 zIndex={zIndex}
                 zIndexInverse={zIndexInverse}
-    
+                multiple={multiple as boolean}
+                mode="BADGE"
             />
         </RowWithTopLabel>
 
