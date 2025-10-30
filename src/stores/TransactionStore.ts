@@ -43,7 +43,8 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
         if (transaction.accountId === activeAccount?.id) {
             set({
-                transactions: [...get().transactions, { ...transaction, id: idInsertedTransaction }]
+                transactions: [...get().transactions, { ...transaction, id: idInsertedTransaction }],
+                transactionsUser: [...get().transactionsUser, { ...transaction, id: idInsertedTransaction }]
             })
         }
         return true;
@@ -100,7 +101,8 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
             
             set({
-                transactions: [...get().transactions.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
+                transactions: [...get().transactions.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)],
+                transactionsUser: [...get().transactionsUser.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
             })
             return true;
         } catch (error) {
@@ -127,7 +129,8 @@ export const useTransactionStore = create<Store>((set, get) => ({
                 }
             }
             set({
-                transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)]
+                transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)],
+                transactionsUser: [...get().transactionsUser.filter(transaction => transaction.id !== idTransaction)]
             })
             return true;
         } catch (error) {
