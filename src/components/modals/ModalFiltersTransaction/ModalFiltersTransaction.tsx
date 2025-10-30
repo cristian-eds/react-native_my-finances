@@ -11,6 +11,12 @@ import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { Spacer } from '../../Spacer/Spacer';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { filtersSchemas } from '../../../utils/schemas/filtersSchemas';
+import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { useCategoryStore } from '../../../stores/CategoryStore';
+import { useAccountStore } from '../../../stores/AccountStore';
 
 interface ModalFiltersTransactionProps {
   isShow: boolean;
@@ -19,7 +25,26 @@ interface ModalFiltersTransactionProps {
 
 export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransactionProps) {
 
+  const { categories } = useCategoryStore();
+  const { accounts } = useAccountStore();
 
+  const { control, reset, watch } = useForm({
+    resolver: zodResolver(filtersSchemas),
+    defaultValues: {
+      movementType: [],
+      categories: [],
+      accounts: []
+    }
+  })
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  }
+
+  const handleFilter = () => {
+    const filters = watch();
+  }
 
   return (
     <Modal
@@ -30,16 +55,27 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
       <ModalContainer>
         <ModalContent>
           <ModalHeader>
-            <ButtonBack onPress={onClose} />
+            <ButtonBack onPress={handleClose} />
             <Text style={styles.title}>Filtros de Lançamentos</Text>
             <Spacer />
           </ModalHeader>
           <View>
-            <PickerWithTopLabel />
+            <PickerWithTopLabel
+              control={control}
+              items={mapCategoriesToItemsDropdown(categories)}
+              showLabel={false}
+              name='categories'
+              multiple={true} />
+            <PickerWithTopLabel
+              control={control}
+              items={mapAccountsToItemsDropdown(accounts)}
+              showLabel={false}
+              name='accounts'
+              multiple={true} />
           </View>
           <ModalFooter>
-            <ButtonIconAction iconName='close' onPress={onClose} />
-            <ButtonIconAction iconName='checkmark-sharp' onPress={() => { }} />
+            <ButtonIconAction iconName='close' onPress={handleClose} />
+            <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter} />
           </ModalFooter>
         </ModalContent>
       </ModalContainer>

@@ -61,7 +61,6 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                     if (JSON.stringify(value) === JSON.stringify(prevValue.current)) {
                         return;
                     }
-                    console.log('value picker', value);
                     field.onChange(value);
                 }}
                 items={items}
