@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -18,6 +18,7 @@ import { toTransactionItemData } from '../../mappers/transactionMapper';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/useUserContext';
+import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
 
 export function TransactionsScreen() {
 
@@ -27,6 +28,8 @@ export function TransactionsScreen() {
   const { user } = useUserContext();
 
   const database = useSQLiteContext();
+
+  const [showModalTransaction, setShowModalTransaction] = useState(false);
 
   const mapTransactions = () => {
     const items = transactionsUser.map<TransactionItemData>(transaction => {
@@ -48,11 +51,9 @@ export function TransactionsScreen() {
     )
   );
 
-
-
   return (
     <View style={[GlobalStyles.container_screens_normal, { paddingTop: 18 }]}>
-      <SearchInput placeholder="Search Transactions" value={filters.textSearch} onChangeText={setFilterText}/>
+      <SearchInput placeholder="Search Transactions" value={filters.textSearch} onChangeText={setFilterText} />
       <Row style={{ paddingHorizontal: 5 }}>
         <Row>
           <Text style={{ fontSize: 22 }}>Filtros</Text>
@@ -61,10 +62,11 @@ export function TransactionsScreen() {
         <Text style={{ fontSize: 22 }}>Limpar Filtros</Text>
       </Row>
       <PeriodFilter />
-      <View>
-        <TransactionsItemList data={mapTransactions()} />
-      </View>
-      <CircularActionButton />
+
+      <TransactionsItemList data={mapTransactions()} />
+
+      <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
+      <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)} />
     </View>
   );
 }
