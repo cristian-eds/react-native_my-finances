@@ -1,7 +1,6 @@
 import z from "zod";
-import { MovementType } from "../domain/enums/movementTypeEnum";
-import { iconsOptions } from "../utils/IconOptions";
-import { hexColorOptions } from "../utils/HexColorOptions";
+import { hexColorOptions } from "../HexColorOptions";
+import { iconsOptions } from "../IconOptions";
 
 const iconValues = iconsOptions.map(item => item.value);
 const hexColorValues = hexColorOptions.map(item => item.value);

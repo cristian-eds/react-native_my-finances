@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TypeAccount } from '../domain/enums/typeAccountEnum';
+import { TypeAccount } from '../../domain/enums/typeAccountEnum';
 
 export const updateAccountSchemas = z.object({
     name: z.string()

@@ -1,5 +1,5 @@
 import z from "zod";
-import { MovementType } from "../domain/enums/movementTypeEnum";
+import { MovementType } from "../../domain/enums/movementTypeEnum";
 
 export const transactionSchemas = z.object({
     description: z.string()
