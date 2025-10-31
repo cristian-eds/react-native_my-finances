@@ -22,16 +22,14 @@ interface PickerWithTopLabelProps {
 
 export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, placeholder = 'Selecione', multiple }: PickerWithTopLabelProps) {
 
-
     const { field } = useController({
         name,
         control
     });
 
     const [open, setOpen] = useState(false);
-    const [localValue, setLocalValue] = useState(field.value);
+    const [localValue, setLocalValue] = useState(field.value || (multiple ? [] : null));
 
-    const firstRender = useRef(true);
     const prevValue = useRef(localValue);
 
     useEffect(() => {
@@ -52,10 +50,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
                 setOpen={setOpen}
                 setValue={setLocalValue}
                 onChangeValue={(value: any) => {
-                    if (firstRender.current) {
-                        firstRender.current = false;
-                        return;
-                    }
+                    
                     if (JSON.stringify(value) === JSON.stringify(prevValue.current)) {
                         return;
                     }
