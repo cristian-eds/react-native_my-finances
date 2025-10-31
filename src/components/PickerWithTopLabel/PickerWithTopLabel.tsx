@@ -5,7 +5,6 @@ import { FieldError, useController } from 'react-hook-form';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { ItemDropdown } from '../../utils/mappers/itemsPickerMapper';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { set } from 'zod';
 
 
 interface PickerWithTopLabelProps {
@@ -17,12 +16,11 @@ interface PickerWithTopLabelProps {
     items: ItemDropdown[];
     zIndex?: number,
     zIndexInverse?: number,
-    showLabel?: boolean;
     placeholder?: string;
     multiple?: boolean;
 }
 
-export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, showLabel, placeholder = 'Selecione', multiple }: PickerWithTopLabelProps) {
+export function PickerWithTopLabel({ labelText, required, name, control, errors, items, zIndex = 1, zIndexInverse = 10000, placeholder = 'Selecione', multiple }: PickerWithTopLabelProps) {
 
 
     const { field } = useController({
@@ -47,7 +45,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
     }, [localValue]);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} showLabel={showLabel} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} showLabel={labelText ? true : false} >
             <DropDownPicker
                 value={localValue}
                 open={open}

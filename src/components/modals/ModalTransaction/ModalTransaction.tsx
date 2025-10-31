@@ -135,20 +135,20 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required showLabel={false}/>
                         <Row>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} placeholder='Tipo Movimento:' showLabel={false}/>
+                                <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} placeholder='Tipo Movimento:' />
                             </Cell>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} placeholder='Categoria:' showLabel={false}/>
+                                <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} placeholder='Categoria:' />
                             </Cell>
                         </Row>
                         <Text style={[styles.inputsTitle, {marginTop: 7}]}>CONTAS</Text>
                         <Row>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta origem'/>
+                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000}  placeholder='Conta origem'/>
                             </Cell>
                             {watch().movementType === MovementType.Transferencia &&
                                 <Cell>
-                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={destinationAccountsItems} zIndex={20000} zIndexInverse={30000} showLabel={false} placeholder='Conta Destino'/>
+                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={destinationAccountsItems} zIndex={20000} zIndexInverse={30000} placeholder='Conta Destino'/>
                                 </Cell>}
                         </Row>
 

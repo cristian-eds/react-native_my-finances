@@ -63,13 +63,11 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
             <PickerWithTopLabel
               control={control}
               items={mapCategoriesToItemsDropdown(categories)}
-              showLabel={false}
               name='categories'
               multiple={true} />
             <PickerWithTopLabel
               control={control}
               items={mapAccountsToItemsDropdown(accounts)}
-              showLabel={false}
               name='accounts'
               multiple={true} />
           </View>

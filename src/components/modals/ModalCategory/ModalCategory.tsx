@@ -111,10 +111,10 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
                         <Row>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} showLabel={false} placeholder='Icone*:' />
+                                <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} placeholder='Icone*:' />
                             </Cell>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} showLabel={false} placeholder='Cor*:' />
+                                <PickerWithTopLabel control={control} name='hexColor' errors={errors.iconName} labelText='Cor' items={hexColorOptions} zIndex={2000} placeholder='Cor*:' />
                             </Cell>
                         </Row>
                     </View>

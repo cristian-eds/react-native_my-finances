@@ -98,7 +98,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                         <Text style={styles.inputsTitle}>INFORMAÇÕES BÁSICAS</Text>
                         <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Nome*:' showLabel={false} required />
                         <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' showLabel={false} required />
-                        <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type' showLabel={false} />
+                        <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type'/>
                         <TouchableOpacity style={styles.showMore} onPress={() => setShowMoreInputs(!showMoreInputs)}>
                             <Text style={styles.showMoreText}>Preencher detalhes da conta...</Text>
                             <Ionicons name={showMoreInputs ? 'chevron-up' : 'chevron-down'} size={20} color="black" />
