@@ -3,6 +3,7 @@ import { CategoryModel } from "../../domain/categoryModel";
 import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Account } from "../../domain/accountModel";
+import { MovementType } from "../../domain/enums/movementTypeEnum";
 
 export interface ItemDropdown {
     label: string,
@@ -23,3 +24,5 @@ export const mapCategoriesToItemsDropdown = (categories: CategoryModel[]): ItemD
 export const mapAccountsToItemsDropdown = (accounts: Account[]): ItemDropdown[] => {
     return accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } });
 }
+
+export const mapMovementTypesToItemsDropdown = () => Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
