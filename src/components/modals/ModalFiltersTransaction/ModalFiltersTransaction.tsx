@@ -14,9 +14,10 @@ import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { filtersSchemas } from '../../../utils/schemas/filtersSchemas';
-import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { useAccountStore } from '../../../stores/AccountStore';
+import { useTransactionStore } from '../../../stores/TransactionStore';
 
 interface ModalFiltersTransactionProps {
   isShow: boolean;
@@ -27,23 +28,27 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
 
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
+  const { filters,setFiltersOptions } = useTransactionStore();
 
   const { control, reset, watch } = useForm({
     resolver: zodResolver(filtersSchemas),
     defaultValues: {
-      movementType: [],
-      categories: [],
-      accounts: []
+      movementType: filters.movementType || [],
+      categories: filters.categories || [],
+      accounts: filters.accounts || []
     }
   })
 
   const handleClose = () => {
     reset();
+    setFiltersOptions(undefined, undefined, undefined);
     onClose();
   }
 
   const handleFilter = () => {
     const filters = watch();
+    setFiltersOptions(filters.movementType, filters.categories, filters.accounts);
+    onClose();
   }
 
   return (
@@ -55,21 +60,37 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
       <ModalContainer>
         <ModalContent>
           <ModalHeader>
-            <ButtonBack onPress={handleClose} />
+            <ButtonBack onPress={onClose} />
             <Text style={styles.title}>Filtros de Lançamentos</Text>
             <Spacer />
           </ModalHeader>
-          <View>
+          <View style={styles.body}>
             <PickerWithTopLabel
+              labelText='Categorias'
               control={control}
               items={mapCategoriesToItemsDropdown(categories)}
               name='categories'
-              multiple={true} />
+              multiple={true}
+              zIndexInverse={2000}
+              zIndex={3000}
+              />
             <PickerWithTopLabel
+              labelText='Contas'
               control={control}
               items={mapAccountsToItemsDropdown(accounts)}
               name='accounts'
-              multiple={true} />
+              multiple={true} 
+              zIndexInverse={1000}
+              zIndex={2000}
+              />
+            <PickerWithTopLabel
+              labelText='Tipos de Lançamento'
+              control={control}
+              items={mapMovementTypesToItemsDropdown()}
+              name='movementType'
+              multiple={true} 
+              zIndexInverse={500}
+              />
           </View>
           <ModalFooter>
             <ButtonIconAction iconName='close' onPress={handleClose} />

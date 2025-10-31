@@ -29,7 +29,7 @@ import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
-import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -64,7 +64,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
 
     const database = useSQLiteContext();
 
-    const movementTypeItems = Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
+    const movementTypeItems = mapMovementTypesToItemsDropdown();
     const accountItems = mapAccountsToItemsDropdown(accounts);
     const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));  
     const categoriesItems = mapCategoriesToItemsDropdown(categories);

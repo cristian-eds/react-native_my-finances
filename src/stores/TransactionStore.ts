@@ -20,6 +20,7 @@ type Store = {
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
     setFilterText: (text: string) => void
+    setFiltersOptions: (movementType: MovementType[] | undefined, categories: number[] | undefined, accounts: number[] | undefined) => void
 
 }
 
@@ -69,6 +70,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
     setFiltersDates(initialDate, finalDate) {
         set({
             filters: {
+                 ...get().filters,
                 initialDate,
                 finalDate
             }
@@ -77,7 +79,21 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
     setFilterText(text) {
         set({
-            filters: {textSearch: text, initialDate: get().filters.initialDate, finalDate: get().filters.finalDate}
+            filters: {
+                 ...get().filters,
+                textSearch: text, 
+            }
+        })
+    },
+
+    setFiltersOptions: (movementType, categories, accounts) => {
+        set({
+            filters: {  
+                ...get().filters,
+                movementType, 
+                categories, 
+                accounts, 
+                }
         })
     },
 

@@ -6,5 +6,8 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     fontWeight: 'bold',
+  },
+  body: {
+    gap: 14,
   }
 });
