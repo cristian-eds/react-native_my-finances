@@ -21,6 +21,7 @@ type Store = {
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
     setFilterText: (text: string) => void
     setFiltersOptions: (movementType: MovementType[] | undefined, categories: number[] | undefined, accounts: number[] | undefined) => void
+    cleanFilters: () => void
 
 }
 
@@ -94,6 +95,16 @@ export const useTransactionStore = create<Store>((set, get) => ({
                 categories, 
                 accounts, 
                 }
+        })
+    },
+    cleanFilters: () => {
+        set({
+            filters: {  
+                ...get().filters,
+                movementType: undefined,
+                categories: undefined,
+                accounts: undefined,    
+            }
         })
     },
 

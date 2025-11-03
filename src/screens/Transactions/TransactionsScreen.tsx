@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './TransactionsScreenStyles';
+
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { Row } from '../../components/modals/structure/Row/Row';
@@ -24,7 +25,7 @@ import { ModalFiltersTransaction } from '../../components/modals/ModalFiltersTra
 
 export function TransactionsScreen() {
 
-  const { transactionsUser, fetchTransactionsByUser, filters, setFilterText } = useTransactionStore();
+  const { transactionsUser, fetchTransactionsByUser, filters, setFilterText, cleanFilters } = useTransactionStore();
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
   const { user } = useUserContext();
@@ -54,21 +55,36 @@ export function TransactionsScreen() {
     )
   );
 
+  const renderCleanFilters = () => {
+    if (filters.textSearch || filters.accounts || filters.categories || filters.movementType) {
+      return (
+        <TouchableOpacity onPress={cleanFilters} style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+            <Ionicons name="close" size={14} color="red" />
+            <Text style={{ fontSize: 14, color: 'red' }}>Limpar filtros</Text>
+
+        </TouchableOpacity>
+      )
+    }
+  }
+
   return (
     <View style={[GlobalStyles.container_screens_normal, { paddingTop: 18 }]}>
       <SearchInput placeholder="Search Transactions" value={filters.textSearch} onChangeText={setFilterText} />
       <Row style={{ paddingHorizontal: 5 }}>
-        <TouchableOpacity onPress={() => setShowModalFilters(true)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          <Text style={{ fontSize: 22 }}>Filtros</Text>
-          <Ionicons name="filter" size={20} color="black" />
+        <TouchableOpacity onPress={() => setShowModalFilters(true)} style={{ alignItems: 'center', gap: 4 }}>
+          <Row>
+            <Ionicons name="filter" size={20} color="black" />
+            <Text style={{ fontSize: 22 }}>Filtros</Text>
+            {renderCleanFilters()}
+          </Row>
         </TouchableOpacity>
-        <Text style={{ fontSize: 22 }}>Limpar Filtros</Text>
+        <Ionicons name="stats-chart-outline" size={20} color="black" />
       </Row>
       <PeriodFilter />
       <TransactionsItemList data={mapTransactions()} />
       <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
       <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)} />
-      <ModalFiltersTransaction isShow={showModalFilters} onClose={() => setShowModalFilters(false)}/>
+      {showModalFilters &&  <ModalFiltersTransaction isShow={showModalFilters} onClose={() => setShowModalFilters(false)} />}
     </View>
   );
 }
