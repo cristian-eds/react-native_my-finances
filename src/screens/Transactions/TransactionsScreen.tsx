@@ -56,15 +56,16 @@ export function TransactionsScreen() {
   );
 
   const renderCleanFilters = () => {
-    if (filters.textSearch || filters.accounts || filters.categories || filters.movementType) {
-      return (
-        <TouchableOpacity onPress={cleanFilters} style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-            <Ionicons name="close" size={14} color="red" />
-            <Text style={{ fontSize: 14, color: 'red' }}>Limpar filtros</Text>
+    if (!filters.accounts && !filters.categories && !filters.movementType) return;
+    if (filters.accounts?.length === 0 && filters.categories?.length === 0 && filters.movementType?.length === 0) return;
+    return (
+      <TouchableOpacity onPress={cleanFilters} style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+        <Ionicons name="close" size={14} color="red" />
+        <Text style={{ fontSize: 14, color: 'red' }}>Limpar filtros</Text>
 
-        </TouchableOpacity>
-      )
-    }
+      </TouchableOpacity>
+    )
+
   }
 
   return (
@@ -84,7 +85,7 @@ export function TransactionsScreen() {
       <TransactionsItemList data={mapTransactions()} />
       <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
       <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)} />
-      {showModalFilters &&  <ModalFiltersTransaction isShow={showModalFilters} onClose={() => setShowModalFilters(false)} />}
+      {showModalFilters && <ModalFiltersTransaction isShow={showModalFilters} onClose={() => setShowModalFilters(false)} />}
     </View>
   );
 }

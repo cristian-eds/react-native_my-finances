@@ -7,7 +7,12 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
+  inputsTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    paddingLeft: 5,
+  },
   body: {
-    gap: 14,
+    gap: 10
   }
 });

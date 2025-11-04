@@ -14,10 +14,12 @@ import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { filtersSchemas } from '../../../utils/schemas/filtersSchemas';
-import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown, mapOrderTypesToItemsDropdown, mappColumnsOrderTransactionToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useTransactionStore } from '../../../stores/TransactionStore';
+import { Row } from '../structure/Row/Row';
+import { Cell } from '../structure/Cell/Cell';
 
 interface ModalFiltersTransactionProps {
   isShow: boolean;
@@ -28,26 +30,29 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
 
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
-  const { filters,setFiltersOptions } = useTransactionStore();
+  const { filters, ordernation, setFiltersOptions, setOrdernation } = useTransactionStore();
 
   const { control, reset, watch } = useForm({
     resolver: zodResolver(filtersSchemas),
     defaultValues: {
       movementType: filters.movementType || [],
       categories: filters.categories || [],
-      accounts: filters.accounts || []
+      accounts: filters.accounts || [],
+      orderColumn: ordernation.orderColumn,
+      orderType: ordernation.orderType
     }
   })
 
   const handleClose = () => {
     reset();
-    setFiltersOptions(undefined, undefined, undefined);
+    setFiltersOptions([], [], []);
     onClose();
   }
 
   const handleFilter = () => {
-    const filters = watch();
-    setFiltersOptions(filters.movementType, filters.categories, filters.accounts);
+    const fields = watch();
+    setFiltersOptions(fields.movementType, fields.categories, fields.accounts);
+    setOrdernation(fields.orderColumn, fields.orderType);
     onClose();
   }
 
@@ -61,36 +66,65 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
         <ModalContent>
           <ModalHeader>
             <ButtonBack onPress={onClose} />
-            <Text style={styles.title}>Filtros de Lançamentos</Text>
+            <Text style={styles.title}>Filtros e Ordenação</Text>
             <Spacer />
           </ModalHeader>
           <View style={styles.body}>
+            <Text style={styles.inputsTitle}>Filtros</Text>
             <PickerWithTopLabel
-              labelText='Categorias'
+              labelText=''
               control={control}
               items={mapCategoriesToItemsDropdown(categories)}
               name='categories'
               multiple={true}
               zIndexInverse={2000}
               zIndex={3000}
-              />
+              placeholder='Categorias...'
+            />
             <PickerWithTopLabel
-              labelText='Contas'
+              labelText=''
               control={control}
               items={mapAccountsToItemsDropdown(accounts)}
               name='accounts'
-              multiple={true} 
+              multiple={true}
               zIndexInverse={1000}
               zIndex={2000}
-              />
+              placeholder='Contas...'
+            />
             <PickerWithTopLabel
-              labelText='Tipos de Lançamento'
+              labelText=''
+              placeholder='Tipos de Lançamentos...'
               control={control}
               items={mapMovementTypesToItemsDropdown()}
               name='movementType'
-              multiple={true} 
+              multiple={true}
               zIndexInverse={500}
-              />
+            />
+            <Text style={[styles.inputsTitle, { marginTop: 5 }]}>Ordenação</Text>
+            <Row>
+              <Cell>
+                <PickerWithTopLabel
+                  labelText=''
+                  placeholder='Coluna...'
+                  control={control}
+                  items={mappColumnsOrderTransactionToItemsDropdown()}
+                  name='orderColumn'
+                  multiple={false}
+                  zIndexInverse={250}
+                />
+              </Cell>
+              <Cell>
+                <PickerWithTopLabel
+                  labelText=''
+                  placeholder='Ordem...'
+                  control={control}
+                  items={mapOrderTypesToItemsDropdown()}
+                  name='orderType'
+                  multiple={false}
+                  zIndexInverse={250}
+                />
+              </Cell>
+            </Row>
           </View>
           <ModalFooter>
             <ButtonIconAction iconName='close' onPress={handleClose} />
