@@ -4,6 +4,8 @@ import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Account } from "../../domain/accountModel";
 import { MovementType } from "../../domain/enums/movementTypeEnum";
+import { OrderTypes } from "../../domain/enums/orderTypes";
+import { ColumnsOrderTransaction } from "../../domain/enums/columnsOrderTransaction";
 
 export interface ItemDropdown {
     label: string,
@@ -26,3 +28,14 @@ export const mapAccountsToItemsDropdown = (accounts: Account[]): ItemDropdown[] 
 }
 
 export const mapMovementTypesToItemsDropdown = () => Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
+
+export const mapOrderTypesToItemsDropdown = () => Object.keys(OrderTypes).map((text) => {
+    const label = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+    return { label, value: OrderTypes[text as keyof typeof OrderTypes] }
+})
+
+export const mappColumnsOrderTransactionToItemsDropdown = () => Object.keys(ColumnsOrderTransaction).map((key) => {
+    const value = ColumnsOrderTransaction[key as keyof typeof ColumnsOrderTransaction];
+    const label = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    return { label, value };
+})
