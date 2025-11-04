@@ -4,5 +4,5 @@ export type PrincipalStackParamList = {
     Main: undefined;
     AccountDetails: {account: Account};
     Categories: undefined,
-    TransactionStatistics: undefined
+    TransactionStatistics: {data: 'transactions' | 'userTransactions'}
 };

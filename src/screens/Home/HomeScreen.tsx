@@ -80,7 +80,7 @@ export function HomeScreen() {
                 <View style={styles.transactions_infos}>
                     <View style={styles.transactions_infos_item}>
                         <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
-                        <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics')} />
+                        <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics', {data:'transactions' })} />
                     </View>
                     <PeriodFilter />
                     <View style={styles.captions}>

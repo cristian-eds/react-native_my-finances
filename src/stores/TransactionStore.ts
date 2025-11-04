@@ -28,7 +28,6 @@ type Store = {
     cleanFilters: () => void
 
     setOrdernation: (orderColumn: ColumnsOrderTransaction | undefined, orderType: OrderTypes | undefined) => void
-
 }
 
 export const useTransactionStore = create<Store>((set, get) => ({

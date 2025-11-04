@@ -17,11 +17,13 @@ import { useAccountStore } from '../../stores/AccountStore';
 import { TransactionItemData } from '../../domain/transactionItemData';
 import { toTransactionItemData } from '../../utils/mappers/transactionMapper';
 import { useSQLiteContext } from 'expo-sqlite';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/useUserContext';
 import { ModalTransaction } from '../../components/modals/ModalTransaction/ModalTransaction';
 import { TouchableOpacity } from 'react-native';
 import { ModalFiltersTransaction } from '../../components/modals/ModalFiltersTransaction/ModalFiltersTransaction';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 
 export function TransactionsScreen() {
 
@@ -31,6 +33,7 @@ export function TransactionsScreen() {
   const { user } = useUserContext();
 
   const database = useSQLiteContext();
+  const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
   const [showModalTransaction, setShowModalTransaction] = useState(false);
   const [showModalFilters, setShowModalFilters] = useState(false);
@@ -62,10 +65,8 @@ export function TransactionsScreen() {
       <TouchableOpacity onPress={cleanFilters} style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }}>
         <Ionicons name="close" size={14} color="red" />
         <Text style={{ fontSize: 14, color: 'red' }}>Limpar filtros</Text>
-
       </TouchableOpacity>
     )
-
   }
 
   return (
@@ -79,7 +80,7 @@ export function TransactionsScreen() {
             {renderCleanFilters()}
           </Row>
         </TouchableOpacity>
-        <Ionicons name="stats-chart-outline" size={20} color="black" />
+        <Ionicons name="stats-chart-outline" size={20} color="black"  onPress={() => navigation.navigate('TransactionStatistics', { data: 'userTransactions' })}/>
       </Row>
       <PeriodFilter />
       <TransactionsItemList data={mapTransactions()} />

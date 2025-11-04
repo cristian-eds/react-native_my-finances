@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './TransactionStatisticsScreenStyles';
@@ -15,6 +15,9 @@ import { useCategoryStore } from '../../stores/CategoryStore';
 import { ChartItem, ControlChart } from '../../components/charts/ControlChart';
 import { Transaction } from '../../domain/transactionModel';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useAppRoute } from '../../utils/navigation/userAppRoute';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useUserContext } from '../../hooks/useUserContext';
 
 type GroupChartItem = {
     [category: number | string]: ChartItem
@@ -27,14 +30,27 @@ type GroupChartTransferItem = {
 export function TransactionStatistics() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
-    const { transactions } = useTransactionStore();
+    const route = useAppRoute<'TransactionStatistics'>();
+    const database = useSQLiteContext();
+    const { data } = route.params;
+
+    const { transactions, transactionsUser, filters, fetchTransactions, fetchTransactionsByUser } = useTransactionStore();
     const { categories } = useCategoryStore();
     const { getAccountName, activeAccount } = useAccountStore();
+    const { user } = useUserContext();
 
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
+    const transactionsData = data ===  'transactions' ? transactions : transactionsUser;
+
+    useEffect(() => {
+        if (data === 'transactions') fetchTransactions(activeAccount?.id as number, database);
+        if (data === 'userTransactions') fetchTransactionsByUser(user?.id as number, database);
+        console.log('reexecutou')
+    }, [filters])
+
     const generateGeneralChart = (): ChartItem[] => {
-        const transferTransactions = transactions.filter(transaction => transaction.movementType === MovementType.Transferencia);
+        const transferTransactions = transactionsData.filter(transaction => transaction.movementType === MovementType.Transferencia);
         const incomeTransfers = transferTransactions.filter(transaction => transaction.destinationAccountId === activeAccount?.id);
         const expenseTransfers = transferTransactions.filter(transaction => transaction.accountId === activeAccount?.id);
 
@@ -87,18 +103,17 @@ export function TransactionStatistics() {
             label: textMovementType(movementType),
             value: someTotalValueByMovementType(movementType),
             movement: movementType === MovementType.Despesa ? 'DEBIT' : 'CREDIT'
-
         }
     }
 
     const someTotalValueByMovementType = (movementType: MovementType) => {
-        return transactions.filter(transaction => transaction.movementType === movementType)
+        return transactionsData.filter(transaction => transaction.movementType === movementType)
             .reduce((acumulator, current) => acumulator += current.value, 0);
     }
 
     const mapTransactionToChartItem = (type: MovementType | null) => {
         if (!type) return generateGeneralChart()
-        const transactionsFiltered = transactions.filter(transaction => transaction.movementType === type);
+        const transactionsFiltered = transactionsData.filter(transaction => transaction.movementType === type);
         if (type === MovementType.Transferencia) return generateTransferItems(transactionsFiltered);
 
         const items = transactionsFiltered.reduce((acumulator, transaction) => {
