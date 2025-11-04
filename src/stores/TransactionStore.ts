@@ -6,11 +6,15 @@ import * as transactionService from '../services/transactionService';
 import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
 import { useAccountStore } from "./AccountStore";
 import { MovementType } from "../domain/enums/movementTypeEnum";
+import { OrderTypes } from "../domain/enums/orderTypes";
+import { OrderTransactionModel } from "../domain/orderTransactionModel";
+import { ColumnsOrderTransaction } from "../domain/enums/columnsOrderTransaction";
 
 type Store = {
     transactions: Transaction[];
     transactionsUser: Transaction[];
     filters: TransactionFiltersModel;
+    ordernation: OrderTransactionModel;
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactions: (accountId: number ,database: SQLiteDatabase) => void
@@ -23,6 +27,8 @@ type Store = {
     setFiltersOptions: (movementType: MovementType[] | undefined, categories: number[] | undefined, accounts: number[] | undefined) => void
     cleanFilters: () => void
 
+    setOrdernation: (orderColumn: ColumnsOrderTransaction | undefined, orderType: OrderTypes | undefined) => void
+
 }
 
 export const useTransactionStore = create<Store>((set, get) => ({
@@ -32,6 +38,11 @@ export const useTransactionStore = create<Store>((set, get) => ({
         initialDate: new Date(),
         finalDate: new Date()
     },
+    ordernation: {
+        orderColumn: ColumnsOrderTransaction.DATA_PAGAMENTO,
+        orderType: OrderTypes.DESCRESCENTE
+    },
+
     addTransaction: async (transaction, userId, database) => {
         const idInsertedTransaction = await transactionService.create(transaction, userId.toLocaleString(),database);
         if (!idInsertedTransaction) return false;
@@ -61,7 +72,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
     },
 
     fetchTransactionsByUser: async (userId, database) => {
-        const transactionsFounded = await transactionService.findAllByUser(userId.toLocaleString(), get().filters,database);
+        const transactionsFounded = await transactionService.findAllByUser(userId.toLocaleString(), get().filters, get().ordernation, database);
         set({
             transactionsUser: [...transactionsFounded]
         })
@@ -164,5 +175,14 @@ export const useTransactionStore = create<Store>((set, get) => ({
             console.log("Error deleting transaction", error)
             return false;
         }
+    },
+
+    setOrdernation: (orderColumn, orderType) => {
+        set({
+            ordernation: {
+                orderColumn,
+                orderType
+            }
+        })
     }
 }))

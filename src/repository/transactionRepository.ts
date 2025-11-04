@@ -3,6 +3,7 @@ import { Transaction } from "../domain/transactionModel";
 import { TransactionRecord } from "./records/TransactionRecord";
 import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
 import { formaterToSqlite } from "../utils/DateFormater";
+import { OrderTransactionModel } from "../domain/orderTransactionModel";
 
 export async function create(transaction: Omit<Transaction, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
 
@@ -56,7 +57,7 @@ export async function getAllByAccount(accountId: number, filter: TransactionFilt
     }
 }
 
-export async function getAllByUser(userId: string, filters: TransactionFiltersModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+export async function getAllByUser(userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel,database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
 
     const buildInClause = (column: string, values: (string | number)[], paramPrefix: string) => {
         if (values.length === 0) return { clause: '', params: {} };
@@ -78,9 +79,11 @@ export async function getAllByUser(userId: string, filters: TransactionFiltersMo
     const { clause: accountClause, params: accountParams } = buildInClause('account_id', filters.accounts || [], 'accountId');
 
     sql += movementTypeClause + categoryClause + accountClause;
-    sql += ` ORDER BY DATETIME(payment_date) DESC; `;
+    sql += ` ORDER BY DATETIME(${ordenation.orderColumn}) ${ordenation.orderType}; `;
 
     const statement = await database.prepareAsync(sql);
+
+    console.log(ordenation);
 
     try {
         const params = {
