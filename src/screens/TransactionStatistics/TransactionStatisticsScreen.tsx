@@ -30,27 +30,21 @@ type GroupChartTransferItem = {
 export function TransactionStatistics() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
-    const route = useAppRoute<'TransactionStatistics'>();
     const database = useSQLiteContext();
-    const { data } = route.params;
 
-    const { transactions, transactionsUser, filters, fetchTransactions, fetchTransactionsByUser } = useTransactionStore();
+    const { transactionsUser, filters, fetchTransactionsByUser } = useTransactionStore();
     const { categories } = useCategoryStore();
     const { getAccountName, activeAccount } = useAccountStore();
     const { user } = useUserContext();
 
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
 
-    const transactionsData = data ===  'transactions' ? transactions : transactionsUser;
-
     useEffect(() => {
-        if (data === 'transactions') fetchTransactions(activeAccount?.id as number, database);
-        if (data === 'userTransactions') fetchTransactionsByUser(user?.id as number, database);
-        console.log('reexecutou')
+        fetchTransactionsByUser(user?.id as number, database, activeAccount?.id);
     }, [filters])
 
     const generateGeneralChart = (): ChartItem[] => {
-        const transferTransactions = transactionsData.filter(transaction => transaction.movementType === MovementType.Transferencia);
+        const transferTransactions = transactionsUser.filter(transaction => transaction.movementType === MovementType.Transferencia);
         const incomeTransfers = transferTransactions.filter(transaction => transaction.destinationAccountId === activeAccount?.id);
         const expenseTransfers = transferTransactions.filter(transaction => transaction.accountId === activeAccount?.id);
 
@@ -107,13 +101,13 @@ export function TransactionStatistics() {
     }
 
     const someTotalValueByMovementType = (movementType: MovementType) => {
-        return transactionsData.filter(transaction => transaction.movementType === movementType)
+        return transactionsUser.filter(transaction => transaction.movementType === movementType)
             .reduce((acumulator, current) => acumulator += current.value, 0);
     }
 
     const mapTransactionToChartItem = (type: MovementType | null) => {
         if (!type) return generateGeneralChart()
-        const transactionsFiltered = transactionsData.filter(transaction => transaction.movementType === type);
+        const transactionsFiltered = transactionsUser.filter(transaction => transaction.movementType === type);
         if (type === MovementType.Transferencia) return generateTransferItems(transactionsFiltered);
 
         const items = transactionsFiltered.reduce((acumulator, transaction) => {
