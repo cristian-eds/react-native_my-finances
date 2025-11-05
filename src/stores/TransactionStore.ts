@@ -11,13 +11,11 @@ import { OrderTransactionModel } from "../domain/orderTransactionModel";
 import { ColumnsOrderTransaction } from "../domain/enums/columnsOrderTransaction";
 
 type Store = {
-    transactions: Transaction[];
     transactionsUser: Transaction[];
     filters: TransactionFiltersModel;
     ordernation: OrderTransactionModel;
 
     addTransaction: (transaction: Omit<Transaction, 'id'>, userId: number, database: SQLiteDatabase) => Promise<boolean>
-    fetchTransactions: (accountId: number ,database: SQLiteDatabase) => void
     updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
     deleteTransaction: (idTransaction: number, database: SQLiteDatabase) => Promise<boolean>
     fetchTransactionsByUser: (userId: number, database: SQLiteDatabase) => void
@@ -55,23 +53,14 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
         if (transaction.accountId === activeAccount?.id) {
             set({
-                transactions: [...get().transactions, { ...transaction, id: idInsertedTransaction }],
                 transactionsUser: [...get().transactionsUser, { ...transaction, id: idInsertedTransaction }]
             })
         }
         return true;
     },
 
-    fetchTransactions: async (accountId, database) => {
-        const transactionsFounded = await transactionService.findAllByAccount(accountId, get().filters, database);
-        set({
-            transactions: [...transactionsFounded]
-        })
-        return true;
-    },
-
     fetchTransactionsByUser: async (userId, database) => {
-        const transactionsFounded = await transactionService.findAllByUser(userId.toLocaleString(), get().filters, get().ordernation, database);
+        const transactionsFounded = await transactionService.findAllByUser(userId, get().filters, get().ordernation, database);
         set({
             transactionsUser: [...transactionsFounded]
         })
@@ -122,7 +111,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
         try {
             const isUpdated = await transactionService.update(transaction, database);
             if (!isUpdated) return false;
-            const oldTransaction = get().transactions.find(transac => transac.id === transaction.id);
+            const oldTransaction = get().transactionsUser.find(transac => transac.id === transaction.id);
             if (oldTransaction) {
                 const { updateBalanceAccount } = useAccountStore.getState();
                 if (oldTransaction.movementType === MovementType.Receita) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa);
@@ -138,7 +127,6 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
             
             set({
-                transactions: [...get().transactions.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)],
                 transactionsUser: [...get().transactionsUser.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
             })
             return true;
@@ -151,7 +139,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
         try {
             const isDeleted = await transactionService.deleteById(idTransaction, database);
             if (!isDeleted) return false;
-            const oldTransaction = get().transactions.find(transaction => transaction.id === idTransaction);
+            const oldTransaction = get().transactionsUser.find(transaction => transaction.id === idTransaction);
             if (oldTransaction) {
                 const { updateBalanceAccount } = useAccountStore.getState();
 
@@ -166,7 +154,6 @@ export const useTransactionStore = create<Store>((set, get) => ({
                 }
             }
             set({
-                transactions: [...get().transactions.filter(transaction => transaction.id !== idTransaction)],
                 transactionsUser: [...get().transactionsUser.filter(transaction => transaction.id !== idTransaction)]
             })
             return true;

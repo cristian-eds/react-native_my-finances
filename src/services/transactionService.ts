@@ -9,14 +9,9 @@ export async function create(transaction: Omit<Transaction, 'id'>, userId: strin
     return transactionRepository.create(transaction, userId, database);
 }
 
-export async function findAllByAccount(accountId: number, filters: TransactionFiltersModel, database: SQLiteDatabase) {
-    const transactions = await transactionRepository.getAllByAccount(accountId, filters, database);
-    if (!transactions) return [];
-    return toTransactionModelList(transactions);
-}
 
-export async function findAllByUser( userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel ,database: SQLiteDatabase) {
-    const transactions = await transactionRepository.getAllByUser(userId,filters,ordenation, database);
+export async function findAllByUser(userId: number, filters: TransactionFiltersModel, ordenation: OrderTransactionModel ,database: SQLiteDatabase) {
+    const transactions = await transactionRepository.getAllByUser(userId.toString(),filters,ordenation, database);
     if (!transactions) return [];
     return toTransactionModelList(transactions);
 }

@@ -9,7 +9,7 @@ import { ColumnsOrderTransaction } from "../../domain/enums/columnsOrderTransact
 
 export interface ItemDropdown {
     label: string,
-    value: string,
+    value: string | number,
     icon?: () => ReactElement
 }
 
@@ -24,7 +24,7 @@ export const mapCategoriesToItemsDropdown = (categories: CategoryModel[]): ItemD
 }
 
 export const mapAccountsToItemsDropdown = (accounts: Account[]): ItemDropdown[] => {
-    return accounts.map(acc => { return { label: acc.name, value: acc.id.toString() } });
+    return accounts.map(acc => { return { label: acc.name, value: acc.id } });
 }
 
 export const mapMovementTypesToItemsDropdown = () => Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })

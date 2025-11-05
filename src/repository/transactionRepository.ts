@@ -29,34 +29,6 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
     }
 }
 
-export async function getAllByAccount(accountId: number, filter: TransactionFiltersModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
-    const statement = await database.prepareAsync(`
-            SELECT * FROM transactions 
-            WHERE (account_id = $accountId OR destination_account_id = $accountId)
-            AND payment_date BETWEEN $initialDate AND $finalDate
-            ORDER BY DATETIME(payment_date) DESC;
-    `);
-
-    try {
-        const params = {
-            $accountId: accountId,
-            $initialDate: formaterToSqlite(new Date(filter.initialDate.setHours(0, 0, 1))),
-            $finalDate: formaterToSqlite(new Date(filter.finalDate.setHours(23, 59, 59)))
-        };
-
-        const result = await statement.executeAsync<TransactionRecord>(params);
-        const transactions = await result.getAllAsync();
-
-        if (transactions) {
-            return transactions;
-        }
-    } catch (error) {
-        console.error("Error fetching transactions", error);
-    } finally {
-        statement.finalizeAsync();
-    }
-}
-
 export async function getAllByUser(userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel,database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
 
     const buildInClause = (column: string, values: (string | number)[], paramPrefix: string) => {
@@ -78,12 +50,13 @@ export async function getAllByUser(userId: string, filters: TransactionFiltersMo
     const { clause: categoryClause, params: categoryParams } = buildInClause('category_id', filters.categories || [], 'categoryId');
     const { clause: accountClause, params: accountParams } = buildInClause('account_id', filters.accounts || [], 'accountId');
 
-    sql += movementTypeClause + categoryClause + accountClause;
+    sql += movementTypeClause + categoryClause;
+    
+    if(filters.accounts?.find(acc => acc === 0) !== 0) sql += accountClause;
+    
     sql += ` ORDER BY DATETIME(${ordenation.orderColumn}) ${ordenation.orderType}; `;
 
     const statement = await database.prepareAsync(sql);
-
-    console.log(ordenation);
 
     try {
         const params = {

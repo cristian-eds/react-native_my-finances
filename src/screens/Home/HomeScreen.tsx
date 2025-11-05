@@ -22,14 +22,16 @@ import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStack
 import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
 import { TransactionItemData } from '../../domain/transactionItemData';
 import { toTransactionItemData } from '../../utils/mappers/transactionMapper';
+import { useUserContext } from '../../hooks/useUserContext';
 
 export function HomeScreen() {
 
     const database = useSQLiteContext();
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
+    const {user} = useUserContext();
 
     const { accounts, activeAccount } = useAccountStore();
-    const { fetchTransactions, transactions, filters } = useTransactionStore();
+    const { fetchTransactionsByUser, transactionsUser, filters, setFiltersOptions } = useTransactionStore();
     const { categories } = useCategoryStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
@@ -37,9 +39,10 @@ export function HomeScreen() {
 
     useFocusEffect(
         useCallback(() => {     
-            const fetch = async () => {
+            const fetch = () => {
                 if (activeAccount) {
-                    await fetchTransactions(activeAccount.id as number, database);
+                    setFiltersOptions([],[],[activeAccount.id])
+                    fetchTransactionsByUser(user?.id as number, database);
                 }   
             }
             fetch();
@@ -47,7 +50,7 @@ export function HomeScreen() {
     );  
 
     const renderCaptionItem = (title: string, movementType: MovementType) => {
-        const totalValue = transactions.filter(transaction => transaction.movementType === movementType)
+        const totalValue = transactionsUser.filter(transaction => transaction.movementType === movementType)
             .map(transaction => transaction.value)
             .reduce((prevValue, current) => prevValue + current, 0);
         const isActualActive = movementType === activeMovementType;
@@ -62,7 +65,7 @@ export function HomeScreen() {
     }
 
     const filterTransactionActiveMovementType = () => {
-        const items = transactions.map<TransactionItemData>(transaction => {
+        const items = transactionsUser.map<TransactionItemData>(transaction => {
             const category = categories.find(cat => cat.id === transaction.categoryId);
             const account = accounts.find(acc => acc.id === transaction.accountId);
             const destinationAccount = accounts.find(acc => acc.id === transaction.destinationAccountId);
@@ -90,7 +93,7 @@ export function HomeScreen() {
                     </View>
                 </View>
             </View>
-            {transactions.length > 0 && <TransactionsItemList data={filterTransactionActiveMovementType()} />}
+            {transactionsUser.length > 0 && <TransactionsItemList data={filterTransactionActiveMovementType()} />}
             <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
             {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount} />}
         </View>
