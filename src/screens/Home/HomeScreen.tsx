@@ -41,8 +41,7 @@ export function HomeScreen() {
         useCallback(() => {     
             const fetch = () => {
                 if (activeAccount) {
-                    setFiltersOptions([],[],[activeAccount.id])
-                    fetchTransactionsByUser(user?.id as number, database);
+                    fetchTransactionsByUser(user?.id as number, database, activeAccount.id);
                 }   
             }
             fetch();

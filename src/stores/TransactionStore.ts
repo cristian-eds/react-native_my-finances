@@ -18,7 +18,7 @@ type Store = {
     addTransaction: (transaction: Omit<Transaction, 'id'>, userId: number, database: SQLiteDatabase) => Promise<boolean>
     updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
     deleteTransaction: (idTransaction: number, database: SQLiteDatabase) => Promise<boolean>
-    fetchTransactionsByUser: (userId: number, database: SQLiteDatabase) => void
+    fetchTransactionsByUser: (userId: number,database: SQLiteDatabase, activeAccount?: number) => void
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
     setFilterText: (text: string) => void
@@ -59,8 +59,9 @@ export const useTransactionStore = create<Store>((set, get) => ({
         return true;
     },
 
-    fetchTransactionsByUser: async (userId, database) => {
-        const transactionsFounded = await transactionService.findAllByUser(userId, get().filters, get().ordernation, database);
+    fetchTransactionsByUser: async (userId, database, activeAccountId) => {
+        const filter = activeAccountId ? {...get().filters, accounts: [activeAccountId]} : get().filters;
+        const transactionsFounded = await transactionService.findAllByUser(userId, filter, get().ordernation, database);
         set({
             transactionsUser: [...transactionsFounded]
         })
