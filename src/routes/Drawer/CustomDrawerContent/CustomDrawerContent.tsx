@@ -6,18 +6,24 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './CustomDrawerContentStyles';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { ButtonIconSimple } from '../../../components/buttons/ButtonIconSimple/ButtonIconSimple';
+
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ButtonBack } from '../../../components/buttons/ButtonBack/ButtonBack';
+import { Account } from '../../../domain/accountModel';
 
 export function CustomDrawerContent({ navigation, ...props }: DrawerContentComponentProps) {
 
     const [expandAccounts, setExpandAccounts] = useState(false);
     const [expandTransactions, setExpandTransactions] = useState(false);
 
-    const { accounts } = useAccountStore()
+    const { accounts,setActiveAccount } = useAccountStore()
     const { logout } = useUserContext();
+
+    const handleNavigateToAccountDetails = (account: Account) => {
+        setActiveAccount(account);
+        navigation.navigate('PrincipalStack', { screen: 'AccountDetails' });
+    }
 
     return (
         <View style={styles.container}>
@@ -36,7 +42,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                 </TouchableOpacity>
                 {expandAccounts && accounts &&
                     accounts.map(account => (
-                        <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => navigation.navigate('PrincipalStack', { screen: 'AccountDetails' })}>
+                        <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => handleNavigateToAccountDetails(account)}>
                             <Ionicons name="wallet-outline" size={20} color="black" />
                             <Text style={styles.subItemText}>{account.name}</Text>
                         </TouchableOpacity>
