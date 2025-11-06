@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { Alert, ScrollView, Text, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 
 import { styles } from './AccountDetailsScreenStyles';
@@ -103,21 +103,14 @@ export function AccountDetails() {
         }
     }, [])
 
-    const renderStatusLabel = () => {
-        if (activeAccount?.status === Status.Ativo) {
-            return (
-                <Row>
-                    <View style={[styles.statusIndicator,{ backgroundColor: 'green' }]}></View>
-                    <Text style={[styles.statusLabel,{ color: 'green' }]}>{activeAccount.status}</Text>
-                </Row>
-                )
-            
-        }
+    const renderStatusLabel = (color: string) => {
         return (
+            <TouchableOpacity onPress={handleToggleStatusAccount}>
                 <Row>
-                    <View style={[styles.statusIndicator,{ backgroundColor: 'red' }]}></View>
-                    <Text style={[styles.statusLabel,{ color: 'red' }]}>{activeAccount?.status}</Text>
+                    <View style={[styles.statusIndicator, { backgroundColor: color }]}></View>
+                    <Text style={[styles.statusLabel, { color: color }]}>{activeAccount?.status}</Text>
                 </Row>
+            </TouchableOpacity>
         )
     }
 
@@ -138,8 +131,6 @@ export function AccountDetails() {
                 <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
                 <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
                 <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
-
-
             </View>
             <View style={styles.containerContent}>
                 <Text style={[GlobalStyles.sectionInputsText, { fontSize: 16, marginVertical: 10, textAlign: 'center' }]}>INFORMAÇÕES</Text>
@@ -148,7 +139,7 @@ export function AccountDetails() {
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    {renderStatusLabel()}
+                    {activeAccount?.status === Status.Ativo ? renderStatusLabel('green') : renderStatusLabel('red')}
                 </RowWithLeftLabel>
             </View>
             <View>
@@ -156,7 +147,6 @@ export function AccountDetails() {
                     <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 15, marginBottom: 0 }} />
                     <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
                 </> : <>
-                    <ButtonPrincipal title={`${activeAccount?.status === Status.Ativo ? 'Inativar' : 'Ativar'} conta`} style={{ marginTop: 15, marginBottom: 0 }} onPress={handleToggleStatusAccount} />
                     <ButtonPrincipal title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }} />
                 </>}
 
