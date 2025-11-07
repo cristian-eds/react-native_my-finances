@@ -98,6 +98,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
               items={mapMovementTypesToItemsDropdown()}
               name='movementType'
               multiple={true}
+              zIndex={900}
               zIndexInverse={500}
             />
             <Text style={[styles.inputsTitle, { marginTop: 5 }]}>Ordenação</Text>

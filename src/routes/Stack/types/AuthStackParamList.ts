@@ -1,4 +1,4 @@
-import { User } from "../../domain/userModel";
+import { User } from "../../../domain/userModel";
 
 export type AuthStackParamList = {
   Login: undefined;
