@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { HomeScreen } from "../../screens/Home/HomeScreen";
 import { styles } from "./TabBottomNavigationStyles";
 import { TransactionsScreen } from "../../screens/Transactions/TransactionsScreen";
-import { FinanceScreen } from "../../screens/Finance/FinanceScreen";
+import { FinancesScreen } from "../../screens/Finances/FinancesScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +43,7 @@ export function TabBottomNavigationRoutes() {
       />
       <Tab.Screen
         name="Financas"
-        component={FinanceScreen}
+        component={FinancesScreen}
         options={{title: 'Finanças'}}
       />
     </Tab.Navigator>

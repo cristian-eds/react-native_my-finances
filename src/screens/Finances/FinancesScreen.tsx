@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
-import { styles } from './FinanceScreenStyles';
+import { styles } from './FinancesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { Row } from '../../components/modals/structure/Row/Row';
@@ -10,8 +10,9 @@ import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
+import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 
-export function FinanceScreen() {
+export function FinancesScreen() {
 
     const [textSearch, setTextSearch] = useState("");
     const [showModalFilters, setShowModalFilters] = useState(false);
@@ -56,6 +57,7 @@ export function FinanceScreen() {
                 {renderTypeCaption('Contas À Pagar', 'PAYABLE')}
                 {renderTypeCaption('Contas À Receber', 'RECEIVABLE')}
             </Row>
+            <CircularActionButton />
         </View>
     );
 }
