@@ -1,10 +1,8 @@
 import { Account } from "../../domain/accountModel";
 import { CategoryModel } from "../../domain/categoryModel";
-import { MovementType } from "../../domain/enums/movementTypeEnum";
 import { TransactionItemData } from "../../domain/transactionItemData";
 import { Transaction } from "../../domain/transactionModel";
 import { TransactionRecord } from "../../repository/records/TransactionRecord";
-import { formaterNumberToBRL } from "../NumberFormater";
 
 export function toTransactionModel(record: TransactionRecord): Transaction {
     return {
@@ -16,8 +14,7 @@ export function toTransactionModel(record: TransactionRecord): Transaction {
         value: record.value,
         categoryId: record.category_id,
         duplicateId: record.duplicate_id,
-        destinationAccountId: record.destination_account_id,
-        transactionFatherId: record.transacation_father_id
+        destinationAccountId: record.destination_account_id
     }
 }
 

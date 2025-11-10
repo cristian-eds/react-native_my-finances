@@ -10,7 +10,7 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
     try {
         const result = await database.runAsync(` 
             INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id, transaction_father_id,user_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);
         `, [transaction.description,
         transaction.value,
         formaterToSqlite(transaction.paymentDate),
@@ -19,7 +19,6 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
         transaction.categoryId ?? null,
         transaction.duplicateId ?? null,
         transaction.destinationAccountId ?? null,
-        transaction.transactionFatherId ?? null,
             userId
         ])
 
