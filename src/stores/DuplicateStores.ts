@@ -7,6 +7,7 @@ type Store = {
     duplicates: DuplicateModel[]
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: string, database: SQLiteDatabase) => Promise<boolean>
+    fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -25,4 +26,14 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return false;
         }
     },
+    fetchDuplicates: async (userId, database) => {
+        try {
+            const duplicates = await duplicateService.getAllByUser(userId, database);
+            set({
+                duplicates: duplicates
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }))
