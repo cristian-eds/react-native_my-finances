@@ -44,7 +44,7 @@ const migrations = [
     );
     `,
     `
-        CREATE TABLE IF NOT EXISTS duplicate (
+        CREATE TABLE IF NOT EXISTS duplicates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,   
             issued_date DATETIME NOT NULL,
             due_date DATETIME NOT NULL,
@@ -53,8 +53,10 @@ const migrations = [
             account_id INTEGER NOT NULL,
             category_id INTEGER,
             movement_type TEXT NOT NULL,
+            user_id INTEGER NOT NULL,
         FOREIGN KEY (account_id) REFERENCES account(id) 
         FOREIGN KEY (category_id) REFERENCES category(id)
+        FOREIGN KEY (user_id) REFERENCES users(id)
     );    
     `,
     `
@@ -74,8 +76,7 @@ const migrations = [
             FOREIGN KEY (account_id) REFERENCES account(id),
             FOREIGN KEY (destination_account_id) REFERENCES account(id),
             FOREIGN KEY (category_id) REFERENCES category(id),
-            FOREIGN KEY (duplicate_id) REFERENCES duplicate(id),
-            FOREIGN KEY (transaction_father_id) REFERENCES transactions(id)
+            FOREIGN KEY (duplicate_id) REFERENCES duplicate(id)
     );
     `,
 ];
