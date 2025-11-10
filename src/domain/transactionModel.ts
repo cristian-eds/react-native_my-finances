@@ -9,6 +9,5 @@ export interface Transaction {
     accountId: number,
     categoryId?: number,
     duplicateId?: number
-    destinationAccountId?: number,
-    transactionFatherId?: number
+    destinationAccountId?: number
 }

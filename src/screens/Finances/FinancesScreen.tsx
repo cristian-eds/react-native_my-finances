@@ -40,7 +40,7 @@ export function FinancesScreen() {
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <SearchInput placeholder="Search Transactions" value={textSearch} onChangeText={setTextSearch} />
+            <SearchInput placeholder="Pesquisar..." value={textSearch} onChangeText={setTextSearch} />
             <Row style={{ paddingHorizontal: 5 }}>
                 <TouchableOpacity onPress={() => setShowModalFilters(true)} style={{ alignItems: 'center', gap: 4 }}>
                     <Row>
