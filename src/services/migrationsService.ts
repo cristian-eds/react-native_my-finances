@@ -1,9 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import { CategoryModel } from "../domain/categoryModel";
 import { create } from "../repository/categoryRepository";
 import { iconsOptions } from "../utils/IconOptions";
 import { hexColorOptions } from "../utils/HexColorOptions";
-import { MovementType } from "../domain/enums/movementTypeEnum";
 
 
 export const createInitialCategories = async (userId: number, database: SQLiteDatabase) => {
