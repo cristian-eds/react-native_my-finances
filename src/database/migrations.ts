@@ -50,7 +50,7 @@ const migrations = [
             due_date DATETIME NOT NULL,
             total_value INTEGER NOT NULL,
             description TEXT NOT NULL,
-            account_id INTEGER NOT NULL,
+            account_id INTEGER,
             category_id INTEGER,
             movement_type TEXT NOT NULL,
             user_id INTEGER NOT NULL,

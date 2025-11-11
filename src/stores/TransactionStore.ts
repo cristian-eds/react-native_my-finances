@@ -159,7 +159,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
             })
             return true;
         } catch (error) {
-            console.log("Error deleting transaction", error)
+            console.error("Error deleting transaction", error)
             return false;
         }
     },

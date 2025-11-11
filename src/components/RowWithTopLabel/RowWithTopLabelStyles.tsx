@@ -27,6 +27,6 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         bottom: -6,
         backgroundColor: 'white',
-        zIndex: 1000000
+        zIndex: 2000
     },
 });

@@ -3,8 +3,8 @@ import { DuplicateModel } from '../domain/duplicateModel'
 import * as duplicateRepository from '../repository/duplicateRepository'
 import { fromRecordListToModelList } from '../utils/mappers/duplicateMapper';
 
-export const createDuplicate = async (duplicate: Omit<DuplicateModel, "id">, userId: string, database: SQLiteDatabase) => {
-    return await duplicateRepository.create(duplicate, userId, database);
+export const createDuplicate = async (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => {
+    return await duplicateRepository.create(duplicate, userId.toLocaleString(), database);
 }
 
 export const getAllByUser = async (userId: number, database: SQLiteDatabase) => {

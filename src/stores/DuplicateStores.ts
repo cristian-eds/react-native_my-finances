@@ -6,7 +6,7 @@ import * as duplicateService from '../services/duplicateService'
 type Store = {
     duplicates: DuplicateModel[]
 
-    addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: string, database: SQLiteDatabase) => Promise<boolean>
+    addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
 }
 

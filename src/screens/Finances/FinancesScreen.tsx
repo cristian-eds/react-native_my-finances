@@ -11,11 +11,13 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
+import { ModalFinance } from '../../components/modals/ModalFinance/ModalFinance';
 
 export function FinancesScreen() {
 
     const [textSearch, setTextSearch] = useState("");
     const [showModalFilters, setShowModalFilters] = useState(false);
+    const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE'|'RECEIVABLE'>('PAYABLE');
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
@@ -57,7 +59,8 @@ export function FinancesScreen() {
                 {renderTypeCaption('Contas À Pagar', 'PAYABLE')}
                 {renderTypeCaption('Contas À Receber', 'RECEIVABLE')}
             </Row>
-            <CircularActionButton />
+            <CircularActionButton onPress={() => setShowModalFinance(true)}/>
+            {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} /> }
         </View>
     );
 }

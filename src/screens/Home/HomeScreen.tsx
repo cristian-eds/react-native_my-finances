@@ -94,7 +94,7 @@ export function HomeScreen() {
             </View>
             {transactionsUser.length > 0 && <TransactionsItemList data={filterTransactionActiveMovementType()} />}
             <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
-            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' activeAccount={activeAccount} />}
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} onClose={() => setShowModalTransaction(false)} mode='add' />}
         </View>
     );
 }

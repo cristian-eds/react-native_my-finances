@@ -19,10 +19,10 @@ export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps
     const [open, setOpen] = useState(false);
     const { accounts, activeAccount, setActiveAccount } = useAccountStore();
 
-    const itemsToDropDown = [...mapAccountsToItemsDropdown(accounts), {label: 'Geral', value: 0}]
+    const itemsToDropDown = [...mapAccountsToItemsDropdown(accounts), {label: 'Geral', value: '0'}]
 
     const handleSetNewAccount = (accountId: number) => {
-        if(accountId === 0) {
+        if(accountId == 0) {
             setActiveAccount({
                 status: Status.Ativo,
                 accountNumber: '9999',
@@ -45,11 +45,11 @@ export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps
 
     return (
         <DropDownPicker
-            value={activeAccount?.id as number}
+            value={activeAccount?.id.toLocaleString() ?? ''}
             open={open}
             setOpen={setOpen}
             setValue={(callback) => {
-                const newValue = callback(activeAccount?.id as number);
+                const newValue = callback(activeAccount?.id);
                 handleSetNewAccount(newValue);
             }}
             items={itemsToDropDown}

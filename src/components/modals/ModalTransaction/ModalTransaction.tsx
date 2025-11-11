@@ -36,13 +36,12 @@ interface ModalTransactionProps {
     onClose: () => void;
     mode: 'add' | 'edit',
     transactionData?: Transaction,
-    activeAccount?: Account | null
 }
 
-export function ModalTransaction({ isShow, onClose, mode, transactionData, activeAccount }: ModalTransactionProps) {
+export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
 
-    const { accounts } = useAccountStore();
-    const {user} = useUserContext()
+    const { accounts, activeAccount } = useAccountStore();
+    const { user } = useUserContext()
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -66,7 +65,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
 
     const movementTypeItems = mapMovementTypesToItemsDropdown();
     const accountItems = mapAccountsToItemsDropdown(accounts);
-    const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));  
+    const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));
     const categoriesItems = mapCategoriesToItemsDropdown(categories);
 
     const handleCreateTransaction = async () => {
@@ -86,7 +85,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
         let isSaved = false;
 
         if (mode === 'add') {
-            isSaved = await addTransaction(newTransaction, user?.id as number,database);
+            isSaved = await addTransaction(newTransaction, user?.id as number, database);
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
         }
@@ -119,9 +118,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
             <ModalContainer>
                 <ModalContent>
                     <ModalHeader>
-                        <ButtonBack onPress={handleClose}  />
-                        <Row style={{flex: 4}}>
-                            <Ionicons name="receipt-outline" size={18} color="green" style={{top: -3}} />
+                        <ButtonBack onPress={handleClose} />
+                        <Row style={{ flex: 4 }}>
+                            <Ionicons name="receipt-outline" size={18} color="green" style={{ top: -3 }} />
                             <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
                         </Row>
                         {mode === 'edit' ?
@@ -130,9 +129,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                     </ModalHeader>
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES LANÇAMENTO</Text>
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false}/>
-                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='Valor*: R$ 00,00' required showLabel={false}/>
-                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required showLabel={false}/>
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
+                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='Valor*: R$ 00,00' required showLabel={false} />
+                        <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required showLabel={false} />
                         <Row>
                             <Cell>
                                 <PickerWithTopLabel control={control} name='movementType' errors={errors.movementType} labelText='Tipo Movimento' items={movementTypeItems} zIndex={30000} zIndexInverse={20000} placeholder='Tipo Movimento:' />
@@ -141,14 +140,14 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, activ
                                 <PickerWithTopLabel control={control} name='category' errors={errors.movementType} labelText='Categoria' items={categoriesItems} zIndex={40000} placeholder='Categoria:' />
                             </Cell>
                         </Row>
-                        <Text style={[styles.inputsTitle, {marginTop: 7}]}>CONTAS</Text>
+                        <Text style={[styles.inputsTitle, { marginTop: 7 }]}>CONTAS</Text>
                         <Row>
                             <Cell>
-                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000}  placeholder='Conta origem'/>
+                                <PickerWithTopLabel control={control} name='accountId' errors={errors.accountId} labelText='Conta' items={accountItems} zIndex={20000} zIndexInverse={30000} placeholder='Conta origem' />
                             </Cell>
                             {watch().movementType === MovementType.Transferencia &&
                                 <Cell>
-                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={destinationAccountsItems} zIndex={20000} zIndexInverse={30000} placeholder='Conta Destino'/>
+                                    <PickerWithTopLabel control={control} name='destinationAccountId' errors={errors.destinationAccountId} labelText='Conta Destino' items={destinationAccountsItems} zIndex={20000} zIndexInverse={30000} placeholder='Conta Destino' />
                                 </Cell>}
                         </Row>
 
