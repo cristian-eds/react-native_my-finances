@@ -49,7 +49,7 @@ const migrations = [
             issued_date DATETIME NOT NULL,
             due_date DATETIME NOT NULL,
             total_value INTEGER NOT NULL,
-            description TEXT,
+            description TEXT NOT NULL,
             account_id INTEGER NOT NULL,
             category_id INTEGER,
             movement_type TEXT NOT NULL,
