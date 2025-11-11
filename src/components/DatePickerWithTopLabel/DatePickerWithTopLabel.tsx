@@ -6,7 +6,7 @@ import { styles } from './DatePickerWithTopLabelStyles';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
-import { formaterIsoDateToDefaultPatternWithTime } from '../../utils/DateFormater';
+import { formaterIsoDateToDefaultPattern, formaterIsoDateToDefaultPatternWithTime } from '../../utils/DateFormater';
 
 interface PickerWithTopLabelProps {
     title: string,
@@ -32,9 +32,19 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
         setShowPicker(false);
     }
 
+    const renderValueText = () => {
+        let value = title;
+        if(field.value) {
+            value = mode === 'datetime' ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value)) : formaterIsoDateToDefaultPattern(new Date(field.value));
+        }
+        return (
+            <Text style={styles.inputText}>{value}</Text>
+        )
+    }
+
     return (
         <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors} showLabel={showLabel}>
-            <Text style={styles.inputText}>{field.value ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value)): title}</Text>
+            {renderValueText()}
             <Ionicons name="calendar-outline" size={24} color="black" />
             <DateTimePickerModal
                 isVisible={showPicker}
