@@ -34,7 +34,7 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
 
     return (
         <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors} showLabel={showLabel}>
-            <Text style={styles.inputText}>{formaterIsoDateToDefaultPatternWithTime(new Date(field.value))}</Text>
+            <Text style={styles.inputText}>{field.value ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value)): title}</Text>
             <Ionicons name="calendar-outline" size={24} color="black" />
             <DateTimePickerModal
                 isVisible={showPicker}
