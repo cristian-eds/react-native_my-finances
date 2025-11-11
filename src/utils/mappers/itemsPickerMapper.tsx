@@ -24,7 +24,7 @@ export const mapCategoriesToItemsDropdown = (categories: CategoryModel[]): ItemD
 }
 
 export const mapAccountsToItemsDropdown = (accounts: Account[]): ItemDropdown[] => {
-    return accounts.map(acc => { return { label: acc.name, value: acc.id } });
+    return accounts.map(acc => { return { label: acc.name, value: acc.id.toLocaleString() } });
 }
 
 export const mapMovementTypesToItemsDropdown = () => Object.keys(MovementType).map((text) => { return { label: text, value: MovementType[text as keyof typeof MovementType] } })
