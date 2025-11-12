@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './FinancesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -7,11 +7,16 @@ import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { Row } from '../../components/modals/structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { ModalFinance } from '../../components/modals/ModalFinance/ModalFinance';
+import { useDuplicateStore } from '../../stores/DuplicateStores';
+import { useUserContext } from '../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
+import { DuplicateModel } from '../../domain/duplicateModel';
+import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
 
 export function FinancesScreen() {
 
@@ -20,7 +25,22 @@ export function FinancesScreen() {
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE'|'RECEIVABLE'>('PAYABLE');
 
+    const {duplicates, fetchDuplicates} = useDuplicateStore();
+    const {user} = useUserContext();
+    const database = useSQLiteContext();
+
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
+
+    console.log(duplicates);
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetch = () => {
+                fetchDuplicates(user?.id as number, database)
+            }
+            fetch();
+        },[])
+    )
 
     const renderCleanFilters = () => {
         return (
@@ -37,6 +57,17 @@ export function FinancesScreen() {
             <TouchableOpacity onPress={() => setTypeFinances(type)} style={[styles.captionItem, isActive ? styles.captionItemActive : '']}>
                 <Text style={[styles.captionItemText, isActive ? styles.captionItemTextActive : '']}>{text}</Text>
             </TouchableOpacity>
+        )
+    }
+
+    const renderItems = () => {
+        return (
+            <FlatList<DuplicateModel>
+                data={duplicates}
+                renderItem={({item})  => <FinanceItemList item={item} />}
+                keyExtractor={(item) => item.id?.toLocaleString()}
+                contentContainerStyle={{ paddingBottom: 80 }}
+            />
         )
     }
 
@@ -59,6 +90,8 @@ export function FinancesScreen() {
                 {renderTypeCaption('Contas À Pagar', 'PAYABLE')}
                 {renderTypeCaption('Contas À Receber', 'RECEIVABLE')}
             </Row>
+            {renderItems()}
+        
             <CircularActionButton onPress={() => setShowModalFinance(true)}/>
             {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} /> }
         </View>

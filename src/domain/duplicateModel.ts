@@ -1,7 +1,7 @@
 import { MovementType } from "./enums/movementTypeEnum"
 
 export interface DuplicateModel {
-    id?: number,
+    id: number,
     description: string,
     totalValue: number,
     issueDate: Date,
