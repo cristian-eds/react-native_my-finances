@@ -31,8 +31,6 @@ export function FinancesScreen() {
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    console.log(duplicates);
-
     useFocusEffect(
         useCallback(() => {
             const fetch = () => {

@@ -28,3 +28,9 @@ export async function deleteById(idTransaction: number, database: SQLiteDatabase
 export async function deleteByFatherId(idTransaction: number, database: SQLiteDatabase): Promise<boolean>  {
     return await transactionRepository.deleteByFatherId(idTransaction, database);
 }
+
+export async function findTransactionsByDuplicateId(duplicateId: string, database: SQLiteDatabase): Promise<Transaction[] | undefined> {
+    const transactionsRecords = await transactionRepository.findTransactionsByDuplicateId(duplicateId, database);
+    if(!transactionsRecords) return []; 
+    return toTransactionModelList(transactionsRecords);
+}

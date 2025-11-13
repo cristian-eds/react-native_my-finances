@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -8,6 +8,9 @@ import { DuplicateModel } from '../../domain/duplicateModel';
 import { Row } from '../modals/structure/Row/Row';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
+import { findTransactionsByDuplicateId } from '../../services/transactionService'
+import { useSQLiteContext } from 'expo-sqlite';
+import { Transaction } from '../../domain/transactionModel';
 
 interface FinanceItemList {
     item: DuplicateModel
@@ -15,11 +18,29 @@ interface FinanceItemList {
 
 export function FinanceItemList({ item }: FinanceItemList) {
 
-    const renderStatus = () => (
+    const datababase = useSQLiteContext();
+    const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
+
+    useEffect(() => {
+        const fetchPayments = async () => {
+            const transactions = await findTransactionsByDuplicateId(item.id.toLocaleString(),datababase);
+            setTransactionsPayments(transactions);
+        }
+
+        fetchPayments();
+    },[item])
+
+    console.log(transactionsPayments);
+
+    const generateStatus = () => {
+        
+    }
+
+    const renderStatus = () => {
         <View style={styles.status}>
             <Text style={styles.statusText}>ABERTO</Text>
         </View>
-    )
+    }
 
     const renderDueDate = () => (
         <Row>

@@ -7,7 +7,7 @@ import { Status } from "../domain/enums/statusEnum";
 export async function findAccountByUser(userId: string, database: SQLiteDatabase): Promise<AccountRecord[] | undefined> {
 
     const statement = await database.prepareAsync(` 
-            SELECT * FROM account 
+            SELECT * FROM accounts 
             WHERE user_id = $userId;
         `);
 
@@ -29,7 +29,7 @@ export async function create(account: Omit<Account, "id">, userId: string, datab
     try {
         const res = await database.runAsync(
             ` 
-            INSERT INTO account (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id, creation_date)
+            INSERT INTO accounts (name, balance, bank_code, type, account_number, agency, holder_name, status, user_id, creation_date)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `,[account.name,account.balance,account.bankCode,account.type,account.accountNumber, account.agency, account.holderName, account.status, userId, new Date().toISOString()]
         )
@@ -43,7 +43,7 @@ export async function create(account: Omit<Account, "id">, userId: string, datab
 export async function update(account: UpdateAccountModel, database: SQLiteDatabase): Promise<boolean> {
     try {
         const response = await database.runAsync(` 
-            UPDATE account  
+            UPDATE accounts  
             SET name = ?, 
                 bank_code = ?,  
                 type = ?,
@@ -64,7 +64,7 @@ export async function toggleStatusAccount(accountId: number, newStatus: Status,d
     try {
         const currentStatus = await getAccountStatus(accountId, database);
         const res = await database.runAsync(` 
-            UPDATE account  
+            UPDATE accounts  
             SET status = ?
             WHERE id = ?;
         `, [newStatus, accountId.toLocaleString()]);
@@ -78,7 +78,7 @@ export async function toggleStatusAccount(accountId: number, newStatus: Status,d
 
 async function getAccountStatus(accountId: number, database: SQLiteDatabase): Promise<string | undefined> {
     const statement = await database.prepareAsync(` 
-            SELECT status FROM account 
+            SELECT status FROM accounts 
             WHERE id = $id;
         `);
 
@@ -101,7 +101,7 @@ async function getAccountStatus(accountId: number, database: SQLiteDatabase): Pr
 export async function deleteAccount(accountId: number, database: SQLiteDatabase): Promise<boolean> {
     try {
         const response = await database.runAsync(` 
-            DELETE FROM account  
+            DELETE FROM accounts  
             WHERE id = ?;
         `, [accountId.toLocaleString()]);
 
@@ -115,7 +115,7 @@ export async function deleteAccount(accountId: number, database: SQLiteDatabase)
 export async function updateAccountBalance(accountId: number, newBalance: number, database: SQLiteDatabase): Promise<boolean> {
     try {
         const result = await database.runAsync(`
-                UPDATE account 
+                UPDATE accounts 
                 SET  balance = ?
                 WHERE id = ?
                 `, [newBalance, accountId]);

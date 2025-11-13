@@ -28,12 +28,12 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
     }
 }
 
-export async function getAllByUser(userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel,database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+export async function getAllByUser(userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
 
     const buildInClause = (column: string, values: (string | number)[], paramPrefix: string) => {
         if (values.length === 0) return { clause: '', params: {} };
         const placeholders = values.map((_, index) => `$${paramPrefix}${index}`).join(", ");
-        const params =  values.map((value, index) => ({ [`$${paramPrefix}${index}`]: value }));
+        const params = values.map((value, index) => ({ [`$${paramPrefix}${index}`]: value }));
         return { clause: ` AND ${column} IN (${placeholders}) `, params: Object.assign({}, ...params) };
     }
 
@@ -50,9 +50,9 @@ export async function getAllByUser(userId: string, filters: TransactionFiltersMo
     const { clause: accountClause, params: accountParams } = buildInClause('account_id', filters.accounts || [], 'accountId');
 
     sql += movementTypeClause + categoryClause;
-    
-    if(filters.accounts?.find(acc => acc === 0) !== 0) sql += accountClause;
-    
+
+    if (filters.accounts?.find(acc => acc === 0) !== 0) sql += accountClause;
+
     sql += ` ORDER BY DATETIME(${ordenation.orderColumn}) ${ordenation.orderType}; `;
 
     const statement = await database.prepareAsync(sql);
@@ -143,6 +143,26 @@ export async function deleteByFatherId(idTransaction: number, database: SQLiteDa
         console.error("Erro ao deletar transação", error);
         return false;
     }
+}
+
+export async function findTransactionsByDuplicateId(duplicateId: string, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+    const statement = await database.prepareAsync(`
+            SELECT * FROM transactions 
+            JOIN duplicates ON duplicates.id = transactions.duplicate_id
+            WHERE transactions.duplicate_id = $duplicateId
+        `);
+
+    try {
+        const params = { $duplicateId: duplicateId }
+        const result = await statement.executeAsync<TransactionRecord>(params);
+        const transactions = await result.getAllAsync();
+        return transactions;
+    } catch (error) {
+        console.error("Erro ao deletar transação", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
+
 }
 
 
