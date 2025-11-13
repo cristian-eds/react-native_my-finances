@@ -84,7 +84,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 <Text>Duplicata 1/1</Text>
                 {renderPayButton()}
             </Row>
-            {showModalFinance && <ModalFinance  isShow={showModalFinance} mode='edit' onClose={()=> setShowModalFinance(false)} duplicateData={item}/>}
+            {showModalFinance && <ModalFinance payments={transactionsPayments} isShow={showModalFinance} mode='edit' onClose={()=> setShowModalFinance(false)} duplicateData={item}/>}
         </TouchableOpacity>
     );
 }

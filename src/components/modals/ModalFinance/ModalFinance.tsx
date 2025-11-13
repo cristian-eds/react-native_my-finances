@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Modal, Text, View } from 'react-native';
+import { Alert, FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -28,19 +28,24 @@ import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
+import { Transaction } from '../../../domain/transactionModel';
+import { TransactionsItemList } from '../../TransactionsItemList/TransactionsItemList';
+import { TransactionItem } from '../../TransactionItem/TransactionItem';
+import { ButtonPlus } from '../../buttons/ButtonPlus/ButtonPlus';
 
 interface ModalFinanceProps {
     isShow: boolean,
     mode: 'edit' | 'add',
     duplicateData?: DuplicateModel,
+    payments?: Transaction[],
     onClose: () => void
 }
 
-export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFinanceProps) {
+export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }: ModalFinanceProps) {
 
     const { categories } = useCategoryStore();
     const { accounts } = useAccountStore();
-    const { addDuplicate,updateDuplicate } = useDuplicateStore();
+    const { addDuplicate, updateDuplicate } = useDuplicateStore();
     const { user } = useUserContext();
 
     const database = useSQLiteContext();
@@ -91,6 +96,19 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
         onClose();
     }
 
+    const renderPayments = () => {
+        if (payments?.length == 0) return;
+        return (
+            <FlatList<Transaction>
+                data={payments}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => <TransactionItem item={item} />}
+                contentContainerStyle={{ paddingBottom: 80 }}
+            />
+        )
+
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -124,6 +142,11 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                         </Row>
                         <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} />
                         <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento*:' required showLabel={false} />
+                        <Row style={{marginTop: 5}}>
+                            <Text style={styles.inputsTitle}>Pagamentos</Text>
+                            <ButtonPlus />
+                        </Row>
+                        {renderPayments()}
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
