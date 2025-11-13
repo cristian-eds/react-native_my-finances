@@ -11,6 +11,7 @@ import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { findTransactionsByDuplicateId } from '../../services/transactionService'
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../domain/transactionModel';
+import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
 
 interface FinanceItemList {
     item: DuplicateModel
@@ -20,6 +21,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
 
     const datababase = useSQLiteContext();
     const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
+    const [showModalFinance, setShowModalFinance] = useState(false);
 
     useEffect(() => {
         const fetchPayments = async () => {
@@ -30,16 +32,8 @@ export function FinanceItemList({ item }: FinanceItemList) {
         fetchPayments();
     }, [item])
 
-    console.log(transactionsPayments);
 
-    const generateStatus = () => {
-        let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
-        if (transactionsPayments && transactionsPayments.reduce((prev, current) => prev += current.value, 0) >= item.totalValue) {
-            status = { text: 'Pago', bgcolor: '#79bc74ff' }
-        }
-        
-        return status;
-    }
+
 
     const renderStatus = () => {
         const { text, bgcolor } = generateStatus();
@@ -48,6 +42,15 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 <Text style={styles.statusText}>{text}</Text>
             </View>
         )
+    }
+
+    const generateStatus = () => {
+        let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
+        if (transactionsPayments && transactionsPayments.reduce((prev, current) => prev += current.value, 0) >= item.totalValue) {
+            status = { text: 'Pago', bgcolor: '#79bc74ff' }
+        }
+
+        return status;
     }
 
     const renderDueDate = () => (
@@ -61,14 +64,14 @@ export function FinanceItemList({ item }: FinanceItemList) {
     )
 
     const renderPayButton = () => (
-        <View style={styles.payButton}>
+        <TouchableOpacity style={styles.payButton}>
             <Text style={styles.payButtonText}>PAGAR</Text>
-        </View>
+        </TouchableOpacity>
     )
 
 
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => setShowModalFinance(true)}>
             <Row>
                 <Text style={{ fontSize: 20 }}>{item.description}</Text>
                 {renderStatus()}
@@ -81,6 +84,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 <Text>Duplicata 1/1</Text>
                 {renderPayButton()}
             </Row>
+            {showModalFinance && <ModalFinance  isShow={showModalFinance} mode='edit' onClose={()=> setShowModalFinance(false)} duplicateData={item}/>}
         </TouchableOpacity>
     );
 }

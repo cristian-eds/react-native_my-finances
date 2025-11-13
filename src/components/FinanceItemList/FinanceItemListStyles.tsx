@@ -23,7 +23,8 @@ export const styles = StyleSheet.create({
         backgroundColor: '#a6c2e6d8',
         width: 120,
         paddingVertical: 8,
-        borderRadius: 20
+        borderRadius: 20,
+        elevation: 2
     },
     payButtonText: {
         textAlign: 'center',

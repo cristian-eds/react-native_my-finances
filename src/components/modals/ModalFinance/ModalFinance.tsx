@@ -48,13 +48,13 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     const { control, formState: { errors }, handleSubmit, watch, reset } = useForm({
         resolver: zodResolver(financeSchemas),
         defaultValues: {
-            accountId: duplicateData?.accountId.toLocaleString() ?? undefined,
+            accountId: duplicateData?.accountId?.toLocaleString() ?? undefined,
             categoryId: duplicateData?.categoryId?.toLocaleString() ?? undefined,
             description: duplicateData?.description ?? undefined,
             dueDate: duplicateData?.dueDate ?? undefined,
             issueDate: duplicateData?.issueDate ?? new Date(),
             movementType: duplicateData?.movementType ?? MovementType.Despesa,
-            totalValue: duplicateData?.totalValue ?? undefined
+            totalValue: duplicateData?.totalValue.toLocaleString()
         }
     });
 
@@ -69,14 +69,17 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             issueDate: new Date(formValues.issueDate as Date),
             movementType: formValues.movementType,
             totalValue: Number(formValues.totalValue),
-            id: duplicateData?.id
+            id: duplicateData?.id as number
         }
 
         let isSaved;
 
         if (mode === 'add') {
             isSaved = await addDuplicate(newDuplicate, user?.id as number, database)
+        } else if (mode === 'edit') {
+            console.log(newDuplicate)
         }
+
 
         if (isSaved) {
             Alert.alert("Finança salva com sucesso!");
@@ -110,7 +113,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                     </ModalHeader>
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES FINANÇA</Text>
-                        <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='datetime' title='Data pagamento' required showLabel={false} />
+                        <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required showLabel={false} />
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
                         <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required showLabel={false} />
                         <Row>
@@ -118,10 +121,10 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                                 <PickerWithTopLabel control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
                             </Cell>
                             <Cell>
-                                <PickerWithTopLabel control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria...' zIndex={10000} required />
+                                <PickerWithTopLabel control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
                             </Cell>
                         </Row>
-                        <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta...' zIndexInverse={1000} />
+                        <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} />
                         <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento*:' required showLabel={false} />
                     </View>
                     <ModalFooter>
