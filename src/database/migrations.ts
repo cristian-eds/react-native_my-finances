@@ -16,7 +16,7 @@ const migrations = [
     );
     `,
     `
-        CREATE TABLE IF NOT EXISTS account (
+        CREATE TABLE IF NOT EXISTS accounts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             balance REAL NOT NULL,
@@ -54,8 +54,8 @@ const migrations = [
             category_id INTEGER,
             movement_type TEXT NOT NULL,
             user_id INTEGER NOT NULL,
-        FOREIGN KEY (account_id) REFERENCES account(id) 
-        FOREIGN KEY (category_id) REFERENCES category(id)
+        FOREIGN KEY (account_id) REFERENCES accounts(id) 
+        FOREIGN KEY (category_id) REFERENCES categories(id)
         FOREIGN KEY (user_id) REFERENCES users(id)
     );    
     `,
@@ -73,10 +73,10 @@ const migrations = [
             transaction_father_id INTEGER,
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
-            FOREIGN KEY (account_id) REFERENCES account(id),
-            FOREIGN KEY (destination_account_id) REFERENCES account(id),
-            FOREIGN KEY (category_id) REFERENCES category(id),
-            FOREIGN KEY (duplicate_id) REFERENCES duplicate(id)
+            FOREIGN KEY (account_id) REFERENCES accounts(id),
+            FOREIGN KEY (destination_account_id) REFERENCES accounts(id),
+            FOREIGN KEY (category_id) REFERENCES categories(id),
+            FOREIGN KEY (duplicate_id) REFERENCES duplicates(id)
     );
     `,
 ];
