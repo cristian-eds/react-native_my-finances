@@ -7,7 +7,7 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
 
     try {
         const result = await database.runAsync(` 
-            INSERT INTO duplicates (description, issued_date, due_date, total_value, movement_type, account_id, category_id, user_id)
+            INSERT INTO duplicates (description, issue_date, due_date, total_value, movement_type, account_id, category_id, user_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `,
             [
@@ -44,4 +44,35 @@ export async function getAllByUser(userId: string, database: SQLiteDatabase): Pr
         await statement.finalizeAsync();
     }
 
+}
+
+export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+                UPDATE duplicates
+                SET 
+                    description = ?,
+                    issue_date = ?,
+                    due_date = ?,
+                    total_value = ?,
+                    movement_type = ?,
+                    account_id = ?,
+                    category_id = ?
+                WHERE 
+                    id = ?
+            `,[
+                duplicate.description,
+                formaterToSqlite(duplicate.issueDate),
+                formaterToSqlite(duplicate.dueDate),
+                duplicate.totalValue,
+                duplicate.movementType,
+                duplicate.accountId,
+                duplicate.categoryId ?? '',
+                duplicate.id
+            ])
+            return res.changes > 0;
+    } catch (error) {
+        console.error(error)
+        return false;
+    }
 }

@@ -8,6 +8,7 @@ type Store = {
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
+    updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -15,9 +16,9 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     addDuplicate: async (duplicate, userId, database) => {
         try {
             const idInserted = await duplicateService.createDuplicate(duplicate, userId, database);
-            if(!idInserted) return false;
+            if (!idInserted) return false;
             set({
-                duplicates: [...get().duplicates, {...duplicate, id: idInserted} ]
+                duplicates: [...get().duplicates, { ...duplicate, id: idInserted }]
             })
 
             return true;
@@ -34,6 +35,22 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             })
         } catch (error) {
             console.error(error);
+        }
+    },
+    updateDuplicate: async (duplicate, database) => {
+        try {
+            const isUpdated = await duplicateService.updateDuplicate(duplicate, database);
+            if (isUpdated) {
+                set({
+                    duplicates: [...get().duplicates.map((current) => current.id === duplicate.id ? duplicate : current)]
+                })
+            }
+
+            return isUpdated;
+
+        } catch (error) {
+            console.error("Error updating duplicate",error)
+            return false;
         }
     }
 }))

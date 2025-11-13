@@ -12,3 +12,7 @@ export const getAllByUser = async (userId: number, database: SQLiteDatabase) => 
     if(!duplicates) return [];
     return fromRecordListToModelList(duplicates);
 }
+
+export const updateDuplicate = async (duplicate: DuplicateModel, database: SQLiteDatabase) => {
+    return await duplicateRepository.udpate(duplicate, database);
+}

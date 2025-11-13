@@ -40,7 +40,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
 
     const { categories } = useCategoryStore();
     const { accounts } = useAccountStore();
-    const { addDuplicate } = useDuplicateStore();
+    const { addDuplicate,updateDuplicate } = useDuplicateStore();
     const { user } = useUserContext();
 
     const database = useSQLiteContext();
@@ -77,15 +77,13 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
         if (mode === 'add') {
             isSaved = await addDuplicate(newDuplicate, user?.id as number, database)
         } else if (mode === 'edit') {
-            console.log(newDuplicate)
+            isSaved = await updateDuplicate(newDuplicate, database);
         }
-
 
         if (isSaved) {
             Alert.alert("Finança salva com sucesso!");
             handleClose();
         }
-
     }
 
     const handleClose = () => {

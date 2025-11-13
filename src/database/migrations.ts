@@ -46,7 +46,7 @@ const migrations = [
     `
         CREATE TABLE IF NOT EXISTS duplicates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,   
-            issued_date DATETIME NOT NULL,
+            issue_date DATETIME NOT NULL,
             due_date DATETIME NOT NULL,
             total_value INTEGER NOT NULL,
             description TEXT NOT NULL,
