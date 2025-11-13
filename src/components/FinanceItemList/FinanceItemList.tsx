@@ -23,23 +23,31 @@ export function FinanceItemList({ item }: FinanceItemList) {
 
     useEffect(() => {
         const fetchPayments = async () => {
-            const transactions = await findTransactionsByDuplicateId(item.id.toLocaleString(),datababase);
+            const transactions = await findTransactionsByDuplicateId(item.id.toLocaleString(), datababase);
             setTransactionsPayments(transactions);
         }
 
         fetchPayments();
-    },[item])
+    }, [item])
 
     console.log(transactionsPayments);
 
     const generateStatus = () => {
+        let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
+        if (transactionsPayments && transactionsPayments.reduce((prev, current) => prev += current.value, 0) >= item.totalValue) {
+            status = { text: 'Pago', bgcolor: '#79bc74ff' }
+        }
         
+        return status;
     }
 
     const renderStatus = () => {
-        <View style={styles.status}>
-            <Text style={styles.statusText}>ABERTO</Text>
-        </View>
+        const { text, bgcolor } = generateStatus();
+        return (
+            <View style={[styles.status, { backgroundColor: bgcolor }]}>
+                <Text style={styles.statusText}>{text}</Text>
+            </View>
+        )
     }
 
     const renderDueDate = () => (
