@@ -186,11 +186,17 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
                         </>: 
                         <>
-                            <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10}}/>
+                            {renderButtonPlus()}
                         </>
                 }
             </ModalFooter>
         )
+    }
+
+    const renderButtonPlus = () => {
+        if(!payments || !duplicateData ) return null;
+        if(payments.reduce((prev,current) => prev += current.value, 0) >= duplicateData.totalValue) return null;
+        return <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10}}/>
     }
 
     return (
