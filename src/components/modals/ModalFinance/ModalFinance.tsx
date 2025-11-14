@@ -93,6 +93,20 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
         }
     }
 
+    const dataToPayment = (): Transaction => {
+        const data = watch();
+        return {
+            id: 0,
+            accountId: Number(data.accountId) ?? 0,
+            description: `Pagamento: ${data.description}`,
+            movementType: data.movementType,
+            paymentDate: new Date(),
+            value: Number(data.totalValue),
+            categoryId: Number(data.categoryId) ?? null,
+            duplicateId: duplicateData?.id,
+        }
+    }
+
     const handleClose = () => {
         reset();
         onClose();
@@ -172,7 +186,7 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
                         </>: 
                         <>
-                            <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#8da5feff', borderRadius: 10}}/>
+                            <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10}}/>
                         </>
                 }
             </ModalFooter>
@@ -204,7 +218,7 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                    {renderFooter()}
                 </ModalContent>
             </ModalContainer>
-            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)}/>}
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
         </Modal>
     );
 }

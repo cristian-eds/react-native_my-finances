@@ -19,7 +19,6 @@ import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimpl
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
-import { Account } from '../../../domain/accountModel';
 import { Row } from '../structure/Row/Row';
 import { Cell } from '../structure/Cell/Cell';
 import { useUserContext } from '../../../hooks/useUserContext';
@@ -34,14 +33,14 @@ import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTy
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
-    mode: 'add' | 'edit',
-    transactionData?: Transaction,
+    mode: 'add' | 'edit' | 'payment',
+    transactionData?: Transaction
 }
 
 export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
 
     const { accounts, activeAccount } = useAccountStore();
-    const { user } = useUserContext()
+    const { user } = useUserContext();
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -79,16 +78,17 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             paymentDate: new Date(formValues.paymentDate as Date),
             id: transactionData?.id as number,
             categoryId: Number(formValues.category) ?? undefined,
-            destinationAccountId: Number(formValues.destinationAccountId)
+            destinationAccountId: Number(formValues.destinationAccountId),
+            duplicateId: transactionData?.duplicateId
         }
 
         let isSaved = false;
 
-        if (mode === 'add') {
+        if (mode === 'add' || mode === 'payment') {
             isSaved = await addTransaction(newTransaction, user?.id as number, database);
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
-        }
+        } 
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
@@ -109,6 +109,12 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
         onClose();
     }
 
+    const renderTitle = () => {
+        if(mode === 'edit') return 'Editar lançamento';
+        if(mode === 'payment') return 'Novo pagamento';
+        return 'Novo lançamento'
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -121,7 +127,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
                         <ButtonBack onPress={handleClose} />
                         <Row style={{ flex: 4 }}>
                             <Ionicons name="receipt-outline" size={18} color="green" style={{ top: -3 }} />
-                            <Text style={styles.title}>{mode === 'add' ? 'Novo Lançamento' : 'Editar Lançamento'}</Text>
+                            <Text style={styles.title}>{renderTitle()}</Text>
                         </Row>
                         {mode === 'edit' ?
                             <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalConfirmDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
