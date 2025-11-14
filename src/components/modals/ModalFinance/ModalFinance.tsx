@@ -95,13 +95,14 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
 
     const dataToPayment = (): Transaction => {
         const data = watch();
+        const remainingValue = payments && payments?.length > 0 ? payments.reduce((prev,current) => prev += current.value,0) : Number(data.totalValue);
         return {
             id: 0,
             accountId: Number(data.accountId) ?? 0,
             description: `Pagamento: ${data.description}`,
             movementType: data.movementType,
             paymentDate: new Date(),
-            value: Number(data.totalValue),
+            value: remainingValue,
             categoryId: Number(data.categoryId) ?? null,
             duplicateId: duplicateData?.id,
         }
