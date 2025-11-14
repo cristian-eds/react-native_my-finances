@@ -46,8 +46,11 @@ export function FinanceItemList({ item }: FinanceItemList) {
 
     const generateStatus = () => {
         let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
+
         if (transactionsPayments && transactionsPayments.reduce((prev, current) => prev += current.value, 0) >= item.totalValue) {
             status = { text: 'Pago', bgcolor: '#79bc74ff' }
+        } else if(new Date() > new Date(item.dueDate)) {
+            status = { text: 'Vencido', bgcolor: '#f19393ff' }
         }
 
         return status;
