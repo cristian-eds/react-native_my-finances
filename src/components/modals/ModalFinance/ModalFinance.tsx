@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -29,9 +29,9 @@ import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../domain/transactionModel';
-import { TransactionsItemList } from '../../TransactionsItemList/TransactionsItemList';
 import { TransactionItem } from '../../TransactionItem/TransactionItem';
 import { ButtonPlus } from '../../buttons/ButtonPlus/ButtonPlus';
+import { ModalTransaction } from '../ModalTransaction/ModalTransaction';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -47,6 +47,8 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
     const { accounts } = useAccountStore();
     const { addDuplicate, updateDuplicate } = useDuplicateStore();
     const { user } = useUserContext();
+    const [tabActive, setTabActive] = useState<'INFO' | 'PAYMENTS'>('INFO');
+    const [showModalTransaction, setShowModalTransaction] = useState(false);
 
     const database = useSQLiteContext();
 
@@ -96,17 +98,85 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
         onClose();
     }
 
-    const renderPayments = () => {
-        if (payments?.length == 0) return;
-        return (
-            <FlatList<Transaction>
-                data={payments}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <TransactionItem item={item} />}
-                contentContainerStyle={{ paddingBottom: 80 }}
-            />
-        )
 
+    const renderTabsHeader = () => {
+        return (
+            <Row style={{ marginBottom: 7 }}>
+                {renderTab('INFO', 'information-circle-outline', 'INFORMAÇÕES')}
+                {payments && <>
+                    <Text style={{ fontWeight: '800' }}>/</Text>
+                    {renderTab('PAYMENTS', 'calendar-outline', 'PAGAMENTOS')}
+                </>}
+            </Row>
+        )
+    }
+
+    const renderTab = (tabName: 'PAYMENTS' | 'INFO', iconName: keyof typeof Ionicons.glyphMap, title: string) => {
+        const isActive = tabActive === tabName;
+        return (
+            <TouchableOpacity onPress={() => setTabActive(tabName)} style={isActive && styles.tabContainerActive}>
+                <View style={[styles.tabContainer, { justifyContent: 'flex-end' }]}>
+                    <Ionicons name={iconName} size={15} color={isActive ? 'black' : 'gray'} style={{ top: 1 }} />
+                    <Text style={[styles.tabTitle, isActive && styles.tabActive, { textAlign: 'center' }]}>{title}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    const renderInfos = () => {
+        return (
+            <>
+                <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required showLabel={false} />
+                <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
+                <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required showLabel={false} />
+                <Row>
+                    <Cell>
+                        <PickerWithTopLabel control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
+                    </Cell>
+                    <Cell>
+                        <PickerWithTopLabel control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
+                    </Cell>
+                </Row>
+                <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} />
+                <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento*:' required showLabel={false} />
+
+            </>
+        )
+    }
+
+    const renderPayments = () => {
+        return (
+            <View>
+                {payments && payments.length > 0 ?
+                    <FlatList<Transaction>
+                        data={payments}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => <TransactionItem item={item} />}
+                        contentContainerStyle={{ paddingBottom: 80 }}
+                    /> :
+                    <View style={{ paddingTop: 20, paddingBottom: 15 }}>
+                        <Text style={styles.textNoTransactions}>Nenhum pagamento registrado ainda.</Text>
+                        <Text style={styles.textNoTransactions}>Adicione o primeiro:</Text>
+                    </View>
+                }
+            </View>
+        )
+    }
+
+    const renderFooter = () => {
+        return (
+            <ModalFooter>
+                {tabActive === 'INFO' ?
+                    <>
+                        <ButtonIconAction iconName='close' onPress={onClose} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
+                        </>: 
+                        <>
+                            <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#8da5feff', borderRadius: 10}}/>
+                        </>
+                }
+            </ModalFooter>
+        )
     }
 
     return (
@@ -128,32 +198,13 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                             <Spacer />}
                     </ModalHeader>
                     <View style={{ rowGap: 10 }}>
-                        <Text style={styles.inputsTitle}>INFORMAÇÕES FINANÇA</Text>
-                        <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required showLabel={false} />
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
-                        <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required showLabel={false} />
-                        <Row>
-                            <Cell>
-                                <PickerWithTopLabel control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
-                            </Cell>
-                            <Cell>
-                                <PickerWithTopLabel control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
-                            </Cell>
-                        </Row>
-                        <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} />
-                        <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento*:' required showLabel={false} />
-                        <Row style={{marginTop: 5}}>
-                            <Text style={styles.inputsTitle}>Pagamentos</Text>
-                            <ButtonPlus />
-                        </Row>
-                        {renderPayments()}
+                        {renderTabsHeader()}
+                        {tabActive === 'INFO' ? renderInfos() : renderPayments()}
                     </View>
-                    <ModalFooter>
-                        <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
-                    </ModalFooter>
+                   {renderFooter()}
                 </ModalContent>
             </ModalContainer>
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)}/>}
         </Modal>
     );
 }

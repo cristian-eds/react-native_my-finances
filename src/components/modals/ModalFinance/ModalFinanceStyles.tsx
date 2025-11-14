@@ -10,6 +10,32 @@ export const styles = StyleSheet.create({
   inputsTitle: {
     fontSize: 13,
     fontWeight: "600",
-    paddingLeft: 5,
+    color: '#000'
   },
+  tabContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+    paddingBottom: 8,
+    paddingHorizontal: 5,
+  },
+  tabContainerActive: {
+    borderBottomColor: '#070031ff',
+    borderBottomWidth: 1
+  },
+  tabTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    paddingLeft: 5,
+    color: '#727272d3'
+  },
+  tabActive: {
+    fontWeight: '800',
+    color: '#000'
+  },
+  textNoTransactions: {
+    fontSize: 13,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    color: '#272727ff'
+  }
 });
