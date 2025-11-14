@@ -50,7 +50,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
-            accountId: transactionData?.accountId.toString() ?? activeAccount?.id.toString(),
+            accountId: mode === 'add' ? activeAccount?.id.toString() : transactionData?.accountId?.toString(),
             destinationAccountId: transactionData?.destinationAccountId?.toString() ?? ''
         }
     });
