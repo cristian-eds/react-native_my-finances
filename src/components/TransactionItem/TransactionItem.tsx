@@ -8,17 +8,17 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TransactionItemData } from '../../domain/transactionItemData';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
-import { useTransactionStore } from '../../stores/TransactionStore';
 import { TouchableOpacity } from 'react-native';
-import { useCategoryStore } from '../../stores/CategoryStore';
 import { useAccountStore } from '../../stores/AccountStore';
 import { Row } from '../modals/structure/Row/Row';
 import { Cell } from '../modals/structure/Cell/Cell';
 import { formaterIsoDateToDefaultPatternWithTime } from '../../utils/DateFormater';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
+import { Transaction } from '../../domain/transactionModel';
+import { useCategoryStore } from '../../stores/CategoryStore';
 
 interface TransactionItemProps {
-    item: TransactionItemData
+    item: Transaction
 }
 
 interface IconConfig {
@@ -37,6 +37,10 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const { activeAccount, accounts } = useAccountStore();
+    const { categories } = useCategoryStore();
+
+    const account = accounts.find(acc => acc.id === item.accountId);
+    const category = categories.find(cat => cat.id === item.categoryId)
 
 
     const ICON_MAP: IconMapStructure = {
@@ -92,8 +96,8 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
-            <View style={[styles.iconBox, { backgroundColor: item.categoryHexColor ?? '#000' }]}>
-                <Ionicons name={item.categoryIconName ?? 'cart-outline'} size={18} color="white" />
+            <View style={[styles.iconBox, { backgroundColor: category?.hexColor ?? '#000' }]}>
+                <Ionicons name={category?.iconName ?? 'cart-outline'} size={18} color="white" />
             </View>
             <Cell>
                 <Row>
@@ -101,7 +105,7 @@ export function TransactionItem({ item }: TransactionItemProps) {
                     <Text style={styles.central_info_data}>{formaterIsoDateToDefaultPatternWithTime(item.paymentDate)}</Text>
                 </Row>
                 <Row>
-                    <Text>{item.accountName}</Text>
+                    <Text>{account?.name}</Text>
                     {renderValueInfo()}
                 </Row>
             </Cell>

@@ -64,14 +64,8 @@ export function HomeScreen() {
     }
 
     const filterTransactionActiveMovementType = () => {
-        const items = transactionsUser.map<TransactionItemData>(transaction => {
-            const category = categories.find(cat => cat.id === transaction.categoryId);
-            const account = accounts.find(acc => acc.id === transaction.accountId);
-            const destinationAccount = accounts.find(acc => acc.id === transaction.destinationAccountId);
-            return toTransactionItemData(transaction, account!, category!, destinationAccount!);
-        });
-        if (!activeMovementType) return items;
-        const filteredItems = items.filter(transaction => transaction.movementType === activeMovementType);
+        if (!activeMovementType) return transactionsUser;
+        const filteredItems = transactionsUser.filter(transaction => transaction.movementType === activeMovementType);
         return filteredItems;
     }
 
