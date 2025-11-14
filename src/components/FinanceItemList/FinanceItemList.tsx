@@ -23,6 +23,9 @@ export function FinanceItemList({ item }: FinanceItemList) {
     const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
     const [showModalFinance, setShowModalFinance] = useState(false);
 
+    const valuePaid = transactionsPayments?.reduce((prev, current) => prev += current.value, 0) || 0;
+    const isPaid = valuePaid >= item.totalValue;
+
     useEffect(() => {
         const fetchPayments = async () => {
             const transactions = await findTransactionsByDuplicateId(item.id.toLocaleString(), datababase);
@@ -46,11 +49,12 @@ export function FinanceItemList({ item }: FinanceItemList) {
 
     const generateStatus = () => {
         let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
-
-        if (transactionsPayments && transactionsPayments.reduce((prev, current) => prev += current.value, 0) >= item.totalValue) {
+        if (isPaid) {
             status = { text: 'Pago', bgcolor: '#79bc74ff' }
-        } else if(new Date() > new Date(item.dueDate)) {
+        } else if (new Date() > new Date(item.dueDate)) {
             status = { text: 'Vencido', bgcolor: '#f19393ff' }
+        } else if (transactionsPayments && valuePaid < item.totalValue) {
+            status = { text: 'Parcialmente Aberto', bgcolor: '#cacccdd8' }
         }
 
         return status;
@@ -67,7 +71,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
     )
 
     const renderPayButton = () => (
-        <TouchableOpacity style={styles.payButton}>
+        <TouchableOpacity style={styles.payButton} disabled={isPaid}>
             <Text style={styles.payButtonText}>PAGAR</Text>
         </TouchableOpacity>
     )
@@ -80,14 +84,18 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 {renderStatus()}
             </Row>
             <Row>
-                <Text style={{ fontSize: 26, fontWeight: '800' }}>{formaterNumberToBRL(item.totalValue)}</Text>
+                <View>
+                    <Text style={{ fontSize: 26, fontWeight: '800' }}>{formaterNumberToBRL(item.totalValue)}</Text>
+                    <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Já pago: {formaterNumberToBRL(valuePaid)}</Text>
+                    <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Saldo: {formaterNumberToBRL(item.totalValue - valuePaid)}</Text>
+                </View>
                 {renderDueDate()}
             </Row>
             <Row>
                 <Text>Duplicata 1/1</Text>
-                {renderPayButton()}
+                {!isPaid && renderPayButton()}
             </Row>
-            {showModalFinance && <ModalFinance payments={transactionsPayments} isShow={showModalFinance} mode='edit' onClose={()=> setShowModalFinance(false)} duplicateData={item}/>}
+            {showModalFinance && <ModalFinance payments={transactionsPayments} isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
         </TouchableOpacity>
     );
 }

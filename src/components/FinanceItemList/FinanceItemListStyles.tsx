@@ -11,8 +11,9 @@ export const styles = StyleSheet.create({
         marginBottom: 15
     },
     status: {
-        width: 80,
+        minWidth: 80,
         paddingVertical: 4,
+        paddingHorizontal: 3,
         borderRadius: 10
     },
     statusText: {
