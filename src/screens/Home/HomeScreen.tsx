@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -15,13 +15,10 @@ import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
-import { useCategoryStore } from '../../stores/CategoryStore';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
-import { TransactionItemData } from '../../domain/transactionItemData';
-import { toTransactionItemData } from '../../utils/mappers/transactionMapper';
 import { useUserContext } from '../../hooks/useUserContext';
 
 export function HomeScreen() {
@@ -30,12 +27,12 @@ export function HomeScreen() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
     const {user} = useUserContext();
 
-    const { accounts, activeAccount } = useAccountStore();
-    const { fetchTransactionsByUser, transactionsUser, filters, setFiltersOptions } = useTransactionStore();
-    const { categories } = useCategoryStore();
+    const { activeAccount } = useAccountStore();
+    const { fetchTransactionsByUser, transactionsUser, filters } = useTransactionStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
+
 
     useFocusEffect(
         useCallback(() => {     

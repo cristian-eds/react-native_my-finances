@@ -11,7 +11,8 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
         const result = await database.runAsync(` 
             INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id,user_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);
-        `, [transaction.description,
+        `, [
+        transaction.description,
         transaction.value,
         formaterToSqlite(transaction.paymentDate),
         transaction.movementType,
@@ -147,7 +148,7 @@ export async function deleteByFatherId(idTransaction: number, database: SQLiteDa
 
 export async function findTransactionsByDuplicateId(duplicateId: string, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
     const statement = await database.prepareAsync(`
-            SELECT * FROM transactions 
+            SELECT transactions.* FROM transactions 
             JOIN duplicates ON duplicates.id = transactions.duplicate_id
             WHERE transactions.duplicate_id = $duplicateId
         `);

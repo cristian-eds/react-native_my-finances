@@ -35,9 +35,6 @@ export function FinanceItemList({ item }: FinanceItemList) {
         fetchPayments();
     }, [item])
 
-
-
-
     const renderStatus = () => {
         const { text, bgcolor } = generateStatus();
         return (
@@ -75,7 +72,6 @@ export function FinanceItemList({ item }: FinanceItemList) {
             <Text style={styles.payButtonText}>PAGAR</Text>
         </TouchableOpacity>
     )
-
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => setShowModalFinance(true)}>

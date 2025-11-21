@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     columnGap: 10,
     marginBottom: 10,
-    elevation: 2
+    elevation: 2,
+    width: '100%'
   },
   iconBox: {
     alignItems: 'center',
@@ -24,11 +25,14 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   central_info_description: {
-    fontSize: 18
+    fontSize: 17,
+    flex: 1,
+    flexWrap: 'wrap'
   },
   central_info_data: {
     fontSize: 13,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    
   },
   value_info: {
     alignItems: 'center',
