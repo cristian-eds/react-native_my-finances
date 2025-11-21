@@ -17,6 +17,7 @@ import { useUserContext } from '../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { DuplicateModel } from '../../domain/duplicateModel';
 import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
+import { MovementType } from '../../domain/enums/movementTypeEnum';
 
 export function FinancesScreen() {
 
@@ -59,9 +60,11 @@ export function FinancesScreen() {
     }
 
     const renderItems = () => {
+        const actualType = typeFinances === 'PAYABLE' ? MovementType.Despesa : MovementType.Receita;
+        const filteredItems = duplicates.filter((duplicate) => duplicate.movementType === actualType)
         return (
             <FlatList<DuplicateModel>
-                data={duplicates}
+                data={filteredItems}
                 renderItem={({item})  => <FinanceItemList item={item} />}
                 keyExtractor={(item) => item.id?.toLocaleString()}
                 contentContainerStyle={{ paddingBottom: 80 }}
