@@ -76,3 +76,16 @@ export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase
         return false;
     }
 }
+
+export async function deleteDuplicate(duplicateId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+            DELETE FROM duplicates
+            WHERE id = ?; 
+            `,duplicateId)
+        return res.changes > 0;
+    } catch (error) {
+        console.error('Error deleting duplicate', error);
+        return false;
+    }
+}

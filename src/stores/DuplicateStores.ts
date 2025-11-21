@@ -9,6 +9,7 @@ type Store = {
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
     updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
+    deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -50,6 +51,20 @@ export const useDuplicateStore = create<Store>((set, get) => ({
 
         } catch (error) {
             console.error("Error updating duplicate",error)
+            return false;
+        }
+    },
+    deleteDuplicate: async (duplicateId, database) => {
+        try {
+            const isDeleted = await duplicateService.deleteDuplicate(duplicateId, database);
+            if(isDeleted) {
+                set({
+                    duplicates: [...get().duplicates.filter((current) => current.id !== duplicateId )]
+                })
+            }
+            return isDeleted;
+        } catch (error) {
+            console.error("Error deleting duplicate",error)
             return false;
         }
     }

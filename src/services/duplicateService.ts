@@ -16,3 +16,7 @@ export const getAllByUser = async (userId: number, database: SQLiteDatabase) => 
 export const updateDuplicate = async (duplicate: DuplicateModel, database: SQLiteDatabase) => {
     return await duplicateRepository.udpate(duplicate, database);
 }
+
+export const deleteDuplicate = async (duplicateId: number, database: SQLiteDatabase) => {
+    return await duplicateRepository.deleteDuplicate(duplicateId.toLocaleString(), database)
+}
