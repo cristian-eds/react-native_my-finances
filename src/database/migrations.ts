@@ -65,7 +65,7 @@ const migrations = [
             description TEXT NOT NULL,
             value INTEGER NOT NULL,
             payment_date DATETIME NOT NULL,
-            account_id INTEGER NOT NULL,
+            account_id INTEGER,
             destination_account_id INTERGER,
             category_id INTEGER,
             duplicate_id INTEGER,

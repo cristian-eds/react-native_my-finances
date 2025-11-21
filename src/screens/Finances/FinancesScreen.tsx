@@ -19,6 +19,7 @@ import { DuplicateModel } from '../../domain/duplicateModel';
 import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { findTransactionsByDuplicateList } from '../../services/transactionService';
+import { useTransactionStore } from '../../stores/TransactionStore';
 
 export function FinancesScreen() {
 
@@ -27,7 +28,8 @@ export function FinancesScreen() {
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE'|'RECEIVABLE'>('PAYABLE');
 
-    const {duplicates, payments,fetchDuplicates, setPayments} = useDuplicateStore();
+    const {duplicates,fetchDuplicates, setPayments} = useDuplicateStore();
+    const {transactionsUser} = useTransactionStore();
     const {user} = useUserContext();
     const database = useSQLiteContext();
 
@@ -43,7 +45,7 @@ export function FinancesScreen() {
                 }
             }
             fetch();
-        },[])
+        },[transactionsUser])
     )
 
     const renderCleanFilters = () => {
