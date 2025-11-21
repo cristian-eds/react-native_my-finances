@@ -32,6 +32,7 @@ import { Transaction } from '../../../domain/transactionModel';
 import { TransactionItem } from '../../TransactionItem/TransactionItem';
 import { ButtonPlus } from '../../buttons/ButtonPlus/ButtonPlus';
 import { ModalTransaction } from '../ModalTransaction/ModalTransaction';
+import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -45,10 +46,11 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
 
     const { categories } = useCategoryStore();
     const { accounts } = useAccountStore();
-    const { addDuplicate, updateDuplicate } = useDuplicateStore();
+    const { addDuplicate, updateDuplicate, deleteDuplicate } = useDuplicateStore();
     const { user } = useUserContext();
     const [tabActive, setTabActive] = useState<'INFO' | 'PAYMENTS'>('INFO');
     const [showModalTransaction, setShowModalTransaction] = useState(false);
+    const [showModalDelete, setShowModalDelete] = useState(false);
 
     const database = useSQLiteContext();
 
@@ -93,13 +95,21 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
         }
     }
 
+    const handleDelete = async () => {
+        const isDeleted = await deleteDuplicate(Number(duplicateData?.id), database);
+        if (isDeleted) {
+            Alert.alert("Finança excluída com sucesso");
+            handleClose();
+        }
+    }
+
     const dataToPayment = (): Transaction => {
         const data = watch();
-        const remainingValue = payments && payments?.length > 0 ? payments.reduce((prev,current) => prev += current.value,0) : Number(data.totalValue);
+        const remainingValue = payments && payments?.length > 0 ? payments.reduce((prev, current) => prev += current.value, 0) : Number(data.totalValue);
         return {
             id: 0,
             accountId: Number(data.accountId) ?? 0,
-            description: `Pagamento: ${data.description}`,
+            description: `Pago: ${data.description}`,
             movementType: data.movementType,
             paymentDate: new Date(),
             value: remainingValue,
@@ -185,19 +195,19 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                     <>
                         <ButtonIconAction iconName='close' onPress={onClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
-                        </>: 
-                        <>
-                            {renderButtonPlus()}
-                        </>
+                    </> :
+                    <>
+                        {renderButtonPlus()}
+                    </>
                 }
             </ModalFooter>
         )
     }
 
     const renderButtonPlus = () => {
-        if(!payments || !duplicateData ) return null;
-        if(payments.reduce((prev,current) => prev += current.value, 0) >= duplicateData.totalValue) return null;
-        return <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10}}/>
+        if (!payments || !duplicateData) return null;
+        if (payments.reduce((prev, current) => prev += current.value, 0) >= duplicateData.totalValue) return null;
+        return <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{ width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10 }} />
     }
 
     return (
@@ -215,17 +225,18 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
                             <Text style={styles.title}>{mode === 'add' ? 'Nova Finança' : 'Editar Finança'}</Text>
                         </Row>
                         {mode === 'edit' ?
-                            <ButtonIconSimple iconName='trash-outline' onPress={() => { }} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
+                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
                             <Spacer />}
                     </ModalHeader>
                     <View style={{ rowGap: 10 }}>
                         {renderTabsHeader()}
                         {tabActive === 'INFO' ? renderInfos() : renderPayments()}
                     </View>
-                   {renderFooter()}
+                    {renderFooter()}
                 </ModalContent>
             </ModalContainer>
             {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
+            {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
         </Modal>
     );
 }
