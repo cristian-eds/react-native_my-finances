@@ -18,6 +18,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { DuplicateModel } from '../../domain/duplicateModel';
 import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { findTransactionsByDuplicateList } from '../../services/transactionService';
 
 export function FinancesScreen() {
 
@@ -26,7 +27,7 @@ export function FinancesScreen() {
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE'|'RECEIVABLE'>('PAYABLE');
 
-    const {duplicates, fetchDuplicates} = useDuplicateStore();
+    const {duplicates, payments,fetchDuplicates, setPayments} = useDuplicateStore();
     const {user} = useUserContext();
     const database = useSQLiteContext();
 
@@ -34,8 +35,12 @@ export function FinancesScreen() {
 
     useFocusEffect(
         useCallback(() => {
-            const fetch = () => {
+            const fetch = async () => {
                 fetchDuplicates(user?.id as number, database)
+                if(duplicates) {
+                    const payments = await findTransactionsByDuplicateList(duplicates, database);
+                    setPayments(payments)
+                }
             }
             fetch();
         },[])

@@ -12,6 +12,7 @@ import { findTransactionsByDuplicateId } from '../../services/transactionService
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../domain/transactionModel';
 import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
+import { useDuplicateStore } from '../../stores/DuplicateStores';
 
 interface FinanceItemList {
     item: DuplicateModel
@@ -22,17 +23,15 @@ export function FinanceItemList({ item }: FinanceItemList) {
     const datababase = useSQLiteContext();
     const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
     const [showModalFinance, setShowModalFinance] = useState(false);
+    const {payments} = useDuplicateStore();
 
     const valuePaid = transactionsPayments?.reduce((prev, current) => prev += current.value, 0) || 0;
     const isPaid = valuePaid >= item.totalValue;
 
     useEffect(() => {
-        const fetchPayments = async () => {
-            const transactions = await findTransactionsByDuplicateId(item.id.toLocaleString(), datababase);
-            setTransactionsPayments(transactions);
+        if(payments) {
+            setTransactionsPayments(payments.filter(pay => pay.duplicateId === item.id))
         }
-
-        fetchPayments();
     }, [item])
 
     const renderStatus = () => {

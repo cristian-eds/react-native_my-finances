@@ -2,18 +2,23 @@ import { SQLiteDatabase } from "expo-sqlite"
 import { DuplicateModel } from "../domain/duplicateModel"
 import { create } from "zustand"
 import * as duplicateService from '../services/duplicateService'
+import { Transaction } from "../domain/transactionModel"
 
 type Store = {
     duplicates: DuplicateModel[]
+    payments: Transaction[]
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
     updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
     deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
+
+    setPayments: (transactions: Transaction[]) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
     duplicates: [],
+    payments: [],
     addDuplicate: async (duplicate, userId, database) => {
         try {
             const idInserted = await duplicateService.createDuplicate(duplicate, userId, database);
@@ -67,5 +72,10 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             console.error("Error deleting duplicate",error)
             return false;
         }
+    },
+    setPayments: (payments) => {
+        set({
+            payments: [...payments]
+        })
     }
 }))

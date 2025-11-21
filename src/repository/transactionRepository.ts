@@ -4,6 +4,7 @@ import { TransactionRecord } from "./records/TransactionRecord";
 import { TransactionFiltersModel } from "../domain/transactionFiltersModel";
 import { formaterToSqlite } from "../utils/DateFormater";
 import { OrderTransactionModel } from "../domain/orderTransactionModel";
+import { buildInClause } from "../utils/sql/builders";
 
 export async function create(transaction: Omit<Transaction, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
 
@@ -12,14 +13,14 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
             INSERT INTO transactions (description, value, payment_date, movement_type, account_id, category_id, duplicate_id, destination_account_id,user_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);
         `, [
-        transaction.description,
-        transaction.value,
-        formaterToSqlite(transaction.paymentDate),
-        transaction.movementType,
-        transaction.accountId,
-        transaction.categoryId ?? null,
-        transaction.duplicateId ?? null,
-        transaction.destinationAccountId ?? null,
+            transaction.description,
+            transaction.value,
+            formaterToSqlite(transaction.paymentDate),
+            transaction.movementType,
+            transaction.accountId,
+            transaction.categoryId ?? null,
+            transaction.duplicateId ?? null,
+            transaction.destinationAccountId ?? null,
             userId
         ])
 
@@ -30,13 +31,6 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
 }
 
 export async function getAllByUser(userId: string, filters: TransactionFiltersModel, ordenation: OrderTransactionModel, database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
-
-    const buildInClause = (column: string, values: (string | number)[], paramPrefix: string) => {
-        if (values.length === 0) return { clause: '', params: {} };
-        const placeholders = values.map((_, index) => `$${paramPrefix}${index}`).join(", ");
-        const params = values.map((value, index) => ({ [`$${paramPrefix}${index}`]: value }));
-        return { clause: ` AND ${column} IN (${placeholders}) `, params: Object.assign({}, ...params) };
-    }
 
     let sql = ` SELECT * FROM transactions 
             WHERE user_id = $userId
@@ -159,11 +153,33 @@ export async function findTransactionsByDuplicateId(duplicateId: string, databas
         const transactions = await result.getAllAsync();
         return transactions;
     } catch (error) {
-        console.error("Erro ao deletar transação", error);
+        console.error("Erro ao buscar transação", error);
     } finally {
         await statement.finalizeAsync();
     }
+}
 
+export async function findTrnasactionsByDuplicateList(duplicatesIds: number[], database: SQLiteDatabase): Promise<TransactionRecord[] | undefined> {
+    let sql = `
+            SELECT transactions.* FROM transactions 
+            JOIN duplicates ON duplicates.id = transactions.duplicate_id 
+        `;
+
+    const {clause, params: duplicatesParam} = buildInClause("transactions.duplicate_id",duplicatesIds,"duplicateId")
+
+    sql += clause;
+
+    const statement = await database.prepareAsync(sql)
+
+    try {
+        const result = await statement.executeAsync<TransactionRecord>(duplicatesParam);
+        const transactions = await result.getAllAsync();
+        return transactions;
+    } catch (error) {
+        console.error("Erro ao buscar transação", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
 }
 
 
