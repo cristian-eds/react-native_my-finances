@@ -30,7 +30,7 @@ export function toTransactionItemData(transacation: Transaction, account: Accoun
         paymentDate: transacation.paymentDate,
         movementType: transacation.movementType,
         accountId: transacation.accountId,
-        accountName: account.name,
+        accountName: account?.name ?? '',
         categoryId: transacation.categoryId ?? 0,
         categoryName: category.description,
         categoryHexColor: category.hexColor,
