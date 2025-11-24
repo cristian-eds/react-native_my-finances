@@ -38,19 +38,20 @@ interface ModalFinanceProps {
     isShow: boolean,
     mode: 'edit' | 'add',
     duplicateData?: DuplicateModel,
-    payments?: Transaction[],
     onClose: () => void
 }
 
-export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }: ModalFinanceProps) {
+export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFinanceProps) {
 
     const { categories } = useCategoryStore();
     const { accounts } = useAccountStore();
-    const { addDuplicate, updateDuplicate, deleteDuplicate } = useDuplicateStore();
+    const { addDuplicate, updateDuplicate, deleteDuplicate, payments } = useDuplicateStore();
     const { user } = useUserContext();
     const [tabActive, setTabActive] = useState<'INFO' | 'PAYMENTS'>('INFO');
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
+
+    const paymentsItem = payments.filter(pay => pay.duplicateId === duplicateData?.id) 
 
     const database = useSQLiteContext();
 
@@ -105,7 +106,7 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
 
     const dataToPayment = (): Transaction => {
         const data = watch();
-        const remainingValue = payments && payments?.length > 0 ? payments.reduce((prev, current) => prev += current.value, 0) : Number(data.totalValue);
+        const remainingValue = paymentsItem && paymentsItem?.length > 0 ? paymentsItem.reduce((prev, current) => prev += current.value, 0) : Number(data.totalValue);
         return {
             id: 0,
             accountId: Number(data.accountId) ?? 0,
@@ -128,7 +129,7 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
         return (
             <Row style={{ marginBottom: 7 }}>
                 {renderTab('INFO', 'information-circle-outline', 'INFORMAÇÕES')}
-                {payments && <>
+                {paymentsItem && <>
                     <Text style={{ fontWeight: '800' }}>/</Text>
                     {renderTab('PAYMENTS', 'calendar-outline', 'PAGAMENTOS')}
                 </>}
@@ -172,9 +173,9 @@ export function ModalFinance({ isShow, mode, duplicateData, payments, onClose }:
     const renderPayments = () => {
         return (
             <View>
-                {payments && payments.length > 0 ?
+                {paymentsItem && paymentsItem.length > 0 ?
                     <FlatList<Transaction>
-                        data={payments}
+                        data={paymentsItem}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => <TransactionItem item={item} />}
                         contentContainerStyle={{ paddingBottom: 80 }}

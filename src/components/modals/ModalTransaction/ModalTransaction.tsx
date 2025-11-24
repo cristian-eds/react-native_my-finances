@@ -29,6 +29,7 @@ import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { useDuplicateStore } from '../../../stores/DuplicateStores';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -41,6 +42,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
     const { accounts, activeAccount } = useAccountStore();
     const { user } = useUserContext();
+    const { addPayment } = useDuplicateStore();
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -79,7 +81,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             id: transactionData?.id as number,
             categoryId: Number(formValues.category) ?? undefined,
             destinationAccountId: Number(formValues.destinationAccountId),
-            duplicateId: transactionData?.duplicateId
+            duplicateId: Number(transactionData?.duplicateId)
         }
 
         let isSaved = false;

@@ -3,17 +3,20 @@ import { DuplicateModel } from "../domain/duplicateModel"
 import { create } from "zustand"
 import * as duplicateService from '../services/duplicateService'
 import { Transaction } from "../domain/transactionModel"
+import { findTransactionsByDuplicateList } from "../services/transactionService"
 
 type Store = {
     duplicates: DuplicateModel[]
     payments: Transaction[]
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
-    fetchDuplicates: (userId: number, database: SQLiteDatabase) => void
+    fetchDuplicates: (userId: number, database: SQLiteDatabase) => Promise<void>
     updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
     deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
 
+    fetchPayments: (duplicates: DuplicateModel[], database: SQLiteDatabase) => Promise<boolean>
     setPayments: (transactions: Transaction[]) => void
+    addPayment: (Transaction: Transaction) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -73,9 +76,28 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return false;
         }
     },
+    fetchPayments: async (duplicates, database) => {
+        try {
+            const transactions = await findTransactionsByDuplicateList(duplicates, database);
+            if(transactions) {
+                set({
+                    payments: transactions
+                })
+            }
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    },
     setPayments: (payments) => {
         set({
             payments: [...payments]
+        })
+    },
+    addPayment: (transaction) => {
+        set({
+            payments: [...get().payments, transaction]
         })
     }
 }))

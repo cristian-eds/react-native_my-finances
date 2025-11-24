@@ -20,18 +20,14 @@ interface FinanceItemList {
 
 export function FinanceItemList({ item }: FinanceItemList) {
 
-    const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
     const [showModalFinance, setShowModalFinance] = useState(false);
-    const {payments} = useDuplicateStore();
+    const { payments } = useDuplicateStore();
+
+    const transactionsPayments = payments.filter(pay => pay.duplicateId === item.id);
 
     const valuePaid = transactionsPayments?.reduce((prev, current) => prev += current.value, 0) || 0;
     const isPaid = valuePaid >= item.totalValue;
 
-    useEffect(() => {
-        if(payments) {
-            setTransactionsPayments(payments.filter(pay => pay.duplicateId === item.id))
-        }
-    }, [item])
 
     const renderStatus = () => {
         const { text, bgcolor } = generateStatus();
@@ -89,7 +85,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 <Text>Duplicata 1/1</Text>
                 {!isPaid && renderPayButton()}
             </Row>
-            {showModalFinance && <ModalFinance payments={transactionsPayments} isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
+            {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
         </TouchableOpacity>
     );
 }

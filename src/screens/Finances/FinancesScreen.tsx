@@ -26,11 +26,11 @@ export function FinancesScreen() {
     const [textSearch, setTextSearch] = useState("");
     const [showModalFilters, setShowModalFilters] = useState(false);
     const [showModalFinance, setShowModalFinance] = useState(false);
-    const [typeFinances, setTypeFinances] = useState<'PAYABLE'|'RECEIVABLE'>('PAYABLE');
+    const [typeFinances, setTypeFinances] = useState<'PAYABLE' | 'RECEIVABLE'>('PAYABLE');
 
-    const {duplicates,fetchDuplicates, setPayments} = useDuplicateStore();
-    const {transactionsUser} = useTransactionStore();
-    const {user} = useUserContext();
+    const { duplicates, fetchDuplicates, fetchPayments } = useDuplicateStore();
+    const { transactionsUser } = useTransactionStore();
+    const { user } = useUserContext();
     const database = useSQLiteContext();
 
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
@@ -38,14 +38,13 @@ export function FinancesScreen() {
     useFocusEffect(
         useCallback(() => {
             const fetch = async () => {
-                fetchDuplicates(user?.id as number, database)
+                await fetchDuplicates(user?.id as number, database)
                 if(duplicates) {
-                    const payments = await findTransactionsByDuplicateList(duplicates, database);
-                    setPayments(payments)
+                    await fetchPayments(duplicates, database);
                 }
             }
             fetch();
-        },[transactionsUser])
+        }, [transactionsUser])
     )
 
     const renderCleanFilters = () => {
@@ -57,7 +56,7 @@ export function FinancesScreen() {
         )
     }
 
-    const renderTypeCaption = (text: string, type: 'PAYABLE'|'RECEIVABLE') => {
+    const renderTypeCaption = (text: string, type: 'PAYABLE' | 'RECEIVABLE') => {
         const isActive = type === typeFinances;
         return (
             <TouchableOpacity onPress={() => setTypeFinances(type)} style={[styles.captionItem, isActive ? styles.captionItemActive : '']}>
@@ -72,7 +71,7 @@ export function FinancesScreen() {
         return (
             <FlatList<DuplicateModel>
                 data={filteredItems}
-                renderItem={({item})  => <FinanceItemList item={item} />}
+                renderItem={({ item }) => <FinanceItemList item={item} />}
                 keyExtractor={(item) => item.id?.toLocaleString()}
                 contentContainerStyle={{ paddingBottom: 80 }}
             />
@@ -99,9 +98,9 @@ export function FinancesScreen() {
                 {renderTypeCaption('Contas À Receber', 'RECEIVABLE')}
             </Row>
             {renderItems()}
-        
-            <CircularActionButton onPress={() => setShowModalFinance(true)}/>
-            {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} /> }
+
+            <CircularActionButton onPress={() => setShowModalFinance(true)} />
+            {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} />}
         </View>
     );
 }

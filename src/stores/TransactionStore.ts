@@ -9,6 +9,7 @@ import { MovementType } from "../domain/enums/movementTypeEnum";
 import { OrderTypes } from "../domain/enums/orderTypes";
 import { OrderTransactionModel } from "../domain/orderTransactionModel";
 import { ColumnsOrderTransaction } from "../domain/enums/columnsOrderTransaction";
+import { useDuplicateStore } from "./DuplicateStores";
 
 type Store = {
     transactionsUser: Transaction[];
@@ -18,7 +19,7 @@ type Store = {
     addTransaction: (transaction: Omit<Transaction, 'id'>, userId: number, database: SQLiteDatabase) => Promise<boolean>
     updateTransaction: (transaction: Transaction, database: SQLiteDatabase) => Promise<boolean>
     deleteTransaction: (idTransaction: number, database: SQLiteDatabase) => Promise<boolean>
-    fetchTransactionsByUser: (userId: number,database: SQLiteDatabase, activeAccount?: number) => void
+    fetchTransactionsByUser: (userId: number, database: SQLiteDatabase, activeAccount?: number) => void
 
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
     setFilterText: (text: string) => void
@@ -41,14 +42,19 @@ export const useTransactionStore = create<Store>((set, get) => ({
     },
 
     addTransaction: async (transaction, userId, database) => {
-        const idInsertedTransaction = await transactionService.create(transaction, userId.toLocaleString(),database);
+        const idInsertedTransaction = await transactionService.create(transaction, userId.toLocaleString(), database);
         if (!idInsertedTransaction) return false;
-        const { updateBalanceAccount, activeAccount } = useAccountStore.getState(); 
+        const { updateBalanceAccount, activeAccount } = useAccountStore.getState();
 
         await updateBalanceAccount(transaction.accountId, transaction.value, database, transaction.movementType);
 
-        if(transaction.movementType === MovementType.Transferencia && transaction.destinationAccountId) {
+        if (transaction.movementType === MovementType.Transferencia && transaction.destinationAccountId) {
             await updateBalanceAccount(transaction.destinationAccountId, transaction.value, database, MovementType.Receita);
+        }
+        
+        if (transaction.duplicateId && transaction.duplicateId > 0) {
+            const { addPayment } = useDuplicateStore.getState();
+            addPayment({ ...transaction, id: idInsertedTransaction })
         }
 
         if (transaction.accountId === activeAccount?.id) {
@@ -60,7 +66,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
     },
 
     fetchTransactionsByUser: async (userId, database, activeAccountId) => {
-        const filter = activeAccountId ? {...get().filters, accounts: [activeAccountId]} : get().filters;
+        const filter = activeAccountId ? { ...get().filters, accounts: [activeAccountId] } : get().filters;
         const transactionsFounded = await transactionService.findAllByUser(userId, filter, get().ordernation, database);
         set({
             transactionsUser: [...transactionsFounded]
@@ -71,7 +77,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
     setFiltersDates(initialDate, finalDate) {
         set({
             filters: {
-                 ...get().filters,
+                ...get().filters,
                 initialDate,
                 finalDate
             }
@@ -81,29 +87,29 @@ export const useTransactionStore = create<Store>((set, get) => ({
     setFilterText(text) {
         set({
             filters: {
-                 ...get().filters,
-                textSearch: text, 
+                ...get().filters,
+                textSearch: text,
             }
         })
     },
 
     setFiltersOptions: (movementType, categories, accounts) => {
         set({
-            filters: {  
+            filters: {
                 ...get().filters,
-                movementType, 
-                categories, 
-                accounts, 
-                }
+                movementType,
+                categories,
+                accounts,
+            }
         })
     },
     cleanFilters: () => {
         set({
-            filters: {  
+            filters: {
                 ...get().filters,
                 movementType: undefined,
                 categories: undefined,
-                accounts: undefined,    
+                accounts: undefined,
             }
         })
     },
@@ -126,7 +132,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
             }
 
-            
+
             set({
                 transactionsUser: [...get().transactionsUser.map(transactionSaved => transactionSaved.id === transaction.id ? transaction : transactionSaved)]
             })
@@ -146,7 +152,7 @@ export const useTransactionStore = create<Store>((set, get) => ({
 
                 if (oldTransaction.movementType === MovementType.Receita) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Despesa);
                 if (oldTransaction.movementType === MovementType.Despesa) await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
-                
+
                 if (oldTransaction.movementType === MovementType.Transferencia && oldTransaction.destinationAccountId) {
                     await transactionService.deleteByFatherId(oldTransaction.id, database);
                     await updateBalanceAccount(oldTransaction.accountId, oldTransaction.value, database, MovementType.Receita);
