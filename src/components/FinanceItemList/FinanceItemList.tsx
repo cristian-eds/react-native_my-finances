@@ -20,7 +20,6 @@ interface FinanceItemList {
 
 export function FinanceItemList({ item }: FinanceItemList) {
 
-    const datababase = useSQLiteContext();
     const [transactionsPayments, setTransactionsPayments] = useState<Transaction[] | undefined>();
     const [showModalFinance, setShowModalFinance] = useState(false);
     const {payments} = useDuplicateStore();
@@ -49,7 +48,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
             status = { text: 'Pago', bgcolor: '#79bc74ff' }
         } else if (new Date() > new Date(item.dueDate)) {
             status = { text: 'Vencido', bgcolor: '#f19393ff' }
-        } else if (transactionsPayments && valuePaid < item.totalValue) {
+        } else if (transactionsPayments && transactionsPayments.length > 0 && valuePaid < item.totalValue) {
             status = { text: 'Parcialmente Aberto', bgcolor: '#cacccdd8' }
         }
 
