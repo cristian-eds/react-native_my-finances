@@ -13,6 +13,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../domain/transactionModel';
 import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
 import { useDuplicateStore } from '../../stores/DuplicateStores';
+import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 
 interface FinanceItemList {
     item: DuplicateModel
@@ -21,6 +22,7 @@ interface FinanceItemList {
 export function FinanceItemList({ item }: FinanceItemList) {
 
     const [showModalFinance, setShowModalFinance] = useState(false);
+    const [showModalTransaction, setShowModalTransaction] = useState(false);
     const { payments } = useDuplicateStore();
 
     const transactionsPayments = payments.filter(pay => pay.duplicateId === item.id);
@@ -51,6 +53,20 @@ export function FinanceItemList({ item }: FinanceItemList) {
         return status;
     }
 
+    const dataToPayment = (): Transaction => {
+            const remainingValue = transactionsPayments && transactionsPayments?.length > 0 ? item.totalValue - transactionsPayments.reduce((prev, current) => prev += current.value, 0) : Number(item.totalValue);
+            return {
+                id: 0,
+                accountId: Number(item.accountId) ?? 0,
+                description: `Pago: ${item.description}`,
+                movementType: item.movementType,
+                paymentDate: new Date(),
+                value: remainingValue,
+                categoryId: Number(item.categoryId) ?? null,
+                duplicateId: item?.id,
+            }
+        }
+
     const renderDueDate = () => (
         <Row>
             <Ionicons name="calendar-outline" size={20} color="black" />
@@ -62,7 +78,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
     )
 
     const renderPayButton = () => (
-        <TouchableOpacity style={styles.payButton} disabled={isPaid}>
+        <TouchableOpacity style={styles.payButton} disabled={isPaid} onPress={() => setShowModalTransaction(true)}>
             <Text style={styles.payButtonText}>PAGAR</Text>
         </TouchableOpacity>
     )
@@ -85,6 +101,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                 <Text>Duplicata 1/1</Text>
                 {!isPaid && renderPayButton()}
             </Row>
+            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
             {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
         </TouchableOpacity>
     );
