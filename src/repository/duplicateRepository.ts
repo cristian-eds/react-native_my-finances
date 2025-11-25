@@ -32,6 +32,7 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
     let sql = `
         SELECT * FROM duplicates 
         WHERE user_id = $userId
+        AND due_date BETWEEN $initialDate AND $finalDate
     `
     if (filters.textSearch) {
         sql += ` AND description LIKE $textSearchQuery`;
@@ -40,7 +41,11 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
     const statement = await database.prepareAsync(sql);
 
     try {
-        const params = { $userId: userId };
+        const params = { 
+            $userId: userId,
+            $initialDate: formaterToSqlite(new Date(filters.initialDate.setHours(0, 0, 1))),
+            $finalDate: formaterToSqlite(new Date(filters.finalDate.setHours(23, 59, 59))),
+        };
         if (filters.textSearch) {
             Object.assign(params, { $textSearchQuery: `%${filters.textSearch}%` });
         }
