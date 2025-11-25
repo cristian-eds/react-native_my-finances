@@ -18,7 +18,7 @@ export const mapCategoriesToItemsDropdown = (categories: CategoryModel[]): ItemD
         return {
             label: category.description,
             value: category.id.toString(),
-            icon: () => <View key={category.id} style={{ backgroundColor: category.hexColor, borderRadius: 50, padding: 2 }}><Ionicons name={category.iconName} size={24} color="black" /></View>
+            icon: () => <View key={category.id} style={{ backgroundColor: category.hexColor, borderRadius: 50, padding: 2 }}><Ionicons name={category.iconName} size={24} color="white" /></View>
         }
     })
 }
