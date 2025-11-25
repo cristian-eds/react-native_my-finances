@@ -18,17 +18,15 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { DuplicateModel } from '../../domain/duplicateModel';
 import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
-import { findTransactionsByDuplicateList } from '../../services/transactionService';
 import { useTransactionStore } from '../../stores/TransactionStore';
 
 export function FinancesScreen() {
 
-    const [textSearch, setTextSearch] = useState("");
     const [showModalFilters, setShowModalFilters] = useState(false);
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE' | 'RECEIVABLE'>('PAYABLE');
 
-    const { duplicates, fetchDuplicates, fetchPayments } = useDuplicateStore();
+    const { duplicates, filters, fetchDuplicates, fetchPayments, setFilterText } = useDuplicateStore();
     const { transactionsUser } = useTransactionStore();
     const { user } = useUserContext();
     const database = useSQLiteContext();
@@ -39,12 +37,12 @@ export function FinancesScreen() {
         useCallback(() => {
             const fetch = async () => {
                 await fetchDuplicates(user?.id as number, database)
-                if(duplicates) {
+                if (duplicates) {
                     await fetchPayments(duplicates, database);
                 }
             }
             fetch();
-        }, [transactionsUser])
+        }, [transactionsUser, filters.textSearch])
     )
 
     const renderCleanFilters = () => {
@@ -80,7 +78,7 @@ export function FinancesScreen() {
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
-            <SearchInput placeholder="Pesquisar..." value={textSearch} onChangeText={setTextSearch} />
+            <SearchInput placeholder="Pesquisar..." value={filters.textSearch} onChangeText={setFilterText} />
             <Row style={{ paddingHorizontal: 5 }}>
                 <TouchableOpacity onPress={() => setShowModalFilters(true)} style={{ alignItems: 'center', gap: 4 }}>
                     <Row>

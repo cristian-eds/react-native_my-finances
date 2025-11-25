@@ -4,10 +4,12 @@ import { create } from "zustand"
 import * as duplicateService from '../services/duplicateService'
 import { Transaction } from "../domain/transactionModel"
 import { findTransactionsByDuplicateList } from "../services/transactionService"
+import { DuplicateFiltersModel } from "../domain/duplicatesFilters"
 
 type Store = {
     duplicates: DuplicateModel[]
     payments: Transaction[]
+    filters: DuplicateFiltersModel
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => Promise<void>
@@ -17,11 +19,17 @@ type Store = {
     fetchPayments: (duplicates: DuplicateModel[], database: SQLiteDatabase) => Promise<boolean>
     setPayments: (transactions: Transaction[]) => void
     addPayment: (Transaction: Transaction) => void
+
+    setFilterText: (text: string) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
     duplicates: [],
     payments: [],
+    filters: {
+        initialDate: new Date(),
+        finalDate: new Date()
+    },
     addDuplicate: async (duplicate, userId, database) => {
         try {
             const idInserted = await duplicateService.createDuplicate(duplicate, userId, database);
@@ -38,7 +46,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     },
     fetchDuplicates: async (userId, database) => {
         try {
-            const duplicates = await duplicateService.getAllByUser(userId, database);
+            const duplicates = await duplicateService.getAllByUser(userId, get().filters,database);
             set({
                 duplicates: duplicates
             })
@@ -99,5 +107,13 @@ export const useDuplicateStore = create<Store>((set, get) => ({
         set({
             payments: [...get().payments, transaction]
         })
-    }
+    },
+    setFilterText(text) {
+        set({
+            filters: {
+                ...get().filters,
+                textSearch: text,
+            }
+        })
+    },
 }))

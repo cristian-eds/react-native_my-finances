@@ -2,6 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { DuplicateModel } from "../domain/duplicateModel";
 import { formaterToSqlite } from "../utils/DateFormater";
 import { DuplicateRecord } from "./records/DuplicateRecord";
+import { DuplicateFiltersModel } from "../domain/duplicatesFilters";
 
 export async function create(duplicate: Omit<DuplicateModel, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
 
@@ -27,14 +28,22 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
     }
 }
 
-export async function getAllByUser(userId: string, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
-    const statement = await database.prepareAsync(`
-            SELECT * FROM duplicates 
-            WHERE user_id = $userId
-        `);
+export async function getAllByUser(userId: string, filters: DuplicateFiltersModel, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
+    let sql = `
+        SELECT * FROM duplicates 
+        WHERE user_id = $userId
+    `
+    if (filters.textSearch) {
+        sql += ` AND description LIKE $textSearchQuery`;
+    }
+
+    const statement = await database.prepareAsync(sql);
 
     try {
         const params = { $userId: userId };
+        if (filters.textSearch) {
+            Object.assign(params, { $textSearchQuery: `%${filters.textSearch}%` });
+        }
         const result = await statement.executeAsync<DuplicateRecord>(params);
         const duplicates = await result.getAllAsync();
         return duplicates;
@@ -60,17 +69,17 @@ export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase
                     category_id = ?
                 WHERE 
                     id = ?
-            `,[
-                duplicate.description,
-                formaterToSqlite(duplicate.issueDate),
-                formaterToSqlite(duplicate.dueDate),
-                duplicate.totalValue,
-                duplicate.movementType,
-                duplicate.accountId,
-                duplicate.categoryId ?? '',
-                duplicate.id
-            ])
-            return res.changes > 0;
+            `, [
+            duplicate.description,
+            formaterToSqlite(duplicate.issueDate),
+            formaterToSqlite(duplicate.dueDate),
+            duplicate.totalValue,
+            duplicate.movementType,
+            duplicate.accountId,
+            duplicate.categoryId ?? '',
+            duplicate.id
+        ])
+        return res.changes > 0;
     } catch (error) {
         console.error(error)
         return false;
@@ -82,7 +91,7 @@ export async function deleteDuplicate(duplicateId: string, database: SQLiteDatab
         const res = await database.runAsync(`
             DELETE FROM duplicates
             WHERE id = ?; 
-            `,duplicateId)
+            `, duplicateId)
         return res.changes > 0;
     } catch (error) {
         console.error('Error deleting duplicate', error);
