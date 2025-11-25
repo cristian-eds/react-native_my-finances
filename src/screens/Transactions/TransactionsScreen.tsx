@@ -27,7 +27,7 @@ import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStack
 
 export function TransactionsScreen() {
 
-  const { transactionsUser, fetchTransactionsByUser, filters, setFilterText, cleanFilters } = useTransactionStore();
+  const { transactionsUser, fetchTransactionsByUser, filters, setFilterText, cleanFilters, setFiltersDates } = useTransactionStore();
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
   const { user } = useUserContext();
@@ -82,7 +82,7 @@ export function TransactionsScreen() {
         </TouchableOpacity>
         <Ionicons name="stats-chart-outline" size={20} color="black"  onPress={() => navigation.navigate('TransactionStatistics', { data: 'userTransactions' })}/>
       </Row>
-      <PeriodFilter />
+      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates}/>
       <TransactionsItemList data={mapTransactions()} />
       <CircularActionButton onPress={() => setShowModalTransaction(true)} style={{ opacity: 0.8 }} />
       <ModalTransaction isShow={showModalTransaction} mode='add' onClose={() => setShowModalTransaction(false)} />

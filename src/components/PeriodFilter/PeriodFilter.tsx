@@ -8,12 +8,18 @@ import { styles } from './PeriodFilterStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { useTransactionStore } from '../../stores/TransactionStore';
 import { View } from 'react-native';
+import { useDuplicateStore } from '../../stores/DuplicateStores';
+import { TransactionFiltersModel } from '../../domain/transactionFiltersModel';
+import { DuplicateFiltersModel } from '../../domain/duplicatesFilters';
 
 export type Mode = 'DAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
-export function PeriodFilter() {
+interface PeriodFilterProps {
+    filters: TransactionFiltersModel | DuplicateFiltersModel,
+    setFiltersDates: (initialDate: Date, finalDate: Date) => void
+}
 
-    const { filters, setFiltersDates } = useTransactionStore();
+export function PeriodFilter({filters, setFiltersDates}:PeriodFilterProps) {
 
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<Mode>('MONTH');

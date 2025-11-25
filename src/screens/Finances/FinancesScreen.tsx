@@ -26,7 +26,7 @@ export function FinancesScreen() {
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE' | 'RECEIVABLE'>('PAYABLE');
 
-    const { duplicates, filters, fetchDuplicates, fetchPayments, setFilterText } = useDuplicateStore();
+    const { duplicates, filters, fetchDuplicates, fetchPayments, setFilterText, setFiltersDates } = useDuplicateStore();
     const { transactionsUser } = useTransactionStore();
     const { user } = useUserContext();
     const database = useSQLiteContext();
@@ -42,7 +42,7 @@ export function FinancesScreen() {
                 }
             }
             fetch();
-        }, [transactionsUser, filters.textSearch])
+        }, [transactionsUser, filters])
     )
 
     const renderCleanFilters = () => {
@@ -89,7 +89,7 @@ export function FinancesScreen() {
                 </TouchableOpacity>
                 <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics', { data: 'userTransactions' })} />
             </Row>
-            <PeriodFilter />
+            <PeriodFilter filters={filters} setFiltersDates={setFiltersDates}/>
 
             <Row>
                 {renderTypeCaption('Contas À Pagar', 'PAYABLE')}

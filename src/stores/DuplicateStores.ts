@@ -21,6 +21,7 @@ type Store = {
     addPayment: (Transaction: Transaction) => void
 
     setFilterText: (text: string) => void
+    setFiltersDates: (initialDate: Date, finalDate: Date) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -116,4 +117,13 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             }
         })
     },
+    setFiltersDates(initialDate, finalDate) {
+        set({
+            filters: {
+                ...get().filters,
+                initialDate,
+                finalDate
+            }
+        })
+    }
 }))

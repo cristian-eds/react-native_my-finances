@@ -28,7 +28,7 @@ export function HomeScreen() {
     const {user} = useUserContext();
 
     const { activeAccount } = useAccountStore();
-    const { fetchTransactionsByUser, transactionsUser, filters } = useTransactionStore();
+    const { fetchTransactionsByUser, transactionsUser, filters, setFiltersDates } = useTransactionStore();
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
@@ -75,7 +75,7 @@ export function HomeScreen() {
                         <Text style={styles.transactions_infos_h1}>Lançamentos</Text>
                         <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics', {data:'transactions' })} />
                     </View>
-                    <PeriodFilter />
+                    <PeriodFilter filters={filters} setFiltersDates={setFiltersDates}/>
                     <View style={styles.captions}>
                         {renderCaptionItem('Créditos', MovementType.Receita)}
                         {renderCaptionItem('Débitos', MovementType.Despesa)}
