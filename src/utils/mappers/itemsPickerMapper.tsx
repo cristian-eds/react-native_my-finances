@@ -6,6 +6,7 @@ import { Account } from "../../domain/accountModel";
 import { MovementType } from "../../domain/enums/movementTypeEnum";
 import { OrderTypes } from "../../domain/enums/orderTypes";
 import { ColumnsOrderTransaction } from "../../domain/enums/columnsOrderTransaction";
+import { ColumnsOrderDuplicate } from "../../domain/enums/columnsOrderDuplicate";
 
 export interface ItemDropdown {
     label: string,
@@ -36,6 +37,12 @@ export const mapOrderTypesToItemsDropdown = () => Object.keys(OrderTypes).map((t
 
 export const mappColumnsOrderTransactionToItemsDropdown = () => Object.keys(ColumnsOrderTransaction).map((key) => {
     const value = ColumnsOrderTransaction[key as keyof typeof ColumnsOrderTransaction];
+    const label = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    return { label, value };
+})
+
+export const mappColumnsOrderDuplicateToItemsDropdown = () => Object.keys(ColumnsOrderDuplicate).map((key) => {
+    const value = ColumnsOrderDuplicate[key as keyof typeof ColumnsOrderDuplicate];
     const label = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     return { label, value };
 })
