@@ -5,11 +5,15 @@ import * as duplicateService from '../services/duplicateService'
 import { Transaction } from "../domain/transactionModel"
 import { findTransactionsByDuplicateList } from "../services/transactionService"
 import { DuplicateFiltersModel } from "../domain/duplicatesFilters"
+import { OrderDuplicate } from "../domain/orderDuplicate"
+import { ColumnsOrderDuplicate } from "../domain/enums/columnsOrderDuplicate"
+import { OrderTypes } from "../domain/enums/orderTypes"
 
 type Store = {
     duplicates: DuplicateModel[]
     payments: Transaction[]
     filters: DuplicateFiltersModel
+    ordernation: OrderDuplicate
 
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => Promise<void>
@@ -30,6 +34,10 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     filters: {
         initialDate: new Date(),
         finalDate: new Date()
+    },
+    ordernation: {
+        orderColumn: ColumnsOrderDuplicate.DATA_VENCIMENTO,
+        orderType: OrderTypes.CRESCENTE
     },
     addDuplicate: async (duplicate, userId, database) => {
         try {

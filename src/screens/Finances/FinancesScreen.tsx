@@ -19,6 +19,7 @@ import { DuplicateModel } from '../../domain/duplicateModel';
 import { FinanceItemList } from '../../components/FinanceItemList/FinanceItemList';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { useTransactionStore } from '../../stores/TransactionStore';
+import { ModalFiltersDuplicate } from '../../components/modals/ModalFiltersDuplicate/ModalFiltersDuplicate';
 
 export function FinancesScreen() {
 
@@ -99,6 +100,7 @@ export function FinancesScreen() {
 
             <CircularActionButton onPress={() => setShowModalFinance(true)} />
             {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} />}
+            {showModalFilters && <ModalFiltersDuplicate isShow={showModalFilters} onClose={() => setShowModalFilters(false)} /> }
         </View>
     );
 }

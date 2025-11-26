@@ -32,7 +32,7 @@ export function TransactionStatistics() {
     const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
     const database = useSQLiteContext();
 
-    const { transactionsUser, filters, fetchTransactionsByUser } = useTransactionStore();
+    const { transactionsUser, filters, fetchTransactionsByUser, setFiltersDates } = useTransactionStore();
     const { categories } = useCategoryStore();
     const { getAccountName, activeAccount } = useAccountStore();
     const { user } = useUserContext();
@@ -154,7 +154,7 @@ export function TransactionStatistics() {
             </View>
             <View style={styles.period}>
                 <View style={{ flexDirection: 'row' }}>
-                    <PeriodFilter />
+                    <PeriodFilter filters={filters} setFiltersDates={setFiltersDates}/>
                 </View>
             </View>
             <View style={styles.chart}>

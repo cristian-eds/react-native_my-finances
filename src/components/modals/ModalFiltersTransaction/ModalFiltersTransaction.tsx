@@ -13,13 +13,13 @@ import { Spacer } from '../../Spacer/Spacer';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { filtersSchemas } from '../../../utils/schemas/filtersSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown, mapOrderTypesToItemsDropdown, mappColumnsOrderTransactionToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useTransactionStore } from '../../../stores/TransactionStore';
 import { Row } from '../structure/Row/Row';
 import { Cell } from '../structure/Cell/Cell';
+import { filtersTransactionSchemas } from '../../../utils/schemas/filtersTransactionSchemas';
 
 interface ModalFiltersTransactionProps {
   isShow: boolean;
@@ -33,7 +33,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
   const { filters, ordernation, setFiltersOptions, setOrdernation } = useTransactionStore();
 
   const { control, reset, watch } = useForm({
-    resolver: zodResolver(filtersSchemas),
+    resolver: zodResolver(filtersTransactionSchemas),
     defaultValues: {
       movementType: filters.movementType || [],
       categories: filters.categories || [],
