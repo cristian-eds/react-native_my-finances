@@ -30,7 +30,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
 
   const { categories } = useCategoryStore();
   const { accounts } = useAccountStore();
-  const { filters, ordernation, setFiltersOptions, setOrdernation } = useTransactionStore();
+  const { filters, ordernation, setFiltersOptions, setOrdernation, cleanFilters } = useTransactionStore();
 
   const { control, reset, watch } = useForm({
     resolver: zodResolver(filtersTransactionSchemas),
@@ -45,7 +45,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
 
   const handleClose = () => {
     reset();
-    setFiltersOptions([], [], []);
+    cleanFilters();
     onClose();
   }
 

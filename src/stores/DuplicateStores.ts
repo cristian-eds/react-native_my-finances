@@ -26,6 +26,10 @@ type Store = {
 
     setFilterText: (text: string) => void
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
+    setFiltersOptions: (categories: number[] | undefined) => void
+    cleanFilters: () => void
+
+    setOrdernation: (orderColumn: ColumnsOrderDuplicate | undefined, orderType: OrderTypes | undefined) => void
 }
 
 export const useDuplicateStore = create<Store>((set, get) => ({
@@ -55,7 +59,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     },
     fetchDuplicates: async (userId, database) => {
         try {
-            const duplicates = await duplicateService.getAllByUser(userId, get().filters,database);
+            const duplicates = await duplicateService.getAllByUser(userId, get().filters, get().ordernation, database);
             set({
                 duplicates: duplicates
             })
@@ -75,28 +79,28 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return isUpdated;
 
         } catch (error) {
-            console.error("Error updating duplicate",error)
+            console.error("Error updating duplicate", error)
             return false;
         }
     },
     deleteDuplicate: async (duplicateId, database) => {
         try {
             const isDeleted = await duplicateService.deleteDuplicate(duplicateId, database);
-            if(isDeleted) {
+            if (isDeleted) {
                 set({
-                    duplicates: [...get().duplicates.filter((current) => current.id !== duplicateId )]
+                    duplicates: [...get().duplicates.filter((current) => current.id !== duplicateId)]
                 })
             }
             return isDeleted;
         } catch (error) {
-            console.error("Error deleting duplicate",error)
+            console.error("Error deleting duplicate", error)
             return false;
         }
     },
     fetchPayments: async (duplicates, database) => {
         try {
             const transactions = await findTransactionsByDuplicateList(duplicates, database);
-            if(transactions) {
+            if (transactions) {
                 set({
                     payments: transactions
                 })
@@ -131,6 +135,30 @@ export const useDuplicateStore = create<Store>((set, get) => ({
                 ...get().filters,
                 initialDate,
                 finalDate
+            }
+        })
+    },
+    setFiltersOptions: (categories) => {
+        set({
+            filters: {
+                ...get().filters,
+                categories,
+            }
+        })
+    },
+    cleanFilters: () => {
+        set({
+            filters: {
+                ...get().filters,
+                categories: undefined,
+            }
+        })
+    },
+    setOrdernation: (orderColumn, orderType) => {
+        set({
+            ordernation: {
+                orderColumn,
+                orderType
             }
         })
     }

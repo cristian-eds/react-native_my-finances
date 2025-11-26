@@ -27,7 +27,7 @@ interface ModalFiltersDuplicateProps {
 export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicateProps) {
 
     const { categories } = useCategoryStore();
-    const { filters, ordernation } = useDuplicateStore();
+    const { filters, ordernation, cleanFilters, setFiltersOptions, setOrdernation } = useDuplicateStore();
 
     const { control, reset, watch } = useForm({
         resolver: zodResolver(filtersDuplicateSchemas),
@@ -40,7 +40,15 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
 
     const handleFilter = () => {
         const fields = watch();
-        console.log(fields)
+        setFiltersOptions(fields.categories);
+        setOrdernation(fields.orderColumn, fields.orderType);
+        onClose();
+    }
+
+    const handleClose = () => {
+        reset();
+        cleanFilters();
+        onClose();
     }
 
     return (
@@ -95,10 +103,9 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                         </Row>
                     </View>
                     <ModalFooter>
-                        <ButtonIconAction iconName='close' onPress={onClose} />
+                        <ButtonIconAction iconName='close' onPress={handleClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter} />
                     </ModalFooter>
-
                 </ModalContent>
             </ModalContainer>
         </Modal>

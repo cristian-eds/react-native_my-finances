@@ -3,6 +3,8 @@ import { DuplicateModel } from "../domain/duplicateModel";
 import { formaterToSqlite } from "../utils/DateFormater";
 import { DuplicateRecord } from "./records/DuplicateRecord";
 import { DuplicateFiltersModel } from "../domain/duplicatesFilters";
+import { OrderDuplicate } from "../domain/orderDuplicate";
+import { buildInClause } from "../utils/sql/builders";
 
 export async function create(duplicate: Omit<DuplicateModel, "id">, userId: string, database: SQLiteDatabase): Promise<number | undefined> {
 
@@ -28,7 +30,7 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
     }
 }
 
-export async function getAllByUser(userId: string, filters: DuplicateFiltersModel, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
+export async function getAllByUser(userId: string, filters: DuplicateFiltersModel, ordenation: OrderDuplicate, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
     let sql = `
         SELECT * FROM duplicates 
         WHERE user_id = $userId
@@ -38,10 +40,15 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
         sql += ` AND description LIKE $textSearchQuery`;
     }
 
+    const { clause: categoryClause, params: categoryParams } = buildInClause('category_id', filters.categories || [], 'categoryId');
+
+    sql += categoryClause;
+    sql += ` ORDER BY DATETIME(${ordenation.orderColumn}) ${ordenation.orderType}; `;
+
     const statement = await database.prepareAsync(sql);
 
     try {
-        const params = { 
+        const params = {
             $userId: userId,
             $initialDate: formaterToSqlite(new Date(filters.initialDate.setHours(0, 0, 1))),
             $finalDate: formaterToSqlite(new Date(filters.finalDate.setHours(23, 59, 59))),
@@ -49,6 +56,9 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
         if (filters.textSearch) {
             Object.assign(params, { $textSearchQuery: `%${filters.textSearch}%` });
         }
+
+        Object.assign(params, categoryParams);
+
         const result = await statement.executeAsync<DuplicateRecord>(params);
         const duplicates = await result.getAllAsync();
         return duplicates;
