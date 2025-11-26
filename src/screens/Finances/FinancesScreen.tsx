@@ -27,7 +27,7 @@ export function FinancesScreen() {
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [typeFinances, setTypeFinances] = useState<'PAYABLE' | 'RECEIVABLE'>('PAYABLE');
 
-    const { duplicates, filters, fetchDuplicates, fetchPayments, setFilterText, setFiltersDates } = useDuplicateStore();
+    const { duplicates, filters, fetchDuplicates, fetchPayments, setFilterText, setFiltersDates, cleanFilters } = useDuplicateStore();
     const { transactionsUser } = useTransactionStore();
     const { user } = useUserContext();
     const database = useSQLiteContext();
@@ -47,8 +47,10 @@ export function FinancesScreen() {
     )
 
     const renderCleanFilters = () => {
+        if (!filters.categories ) return;
+        if (filters.categories?.length === 0) return;
         return (
-            <TouchableOpacity style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+            <TouchableOpacity style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }} onPress={cleanFilters}>
                 <Ionicons name="close" size={14} color="red" />
                 <Text style={{ fontSize: 14, color: 'red' }}>Limpar filtros</Text>
             </TouchableOpacity>
@@ -90,7 +92,7 @@ export function FinancesScreen() {
                 </TouchableOpacity>
                 <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics', { data: 'userTransactions' })} />
             </Row>
-            <PeriodFilter filters={filters} setFiltersDates={setFiltersDates}/>
+            <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} />
 
             <Row>
                 {renderTypeCaption('Contas À Pagar', 'PAYABLE')}
@@ -100,7 +102,7 @@ export function FinancesScreen() {
 
             <CircularActionButton onPress={() => setShowModalFinance(true)} />
             {showModalFinance && <ModalFinance isShow={showModalFinance} mode='add' onClose={() => setShowModalFinance(false)} />}
-            {showModalFilters && <ModalFiltersDuplicate isShow={showModalFilters} onClose={() => setShowModalFilters(false)} /> }
+            {showModalFilters && <ModalFiltersDuplicate isShow={showModalFilters} onClose={() => setShowModalFilters(false)} />}
         </View>
     );
 }
