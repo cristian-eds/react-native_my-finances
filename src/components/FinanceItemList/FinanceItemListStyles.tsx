@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     status: {
         minWidth: 80,
         paddingVertical: 4,
-        paddingHorizontal: 3,
+        paddingHorizontal: 5,
         borderRadius: 10
     },
     statusText: {
