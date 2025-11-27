@@ -43,7 +43,7 @@ export function PickerWithTopLabel({ labelText, required, name, control, errors,
     }, [localValue]);
 
     return (
-        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} showLabel={labelText ? true : false} >
+        <RowWithTopLabel title={labelText} required={required} errors={errors} stylesProp={{ padding: 0 }} showLabel={labelText ? true : false} value={field.value} zIndex={zIndex}>
             <DropDownPicker
                 value={localValue}
                 open={open}

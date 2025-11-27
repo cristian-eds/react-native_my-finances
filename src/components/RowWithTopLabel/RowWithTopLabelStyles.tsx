@@ -9,6 +9,16 @@ export const styles = StyleSheet.create({
         paddingLeft: 8,
         color: '#242424e1'
     },
+    labelTopLine: {
+        fontSize: 12,
+        color: '#242424e1',
+        position: 'absolute',
+        top: -8,
+        left: 15,
+        backgroundColor: 'white',
+        zIndex: 1000,
+       fontStyle: 'italic'
+    },
     input: {
         borderWidth: 1,
         borderColor: '#8989899f',

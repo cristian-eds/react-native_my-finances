@@ -43,7 +43,7 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
     }
 
     return (
-        <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors} showLabel={showLabel}>
+        <RowWithTopLabel title={title} onPress={() => setShowPicker(true)} required={required} errors={errors} showLabel={showLabel} value={field.value}>
             {renderValueText()}
             <Ionicons name="calendar-outline" size={24} color="black" />
             <DateTimePickerModal

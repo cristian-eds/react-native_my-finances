@@ -24,7 +24,7 @@ export function TextInputWithTopLabel({ name, title, control, showLabel = true,r
     })
 
     return (
-        <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel}>
+        <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel} value={field.value}>
             <TextInput {...props} value={field.value} onChangeText={field.onChange} placeholderTextColor='#090909e8' style={{padding: 4, flex: 1}}/>
         </RowWithTopLabel>
     );
