@@ -45,10 +45,9 @@ export function FinancesScreen() {
             fetch();
         }, [transactionsUser, filters])
     )
-
     const renderCleanFilters = () => {
-        if (!filters.categories ) return;
-        if (filters.categories?.length === 0) return;
+        if (!filters.categories && !filters.status ) return;
+        if (filters.categories?.length === 0 && filters.status?.length === 0) return;
         return (
             <TouchableOpacity style={{ marginLeft: 8, flexDirection: 'row', alignItems: 'center', gap: 2 }} onPress={cleanFilters}>
                 <Ionicons name="close" size={14} color="red" />

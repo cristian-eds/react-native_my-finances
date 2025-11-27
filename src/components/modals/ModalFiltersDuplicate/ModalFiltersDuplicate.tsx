@@ -8,7 +8,7 @@ import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { Spacer } from '../../Spacer/Spacer';
 import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
-import { mapCategoriesToItemsDropdown, mapOrderTypesToItemsDropdown, mappColumnsOrderDuplicateToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { mapCategoriesToItemsDropdown, mapOrderTypesToItemsDropdown, mappColumnsOrderDuplicateToItemsDropdown, mappDuplicateStatusToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,13 +34,14 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
         defaultValues: {
             categories: filters.categories || [],
             orderColumn: ordernation.orderColumn,
-            orderType: ordernation.orderType
+            orderType: ordernation.orderType,
+            status: filters.status || []
         }
     })
 
     const handleFilter = () => {
         const fields = watch();
-        setFiltersOptions(fields.categories);
+        setFiltersOptions(fields.categories, fields.status);
         setOrdernation(fields.orderColumn, fields.orderType);
         onClose();
     }
@@ -75,6 +76,16 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                             zIndexInverse={2000}
                             zIndex={3000}
                             placeholder='Categorias...'
+                        />
+                        <PickerWithTopLabel
+                            labelText=''
+                            control={control}
+                            items={mappDuplicateStatusToItemsDropdown()}
+                            name='status'
+                            multiple={true}
+                            zIndexInverse={1800}
+                            zIndex={2800}
+                            placeholder='Status...'
                         />
                         <Text style={[styles.inputsTitle, { marginTop: 5 }]}>Ordenação</Text>
                         <Row>

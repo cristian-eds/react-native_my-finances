@@ -2,5 +2,6 @@ export interface DuplicateFiltersModel {
     initialDate: Date,
     finalDate: Date,
     textSearch?: string,
-    categories?: number[]
+    categories?: number[],
+    status?: string[]
 }

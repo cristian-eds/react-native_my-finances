@@ -8,22 +8,22 @@ import { DuplicateModel } from '../../domain/duplicateModel';
 import { Row } from '../modals/structure/Row/Row';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
-import { findTransactionsByDuplicateId } from '../../services/transactionService'
-import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../domain/transactionModel';
 import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
 import { useDuplicateStore } from '../../stores/DuplicateStores';
 import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
+import { DuplicateStatus } from '../../domain/enums/duplicateStatusEnun';
+import { formaterEnumKeyToLabel } from '../../utils/StringFormater';
 
 interface FinanceItemList {
-    item: DuplicateModel
+    item: DuplicateModel,
 }
 
 export function FinanceItemList({ item }: FinanceItemList) {
 
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [showModalTransaction, setShowModalTransaction] = useState(false);
-    const { payments } = useDuplicateStore();
+    const { payments, filters } = useDuplicateStore();
 
     const transactionsPayments = payments.filter(pay => pay.duplicateId === item.id);
 
@@ -35,37 +35,36 @@ export function FinanceItemList({ item }: FinanceItemList) {
         const { text, bgcolor } = generateStatus();
         return (
             <View style={[styles.status, { backgroundColor: bgcolor }]}>
-                <Text style={styles.statusText}>{text}</Text>
+                <Text style={styles.statusText}>{formaterEnumKeyToLabel(text)}</Text>
             </View>
         )
     }
 
     const generateStatus = () => {
-        let status: { text: string, bgcolor: string } = { text: 'Aberto', bgcolor: '#cacccdd8' };
+        let status: { text: DuplicateStatus, bgcolor: string } = { text: DuplicateStatus.Aberto, bgcolor: '#cacccdd8' };
         if (isPaid) {
-            status = { text: 'Pago', bgcolor: '#79bc74ff' }
+            status = { text: DuplicateStatus.Paga, bgcolor: '#79bc74ff' }
         } else if (new Date() > new Date(item.dueDate)) {
-            status = { text: 'Vencido', bgcolor: '#f19393ff' }
+            status = { text: DuplicateStatus.Vencido, bgcolor: '#f19393ff' }
         } else if (transactionsPayments && transactionsPayments.length > 0 && valuePaid < item.totalValue) {
-            status = { text: 'Parcialmente Aberto', bgcolor: '#cacccdd8' }
+            status = { text: DuplicateStatus.Parcialmente_Paga, bgcolor: '#cacccdd8' }
         }
-
         return status;
     }
 
     const dataToPayment = (): Transaction => {
-            const remainingValue = transactionsPayments && transactionsPayments?.length > 0 ? item.totalValue - transactionsPayments.reduce((prev, current) => prev += current.value, 0) : Number(item.totalValue);
-            return {
-                id: 0,
-                accountId: Number(item.accountId) ?? 0,
-                description: `Pago: ${item.description}`,
-                movementType: item.movementType,
-                paymentDate: new Date(),
-                value: remainingValue,
-                categoryId: Number(item.categoryId) ?? null,
-                duplicateId: item?.id,
-            }
+        const remainingValue = transactionsPayments && transactionsPayments?.length > 0 ? item.totalValue - transactionsPayments.reduce((prev, current) => prev += current.value, 0) : Number(item.totalValue);
+        return {
+            id: 0,
+            accountId: Number(item.accountId) ?? 0,
+            description: `Pago: ${item.description}`,
+            movementType: item.movementType,
+            paymentDate: new Date(),
+            value: remainingValue,
+            categoryId: Number(item.categoryId) ?? null,
+            duplicateId: item?.id,
         }
+    }
 
     const renderDueDate = () => (
         <Row>
@@ -84,25 +83,30 @@ export function FinanceItemList({ item }: FinanceItemList) {
     )
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => setShowModalFinance(true)}>
-            <Row>
-                <Text style={{ fontSize: 20 }}>{item.description}</Text>
-                {renderStatus()}
-            </Row>
-            <Row>
-                <View>
-                    <Text style={{ fontSize: 26, fontWeight: '800' }}>{formaterNumberToBRL(item.totalValue)}</Text>
-                    <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Já pago: {formaterNumberToBRL(valuePaid)}</Text>
-                    <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Saldo: {formaterNumberToBRL(item.totalValue - valuePaid)}</Text>
-                </View>
-                {renderDueDate()}
-            </Row>
-            <Row>
-                <Text>Duplicata 1/1</Text>
-                {!isPaid && renderPayButton()}
-            </Row>
-            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
-            {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
-        </TouchableOpacity>
-    );
+        <>
+            {filters.status && filters.status.length > 0 && !filters.status.includes(generateStatus().text) ? null :
+                <TouchableOpacity style={styles.container} onPress={() => setShowModalFinance(true)}>
+                    <Row>
+                        <Text style={{ fontSize: 20 }}>{item.description}</Text>
+                        {renderStatus()}
+                    </Row>
+                    <Row>
+                        <View>
+                            <Text style={{ fontSize: 26, fontWeight: '800' }}>{formaterNumberToBRL(item.totalValue)}</Text>
+                            <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Já pago: {formaterNumberToBRL(valuePaid)}</Text>
+                            <Text style={{ fontSize: 13, fontStyle: 'italic' }}>Saldo: {formaterNumberToBRL(item.totalValue - valuePaid)}</Text>
+                        </View>
+                        {renderDueDate()}
+                    </Row>
+                    <Row>
+                        <Text>Duplicata 1/1</Text>
+                        {!isPaid && renderPayButton()}
+                    </Row>
+                    {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
+                    {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
+                </TouchableOpacity>
+            }
+        </>
+
+    )
 }

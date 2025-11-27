@@ -8,3 +8,7 @@ export const capitalizeWord = (word: string) => {
     return firstLetter + restWord;
 
 }   
+
+export const formaterEnumKeyToLabel = (key: string) => {
+    return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+}

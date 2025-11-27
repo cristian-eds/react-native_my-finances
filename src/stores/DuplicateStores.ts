@@ -26,7 +26,7 @@ type Store = {
 
     setFilterText: (text: string) => void
     setFiltersDates: (initialDate: Date, finalDate: Date) => void
-    setFiltersOptions: (categories: number[] | undefined) => void
+    setFiltersOptions: (categories: number[] | undefined, status: string[] | undefined) => void
     cleanFilters: () => void
 
     setOrdernation: (orderColumn: ColumnsOrderDuplicate | undefined, orderType: OrderTypes | undefined) => void
@@ -37,7 +37,8 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     payments: [],
     filters: {
         initialDate: new Date(),
-        finalDate: new Date()
+        finalDate: new Date(),
+        status: []
     },
     ordernation: {
         orderColumn: ColumnsOrderDuplicate.DATA_VENCIMENTO,
@@ -138,11 +139,12 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             }
         })
     },
-    setFiltersOptions: (categories) => {
+    setFiltersOptions: (categories, status) => {
         set({
             filters: {
                 ...get().filters,
                 categories,
+                status
             }
         })
     },
@@ -151,6 +153,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             filters: {
                 ...get().filters,
                 categories: undefined,
+                status: undefined,
             }
         })
     },
