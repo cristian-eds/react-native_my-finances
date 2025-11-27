@@ -206,8 +206,8 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     }
 
     const renderButtonPlus = () => {
-        if (!payments || !duplicateData) return null;
-        if (payments.reduce((prev, current) => prev += current.value, 0) >= duplicateData.totalValue) return null;
+        if (!duplicateData) return null;
+        if (paymentsItem.reduce((prev, current) => prev += current.value, 0) >= duplicateData.totalValue) return null;
         return <ButtonPlus onPress={() => setShowModalTransaction(true)} style={{ width: 110, height: 40, backgroundColor: '#96df87ff', borderRadius: 10 }} />
     }
 
