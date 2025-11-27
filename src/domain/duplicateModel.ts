@@ -8,5 +8,7 @@ export interface DuplicateModel {
     dueDate: Date,
     movementType: MovementType,
     accountId: number,
-    categoryId?: number
+    categoryId?: number,
+    duplicateFatherId?: number,
+    numberInstallments: number,
 }

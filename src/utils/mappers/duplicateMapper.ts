@@ -10,7 +10,10 @@ export function fromRecordToModel(record: DuplicateRecord) : DuplicateModel{
         id: record.id,
         issueDate: record.issue_date,
         movementType: record.movement_type,
-        totalValue: record.total_value
+        totalValue: record.total_value,
+        numberInstallments: record.number_installments,
+        duplicateFatherId: record.duplicate_father_id,
+
     }
 }
 

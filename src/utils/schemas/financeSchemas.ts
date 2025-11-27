@@ -10,4 +10,5 @@ export const financeSchemas = z.object({
     movementType: z.enum(MovementType, "Tipo movimento inválido"),
     categoryId: z.string('Categoria inválida!').optional(),
     accountId: z.string().optional(),
+    numberInstallments: z.number().min(1, "O número mínimo de parcelas é 1").optional(),
 })

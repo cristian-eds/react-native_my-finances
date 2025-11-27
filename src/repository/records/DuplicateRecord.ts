@@ -8,5 +8,7 @@ export interface DuplicateRecord {
     due_date: Date,
     movement_type: MovementType,
     account_id: number,
-    category_id: number
+    category_id: number,
+    duplicate_father_id?: number,
+    number_installments: number,
 }
