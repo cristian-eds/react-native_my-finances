@@ -72,7 +72,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
           <View style={styles.body}>
             <Text style={styles.inputsTitle}>Filtros</Text>
             <PickerWithTopLabel
-              labelText=''
+              labelText='Categorias'
               control={control}
               items={mapCategoriesToItemsDropdown(categories)}
               name='categories'
@@ -82,7 +82,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
               placeholder='Categorias...'
             />
             <PickerWithTopLabel
-              labelText=''
+              labelText='Contas'
               control={control}
               items={mapAccountsToItemsDropdown(accounts)}
               name='accounts'
@@ -92,7 +92,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
               placeholder='Contas...'
             />
             <PickerWithTopLabel
-              labelText=''
+              labelText='Tipos de Lançamentos'
               placeholder='Tipos de Lançamentos...'
               control={control}
               items={mapMovementTypesToItemsDropdown()}
@@ -105,7 +105,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
             <Row>
               <Cell>
                 <PickerWithTopLabel
-                  labelText=''
+                  labelText='Coluna'
                   placeholder='Coluna...'
                   control={control}
                   items={mappColumnsOrderTransactionToItemsDropdown()}
@@ -116,7 +116,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
               </Cell>
               <Cell>
                 <PickerWithTopLabel
-                  labelText=''
+                  labelText='Ordem'
                   placeholder='Ordem...'
                   control={control}
                   items={mapOrderTypesToItemsDropdown()}

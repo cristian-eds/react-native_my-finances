@@ -157,14 +157,14 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                 <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required showLabel={false} />
                 <Row>
                     <Cell>
-                        <PickerWithTopLabel control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
+                        <PickerWithTopLabel labelText='Tipo Movimento' control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
                     </Cell>
                     <Cell>
-                        <PickerWithTopLabel control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
+                        <PickerWithTopLabel labelText='Categoria' control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
                     </Cell>
                 </Row>
-                <PickerWithTopLabel control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} />
-                <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento*:' required showLabel={false} />
+                <PickerWithTopLabel labelText='Conta' control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} zIndex={8000} />
+                <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento' required showLabel={false} />
 
             </>
         )

@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { styles } from './RowWithTopLabelStyles';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { isValidProp } from '../../utils/validations';
 
 interface RowWithTopLabelProps {
   title?: string,
@@ -16,13 +17,13 @@ interface RowWithTopLabelProps {
   zIndex?: number,
 }
 
-export function RowWithTopLabel({ title, children, onPress, required = false, errors, showLabel = false, stylesProp, value = true, zIndex = 10}: RowWithTopLabelProps) {
+export function RowWithTopLabel({ title, children, onPress, required = false, errors, showLabel = false, stylesProp, value = true, zIndex = 10 }: RowWithTopLabelProps) {
 
-  const Wrapper = onPress ? TouchableOpacity : View
+  const Wrapper = onPress ? TouchableOpacity : View;
 
   return (
     <View style={styles.container}>
-      {value && <Text style={[styles.labelTopLine, {zIndex: zIndex + 1}]}>{title}{required && '*'}:</Text>}
+      {isValidProp(value) && <Text style={[styles.labelTopLine, { zIndex: zIndex + 1 }]}>{title}{required && '*'}:</Text>}
       <Wrapper style={[styles.input, stylesProp]} onPress={onPress}>
         {children}
       </Wrapper>

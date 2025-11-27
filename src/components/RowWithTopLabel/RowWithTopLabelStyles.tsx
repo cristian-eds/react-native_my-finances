@@ -11,13 +11,14 @@ export const styles = StyleSheet.create({
     },
     labelTopLine: {
         fontSize: 12,
-        color: '#242424e1',
+        color: '#373737b6',
         position: 'absolute',
         top: -8,
         left: 15,
         backgroundColor: 'white',
         zIndex: 1000,
-       fontStyle: 'italic'
+        fontStyle: 'italic',
+        paddingHorizontal: 4
     },
     input: {
         borderWidth: 1,
@@ -26,7 +27,7 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
+        alignItems: 'center',
         height: 46.9
     },
     error_message: {

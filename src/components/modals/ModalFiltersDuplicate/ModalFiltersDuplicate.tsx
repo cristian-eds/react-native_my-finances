@@ -68,7 +68,7 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                     <View style={styles.body}>
                         <Text style={styles.inputsTitle}>Filtros</Text>
                         <PickerWithTopLabel
-                            labelText=''
+                            labelText='Categorias'
                             control={control}
                             items={mapCategoriesToItemsDropdown(categories)}
                             name='categories'
@@ -78,7 +78,7 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                             placeholder='Categorias...'
                         />
                         <PickerWithTopLabel
-                            labelText=''
+                            labelText='Status'
                             control={control}
                             items={mappDuplicateStatusToItemsDropdown()}
                             name='status'
@@ -91,7 +91,7 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                         <Row>
                             <Cell>
                                 <PickerWithTopLabel
-                                    labelText=''
+                                    labelText='Coluna'
                                     placeholder='Coluna...'
                                     control={control}
                                     items={mappColumnsOrderDuplicateToItemsDropdown()}
@@ -102,7 +102,7 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                             </Cell>
                             <Cell>
                                 <PickerWithTopLabel
-                                    labelText=''
+                                    labelText='Ordem'
                                     placeholder='Ordem...'
                                     control={control}
                                     items={mapOrderTypesToItemsDropdown()}
