@@ -37,8 +37,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     payments: [],
     filters: {
         initialDate: new Date(),
-        finalDate: new Date(),
-        status: []
+        finalDate: new Date()
     },
     ordernation: {
         orderColumn: ColumnsOrderDuplicate.DATA_VENCIMENTO,
