@@ -9,6 +9,7 @@ import { ColumnsOrderTransaction } from "../../domain/enums/columnsOrderTransact
 import { ColumnsOrderDuplicate } from "../../domain/enums/columnsOrderDuplicate";
 import { DuplicateStatus } from "../../domain/enums/duplicateStatusEnun";
 import { formaterEnumKeyToLabel } from "../StringFormater";
+import { TypeRecurrence } from "../../domain/enums/typeRecurrence";
 
 export interface ItemDropdown {
     label: string,
@@ -51,6 +52,12 @@ export const mappColumnsOrderDuplicateToItemsDropdown = () => Object.keys(Column
 
 export const mappDuplicateStatusToItemsDropdown = () => Object.keys(DuplicateStatus).map((key) => {
     const value = DuplicateStatus[key as keyof typeof DuplicateStatus];
+    const label = formaterEnumKeyToLabel(key);
+    return { label, value };
+})
+
+export const mapTypeRecurrenceToItemsDropdown = () => Object.keys(TypeRecurrence).map((key) => {
+    const value = TypeRecurrence[key as keyof typeof TypeRecurrence];
     const label = formaterEnumKeyToLabel(key);
     return { label, value };
 })

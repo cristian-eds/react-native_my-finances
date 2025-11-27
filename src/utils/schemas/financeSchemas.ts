@@ -1,5 +1,6 @@
 import z from "zod";
 import { MovementType } from "../../domain/enums/movementTypeEnum";
+import { TypeRecurrence } from "../../domain/enums/typeRecurrence";
 
 export const financeSchemas = z.object({
     issueDate: z.coerce.date('Data emissão inválida'),
@@ -11,4 +12,5 @@ export const financeSchemas = z.object({
     categoryId: z.string('Categoria inválida!').optional(),
     accountId: z.string().optional(),
     numberInstallments: z.number().min(1, "O número mínimo de parcelas é 1").optional(),
+    typeRecurrence: z.enum(TypeRecurrence).optional()
 })

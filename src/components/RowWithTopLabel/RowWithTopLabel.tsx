@@ -23,7 +23,7 @@ export function RowWithTopLabel({ title, children, onPress, required = false, er
 
   return (
     <View style={styles.container}>
-      {isValidProp(value) && <Text style={[styles.labelTopLine, { zIndex: zIndex + 1 }]}>{title}{required && '*'}:</Text>}
+      {showLabel && isValidProp(value) && <Text style={[styles.labelTopLine, { zIndex: zIndex + 1 }]}>{title}{required && '*'}:</Text>}
       <Wrapper style={[styles.input, stylesProp]} onPress={onPress}>
         {children}
       </Wrapper>
