@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -26,15 +26,14 @@ import { useAccountStore } from '../../../stores/AccountStore';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
-import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../domain/transactionModel';
 import { TransactionItem } from '../../TransactionItem/TransactionItem';
 import { ButtonPlus } from '../../buttons/ButtonPlus/ButtonPlus';
 import { ModalTransaction } from '../ModalTransaction/ModalTransaction';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
-import { RowWithTopLabel } from '../../RowWithTopLabel/RowWithTopLabel';
-import { TypeRecurrence } from '../../../domain/enums/typeRecurrence';
+import { TabRecurrence } from './TabRecurrence/TabRecurrence';
+import { useUserContext } from '../../../hooks/useUserContext';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -53,7 +52,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     const [tabActive, setTabActive] = useState<TabActive>('INFO');
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
-    const [typeRecurrence, setTypeRecurrence] = useState<TypeRecurrence>(TypeRecurrence.Fixo);
+    const {user} = useUserContext();
 
     const paymentsItem = payments.filter(pay => pay.duplicateId === duplicateData?.id)
 
@@ -68,9 +67,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             dueDate: duplicateData?.dueDate ?? undefined,
             issueDate: duplicateData?.issueDate ?? new Date(),
             movementType: duplicateData?.movementType ?? MovementType.Despesa,
-            totalValue: duplicateData?.totalValue.toLocaleString(),
-            numberInstallments: duplicateData?.numberInstallments ?? 1,
-            typeRecurrence: undefined,
+            totalValue: duplicateData?.totalValue.toLocaleString()
         }
     });
 
@@ -86,15 +83,13 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             movementType: formValues.movementType,
             totalValue: Number(formValues.totalValue),
             id: duplicateData?.id as number,
-            numberInstallments: formValues.numberInstallments ?? 1,
-            duplicateFatherId: duplicateData?.duplicateFatherId,
+            numberInstallments: 1,
         }
 
         let isSaved;
 
         if (mode === 'add') {
-            console.log(newDuplicate);
-            //isSaved = await addDuplicate(newDuplicate, user?.id as number, database)
+            isSaved = await addDuplicate(newDuplicate, user?.id as number, database)
         } else if (mode === 'edit') {
             isSaved = await updateDuplicate(newDuplicate, database);
         }
@@ -137,21 +132,21 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     const renderTabsHeader = () => {
         return (
             <Row style={{ marginBottom: 7 }}>
-                {renderTab('INFO', 'information-circle-outline', 'INFORMAÇÕES')}
+                {renderTab('INFO', 'information-circle-outline', 'INFORMAÇÕES', () => setTabActive('INFO'))}
                 <Text style={{ fontWeight: '800' }}>/</Text>
                 {mode === 'edit' ? <>
-                    {renderTab('PAYMENTS', 'calendar-outline', 'PAGAMENTOS')}
+                    {renderTab('PAYMENTS', 'calendar-outline', 'PAGAMENTOS', () => setTabActive('PAYMENTS'))}
                 </> : <>
-                    {renderTab('RECURRENCE', 'calendar-outline', 'RECORRÊNCIA')}
+                    {renderTab('RECURRENCE', 'calendar-outline', 'RECORRÊNCIA', handleSubmit(() => setTabActive('RECURRENCE')))}
                 </>}
             </Row>
         )
     }
 
-    const renderTab = (tabName: TabActive, iconName: keyof typeof Ionicons.glyphMap, title: string) => {
+    const renderTab = (tabName: TabActive, iconName: keyof typeof Ionicons.glyphMap, title: string, onPress: () => void) => {
         const isActive = tabActive === tabName;
         return (
-            <TouchableOpacity onPress={() => setTabActive(tabName)} style={isActive && styles.tabContainerActive}>
+            <TouchableOpacity onPress={onPress} style={isActive && styles.tabContainerActive}>
                 <View style={[styles.tabContainer, { justifyContent: 'flex-end' }]}>
                     <Ionicons name={iconName} size={15} color={isActive ? 'black' : 'gray'} style={{ top: 1 }} />
                     <Text style={[styles.tabTitle, isActive && styles.tabActive, { textAlign: 'center' }]}>{title}</Text>
@@ -200,27 +195,6 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
         )
     }
 
-    const renderRecurrence = () => {
-        return (
-            <>
-                <TextInputWithTopLabel title='Número de Parcelas' control={control} name='numberInstallments' errors={errors.numberInstallments} placeholder='Quantidade de parcelas' keyboardType='number-pad' required />
-                {renderTypeRecurrenceItem('Dia Fixo', 'Vence no mesmo dia em todos os meses.', TypeRecurrence.Fixo)}
-                {renderTypeRecurrenceItem('Intervalo de dias', 'Número de dias entre cada parcela.', TypeRecurrence.Fixo)}
-            </>
-        )
-    }
-
-    const renderTypeRecurrenceItem = (title: string, subtitle: string, type: TypeRecurrence) => {
-        return (
-            <RowWithTopLabel title='Tipo da recorrência' errors={errors.typeRecurrence}>
-                <TouchableOpacity onPress={() => setTypeRecurrence(type)}>
-                    <Text>{title}</Text>
-                    <Text style={{fontSize: 12, color:'#7b7b7bff'}}>{subtitle}</Text>
-                </TouchableOpacity>
-            </RowWithTopLabel>
-        )
-    }
-
     const renderTabsContent = () => {
         switch (tabActive) {
             case 'INFO':
@@ -228,7 +202,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             case 'PAYMENTS':
                 return renderPayments();
             case 'RECURRENCE':
-                return renderRecurrence();
+                return <TabRecurrence data={watch()} />;
         }
     }
 
@@ -260,27 +234,29 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             transparent={true}
             visible={isShow}
             statusBarTranslucent={true}>
-            <ModalContainer>
-                <ModalContent>
-                    <ModalHeader>
-                        <ButtonBack onPress={onClose} />
-                        <Row>
-                            <Ionicons name="cash-outline" size={18} color="green" style={{ top: -3 }} />
-                            <Text style={styles.title}>{mode === 'add' ? 'Nova Finança' : 'Editar Finança'}</Text>
-                        </Row>
-                        {mode === 'edit' ?
-                            <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
-                            <Spacer />}
-                    </ModalHeader>
-                    <View style={{ rowGap: 10 }}>
-                        {renderTabsHeader()}
-                        {renderTabsContent()}
-                    </View>
-                    {renderFooter()}
-                </ModalContent>
-            </ModalContainer>
-            {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
-            {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
+            <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'flex-end' }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <ModalContainer>
+                    <ModalContent>
+                        <ModalHeader>
+                            <ButtonBack onPress={onClose} />
+                            <Row style={{ flex: 4, justifyContent: 'center' }}>
+                                <Ionicons name="cash-outline" size={18} color="green" style={{ top: -3 }} />
+                                <Text style={styles.title}>{mode === 'add' ? 'Nova Finança' : 'Editar Finança'}</Text>
+                            </Row>
+                            {mode === 'edit' ?
+                                <ButtonIconSimple iconName='trash-outline' onPress={() => setShowModalDelete(true)} style={{ width: '15%', alignItems: "flex-end", top: -3 }} /> :
+                                <Spacer />}
+                        </ModalHeader>
+                        <View style={{ rowGap: 10 }}>
+                            {renderTabsHeader()}
+                            {renderTabsContent()}
+                        </View>
+                        {renderFooter()}
+                    </ModalContent>
+                </ModalContainer>
+                {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
+                {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
+            </KeyboardAvoidingView >
         </Modal>
     );
 }

@@ -10,8 +10,8 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
 
     try {
         const result = await database.runAsync(` 
-            INSERT INTO duplicates (description, issue_date, due_date, total_value, movement_type, account_id, category_id, user_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO duplicates (description, issue_date, due_date, total_value, movement_type, account_id, category_id, user_id, number_installments, duplicate_father_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `,
             [
                 duplicate.description,
@@ -21,7 +21,9 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
                 duplicate.movementType,
                 duplicate.accountId,
                 duplicate.categoryId ?? '',
-                userId
+                userId,
+                duplicate.numberInstallments,
+                duplicate.duplicateFatherId ?? null
             ])
 
         return result.lastInsertRowId;
