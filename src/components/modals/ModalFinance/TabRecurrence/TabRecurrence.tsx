@@ -10,40 +10,55 @@ import { RowWithTopLabel } from '../../../RowWithTopLabel/RowWithTopLabel';
 import { Checkbox } from '../../../Checkbox/Checkbox';
 import { TouchableOpacity } from 'react-native';
 import { ModalInstallments } from '../../ModalInstallments/ModalInstallments';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { installmentsSchemas } from '../../../../utils/schemas/installmentsSchemas';
 
 interface TabRecurrenceProps {
-    control: any;
-    errors: any;
-    activeTypeRecurrence: TypeRecurrence;
-    setActiveTypeRecurrence: (type: TypeRecurrence) => void;
-    data: any;
+    data: {
+        issueDate: Date | undefined | any;
+        description: string | any;
+        totalValue: number | string | any;
+    };
 }
 
-export function TabRecurrence({ control, errors, activeTypeRecurrence, setActiveTypeRecurrence, data }: TabRecurrenceProps) {
+export function TabRecurrence({ data }: TabRecurrenceProps) {
 
     const [showModalInstallments, setShowModalInstallments] = React.useState(false);
 
+    const { control, formState: { errors }, handleSubmit, watch, reset, setValue } = useForm({
+        resolver: zodResolver(installmentsSchemas),
+        defaultValues: {
+            numberInstallments: '1',
+            typeRecurrence: TypeRecurrence.Fixo,
+            intervalBetweenInstallments:  30,
+            fixedInstallmentDate: new Date(data.issueDate as Date).getDate().toLocaleString(),
+        }
+    });
+
     const handleGenerateInstallments = () => {
         let items = [];
+        const activeTypeRecurrence = watch().typeRecurrence;
+        const fields = watch();
         if (activeTypeRecurrence === TypeRecurrence.Fixo) {
-            const fixedDate = data.fixedInstallmentDate;
-            for (let i = 0; i < data.numberInstallments; i++) {
+            const fixedDate = fields.fixedInstallmentDate;
+            for (let i = 1; i < Number(fields.numberInstallments)+ 1; i++) {
                 items.push({
-                    sequencyItem: i + 1,
-                    dueDate: new Date(new Date(data.issueDate as Date).getFullYear(), new Date(data.issueDate as Date).getMonth() + i, fixedDate),
+                    sequencyItem: i,
+                    dueDate: new Date(new Date(data.issueDate as Date).getFullYear(), new Date(data.issueDate as Date).getMonth() + i, fixedDate as number),
                     value: Number(data.totalValue),
-                    description: data.description + ` - ${i + 1}/${data.numberInstallments}`
+                    description: data.description + ` - ${i }/${fields.numberInstallments}`
                 });
             }
         }
         else if (activeTypeRecurrence === TypeRecurrence.Intervalo) {
-            const intervalDays = data.intervalBetweenInstallments || 30;
-            for (let i = 0; i < data.numberInstallments; i++) {
+            const intervalDays = fields.intervalBetweenInstallments || 30;
+            for (let i = 1; i < Number(fields.numberInstallments) + 1; i++) {
                 items.push({
-                    sequencyItem: i + 1,
-                    dueDate: new Date(new Date(data.issueDate as Date).getTime() + (i * intervalDays as number * 24 * 60 * 60 * 1000)),
-                    value: Number(data.totalValue) / data.numberInstallments,
-                    description: data.description + ` - ${i + 1}/${data.numberInstallments}`
+                    sequencyItem: i,
+                    dueDate: new Date(new Date(data.issueDate as Date).getTime() + (i * Number(intervalDays)  * 24 * 60 * 60 * 1000)),
+                    value: Number(data.totalValue),
+                    description: data.description + ` ${i}/${fields.numberInstallments}`
                 });
             }
         }
@@ -51,10 +66,11 @@ export function TabRecurrence({ control, errors, activeTypeRecurrence, setActive
     }
 
     const renderTypeRecurrenceItem = (title: string, subtitle: string, type: TypeRecurrence) => {
+        const activeTypeRecurrence = watch().typeRecurrence;
         return (
             <RowWithTopLabel title='Tipo da recorrência' errors={errors.typeRecurrence} stylesProp={{ justifyContent: 'flex-start', columnGap: 10 }}>
                 <Checkbox checked={type === activeTypeRecurrence} />
-                <TouchableOpacity onPress={() => setActiveTypeRecurrence(type)}>
+                <TouchableOpacity onPress={() => setValue('typeRecurrence',type)}>
                     <Text>{title}</Text>
                     <Text style={{ fontSize: 12, color: '#7b7b7bff' }}>{subtitle}</Text>
                 </TouchableOpacity>
@@ -71,7 +87,7 @@ export function TabRecurrence({ control, errors, activeTypeRecurrence, setActive
                 {renderTypeRecurrenceItem('Intervalo de dias', 'Número de dias entre cada parcela.', TypeRecurrence.Intervalo)}
             </View>
             <View style={{ rowGap: 14, marginTop: 5 }}>
-                {activeTypeRecurrence === TypeRecurrence.Fixo ?
+                {watch().typeRecurrence === TypeRecurrence.Fixo ?
                     <>
                         <Text>Dia do vencimento</Text>
                         <TextInputWithTopLabel title='Dia do mês' control={control} name='fixedInstallmentDate' errors={errors.fixedInstallmentDate} placeholder='Informe o dia do mês' keyboardType='number-pad' required />
@@ -86,7 +102,7 @@ export function TabRecurrence({ control, errors, activeTypeRecurrence, setActive
                 <Ionicons name="calendar-clear-outline" size={18} color="black" />
                 <Text>Ver pré-visualização das parcelas</Text>
             </TouchableOpacity>
-            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)}/>}
+            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} />}
         </>
     );
 }
