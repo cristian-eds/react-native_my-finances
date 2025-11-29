@@ -69,7 +69,7 @@ export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) 
                         />
                     </View>
                     <ModalFooter>
-                        <ButtonPrincipal title='Gerar parcelas' onPress={onClose} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} />
+                        <ButtonPrincipal title='Gerar parcelas' onPress={onClose} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done'/>
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>
