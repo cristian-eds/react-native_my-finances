@@ -19,6 +19,7 @@ interface TabRecurrenceProps {
         issueDate: Date | undefined | any;
         description: string | any;
         totalValue: number | string | any;
+        dueDate: Date | undefined | any;
     };
 }
 
@@ -32,7 +33,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
             numberInstallments: '1',
             typeRecurrence: TypeRecurrence.Fixo,
             intervalBetweenInstallments:  30,
-            fixedInstallmentDate: new Date(data.issueDate as Date).getDate().toLocaleString(),
+            fixedInstallmentDate: new Date(data.dueDate as Date).getDate().toLocaleString(),
         }
     });
 
