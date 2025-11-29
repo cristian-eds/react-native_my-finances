@@ -1,10 +1,19 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+    headerItems: {
+        backgroundColor: '#edededff',
+        paddingVertical: 6,
+        paddingHorizontal: 4,
+        borderBottomWidth: 1,
+        borderBottomColor: '#d3d3d3',
+        borderRadius: 4,    
+    },
     installmentItem: {
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
-        paddingBottom: 5,
+        paddingVertical: 7,
+        paddingHorizontal: 4,
     },
     title: {
         fontSize: 22,

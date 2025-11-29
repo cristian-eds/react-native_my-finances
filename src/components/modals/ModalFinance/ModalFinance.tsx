@@ -171,7 +171,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                 </Row>
                 <PickerWithTopLabel labelText='Conta' control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} zIndex={8000} />
                 <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento' required showLabel={false} />
-
+                
             </>
         )
     }
