@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, View } from 'react-native';
 
 import { styles } from './ModalInstallmentsStyles';
@@ -13,8 +13,9 @@ import { Spacer } from '../../Spacer/Spacer';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { FlatList } from 'react-native-gesture-handler';
+import { InstallmentItem } from './InstallmentItem/InstallmentItem';
 
-interface Item {
+export interface Item {
     sequencyItem: number;
     dueDate: Date;
     value: number;
@@ -29,15 +30,15 @@ interface InstallmentProps {
 
 export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) {
 
-    const renderItem = (item: Item) => {
-        return <>
-            <Row key={item.sequencyItem} style={styles.installmentItem}>
-                <Text>{item.sequencyItem}</Text>
-                <Text>{item.description}</Text>
-                <Text>{item.dueDate.toLocaleDateString()}</Text>
-                <Text>{item.value.toFixed(2)}</Text>
-            </Row></>
+    const [controlledItems, setControlledItems] = useState<Item[]>(items);
+
+    const handleUpdateItem = (updatedItem: Item) => {
+        const updatedItems = controlledItems.map(item => 
+            item.sequencyItem === updatedItem.sequencyItem ? updatedItem : item
+        );
+        setControlledItems(updatedItems);
     }
+
     return (
         <Modal
             animationType="slide"
@@ -62,8 +63,8 @@ export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) 
                     </Row>
                     <View style={{ maxHeight: 300 }}>
                         <FlatList
-                            data={items}
-                            renderItem={({ item }) => renderItem(item)}
+                            data={controlledItems}
+                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem}/>}
                             keyExtractor={(item) => item.sequencyItem.toString()}
 
                         />

@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     input: {
         margin: 0,
         padding: 5,
-        minWidth: 100,
     },
     errorMessage: {
         color: 'red',

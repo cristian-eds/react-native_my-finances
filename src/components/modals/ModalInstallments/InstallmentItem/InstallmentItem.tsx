@@ -23,19 +23,17 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
 
     function propagateChanges() {
 
-        if (errors) return;
+        if (errors.description || errors.description || errors.value) return;
 
         const updated = watch();
 
-        //updateItem({
-        //   ...item,
-        //    ...updated,
-        //});
+        updateItem({
+           ...item,
+           dueDate: new Date(updated.dueDate as Date),
+              description: updated.description,
+              value: updated.value as number,
+        });
 
-        console.log({
-            ...item,
-            ...updated,
-        })
     }
 
     const renderErrors = () => {
@@ -51,8 +49,6 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
         return null;
     }
 
-
-
     return (
     <View style={styles.installmentItem}>
         <Row key={item.sequencyItem} >
@@ -65,11 +61,23 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
                         onChange(e);
                         await trigger('description');
                         propagateChanges();
-                    }} style={styles.input} />
+                    }} style={[styles.input,{flex: 2}]} />
                 )}
             />
-            <Text>{item.dueDate.toLocaleDateString()}</Text>
-            <Text>{item.value.toFixed(2)}</Text>
+            <Text style={{flex: 2}}>{item.dueDate.toLocaleDateString()}</Text>
+            <Controller
+                control={control}
+                name="value"
+                render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
+                    <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
+                        onChange(e);
+                        await trigger('value');
+                        propagateChanges();
+                    }} style={[styles.input, { flex: 1 ,textAlign: 'right' }]} 
+                        keyboardType="numeric"
+                    />
+                )}
+            />
         </Row>
         {renderErrors()}
     </View>

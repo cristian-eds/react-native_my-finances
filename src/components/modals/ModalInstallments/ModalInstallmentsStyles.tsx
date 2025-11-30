@@ -9,12 +9,6 @@ export const styles = StyleSheet.create({
         borderBottomColor: '#d3d3d3',
         borderRadius: 4,    
     },
-    installmentItem: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#d3d3d3',
-        paddingVertical: 7,
-        paddingHorizontal: 4,
-    },
     title: {
         fontSize: 22,
         textAlign: 'center',
