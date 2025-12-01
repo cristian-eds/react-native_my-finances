@@ -96,8 +96,8 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                     </View>
                     <View style={styles.inputs}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES BÁSICAS</Text>
-                        <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Nome*:' showLabel={false} required />
-                        <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' showLabel={false} required />
+                        <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Nome*:' required />
+                        <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' required />
                         <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type'/>
                         <TouchableOpacity style={styles.showMore} onPress={() => setShowMoreInputs(!showMoreInputs)}>
                             <Text style={styles.showMoreText}>Preencher detalhes da conta...</Text>
@@ -105,16 +105,16 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                         </TouchableOpacity>
                         {showMoreInputs && <>
                             <Text style={styles.inputsTitle}>DETALHES DA CONTA</Text>
-                            <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' showLabel={false}/>
+                            <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta'/>
                             <Row>
                                 <Cell>
-                                    <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' showLabel={false}/>
+                                    <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência'/>
                                 </Cell>
                                 <Cell>
-                                    <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' showLabel={false}/>
+                                    <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco'/>
                                 </Cell>
                             </Row>
-                            <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' showLabel={false}/>
+                            <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável'/>
                         </>}
                     </View>
                     <View style={styles.buttons_footer}>

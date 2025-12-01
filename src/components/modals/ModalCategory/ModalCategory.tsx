@@ -108,7 +108,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES</Text>
-                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required showLabel={false} />
+                        <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required />
                         <Row>
                             <Cell>
                                 <PickerWithTopLabel control={control} name='iconName' errors={errors.iconName} labelText='Icone' items={iconsOptions} zIndex={3000} placeholder='Icone*:' />

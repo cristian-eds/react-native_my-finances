@@ -17,7 +17,7 @@ interface RowWithTopLabelProps {
   zIndex?: number,
 }
 
-export function RowWithTopLabel({ title, children, onPress, required = false, errors, showLabel = false, stylesProp, value = true, zIndex = 10 }: RowWithTopLabelProps) {
+export function RowWithTopLabel({ title, children, onPress, required = false, errors, showLabel = true, stylesProp, value = true, zIndex = 10 }: RowWithTopLabelProps) {
 
   const Wrapper = onPress ? TouchableOpacity : View;
 
