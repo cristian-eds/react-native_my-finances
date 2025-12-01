@@ -14,6 +14,7 @@ import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { FlatList } from 'react-native-gesture-handler';
 import { InstallmentItem } from './InstallmentItem/InstallmentItem';
+import { DuplicateModel } from '../../../domain/duplicateModel';
 
 export interface Item {
     sequencyItem: number;
@@ -26,9 +27,10 @@ interface InstallmentProps {
     isShow?: boolean;
     onClose: () => void;
     items: Item[];
+    data: Omit<DuplicateModel, 'id'>;
 }
 
-export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) {
+export function ModalInstallments({ items, isShow, onClose, data }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
 
@@ -38,6 +40,23 @@ export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) 
         );
         setControlledItems(updatedItems);
     }
+
+    const handleGenerateInstallments = () => {
+        const mappedItems: Omit<DuplicateModel, 'id'>[] = controlledItems.map(item => ({
+            sequencyItem: item.sequencyItem,
+            dueDate: item.dueDate,
+            accountId: data.accountId,
+            description: item.description,
+            totalValue: item.value,
+            issueDate: new Date(data.issueDate as Date),
+            categoryId: data.categoryId,
+            movementType: data.movementType,
+            numberInstallments: data.numberInstallments
+        }));
+
+        return mappedItems;
+    }
+
 
     return (
         <Modal
@@ -66,11 +85,10 @@ export function ModalInstallments({ items, isShow, onClose }: InstallmentProps) 
                             data={controlledItems}
                             renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem}/>}
                             keyExtractor={(item) => item.sequencyItem.toString()}
-
                         />
                     </View>
                     <ModalFooter>
-                        <ButtonPrincipal title='Gerar parcelas' onPress={onClose} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done'/>
+                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done'/>
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

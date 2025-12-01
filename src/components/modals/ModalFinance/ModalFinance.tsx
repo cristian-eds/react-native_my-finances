@@ -34,6 +34,7 @@ import { ModalTransaction } from '../ModalTransaction/ModalTransaction';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
+import { number } from 'zod';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -196,13 +197,25 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     }
 
     const renderTabsContent = () => {
+        const data = watch();
+        const item = {
+            accountId: Number(data.accountId),
+            categoryId: Number(data.categoryId),
+            description: data.description,
+            dueDate: new Date(data.dueDate as Date),
+            issueDate: new Date(data.issueDate as Date),
+            movementType: data.movementType,
+            totalValue: Number(data.totalValue),
+            numberInstallments: 1, 
+        }
+        
         switch (tabActive) {
             case 'INFO':
                 return renderInfos();
             case 'PAYMENTS':
                 return renderPayments();
             case 'RECURRENCE':
-                return <TabRecurrence data={watch()} />;
+                return <TabRecurrence data={item} />;
         }
     }
 

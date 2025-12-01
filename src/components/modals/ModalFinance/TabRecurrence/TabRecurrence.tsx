@@ -13,24 +13,20 @@ import { ModalInstallments } from '../../ModalInstallments/ModalInstallments';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { installmentsSchemas } from '../../../../utils/schemas/installmentsSchemas';
+import { DuplicateModel } from '../../../../domain/duplicateModel';
 
 interface TabRecurrenceProps {
-    data: {
-        issueDate: Date | undefined | any;
-        description: string | any;
-        totalValue: number | string | any;
-        dueDate: Date | undefined | any;
-    };
+    data: Omit<DuplicateModel, 'id'>;
 }
 
 export function TabRecurrence({ data }: TabRecurrenceProps) {
 
     const [showModalInstallments, setShowModalInstallments] = React.useState(false);
 
-    const { control, formState: { errors }, handleSubmit, watch, reset, setValue } = useForm({
+    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm({
         resolver: zodResolver(installmentsSchemas),
         defaultValues: {
-            numberInstallments: '1',
+            numberInstallments: data.numberInstallments.toLocaleString(),
             typeRecurrence: TypeRecurrence.Fixo,
             intervalBetweenInstallments:  30,
             fixedInstallmentDate: new Date(data.dueDate as Date).getDate().toLocaleString(),
@@ -103,7 +99,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
                 <Ionicons name="calendar-clear-outline" size={18} color="black" />
                 <Text>Ver pré-visualização das parcelas</Text>
             </TouchableOpacity>
-            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} />}
+            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} data={data}/>}
         </>
     );
 }
