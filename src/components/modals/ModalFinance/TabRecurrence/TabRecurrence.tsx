@@ -42,7 +42,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
             for (let i = 1; i < Number(fields.numberInstallments)+ 1; i++) {
                 items.push({
                     sequencyItem: i,
-                    dueDate: new Date(new Date(data.issueDate as Date).getFullYear(), new Date(data.issueDate as Date).getMonth() + i, fixedDate as number),
+                    dueDate: generateFixedDueDate(i),
                     value: Number(data.totalValue),
                     description: data.description + ` - ${i }/${fields.numberInstallments}`
                 });
@@ -62,6 +62,16 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         return items;
     }
 
+    const generateFixedDueDate = (index: number) => {
+        const fixedDate = watch().fixedInstallmentDate;
+        const year = new Date(data.issueDate as Date).getFullYear();
+        const month = new Date(data.issueDate as Date).getMonth() + index;
+        if(new Date(year, month, fixedDate as number).getDate() !== Number(fixedDate)) {
+            return new Date(year, month + 1, 0);
+        }
+        return new Date(new Date(data.issueDate as Date).getFullYear(), new Date(data.issueDate as Date).getMonth() + index, fixedDate as number);
+    }
+ 
     const renderTypeRecurrenceItem = (title: string, subtitle: string, type: TypeRecurrence) => {
         const activeTypeRecurrence = watch().typeRecurrence;
         return (
