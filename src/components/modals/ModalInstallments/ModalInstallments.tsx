@@ -32,15 +32,16 @@ interface InstallmentProps {
     onClose: () => void;
     items: Item[];
     data: Omit<DuplicateModel, 'id'>;
+    mode?: 'create' | 'edit';
 }
 
-export function ModalInstallments({ items, isShow, onClose, data }: InstallmentProps) {
+export function ModalInstallments({ items, isShow, onClose, data, mode = 'create' }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
-    const {createRecurrenceDuplicates} = useDuplicateStore()
+    const { createRecurrenceDuplicates } = useDuplicateStore()
 
     const database = useSQLiteContext();
-    const {user} = useUserContext()
+    const { user } = useUserContext()
 
     const handleUpdateItem = (updatedItem: Item) => {
         const updatedItems = controlledItems.map(item =>
@@ -64,7 +65,7 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
 
         const created = await createRecurrenceDuplicates(mappedItems, user?.id as number, database);
 
-        if(created) {
+        if (created) {
             onClose();
             Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');
         }
@@ -100,9 +101,10 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
                             keyExtractor={(item) => item.sequencyItem.toString()}
                         />
                     </View>
-                    <ModalFooter>
-                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
-                    </ModalFooter>
+                    {mode === 'create' && <ModalFooter>
+                            <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
+                        </ModalFooter>
+                    }
                 </ModalContent>
             </ModalContainer>
         </Modal>

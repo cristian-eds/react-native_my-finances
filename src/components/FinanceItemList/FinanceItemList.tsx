@@ -119,7 +119,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                         {!isPaid && renderPayButton()}
                     </Row>
                     {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
-                    {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} />}
+                    {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} recurrendeDuplicates={recurrenceDuplicates}/>}
                 </TouchableOpacity>
             }
         </>

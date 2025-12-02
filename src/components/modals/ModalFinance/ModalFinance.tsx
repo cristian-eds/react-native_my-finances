@@ -35,25 +35,30 @@ import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { number } from 'zod';
+import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
 
 interface ModalFinanceProps {
     isShow: boolean,
     mode: 'edit' | 'add',
     duplicateData?: DuplicateModel,
+    recurrendeDuplicates?: DuplicateModel[],
     onClose: () => void
 }
 
 type TabActive = 'INFO' | 'PAYMENTS' | 'RECURRENCE';
 
-export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFinanceProps) {
+export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates, onClose }: ModalFinanceProps) {
 
     const { categories } = useCategoryStore();
     const { accounts } = useAccountStore();
     const { addDuplicate, updateDuplicate, deleteDuplicate, payments } = useDuplicateStore();
+
     const [tabActive, setTabActive] = useState<TabActive>('INFO');
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
-    const {user} = useUserContext();
+    const [showModalInstallments, setShowModalInstallments] = useState(false);
+
+    const { user } = useUserContext();
 
     const paymentsItem = payments.filter(pay => pay.duplicateId === duplicateData?.id)
 
@@ -109,6 +114,15 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
         }
     }
 
+    const recurrenceDuplicatesToItems = () => {
+        return recurrendeDuplicates?.map(dup => ({
+            sequencyItem: dup.numberInstallments,
+            dueDate: new Date(dup.dueDate),
+            value: dup.totalValue,
+            description: dup.description,
+        })) || [];
+    }   
+
     const dataToPayment = (): Transaction => {
         const data = watch();
         const remainingValue = paymentsItem && paymentsItem?.length > 0 ? Number(data.totalValue) - paymentsItem.reduce((prev, current) => prev += current.value, 0) : Number(data.totalValue);
@@ -159,9 +173,9 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
     const renderInfos = () => {
         return (
             <>
-                <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required  />
+                <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required />
                 <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required />
-                <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required  />
+                <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required />
                 <Row>
                     <Cell>
                         <PickerWithTopLabel labelText='Tipo Movimento' control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
@@ -172,7 +186,7 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                 </Row>
                 <PickerWithTopLabel labelText='Conta' control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} zIndex={8000} />
                 <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento' required />
-                
+
             </>
         )
     }
@@ -206,9 +220,9 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
             issueDate: new Date(data.issueDate as Date),
             movementType: data.movementType,
             totalValue: Number(data.totalValue),
-            numberInstallments: 1, 
+            numberInstallments: 1,
         }
-        
+
         switch (tabActive) {
             case 'INFO':
                 return renderInfos();
@@ -263,12 +277,17 @@ export function ModalFinance({ isShow, mode, duplicateData, onClose }: ModalFina
                         <View style={{ rowGap: 10 }}>
                             {renderTabsHeader()}
                             {renderTabsContent()}
+                            {recurrendeDuplicates && recurrendeDuplicates.length > 1 && <TouchableOpacity style={styles.buttonInstallmentsPreview} onPress={() => setShowModalInstallments(true)}>
+                                <Ionicons name="calendar-clear-outline" size={18} color="black" />
+                                <Text>Ver parcelas recorrentes</Text>
+                            </TouchableOpacity>}
                         </View>
                         {renderFooter()}
                     </ModalContent>
                 </ModalContainer>
                 {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
                 {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
+                {showModalInstallments && duplicateData &&  recurrendeDuplicates && <ModalInstallments isShow={showModalInstallments} onClose={() => setShowModalInstallments(false)} items={recurrenceDuplicatesToItems()} data={duplicateData} mode='edit'/>}
             </KeyboardAvoidingView >
         </Modal>
     );

@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     color: '#000'
   },
   tabContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 8,
     paddingHorizontal: 5,
@@ -37,5 +37,15 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
     color: '#272727ff'
-  }
+  },
+  buttonInstallmentsPreview: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    columnGap: 8,
+    marginTop: 10,
+    alignItems: 'center',
+    backgroundColor: '#e0e0e0',
+    padding: 8,
+    borderRadius: 7
+  },
 });
