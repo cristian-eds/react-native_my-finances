@@ -115,3 +115,22 @@ export async function deleteDuplicate(duplicateId: string, database: SQLiteDatab
         return false;
     }
 }
+
+export async function udpateFatherId(duplicateId: string, fatherId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+                UPDATE duplicates
+                SET 
+                    duplicate_father_id = ?
+                WHERE 
+                    id = ?
+            `, [
+            fatherId,
+            duplicateId
+        ])
+        return res.changes > 0;
+    } catch (error) {
+        console.error(error)
+        return false;
+    }
+}

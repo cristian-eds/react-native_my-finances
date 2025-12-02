@@ -37,5 +37,9 @@ export const createRecurrenceDuplicates = async (duplicates: Omit<DuplicateModel
         }
         createdDuplicates.push(createdDuplicate);
     }  
+
+    if(idFirstDuplicate && createdDuplicates.length > 1) {
+        await duplicateRepository.udpateFatherId(idFirstDuplicate.toLocaleString(),idFirstDuplicate.toLocaleString(), database);
+    }
     return createdDuplicates;
 }
