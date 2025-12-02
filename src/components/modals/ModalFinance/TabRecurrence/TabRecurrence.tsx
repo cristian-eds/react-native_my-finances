@@ -14,6 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { installmentsSchemas } from '../../../../utils/schemas/installmentsSchemas';
 import { DuplicateModel } from '../../../../domain/duplicateModel';
+import { Row } from '../../structure/Row/Row';
+import { Cell } from '../../structure/Cell/Cell';
+import { ButtonIconSimple } from '../../../buttons/ButtonIconSimple/ButtonIconSimple';
 
 interface TabRecurrenceProps {
     data: Omit<DuplicateModel, 'id'>;
@@ -28,7 +31,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         defaultValues: {
             numberInstallments: data.numberInstallments.toLocaleString(),
             typeRecurrence: TypeRecurrence.Fixo,
-            intervalBetweenInstallments:  30,
+            intervalBetweenInstallments: 30,
             fixedInstallmentDate: new Date(data.dueDate as Date).getDate().toLocaleString(),
         }
     });
@@ -38,12 +41,12 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         const activeTypeRecurrence = watch().typeRecurrence;
         const fields = watch();
         if (activeTypeRecurrence === TypeRecurrence.Fixo) {
-            for (let i = 1; i < Number(fields.numberInstallments)+ 1; i++) {
+            for (let i = 1; i < Number(fields.numberInstallments) + 1; i++) {
                 items.push({
                     sequencyItem: i,
                     dueDate: generateFixedDueDate(i),
                     value: Number(data.totalValue),
-                    description: data.description + ` - ${i }/${fields.numberInstallments}`
+                    description: data.description + ` - ${i}/${fields.numberInstallments}`
                 });
             }
         }
@@ -52,7 +55,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
             for (let i = 1; i < Number(fields.numberInstallments) + 1; i++) {
                 items.push({
                     sequencyItem: i,
-                    dueDate: new Date(new Date(data.issueDate as Date).getTime() + (i * Number(intervalDays)  * 24 * 60 * 60 * 1000)),
+                    dueDate: new Date(new Date(data.issueDate as Date).getTime() + (i * Number(intervalDays) * 24 * 60 * 60 * 1000)),
                     value: Number(data.totalValue),
                     description: data.description + ` ${i}/${fields.numberInstallments}`
                 });
@@ -65,18 +68,39 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         const fixedDate = watch().fixedInstallmentDate;
         const year = new Date(data.issueDate as Date).getFullYear();
         const month = new Date(data.issueDate as Date).getMonth() + index;
-        if(new Date(year, month, fixedDate as number).getDate() !== Number(fixedDate)) {
+        if (new Date(year, month, fixedDate as number).getDate() !== Number(fixedDate)) {
             return new Date(year, month + 1, 0);
         }
         return new Date(new Date(data.issueDate as Date).getFullYear(), new Date(data.issueDate as Date).getMonth() + index, fixedDate as number);
     }
- 
+
+    const renderControlInstallments = (field: 'numberInstallments' | 'intervalBetweenInstallments' | 'fixedInstallmentDate') => {
+        return (
+            <Row style={{ justifyContent: 'space-around' }}>
+                <ButtonIconSimple iconName='remove' sizeIcon={20} style={styles.iconButtonRounded} onPress={() => updateInstallments('decrease', field)} />
+                <ButtonIconSimple iconName='add' sizeIcon={20} style={[styles.iconButtonRounded, { backgroundColor: '#77d05fff' }]} onPress={() => updateInstallments('increase', field)} />
+            </Row>
+        )
+    }
+
+    const updateInstallments = (type: 'increase' | 'decrease', field: 'numberInstallments' | 'intervalBetweenInstallments' | 'fixedInstallmentDate') => {
+        const values = watch();
+        const currentValue = Number(values[field]) || 0;
+        if (type === 'increase') {
+            setValue(field, (currentValue + 1).toString());
+        } else {
+            if (currentValue > 1) {
+                setValue(field, (currentValue - 1).toString());
+            }
+        }
+    }
+
     const renderTypeRecurrenceItem = (title: string, subtitle: string, type: TypeRecurrence) => {
         const activeTypeRecurrence = watch().typeRecurrence;
         return (
             <RowWithTopLabel title='Tipo da recorrência' errors={errors.typeRecurrence} stylesProp={{ justifyContent: 'flex-start', columnGap: 10 }}>
                 <Checkbox checked={type === activeTypeRecurrence} />
-                <TouchableOpacity onPress={() => setValue('typeRecurrence',type)}>
+                <TouchableOpacity onPress={() => setValue('typeRecurrence', type)}>
                     <Text>{title}</Text>
                     <Text style={{ fontSize: 12, color: '#7b7b7bff' }}>{subtitle}</Text>
                 </TouchableOpacity>
@@ -86,7 +110,14 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
 
     return (
         <>
-            <TextInputWithTopLabel title='Número de Parcelas' control={control} name='numberInstallments' errors={errors.numberInstallments} placeholder='Quantidade de parcelas' keyboardType='number-pad' required />
+            <Row>
+                <Cell flex={3}>
+                    <TextInputWithTopLabel title='Número de Parcelas' control={control} name='numberInstallments' errors={errors.numberInstallments} placeholder='Quantidade de parcelas' keyboardType='number-pad' required />
+                </Cell>
+                <Cell flex={1}>
+                    {renderControlInstallments('numberInstallments')}
+                </Cell>
+            </Row>
             <View style={{ rowGap: 10, marginTop: 5 }}>
                 <Text>Tipo de Recorrência</Text>
                 {renderTypeRecurrenceItem('Dia Fixo', 'Vence no mesmo dia em todos os meses.', TypeRecurrence.Fixo)}
@@ -96,11 +127,25 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
                 {watch().typeRecurrence === TypeRecurrence.Fixo ?
                     <>
                         <Text>Dia do vencimento</Text>
-                        <TextInputWithTopLabel title='Dia do mês' control={control} name='fixedInstallmentDate' errors={errors.fixedInstallmentDate} placeholder='Informe o dia do mês' keyboardType='number-pad' required />
+                        <Row>
+                            <Cell flex={3}>
+                                <TextInputWithTopLabel title='Dia do mês' control={control} name='fixedInstallmentDate' errors={errors.fixedInstallmentDate} placeholder='Informe o dia do mês' keyboardType='number-pad' required />
+                            </Cell>
+                            <Cell flex={1}>
+                                {renderControlInstallments('fixedInstallmentDate')}
+                            </Cell>
+                        </Row>
                     </> :
                     <>
                         <Text>Dias entre parcelas</Text>
-                        <TextInputWithTopLabel title='Intervalo de dias' control={control} name='intervalBetweenInstallments' errors={errors.intervalBetweenInstallments} placeholder='Informe o intervalo de dias' keyboardType='number-pad' required />
+                        <Row>
+                            <Cell flex={3}>
+                                <TextInputWithTopLabel title='Intervalo de dias' control={control} name='intervalBetweenInstallments' errors={errors.intervalBetweenInstallments} placeholder='Informe o intervalo de dias' keyboardType='number-pad' required />
+                            </Cell>
+                            <Cell flex={1}>
+                                {renderControlInstallments('intervalBetweenInstallments')}
+                            </Cell> 
+                        </Row>
                     </>
                 }
             </View>
@@ -108,7 +153,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
                 <Ionicons name="calendar-clear-outline" size={18} color="black" />
                 <Text>Ver pré-visualização das parcelas</Text>
             </TouchableOpacity>
-            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} data={data}/>}
+            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} data={data} />}
         </>
     );
 }

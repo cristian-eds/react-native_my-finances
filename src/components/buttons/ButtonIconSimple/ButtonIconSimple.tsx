@@ -6,14 +6,15 @@ import { styles } from './ButtonIconSimpleStyles';
 
 interface ButtonIconSimple {
   iconName: keyof typeof Ionicons.glyphMap,
+  sizeIcon?: number,
 }
 
 type Props = ButtonIconSimple & TouchableOpacityProps;
 
-export function ButtonIconSimple({iconName, ...props}: Props) {
+export function ButtonIconSimple({iconName, sizeIcon = 22, ...props}: Props) {
   return (
     <TouchableOpacity {...props} style={[styles.container, props.style]} >
-        <Ionicons name={iconName} size={22} color="black" />
+        <Ionicons name={iconName} size={sizeIcon} color="black" />
     </TouchableOpacity>
   );
 }

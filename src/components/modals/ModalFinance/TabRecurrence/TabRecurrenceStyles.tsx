@@ -11,5 +11,12 @@ export const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 7
     },
-    
+    iconButtonRounded: {
+        width: 27,
+        height: 27,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fa7e7eff'
+    }
 });
