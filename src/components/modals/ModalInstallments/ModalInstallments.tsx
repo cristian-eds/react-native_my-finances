@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View } from 'react-native';
+import { Alert, Modal, View } from 'react-native';
 
 import { styles } from './ModalInstallmentsStyles';
 import { Row } from '../structure/Row/Row';
@@ -15,6 +15,9 @@ import { ButtonPrincipal } from '../../buttons/ButtonPrincipal/ButtonPrincipal';
 import { FlatList } from 'react-native-gesture-handler';
 import { InstallmentItem } from './InstallmentItem/InstallmentItem';
 import { DuplicateModel } from '../../../domain/duplicateModel';
+import { useDuplicateStore } from '../../../stores/DuplicateStores';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useUserContext } from '../../../hooks/useUserContext';
 
 
 export interface Item {
@@ -34,6 +37,10 @@ interface InstallmentProps {
 export function ModalInstallments({ items, isShow, onClose, data }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
+    const {createRecurrenceDuplicates} = useDuplicateStore()
+
+    const database = useSQLiteContext();
+    const {user} = useUserContext()
 
     const handleUpdateItem = (updatedItem: Item) => {
         const updatedItems = controlledItems.map(item =>
@@ -42,7 +49,7 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
         setControlledItems(updatedItems);
     }
 
-    const handleGenerateInstallments = () => {
+    const handleGenerateInstallments = async () => {
         const mappedItems: Omit<DuplicateModel, 'id'>[] = controlledItems.map(item => ({
             sequencyItem: item.sequencyItem,
             dueDate: item.dueDate,
@@ -55,9 +62,12 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
             numberInstallments: data.numberInstallments
         }));
 
-        console.log('Generated Installments:', mappedItems);
+        const created = await createRecurrenceDuplicates(mappedItems, user?.id as number, database);
 
-        return mappedItems;
+        if(created) {
+            onClose();
+            Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');
+        }
     }
 
 

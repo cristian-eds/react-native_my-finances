@@ -19,6 +19,7 @@ type Store = {
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => Promise<void>
     updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
     deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
+    createRecurrenceDuplicates: (duplicates: Omit<DuplicateModel, "id">[], userId: number, database: SQLiteDatabase) => Promise<boolean>
 
     fetchPayments: (duplicates: DuplicateModel[], database: SQLiteDatabase) => Promise<boolean>
     setPayments: (transactions: Transaction[]) => void
@@ -94,6 +95,24 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return isDeleted;
         } catch (error) {
             console.error("Error deleting duplicate", error)
+            return false;
+        }
+    },
+
+    createRecurrenceDuplicates: async (duplicates, userId, database) => {
+        try {
+            const idsInserted = await duplicateService.createRecurrenceDuplicates(duplicates, userId, database);
+            const createdDuplicates = duplicates.map((dup, index) => ({
+                ...dup,
+                id: idsInserted[index]
+            }))
+            set({
+                duplicates: [...get().duplicates, ...createdDuplicates.filter(dup => get().filters.initialDate < dup.dueDate && get().filters.finalDate > dup.dueDate )] as DuplicateModel[]
+            })
+            return true;
+        }
+        catch (error) {
+            console.error("Error creating recurrence duplicates", error)
             return false;
         }
     },
