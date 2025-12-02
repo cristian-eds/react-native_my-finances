@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { use, useEffect, useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -14,6 +14,9 @@ import { useDuplicateStore } from '../../stores/DuplicateStores';
 import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 import { DuplicateStatus } from '../../domain/enums/duplicateStatusEnun';
 import { formaterEnumKeyToLabel } from '../../utils/StringFormater';
+import { getByFatherId } from '../../services/duplicateService';
+import { useUserContext } from '../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
 
 interface FinanceItemList {
     item: DuplicateModel,
@@ -23,13 +26,26 @@ export function FinanceItemList({ item }: FinanceItemList) {
 
     const [showModalFinance, setShowModalFinance] = useState(false);
     const [showModalTransaction, setShowModalTransaction] = useState(false);
+    const [recurrenceDuplicates, setRecurrenceDuplicates] = useState<DuplicateModel[]>([]);
+
     const { payments, filters } = useDuplicateStore();
+    const { user } = useUserContext();
+    const database = useSQLiteContext();
 
     const transactionsPayments = payments.filter(pay => pay.duplicateId === item.id);
 
     const valuePaid = transactionsPayments?.reduce((prev, current) => prev += current.value, 0) || 0;
     const isPaid = valuePaid >= item.totalValue;
 
+    useEffect(() => {
+        const fetchRecurrenceDuplicates = async () => {
+            if (item.duplicateFatherId) {
+                const duplicates = await getByFatherId(item.duplicateFatherId,user?.id as number,database);
+                setRecurrenceDuplicates(duplicates);
+            }
+        }
+        fetchRecurrenceDuplicates();
+    }, [item.duplicateFatherId]);
 
     const renderStatus = () => {
         const { text, bgcolor } = generateStatus();
@@ -99,7 +115,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
                         {renderDueDate()}
                     </Row>
                     <Row>
-                        <Text>Duplicata 1/1</Text>
+                        <Text>Duplicata {`${item.numberInstallments}/${recurrenceDuplicates.length}`}</Text>
                         {!isPaid && renderPayButton()}
                     </Row>
                     {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}

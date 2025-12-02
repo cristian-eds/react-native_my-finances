@@ -28,7 +28,7 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
 
         return result.lastInsertRowId;
     } catch (error) {
-        console.error("Error creating transaction:", error);
+        console.error("Error creating duplicate:", error);
     }
 }
 
@@ -37,7 +37,8 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
         SELECT * FROM duplicates 
         WHERE user_id = $userId
         AND due_date BETWEEN $initialDate AND $finalDate
-    `
+    `;
+
     if (filters.textSearch) {
         sql += ` AND description LIKE $textSearchQuery`;
     }
@@ -65,7 +66,7 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
         const duplicates = await result.getAllAsync();
         return duplicates;
     } catch (error) {
-        console.error("Error getting account:", error);
+        console.error("Error getting duplicates:", error);
     } finally {
         await statement.finalizeAsync();
     }
@@ -133,4 +134,30 @@ export async function udpateFatherId(duplicateId: string, fatherId: string, data
         console.error(error)
         return false;
     }
+}
+
+export async function getByFatherId(fatherId: string, userId: string, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
+    let sql = `
+        SELECT * FROM duplicates 
+        WHERE user_id = $userId
+        AND duplicate_father_id = $fatherId
+    `;
+    
+    const statement = await database.prepareAsync(sql);
+
+    try {
+        const params = {
+            $userId: userId,
+            $fatherId: fatherId
+        };
+
+        const result = await statement.executeAsync<DuplicateRecord>(params);
+        const duplicates = await result.getAllAsync();
+        return duplicates;
+    } catch (error) {
+        console.error("Error getting duplicates:", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
+
 }

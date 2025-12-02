@@ -43,3 +43,9 @@ export const createRecurrenceDuplicates = async (duplicates: Omit<DuplicateModel
     }
     return createdDuplicates;
 }
+
+export const getByFatherId = async (fatherId: number, userId: number,database: SQLiteDatabase) => {
+    const duplicates = await duplicateRepository.getByFatherId(fatherId.toLocaleString(), userId.toLocaleString(), database);
+    if (!duplicates) return [];
+    return fromRecordListToModelList(duplicates);
+}

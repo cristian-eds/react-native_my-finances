@@ -50,7 +50,7 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
     }
 
     const handleGenerateInstallments = async () => {
-        const mappedItems: Omit<DuplicateModel, 'id'>[] = controlledItems.map(item => ({
+        const mappedItems: Omit<DuplicateModel, 'id'>[] = controlledItems.map((item, index) => ({
             sequencyItem: item.sequencyItem,
             dueDate: item.dueDate,
             accountId: data.accountId,
@@ -59,7 +59,7 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
             issueDate: new Date(data.issueDate as Date),
             categoryId: data.categoryId,
             movementType: data.movementType,
-            numberInstallments: data.numberInstallments
+            numberInstallments: index + 1
         }));
 
         const created = await createRecurrenceDuplicates(mappedItems, user?.id as number, database);

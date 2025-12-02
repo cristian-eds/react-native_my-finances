@@ -38,7 +38,6 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         const activeTypeRecurrence = watch().typeRecurrence;
         const fields = watch();
         if (activeTypeRecurrence === TypeRecurrence.Fixo) {
-            const fixedDate = fields.fixedInstallmentDate;
             for (let i = 1; i < Number(fields.numberInstallments)+ 1; i++) {
                 items.push({
                     sequencyItem: i,
