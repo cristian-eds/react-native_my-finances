@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './DatePickerWithTopLabelStyles';

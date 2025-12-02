@@ -4,9 +4,12 @@ import { Text, TextInput, View } from 'react-native';
 import { styles } from './InstallmentItemStyles';
 import { Item } from '../ModalInstallments';
 import { Row } from '../../structure/Row/Row';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { installmentsItemSchemas } from '../../../../utils/schemas/installmentItemSchemas';
+
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { TouchableOpacity } from 'react-native';
 
 interface InstallmentItemProps {
     item: Item,
@@ -14,6 +17,8 @@ interface InstallmentItemProps {
 }
 
 export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
+
+    const [showPicker, setShowPicker] = useState<boolean>(false);
 
     const { control, handleSubmit, watch, formState: { errors }, trigger } = useForm({
         resolver: zodResolver(installmentsItemSchemas),
@@ -28,10 +33,10 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
         const updated = watch();
 
         updateItem({
-           ...item,
-           dueDate: new Date(updated.dueDate as Date),
-              description: updated.description,
-              value: updated.value as number,
+            ...item,
+            dueDate: new Date(updated.dueDate as Date),
+            description: updated.description,
+            value: updated.value as number,
         });
 
     }
@@ -50,36 +55,58 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
     }
 
     return (
-    <View style={styles.installmentItem}>
-        <Row key={item.sequencyItem} >
-            <Text>{item.sequencyItem}</Text>
-            <Controller
-                control={control}
-                name="description"
-                render={({ field: { onChange, onBlur, value: description } }) => (
-                    <TextInput value={description} onChangeText={async (e) => {
-                        onChange(e);
-                        await trigger('description');
-                        propagateChanges();
-                    }} style={[styles.input,{flex: 2}]} />
-                )}
-            />
-            <Text style={{flex: 2}}>{item.dueDate.toLocaleDateString()}</Text>
-            <Controller
-                control={control}
-                name="value"
-                render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
-                    <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
-                        onChange(e);
-                        await trigger('value');
-                        propagateChanges();
-                    }} style={[styles.input, { flex: 1 ,textAlign: 'right' }]} 
-                        keyboardType="numeric"
-                    />
-                )}
-            />
-        </Row>
-        {renderErrors()}
-    </View>
+        <View style={styles.installmentItem}>
+            <Row key={item.sequencyItem} >
+                <Text>{item.sequencyItem}</Text>
+                <Controller
+                    control={control}
+                    name="description"
+                    render={({ field: { onChange, onBlur, value: description } }) => (
+                        <TextInput value={description} onChangeText={async (e) => {
+                            onChange(e);
+                            await trigger('description');
+                            propagateChanges();
+                        }} style={[styles.input, { flex: 2 }]} />
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name='dueDate'
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}>
+                            <Text>{new Date(value as Date).toLocaleDateString()}</Text>
+                            <DateTimePickerModal
+                                isVisible={showPicker}
+                                mode={'date'}
+                                onConfirm={(selectedDate: Date) => {
+                                    onChange(selectedDate);
+                                    setShowPicker(false);
+                                    propagateChanges();
+                                }}
+                                onCancel={() => setShowPicker(false)}
+                                date={value as Date}
+                            />
+                        </TouchableOpacity>
+
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="value"
+                    render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
+                        <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
+                            onChange(e);
+                            await trigger('value');
+                            propagateChanges();
+                        }} style={[styles.input, { flex: 1, textAlign: 'right' }]}
+                            keyboardType="numeric"
+                        />
+                    )}
+                />
+            </Row>
+
+            {renderErrors()}
+        </View>
     );
 }

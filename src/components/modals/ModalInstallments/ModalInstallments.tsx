@@ -16,6 +16,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { InstallmentItem } from './InstallmentItem/InstallmentItem';
 import { DuplicateModel } from '../../../domain/duplicateModel';
 
+
 export interface Item {
     sequencyItem: number;
     dueDate: Date;
@@ -35,7 +36,7 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
 
     const handleUpdateItem = (updatedItem: Item) => {
-        const updatedItems = controlledItems.map(item => 
+        const updatedItems = controlledItems.map(item =>
             item.sequencyItem === updatedItem.sequencyItem ? updatedItem : item
         );
         setControlledItems(updatedItems);
@@ -53,6 +54,8 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
             movementType: data.movementType,
             numberInstallments: data.numberInstallments
         }));
+
+        console.log('Generated Installments:', mappedItems);
 
         return mappedItems;
     }
@@ -83,12 +86,12 @@ export function ModalInstallments({ items, isShow, onClose, data }: InstallmentP
                     <View style={{ maxHeight: 300 }}>
                         <FlatList
                             data={controlledItems}
-                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem}/>}
+                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem} />}
                             keyExtractor={(item) => item.sequencyItem.toString()}
                         />
                     </View>
                     <ModalFooter>
-                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done'/>
+                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>
