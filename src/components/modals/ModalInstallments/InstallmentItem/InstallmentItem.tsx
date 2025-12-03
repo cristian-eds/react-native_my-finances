@@ -12,7 +12,6 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { TouchableOpacity } from 'react-native';
 import { findTransactionsByDuplicateId } from '../../../../services/transactionService';
 import { useSQLiteContext } from 'expo-sqlite';
-import { DuplicateModel } from '../../../../domain/duplicateModel';
 import { Transaction } from '../../../../domain/transactionModel';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -42,7 +41,9 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
             const pays = await findTransactionsByDuplicateId(item.id.toLocaleString(), database);
             pays && setPayments(pays);
         }
-        fetchPayments()
+        if(item.id && item.id !== 0) {
+            fetchPayments()
+        }
         return () => { };
     }, [watch]);
 
@@ -89,7 +90,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                                 await trigger('description');
                                 propagateChanges();
                             }}
-                            style={[styles.input, { flex: 2 }]}
+                            style={[styles.input, { flex: 3 }]}
                             readOnly={readonly} />
                     )}
                 />

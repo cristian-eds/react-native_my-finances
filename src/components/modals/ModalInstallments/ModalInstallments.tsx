@@ -31,12 +31,13 @@ export interface Item {
 interface InstallmentProps {
     isShow?: boolean;
     onClose: () => void;
+    onCreateInstallments?: () => void;
     items: Item[];
     data: Omit<DuplicateModel, 'id'>;
     mode?: 'create' | 'edit';
 }
 
-export function ModalInstallments({ items, isShow, onClose, data, mode = 'create' }: InstallmentProps) {
+export function ModalInstallments({ items, isShow, onClose,onCreateInstallments, data, mode = 'create' }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
     const { createRecurrenceDuplicates } = useDuplicateStore()
@@ -68,6 +69,7 @@ export function ModalInstallments({ items, isShow, onClose, data, mode = 'create
 
         if (created) {
             onClose();
+            onCreateInstallments && onCreateInstallments();
             Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');
         }
     }

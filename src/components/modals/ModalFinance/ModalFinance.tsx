@@ -232,7 +232,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
             case 'PAYMENTS':
                 return renderPayments();
             case 'RECURRENCE':
-                return <TabRecurrence data={item} />;
+                return <TabRecurrence data={item} onClose={handleClose}/>;
         }
     }
 

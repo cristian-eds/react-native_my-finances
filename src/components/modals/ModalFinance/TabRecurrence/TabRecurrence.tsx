@@ -20,9 +20,10 @@ import { ButtonIconSimple } from '../../../buttons/ButtonIconSimple/ButtonIconSi
 
 interface TabRecurrenceProps {
     data: Omit<DuplicateModel, 'id'>;
+    onClose: () => void
 }
 
-export function TabRecurrence({ data }: TabRecurrenceProps) {
+export function TabRecurrence({ data, onClose }: TabRecurrenceProps) {
 
     const [showModalInstallments, setShowModalInstallments] = React.useState(false);
 
@@ -43,6 +44,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
         if (activeTypeRecurrence === TypeRecurrence.Fixo) {
             for (let i = 1; i < Number(fields.numberInstallments) + 1; i++) {
                 items.push({
+                    id: 0,
                     sequencyItem: i,
                     dueDate: generateFixedDueDate(i),
                     value: Number(data.totalValue),
@@ -54,6 +56,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
             const intervalDays = fields.intervalBetweenInstallments || 30;
             for (let i = 1; i < Number(fields.numberInstallments) + 1; i++) {
                 items.push({
+                    id: 0,
                     sequencyItem: i,
                     dueDate: new Date(new Date(data.issueDate as Date).getTime() + (i * Number(intervalDays) * 24 * 60 * 60 * 1000)),
                     value: Number(data.totalValue),
@@ -153,7 +156,7 @@ export function TabRecurrence({ data }: TabRecurrenceProps) {
                 <Ionicons name="calendar-clear-outline" size={18} color="black" />
                 <Text>Ver pré-visualização das parcelas</Text>
             </TouchableOpacity>
-            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} data={data} />}
+            {showModalInstallments && <ModalInstallments isShow={showModalInstallments} items={handleGenerateInstallments()} onClose={() => setShowModalInstallments(false)} data={data} onCreateInstallments={onClose} />}
         </>
     );
 }
