@@ -21,6 +21,7 @@ import { useUserContext } from '../../../hooks/useUserContext';
 
 
 export interface Item {
+    id: number;
     sequencyItem: number;
     dueDate: Date;
     value: number;
@@ -41,7 +42,7 @@ export function ModalInstallments({ items, isShow, onClose, data, mode = 'create
     const { createRecurrenceDuplicates } = useDuplicateStore()
 
     const database = useSQLiteContext();
-    const { user } = useUserContext()
+    const { user } = useUserContext();
 
     const handleUpdateItem = (updatedItem: Item) => {
         const updatedItems = controlledItems.map(item =>

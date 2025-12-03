@@ -26,6 +26,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
         defaultValues: item,
     });
 
+    const overdue = new Date() > new Date(item.dueDate as Date);
 
     function propagateChanges() {
 
@@ -80,7 +81,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}
                             disabled={readonly}>
-                            <Text>{new Date(value as Date).toLocaleDateString()}</Text>
+                            <Text style={overdue ? {color: 'red'} : ''}>{new Date(value as Date).toLocaleDateString()}</Text>
                             <DateTimePickerModal
                                 isVisible={showPicker}
                                 mode={'date'}

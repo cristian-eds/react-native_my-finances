@@ -34,7 +34,6 @@ import { ModalTransaction } from '../ModalTransaction/ModalTransaction';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
-import { number } from 'zod';
 import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
 
 interface ModalFinanceProps {
@@ -116,12 +115,13 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
 
     const recurrenceDuplicatesToItems = () => {
         return recurrendeDuplicates?.map(dup => ({
+            id: dup.id,
             sequencyItem: dup.numberInstallments,
             dueDate: new Date(dup.dueDate),
             value: dup.totalValue,
             description: dup.description,
         })) || [];
-    }   
+    }
 
     const dataToPayment = (): Transaction => {
         const data = watch();
@@ -186,7 +186,10 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                 </Row>
                 <PickerWithTopLabel labelText='Conta' control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} zIndex={8000} />
                 <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento' required />
-
+                {recurrendeDuplicates && recurrendeDuplicates.length > 1 && <TouchableOpacity style={styles.buttonInstallmentsPreview} onPress={() => setShowModalInstallments(true)}>
+                    <Ionicons name="calendar-clear-outline" size={18} color="black" />
+                    <Text>Ver parcelas recorrentes</Text>
+                </TouchableOpacity>}
             </>
         )
     }
@@ -277,17 +280,13 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                         <View style={{ rowGap: 10 }}>
                             {renderTabsHeader()}
                             {renderTabsContent()}
-                            {recurrendeDuplicates && recurrendeDuplicates.length > 1 && <TouchableOpacity style={styles.buttonInstallmentsPreview} onPress={() => setShowModalInstallments(true)}>
-                                <Ionicons name="calendar-clear-outline" size={18} color="black" />
-                                <Text>Ver parcelas recorrentes</Text>
-                            </TouchableOpacity>}
                         </View>
                         {renderFooter()}
                     </ModalContent>
                 </ModalContainer>
                 {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
                 {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
-                {showModalInstallments && duplicateData &&  recurrendeDuplicates && <ModalInstallments isShow={showModalInstallments} onClose={() => setShowModalInstallments(false)} items={recurrenceDuplicatesToItems()} data={duplicateData} mode='edit'/>}
+                {showModalInstallments && duplicateData && recurrendeDuplicates && <ModalInstallments isShow={showModalInstallments} onClose={() => setShowModalInstallments(false)} items={recurrenceDuplicatesToItems()} data={duplicateData} mode='edit' />}
             </KeyboardAvoidingView >
         </Modal>
     );
