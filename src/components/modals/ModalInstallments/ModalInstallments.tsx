@@ -97,7 +97,7 @@ export function ModalInstallments({ items, isShow, onClose, data, mode = 'create
                     <View style={{ maxHeight: 300 }}>
                         <FlatList
                             data={controlledItems}
-                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem} />}
+                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem} readonly={mode === 'edit'}/>}
                             keyExtractor={(item) => item.sequencyItem.toString()}
                         />
                     </View>

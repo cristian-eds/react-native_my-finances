@@ -14,9 +14,10 @@ import { TouchableOpacity } from 'react-native';
 interface InstallmentItemProps {
     item: Item,
     updateItem: (item: Item) => void,
+    readonly?: boolean,
 }
 
-export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
+export function InstallmentItem({ item, updateItem, readonly = false }: InstallmentItemProps) {
 
     const [showPicker, setShowPicker] = useState<boolean>(false);
 
@@ -62,18 +63,23 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
                     control={control}
                     name="description"
                     render={({ field: { onChange, onBlur, value: description } }) => (
-                        <TextInput value={description} onChangeText={async (e) => {
-                            onChange(e);
-                            await trigger('description');
-                            propagateChanges();
-                        }} style={[styles.input, { flex: 2 }]} />
+                        <TextInput
+                            value={description}
+                            onChangeText={async (e) => {
+                                onChange(e);
+                                await trigger('description');
+                                propagateChanges();
+                            }}
+                            style={[styles.input, { flex: 2 }]}
+                            readOnly={readonly} />
                     )}
                 />
                 <Controller
                     control={control}
                     name='dueDate'
                     render={({ field: { onChange, onBlur, value } }) => (
-                        <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}>
+                        <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}
+                            disabled={readonly}>
                             <Text>{new Date(value as Date).toLocaleDateString()}</Text>
                             <DateTimePickerModal
                                 isVisible={showPicker}
@@ -101,7 +107,7 @@ export function InstallmentItem({ item, updateItem }: InstallmentItemProps) {
                             propagateChanges();
                         }} style={[styles.input, { flex: 1, textAlign: 'right' }]}
                             keyboardType="numeric"
-                        />
+                            readOnly={readonly} />
                     )}
                 />
             </Row>
