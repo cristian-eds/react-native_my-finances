@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 
 import { styles } from './InstallmentItemStyles';
@@ -10,6 +10,11 @@ import { installmentsItemSchemas } from '../../../../utils/schemas/installmentIt
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { TouchableOpacity } from 'react-native';
+import { findTransactionsByDuplicateId } from '../../../../services/transactionService';
+import { useSQLiteContext } from 'expo-sqlite';
+import { DuplicateModel } from '../../../../domain/duplicateModel';
+import { Transaction } from '../../../../domain/transactionModel';
+import { Ionicons } from '@expo/vector-icons';
 
 interface InstallmentItemProps {
     item: Item,
@@ -20,6 +25,9 @@ interface InstallmentItemProps {
 export function InstallmentItem({ item, updateItem, readonly = false }: InstallmentItemProps) {
 
     const [showPicker, setShowPicker] = useState<boolean>(false);
+    const [payments, setPayments] = useState<Transaction[]>([]);
+
+    const database = useSQLiteContext();
 
     const { control, handleSubmit, watch, formState: { errors }, trigger } = useForm({
         resolver: zodResolver(installmentsItemSchemas),
@@ -27,6 +35,16 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
     });
 
     const overdue = new Date() > new Date(item.dueDate as Date);
+    const payed = payments.length > 0 && payments.reduce((prev, current) => prev += current.value, 0) >= item.value;
+
+    useEffect(() => {
+        const fetchPayments = async () => {
+            const pays = await findTransactionsByDuplicateId(item.id.toLocaleString(), database);
+            pays && setPayments(pays);
+        }
+        fetchPayments()
+        return () => { };
+    }, [watch]);
 
     function propagateChanges() {
 
@@ -81,7 +99,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}
                             disabled={readonly}>
-                            <Text style={overdue ? {color: 'red'} : ''}>{new Date(value as Date).toLocaleDateString()}</Text>
+                            <Text style={overdue ? { color: 'red' } : ''}>{new Date(value as Date).toLocaleDateString()}</Text>
                             <DateTimePickerModal
                                 isVisible={showPicker}
                                 mode={'date'}
@@ -97,20 +115,23 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
 
                     )}
                 />
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <Controller
+                        control={control}
+                        name="value"
+                        render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
+                            <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
+                                onChange(e);
+                                await trigger('value');
+                                propagateChanges();
+                            }} style={[styles.input, { flex: 1, textAlign: 'right' }, payed ? { textDecorationLine: 'line-through', color: 'green' } : {}]}
+                                keyboardType="numeric"
+                                readOnly={readonly} />
+                        )}
+                    />
+                    {payed && <Ionicons name="checkmark-circle" size={15} color="green" />}
+                </View>
 
-                <Controller
-                    control={control}
-                    name="value"
-                    render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
-                        <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
-                            onChange(e);
-                            await trigger('value');
-                            propagateChanges();
-                        }} style={[styles.input, { flex: 1, textAlign: 'right' }]}
-                            keyboardType="numeric"
-                            readOnly={readonly} />
-                    )}
-                />
             </Row>
 
             {renderErrors()}
