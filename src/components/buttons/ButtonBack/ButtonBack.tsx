@@ -7,8 +7,8 @@ interface ButtonBack {
     onPress: () => void
 }
 
-export function ButtonBack({onPress}: ButtonBack ) {
+export function ButtonBack({onPress, ...props}: ButtonBack ) {
     return (
-        <ButtonIconSimple iconName='arrow-back' onPress={onPress} style={styles.buttonBack} />
+        <ButtonIconSimple iconName='arrow-back' onPress={onPress} style={styles.buttonBack} {...props} />
     );
 }

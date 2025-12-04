@@ -6,10 +6,23 @@ export const styles = StyleSheet.create({
     borderTopEndRadius: 10,
     borderBottomRightRadius: 10,
     paddingHorizontal: 20,
-    paddingVertical: 30
+    paddingVertical: 25
   },
   header: {
-    marginBottom: 15
+    marginBottom: 20
+  },
+  avatarHeader: {
+    backgroundColor:'#9eb5ffcb',
+    padding: 7,
+    width: 35,
+    height: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: '500'
   },
   tab: {
     rowGap: 8,
@@ -21,7 +34,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: .7,
     padding: 10,
-    borderBottomColor: '#9e9e9e81'
+    borderBottomColor: '#9e9e9e81',
+  },
+  itemsPrincipals: {
+    borderRadius: 10
   },
   itemLink: {
     flexDirection: 'row',
@@ -30,7 +46,7 @@ export const styles = StyleSheet.create({
     flex: 1
   },
   itemText: {
-    fontSize: 18
+    fontSize: 16,
   },
   boxChevron: {
     width: '15%',
@@ -44,4 +60,11 @@ export const styles = StyleSheet.create({
   subItemText: {
     fontSize: 16
   },
+  bgGradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 40,
+    borderRadius: 15
+  }
 });
