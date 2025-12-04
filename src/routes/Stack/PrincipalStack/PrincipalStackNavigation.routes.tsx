@@ -6,6 +6,7 @@ import { PrincipalStackParamList } from "../types/PrincipalStackParamList";
 import { TabBottomNavigationRoutes } from "../../TabBottom/TabBottomNavigation.routes";
 import { CategoriesScreen } from "../../../screens/Categories/CategoriesScreen";
 import { TransactionStatistics } from "../../../screens/TransactionStatistics/TransactionStatisticsScreen";
+import { PerfilScreen } from "../../../screens/Perfil/PerfilScreen";
 
 
 const Stack = createNativeStackNavigator<PrincipalStackParamList>();
@@ -20,6 +21,7 @@ export function PrincipalStackNavigationRoutes() {
             <Stack.Screen name="AccountDetails" component={AccountDetails} />
             <Stack.Screen name="Categories" component={CategoriesScreen}/>
             <Stack.Screen name="TransactionStatistics" component={TransactionStatistics}/>
+            <Stack.Screen name="Perfil" component={PerfilScreen} />
         </Stack.Navigator>
     )
 }
