@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalChangePasswordStyles';
 import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
@@ -10,11 +10,14 @@ import { Row } from '../structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
-import { useForm } from 'react-hook-form';
+import { useForm, Watch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchemas } from '../../../utils/schemas/changePasswordSchemas';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { updatePassword } from '../../../services/userService';
+import { useUserContext } from '../../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
 
 interface ModalChangePasswordProps {
     isShow: boolean,
@@ -23,7 +26,10 @@ interface ModalChangePasswordProps {
 
 export function ModalChangePassword({ isShow, onClose }: ModalChangePasswordProps) {
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const {user} = useUserContext();
+    const database = useSQLiteContext();
+
+    const { control, handleSubmit, formState: { errors }, watch } = useForm({
         resolver: zodResolver(changePasswordSchemas),
         defaultValues: {
             password: '',
@@ -32,8 +38,14 @@ export function ModalChangePassword({ isShow, onClose }: ModalChangePasswordProp
         }
     })
 
-    const handleConfirmChange = () => {
-
+    const handleConfirmChange = async () => {
+        const values = watch();
+        const changed = await updatePassword(values.password,values.newPassword, user?.id as number, database);
+        if(changed) {
+            Alert.alert("Sucesso!", "Senha atualizada.")
+            onClose();
+        }
+        console.log('Falhou')
     }
 
     return (

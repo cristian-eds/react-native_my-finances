@@ -71,7 +71,7 @@ async function updatePassword(newPass: string ,userId: string, database: SQLiteD
     try {
         const res = await database.runAsync(` 
             UPDATE users 
-            SET passsword = ?
+            SET password = ?
             WHERE id = ?;
         `,[newPass, userId])
         //const passwordHashed = await hash(data.password, Number(10));

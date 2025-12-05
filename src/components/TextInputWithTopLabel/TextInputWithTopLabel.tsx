@@ -24,7 +24,7 @@ export function TextInputWithTopLabel({ name, title, control, showLabel = true,r
         control
     })
 
-    const [showSecureText, setShowSecureText] = useState(false);
+    const [showSecureText, setShowSecureText] = useState(true);
 
     return (
         <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel} value={field.value}>
