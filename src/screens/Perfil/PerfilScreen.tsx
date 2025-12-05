@@ -11,7 +11,7 @@ import { ModalChangePassword } from '../../components/modals/ModalChangePassword
 
 export function PerfilScreen() {
 
-    const { user } = useUserContext();
+    const { user, logout } = useUserContext();
 
     const [showModalChangePassword, setShowModalChangePassword] = useState<boolean>(false);
 
@@ -57,7 +57,7 @@ export function PerfilScreen() {
                     {renderItemSection('Sobre nós', 'Informações', 'information-circle-outline')}
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.buttonExit}>
+            <TouchableOpacity style={styles.buttonExit} onPress={logout}>
                 <Row style={{ justifyContent: 'center', columnGap: 10 }}>
                     <Ionicons name="exit-outline" size={24} color="white" />
                     <Text style={{ fontSize: 16, color: '#fff' }}>Sair da conta</Text>
