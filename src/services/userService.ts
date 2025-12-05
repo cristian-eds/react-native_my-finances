@@ -24,5 +24,11 @@ async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Pro
     return { data: savedUser }; 
 }
 
+async function updatePassword(newPass: string, userId: number, database: SQLiteDatabase): Promise<boolean> {
+    const userFound = await userRepository.findUserById(userId.toLocaleString(), database);
+    if(!userFound || userFound.password !== newPass) return false;
+    return await userRepository.updatePassword(newPass, userId.toLocaleString(), database);
+}
 
-export { createUser };
+
+export { createUser,updatePassword };

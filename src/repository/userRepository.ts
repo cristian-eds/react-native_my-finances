@@ -33,6 +33,22 @@ async function findUserByCpf(cpf: string, database: SQLiteDatabase): Promise<Use
     }
 }
 
+async function findUserById(userId: string, database: SQLiteDatabase): Promise<User | undefined> {
+    const statement = (` 
+            SELECT * FROM users WHERE id = $id;
+        `);
+    try {
+        const params = { $id: userId };
+        const user = await database.getFirstAsync<User>(statement, params);
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        console.error("Error getting user:", error);
+        return undefined;
+    }
+}
+
 async function findUserBySessionToken(sessionToken: string, database: SQLiteDatabase): Promise<User | undefined> {
     const statement = await database.prepareAsync(` 
             SELECT users.id, users.name, users.cpf FROM users JOIN sessions on sessions.user_id = users.id WHERE sessions.session_token = $sessionToken;
@@ -51,4 +67,21 @@ async function findUserBySessionToken(sessionToken: string, database: SQLiteData
     }
 }
 
-export { create, findUserByCpf, findUserBySessionToken };
+async function updatePassword(newPass: string ,userId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(` 
+            UPDATE users 
+            SET passsword = ?
+            WHERE id = ?;
+        `,[newPass, userId])
+        //const passwordHashed = await hash(data.password, Number(10));
+
+        return res.changes > 0;
+    } catch (error) {
+        console.error("Error creating user:", error);
+        return false;
+    } 
+}   
+
+
+export { create, findUserByCpf, findUserBySessionToken, updatePassword, findUserById };
