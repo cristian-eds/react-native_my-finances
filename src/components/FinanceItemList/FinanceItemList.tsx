@@ -45,7 +45,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
             }
         }
         fetchRecurrenceDuplicates();
-    }, [item.duplicateFatherId]);
+    }, [item.id]);
 
     const renderStatus = () => {
         const { text, bgcolor } = generateStatus();

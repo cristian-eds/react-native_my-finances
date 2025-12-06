@@ -35,7 +35,6 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
     const renderValueText = () => {
         let value = title;
         if(field.value) {
-            console.log(field.value)
             value = mode === 'datetime' ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value as Date)) : formaterIsoDateToDefaultPattern(new Date(field.value as Date));
         }
         return (

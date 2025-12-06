@@ -39,11 +39,11 @@ export function FinancesScreen() {
             const fetch = async () => {
                 await fetchDuplicates(user?.id as number, database)
                 if (duplicates) {
-                    await fetchPayments(duplicates, database);
+                    await fetchPayments(database);
                 }
             }
             fetch();
-        }, [transactionsUser, filters])
+        }, [transactionsUser, filters ])
     )
     const renderCleanFilters = () => {
         if (!filters.categories && !filters.status) return;

@@ -21,7 +21,7 @@ type Store = {
     deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
     createRecurrenceDuplicates: (duplicates: Omit<DuplicateModel, "id">[], userId: number, database: SQLiteDatabase) => Promise<boolean>
 
-    fetchPayments: (duplicates: DuplicateModel[], database: SQLiteDatabase) => Promise<boolean>
+    fetchPayments: (database: SQLiteDatabase) => Promise<boolean>
     setPayments: (transactions: Transaction[]) => void
     addPayment: (Transaction: Transaction) => void
 
@@ -116,9 +116,10 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return false;
         }
     },
-    fetchPayments: async (duplicates, database) => {
+    fetchPayments: async (database) => {
         try {
-            const transactions = await findTransactionsByDuplicateList(duplicates, database);
+
+            const transactions = await findTransactionsByDuplicateList(get().duplicates, database);
             if (transactions) {
                 set({
                     payments: transactions

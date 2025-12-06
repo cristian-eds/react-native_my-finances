@@ -37,12 +37,12 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
     const payed = payments.length > 0 && payments.reduce((prev, current) => prev += current.value, 0) >= item.value;
 
     useEffect(() => {
-        const fetchPayments = async () => {
+        const fetchPaymentsItems = async () => {
             const pays = await findTransactionsByDuplicateId(item.id.toLocaleString(), database);
             pays && setPayments(pays);
         }
         if(item.id && item.id !== 0) {
-            fetchPayments()
+            fetchPaymentsItems()
         }
         return () => { };
     }, [watch]);

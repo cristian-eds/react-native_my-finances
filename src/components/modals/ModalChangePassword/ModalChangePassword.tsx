@@ -45,7 +45,6 @@ export function ModalChangePassword({ isShow, onClose }: ModalChangePasswordProp
             Alert.alert("Sucesso!", "Senha atualizada.")
             onClose();
         }
-        console.log('Falhou')
     }
 
     return (
