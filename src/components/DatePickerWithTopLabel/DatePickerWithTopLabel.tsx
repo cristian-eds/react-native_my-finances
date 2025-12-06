@@ -28,14 +28,15 @@ export function DatePickerWithTopLabel({ title, name, control, required=false, m
       })
 
     const handleConfirmDate = (selectedDate: Date) => {
-        field.onChange(selectedDate);
+        field.onChange(selectedDate.toISOString());
         setShowPicker(false);
     }
 
     const renderValueText = () => {
         let value = title;
         if(field.value) {
-            value = mode === 'datetime' ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value)) : formaterIsoDateToDefaultPattern(new Date(field.value));
+            console.log(field.value)
+            value = mode === 'datetime' ? formaterIsoDateToDefaultPatternWithTime(new Date(field.value as Date)) : formaterIsoDateToDefaultPattern(new Date(field.value as Date));
         }
         return (
             <Text style={styles.inputText}>{value}</Text>

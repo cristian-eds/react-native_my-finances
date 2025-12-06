@@ -17,14 +17,14 @@ interface TextInputWithLeftLabelProps {
 
 type Props = TextInputWithLeftLabelProps & TextInputProps;
 
-export function TextInputWithTopLabel({ name, title, control, showLabel = true,required = false, errors, secureText, ...props }: Props) {
+export function TextInputWithTopLabel({ name, title, control, showLabel = true,required = false, errors, secureText = false, ...props }: Props) {
 
     const { field } = useController({
         name,
         control
     })
 
-    const [showSecureText, setShowSecureText] = useState(true);
+    const [showSecureText, setShowSecureText] = useState(secureText);
 
     return (
         <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel} value={field.value}>

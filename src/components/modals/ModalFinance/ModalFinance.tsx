@@ -11,18 +11,11 @@ import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { Row } from '../../structure/Row/Row';
 import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimple';
 import { Spacer } from '../../Spacer/Spacer';
-import { DatePickerWithTopLabel } from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { financeSchemas } from '../../../utils/schemas/financeSchemas';
+import { FinanceFormFields, financeSchemas } from '../../../utils/schemas/financeSchemas';
 import { DuplicateModel } from '../../../domain/duplicateModel';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
-import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
-import { Cell } from '../../structure/Cell/Cell';
-import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
-import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown, mapTypeRecurrenceToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
-import { useCategoryStore } from '../../../stores/CategoryStore';
-import { useAccountStore } from '../../../stores/AccountStore';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
@@ -35,6 +28,7 @@ import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
+import { TabInfos } from './TabInfos/TabInfos';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -48,8 +42,6 @@ type TabActive = 'INFO' | 'PAYMENTS' | 'RECURRENCE';
 
 export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates, onClose }: ModalFinanceProps) {
 
-    const { categories } = useCategoryStore();
-    const { accounts } = useAccountStore();
     const { addDuplicate, updateDuplicate, deleteDuplicate, payments } = useDuplicateStore();
 
     const [tabActive, setTabActive] = useState<TabActive>('INFO');
@@ -63,14 +55,22 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
 
     const database = useSQLiteContext();
 
-    const { control, formState: { errors }, handleSubmit, watch, reset } = useForm({
+    const { control, formState: { errors }, handleSubmit, watch, reset } = useForm<FinanceFormFields>({
         resolver: zodResolver(financeSchemas),
         defaultValues: {
             accountId: duplicateData?.accountId?.toLocaleString() ?? undefined,
             categoryId: duplicateData?.categoryId?.toLocaleString() ?? undefined,
             description: duplicateData?.description ?? undefined,
-            dueDate: duplicateData?.dueDate ?? undefined,
-            issueDate: duplicateData?.issueDate ?? new Date(),
+            dueDate: (() => {
+                const dateValue = duplicateData?.dueDate;
+                if (!dateValue) return undefined;
+                return new Date(dateValue as Date).toISOString();
+            })(),
+            issueDate: (() => {
+                const dateValue = duplicateData?.issueDate;
+                if (!dateValue) return new Date().toISOString();
+                return new Date(dateValue as Date).toISOString();
+            })(),
             movementType: duplicateData?.movementType ?? MovementType.Despesa,
             totalValue: duplicateData?.totalValue.toLocaleString()
         }
@@ -83,8 +83,8 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
             accountId: Number(formValues.accountId),
             categoryId: Number(formValues.categoryId),
             description: formValues.description,
-            dueDate: new Date(formValues.dueDate as Date),
-            issueDate: new Date(formValues.issueDate as Date),
+            dueDate: new Date(formValues.dueDate),
+            issueDate: new Date(formValues.issueDate),
             movementType: formValues.movementType,
             totalValue: Number(formValues.totalValue),
             id: duplicateData?.id as number,
@@ -170,29 +170,6 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
         )
     }
 
-    const renderInfos = () => {
-        return (
-            <>
-                <DatePickerWithTopLabel control={control} name='issueDate' errors={errors.issueDate} mode='date' title='Data emissão' required />
-                <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required />
-                <TextInputWithTopLabel control={control} title='Valor' errors={errors.totalValue} name='totalValue' placeholder='Valor*:' required />
-                <Row>
-                    <Cell>
-                        <PickerWithTopLabel labelText='Tipo Movimento' control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
-                    </Cell>
-                    <Cell>
-                        <PickerWithTopLabel labelText='Categoria' control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
-                    </Cell>
-                </Row>
-                <PickerWithTopLabel labelText='Conta' control={control} items={mapAccountsToItemsDropdown(accounts)} name='accountId' errors={errors.accountId} placeholder='Conta:' zIndexInverse={1000} zIndex={8000} />
-                <DatePickerWithTopLabel control={control} name='dueDate' errors={errors.dueDate} mode='date' title='Data vencimento' required />
-                {recurrendeDuplicates && recurrendeDuplicates.length > 1 && <TouchableOpacity style={styles.buttonInstallmentsPreview} onPress={() => setShowModalInstallments(true)}>
-                    <Ionicons name="calendar-clear-outline" size={18} color="black" />
-                    <Text>Ver parcelas recorrentes</Text>
-                </TouchableOpacity>}
-            </>
-        )
-    }
 
     const renderPayments = () => {
         return (
@@ -219,8 +196,8 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
             accountId: Number(data.accountId),
             categoryId: Number(data.categoryId),
             description: data.description,
-            dueDate: new Date(data.dueDate as Date),
-            issueDate: new Date(data.issueDate as Date),
+            dueDate: new Date(data.dueDate),
+            issueDate: new Date(data.issueDate),
             movementType: data.movementType,
             totalValue: Number(data.totalValue),
             numberInstallments: 1,
@@ -228,11 +205,11 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
 
         switch (tabActive) {
             case 'INFO':
-                return renderInfos();
+                return <TabInfos control={control} errors={errors} recurrendeDuplicates={recurrendeDuplicates} setShowModalInstallments={setShowModalInstallments} />
             case 'PAYMENTS':
                 return renderPayments();
             case 'RECURRENCE':
-                return <TabRecurrence data={item} onClose={handleClose}/>;
+                return <TabRecurrence data={item} onClose={handleClose} />;
         }
     }
 
