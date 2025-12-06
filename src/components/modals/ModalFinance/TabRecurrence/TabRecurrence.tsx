@@ -14,8 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { installmentsSchemas } from '../../../../utils/schemas/installmentsSchemas';
 import { DuplicateModel } from '../../../../domain/duplicateModel';
-import { Row } from '../../structure/Row/Row';
-import { Cell } from '../../structure/Cell/Cell';
+import { Row } from '../../../structure/Row/Row';
+import { Cell } from '../../../structure/Cell/Cell';
 import { ButtonIconSimple } from '../../../buttons/ButtonIconSimple/ButtonIconSimple';
 
 interface TabRecurrenceProps {

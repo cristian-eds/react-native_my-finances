@@ -7,7 +7,7 @@ import { styles } from './TransactionsScreenStyles';
 
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
-import { Row } from '../../components/modals/structure/Row/Row';
+import { Row } from '../../components/structure/Row/Row';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { CircularActionButton } from '../../components/buttons/CircularActionButton/CircularActionButton';
 import { useTransactionStore } from '../../stores/TransactionStore';

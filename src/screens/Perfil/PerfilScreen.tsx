@@ -4,10 +4,11 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './PerfilScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles'
 import { useUserContext } from '../../hooks/useUserContext';
-import { Row } from '../../components/modals/structure/Row/Row';
+import { Row } from '../../components/structure/Row/Row';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ModalChangePassword } from '../../components/modals/ModalChangePassword/ModalChangePassword';
+import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 
 export function PerfilScreen() {
 
@@ -41,21 +42,21 @@ export function PerfilScreen() {
                 <Text style={styles.sectionItemSubText}>Membro desde 2025</Text>
             </View>
             <ScrollView >
-                <View style={styles.section}>
-                    <Text style={styles.inputsTitle}>Minha Conta</Text>
+                <SectionWithTitle title='Minha Conta'>
                     {renderItemSection('Dados Pessoais', 'Nome, CPF', 'person-outline')}
                     {renderItemSection('Segurança', 'Alterar Senha', 'lock-closed-outline', () => setShowModalChangePassword(true))}
-                </View>
-                <View style={styles.section}>
-                    <Text style={styles.inputsTitle}>Configurações</Text>
+                </SectionWithTitle>
+
+                <SectionWithTitle title='Configurações'>
                     {renderItemSection('Parâmetros', 'Gerais, finanças, lançamentos', 'options-outline')}
                     {renderItemSection('Notificações', 'Gerais, finanças, lançamentos', 'notifications-outline')}
-                </View>
-                <View style={styles.section}>
-                    <Text style={styles.inputsTitle}>Suporte</Text>
+                </SectionWithTitle>
+
+                <SectionWithTitle title='Suporte'>
                     {renderItemSection('Contato', 'Fale conosco', 'chatbox-outline')}
                     {renderItemSection('Sobre nós', 'Informações', 'information-circle-outline')}
-                </View>
+                </SectionWithTitle>
+
             </ScrollView>
             <TouchableOpacity style={styles.buttonExit} onPress={logout}>
                 <Row style={{ justifyContent: 'center', columnGap: 10 }}>

@@ -6,7 +6,7 @@ import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
 import { ModalContent } from '../structure/ModalContent/ModalContent';
 import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { Row } from '../structure/Row/Row';
+import { Row } from '../../structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';

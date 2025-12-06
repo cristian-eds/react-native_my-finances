@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './FinanceItemListStyles';
 import { DuplicateModel } from '../../domain/duplicateModel';
-import { Row } from '../modals/structure/Row/Row';
+import { Row } from '../structure/Row/Row';
 import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { Transaction } from '../../domain/transactionModel';

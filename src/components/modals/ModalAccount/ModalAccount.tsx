@@ -17,8 +17,8 @@ import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
-import { Row } from '../structure/Row/Row';
-import { Cell } from '../structure/Cell/Cell';
+import { Row } from '../../structure/Row/Row';
+import { Cell } from '../../structure/Cell/Cell';
 import { TouchableOpacity } from 'react-native';
 
 interface ModalAccountProps {

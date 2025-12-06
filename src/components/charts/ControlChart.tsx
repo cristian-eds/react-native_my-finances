@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './ControlChartStyles';
 import { formaterNumberToBRL } from '../../utils/NumberFormater'
-import { Row } from '../modals/structure/Row/Row';
+import { Row } from '../structure/Row/Row';
 import { MovementType, textMovementType } from '../../domain/enums/movementTypeEnum';
 
 import Ionicons from '@expo/vector-icons/Ionicons';

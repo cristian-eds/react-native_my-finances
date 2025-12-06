@@ -4,7 +4,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './FinancesScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
-import { Row } from '../../components/modals/structure/Row/Row';
+import { Row } from '../../components/structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';

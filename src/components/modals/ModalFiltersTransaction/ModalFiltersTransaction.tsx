@@ -17,8 +17,8 @@ import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTy
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useTransactionStore } from '../../../stores/TransactionStore';
-import { Row } from '../structure/Row/Row';
-import { Cell } from '../structure/Cell/Cell';
+import { Row } from '../../structure/Row/Row';
+import { Cell } from '../../structure/Cell/Cell';
 import { filtersTransactionSchemas } from '../../../utils/schemas/filtersTransactionSchemas';
 
 interface ModalFiltersTransactionProps {

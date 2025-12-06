@@ -21,19 +21,6 @@ export const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold'
     },
-    section: {
-        backgroundColor: '#ffffffff',
-        paddingVertical: 15,
-        paddingHorizontal: 15,
-        borderRadius: 10,
-        rowGap: 15,
-        marginBottom: 10
-    },
-    inputsTitle: {
-        fontSize: 16,
-        fontWeight: "600",
-        paddingLeft: 5,
-    },
     sectionItemText: {
         fontSize: 16
     },

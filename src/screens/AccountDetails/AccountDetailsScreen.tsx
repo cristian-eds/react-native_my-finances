@@ -27,7 +27,7 @@ import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm'
 import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
-import { Row } from '../../components/modals/structure/Row/Row';
+import { Row } from '../../components/structure/Row/Row';
 
 
 export function AccountDetails() {

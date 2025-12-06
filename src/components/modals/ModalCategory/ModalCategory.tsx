@@ -19,8 +19,8 @@ import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { Row } from '../structure/Row/Row';
-import { Cell } from '../structure/Cell/Cell';
+import { Row } from '../../structure/Row/Row';
+import { Cell } from '../../structure/Cell/Cell';
 
 
 interface ModalCategoryProps {

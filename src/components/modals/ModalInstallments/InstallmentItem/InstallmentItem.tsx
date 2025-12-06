@@ -3,7 +3,7 @@ import { Text, TextInput, View } from 'react-native';
 
 import { styles } from './InstallmentItemStyles';
 import { Item } from '../ModalInstallments';
-import { Row } from '../../structure/Row/Row';
+import { Row } from '../../../structure/Row/Row';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { installmentsItemSchemas } from '../../../../utils/schemas/installmentItemSchemas';

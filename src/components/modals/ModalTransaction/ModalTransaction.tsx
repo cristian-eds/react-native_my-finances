@@ -19,8 +19,8 @@ import { ButtonIconSimple } from '../../buttons/ButtonIconSimple/ButtonIconSimpl
 import { ModalConfirm } from '../ModalConfirm/ModalConfirm';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { useCategoryStore } from '../../../stores/CategoryStore';
-import { Row } from '../structure/Row/Row';
-import { Cell } from '../structure/Cell/Cell';
+import { Row } from '../../structure/Row/Row';
+import { Cell } from '../../structure/Cell/Cell';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
 import { ModalContent } from '../structure/ModalContent/ModalContent';

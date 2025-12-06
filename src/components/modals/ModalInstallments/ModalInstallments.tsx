@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Modal, View } from 'react-native';
 
 import { styles } from './ModalInstallmentsStyles';
-import { Row } from '../structure/Row/Row';
+import { Row } from '../../structure/Row/Row';
 import { Text } from 'react-native';
 import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
 import { ModalContent } from '../structure/ModalContent/ModalContent';
