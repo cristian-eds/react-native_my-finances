@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Alert, Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalChangeUserDataStyles';
 import { ModalContainer } from '../structure/ModalContainer/ModalContainer';
@@ -16,6 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { changeUserDataSchemas } from '../../../utils/schemas/changeUserDataSchemas';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
+import { updateUser } from '../../../services/userService';
+import { useSQLiteContext } from 'expo-sqlite';
 
 interface Props {
     isShow: boolean,
@@ -24,15 +26,33 @@ interface Props {
 
 export function ModalChangeUserData({ isShow, onClose }: Props) {
 
-    const { user } = useUserContext();
+    const { user, handleSetUser } = useUserContext();
+    const databse = useSQLiteContext();
 
-    const { control, formState: { errors }, handleSubmit } = useForm({
+    const { control, formState: { errors }, handleSubmit, watch } = useForm({
         resolver: zodResolver(changeUserDataSchemas),
         defaultValues: {
             cpf: user?.cpf as string,
             name: user?.name as string
         }
-    })
+    });
+
+    const handleConfirm = async () => {
+        const fieldsData = watch();
+        const newUser = {
+            id: user?.id as number,
+            cpf: fieldsData.cpf,
+            name: fieldsData.name
+        }
+
+        const updated = await updateUser(newUser, databse);
+
+        if(updated) {
+            Alert.alert('Sucesso!', 'Dados foram atualizados!')
+            handleSetUser(newUser);
+            onClose();
+        }
+    }
 
     return (
         <Modal
@@ -69,12 +89,13 @@ export function ModalChangeUserData({ isShow, onClose }: Props) {
                             required={true}
                             placeholder='CPF: '
                             errors={errors.cpf}
+                            keyboardType='numeric'
                         />
 
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)}/>
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

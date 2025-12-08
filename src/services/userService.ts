@@ -32,11 +32,12 @@ async function updatePassword(oldPass: string, newPass: string, userId: number, 
 }
 
 async function updateUser(user: Omit<User, 'password'>, database: SQLiteDatabase): Promise<boolean> {
-    const userFound = await userRepository.findUserById(user.id.toLocaleString(), database);
+    let userFound = await userRepository.findUserById(user.id.toLocaleString(), database);
     if(!userFound) return false;
+    userFound = {...userFound, ...user};
 
     return await userRepository.updateUser(userFound, database);
 }
 
 
-export { createUser,updatePassword };
+export { createUser,updatePassword, updateUser };
