@@ -78,10 +78,28 @@ async function updatePassword(newPass: string ,userId: string, database: SQLiteD
 
         return res.changes > 0;
     } catch (error) {
-        console.error("Error creating user:", error);
+        console.error("Error updating user:", error);
+        return false;
+    } 
+}   
+
+async function updateUser(user: User, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(` 
+            UPDATE users 
+            SET 
+                name = ? ,
+                cpf = ?
+            WHERE id = ?;
+        `,[user.name, user.cpf, user.id])
+
+        return res.changes > 0;
+    } catch (error) {
+        console.error("Error updating user password:", error);
         return false;
     } 
 }   
 
 
-export { create, findUserByCpf, findUserBySessionToken, updatePassword, findUserById };
+
+export { create, findUserByCpf, findUserBySessionToken, updatePassword, findUserById, updateUser };
