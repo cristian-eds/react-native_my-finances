@@ -10,12 +10,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { ModalChangePassword } from '../../components/modals/ModalChangePassword/ModalChangePassword';
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 import { SectionItemLink } from '../../components/SectionItemLink/SectionItemLink';
+import { ModalChangeUserData } from '../../components/modals/ModalChangeUserData/ModalChangeUserData';
 
 export function PerfilScreen() {
 
     const { user, logout } = useUserContext();
 
     const [showModalChangePassword, setShowModalChangePassword] = useState<boolean>(false);
+    const [showModalChangeUserData, setShowModalChangeUserData] = useState<boolean>(false);
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -28,7 +30,7 @@ export function PerfilScreen() {
             </View>
             <ScrollView >
                 <SectionWithTitle title='Minha Conta'>
-                    <SectionItemLink iconName='person-outline' text='Dados Pessoais' subText='Nome, CPF' />
+                    <SectionItemLink iconName='person-outline' text='Dados Pessoais' subText='Nome, CPF' onPress={() => setShowModalChangeUserData(true)}/>
                     <SectionItemLink iconName='lock-closed-outline' text='Segurança' subText='Alterar Senha' onPress={() => setShowModalChangePassword(true)}/>
                 </SectionWithTitle>
 
@@ -41,6 +43,7 @@ export function PerfilScreen() {
                 </Row>
             </TouchableOpacity>
             {showModalChangePassword && <ModalChangePassword isShow={showModalChangePassword} onClose={() => setShowModalChangePassword(false)} />}
+            {showModalChangeUserData && <ModalChangeUserData isShow={showModalChangeUserData} onClose={() => setShowModalChangeUserData(false)} />}
         </View>
     );
 }
