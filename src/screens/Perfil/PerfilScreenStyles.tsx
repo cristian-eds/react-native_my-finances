@@ -21,13 +21,8 @@ export const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold'
     },
-    sectionItemText: {
-        fontSize: 16
-    },
-    sectionItemSubText: {
-        fontSize: 13,
-        fontWeight: '400',
-        color: '#6c6c6cff'
+    avatarSubText: {
+        fontSize: 14
     },
     buttonExit: {
         backgroundColor: '#f74141ff',

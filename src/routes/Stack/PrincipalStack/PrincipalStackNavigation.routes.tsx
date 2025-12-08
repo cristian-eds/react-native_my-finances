@@ -7,6 +7,7 @@ import { TabBottomNavigationRoutes } from "../../TabBottom/TabBottomNavigation.r
 import { CategoriesScreen } from "../../../screens/Categories/CategoriesScreen";
 import { TransactionStatistics } from "../../../screens/TransactionStatistics/TransactionStatisticsScreen";
 import { PerfilScreen } from "../../../screens/Perfil/PerfilScreen";
+import { Configuration } from "../../../screens/Configuration/ConfigurationScreen";
 
 
 const Stack = createNativeStackNavigator<PrincipalStackParamList>();
@@ -22,6 +23,7 @@ export function PrincipalStackNavigationRoutes() {
             <Stack.Screen name="Categories" component={CategoriesScreen}/>
             <Stack.Screen name="TransactionStatistics" component={TransactionStatistics}/>
             <Stack.Screen name="Perfil" component={PerfilScreen} />
+            <Stack.Screen name="Config" component={Configuration} />
         </Stack.Navigator>
     )
 }

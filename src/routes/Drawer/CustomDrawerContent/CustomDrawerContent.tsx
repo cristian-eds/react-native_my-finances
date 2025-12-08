@@ -103,7 +103,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
             </View>
             <View>
                 <View style={styles.item}>
-                    <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}>
+                    <TouchableOpacity style={styles.itemLink} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Config' })}>
                         <Ionicons name="settings-outline" size={20} color="black" />
                         <Text style={styles.itemText}>Configurações</Text>
                     </TouchableOpacity>
