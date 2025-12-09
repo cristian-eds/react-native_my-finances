@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#fffffffb',
   },
+  focus: {
+    borderColor: '#9c9fb9d7'
+  },
   input: {
     fontSize: 18,
     flex: 1,

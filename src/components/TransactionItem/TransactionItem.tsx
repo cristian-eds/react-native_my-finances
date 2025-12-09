@@ -96,8 +96,8 @@ export function TransactionItem({ item }: TransactionItemProps) {
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
-            <View style={[styles.iconBox, { backgroundColor: category?.hexColor ?? '#000' }]}>
-                <Ionicons name={category?.iconName ?? 'cart-outline'} size={18} color="white" />
+            <View style={[styles.iconBox, { backgroundColor: category?.hexColor ?? '#7596d7ff' }]}>
+                <Ionicons name={category?.iconName ?? 'receipt-outline'} size={20} color="white" />
             </View>
             <Cell>
                 <Row>

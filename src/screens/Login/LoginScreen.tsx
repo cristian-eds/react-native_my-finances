@@ -35,7 +35,7 @@ export function LoginScreen() {
     if (response?.error) {
       Alert.alert("Erro no login", response.error)
     } else if (response?.data) {
-      Alert.alert("Usuário logado!")
+      Alert.alert("Sucesso","Usuário logado!")
     }
     setLoading(false);
   }

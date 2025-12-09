@@ -33,7 +33,7 @@ export function RegisterScreen() {
       Alert.alert('Erro ao registrar', response.error);
       return;
     }
-    Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
+    Alert.alert('Sucesso', 'Registrado com sucesso!');
     if(response.data) {
       await login(db, {cpf: formValues.cpf, password: formValues.password})
       navigation.navigate("RegisterInitialAccount", {user: response?.data});
