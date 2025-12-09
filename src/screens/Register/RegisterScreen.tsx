@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { userSchemas } from '../../utils/schemas/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
+import { login } from '../../services/authService';
 
 
 export function RegisterScreen() {
@@ -26,13 +27,15 @@ export function RegisterScreen() {
   })
 
   const handleRegister = async () => {
-    const response = await createUser(watch(), db);
+    const formValues = watch();
+    const response = await createUser(formValues, db);
     if (response?.error) {
       Alert.alert('Erro ao registrar', response.error);
       return;
     }
     Alert.alert('Registrado com sucesso!', response && response.data?.id?.toString());
     if(response.data) {
+      await login(db, {cpf: formValues.cpf, password: formValues.password})
       navigation.navigate("RegisterInitialAccount", {user: response?.data});
     }
   }
