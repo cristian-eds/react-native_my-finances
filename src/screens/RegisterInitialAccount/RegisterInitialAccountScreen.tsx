@@ -20,6 +20,8 @@ import { Status } from '../../domain/enums/statusEnum';
 import * as accountService from '../../services/accountService';
 import { UserContext } from '../../context/UserContext';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
+import { useTransactionStore } from '../../stores/TransactionStore';
+import { MovementType } from '../../domain/enums/movementTypeEnum';
 
 
 export function RegisterInitialAccountScreen() {
@@ -30,8 +32,9 @@ export function RegisterInitialAccountScreen() {
   const context = useContext(UserContext);
 
   const route = useRoute<RouteProp<AuthStackParamList, 'RegisterInitialAccount'>>();
-  const {user} = route.params;
-  
+  const { user } = route.params;
+  const { addTransaction } = useTransactionStore();
+
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(accountSchemas),
   })
@@ -51,8 +54,20 @@ export function RegisterInitialAccountScreen() {
         creationDate: new Date().toISOString(),
       }, Number(user?.id), db);
 
-    if(idConta) {
+    if (idConta) {
       Alert.alert("Conta criada!");
+      if (Number(formValues.balance) > 0) {
+        await addTransaction({
+          accountId: idConta,
+          description: 'Saldo Inicial',
+          movementType: MovementType.Receita,
+          paymentDate: new Date(),
+          value: Number(formValues.balance),
+        },
+          user?.id,
+          db
+        )
+      }
       context?.handleSetUser(user);
     }
   }
@@ -67,10 +82,10 @@ export function RegisterInitialAccountScreen() {
           <Text style={styles.title}>Dados da conta</Text>
           <TextInpuWithLeftLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Informe seu nome' required />
           <TextInpuWithLeftLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
-          <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco'  />
+          <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
           <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
           <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
-          <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência'  />
+          <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
           <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
         </View>
         <View>

@@ -32,9 +32,9 @@ export function toTransactionItemData(transacation: Transaction, account: Accoun
         accountId: transacation.accountId,
         accountName: account?.name ?? '',
         categoryId: transacation.categoryId ?? 0,
-        categoryName: category.description,
-        categoryHexColor: category.hexColor,
-        categoryIconName: category.iconName,
+        categoryName: category?.description,
+        categoryHexColor: category?.hexColor,
+        categoryIconName: category?.iconName,
         destinationAccountId: transacation.destinationAccountId,
         destinationAccountName: destinationAccount?.name,
     }

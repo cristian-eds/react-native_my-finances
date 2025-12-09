@@ -39,6 +39,7 @@ export function TransactionsScreen() {
   const [showModalFilters, setShowModalFilters] = useState(false);
 
   const mapTransactions = () => {
+    console.log(transactionsUser)
     const items = transactionsUser.map<TransactionItemData>(transaction => {
       const category = categories.find(cat => cat.id === transaction.categoryId);
       const account = accounts.find(acc => acc.id === transaction.accountId);
