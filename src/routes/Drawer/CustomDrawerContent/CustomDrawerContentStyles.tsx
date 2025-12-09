@@ -14,15 +14,16 @@ export const styles = StyleSheet.create({
   avatarHeader: {
     backgroundColor:'#9eb5ffcb',
     padding: 7,
-    width: 35,
-    height: 35,
+    width: 32,
+    height: 32,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15
   },
   headerText: {
     fontSize: 18,
-    fontWeight: '500'
+    fontWeight: '500', 
+    flexWrap: 'wrap'
   },
   tab: {
     rowGap: 8,

@@ -38,11 +38,11 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
 
     const renderHeader = () => {
         return (
-            <Row>
-                <TouchableOpacity onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}>
+            <Row >
+                <TouchableOpacity style={{flex: 3}} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}>
                     <Row style={{ columnGap: 15 }}>
                         <View style={styles.avatarHeader}>
-                            <Ionicons name="person-outline" size={20} color="black" />
+                            <Ionicons name="person-outline" size={18} color="black" />
                         </View>
                         <View>
                             <Text style={styles.headerText}>Olá {user?.name}!</Text>
@@ -50,7 +50,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         </View>
                     </Row>
                 </TouchableOpacity>
-                <ButtonIconSimple iconName='arrow-back' style={{ justifyContent: 'flex-start', alignItems: 'flex-end' }} onPress={() => navigation.closeDrawer()} />
+                <ButtonIconSimple iconName='arrow-back' style={{justifyContent: 'flex-start', alignItems: 'flex-end', flex: 1, width: '10%', top: 5 }} onPress={() => navigation.closeDrawer()} />
             </Row>
         )
     }
