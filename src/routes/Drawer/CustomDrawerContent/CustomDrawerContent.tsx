@@ -39,7 +39,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
     const renderHeader = () => {
         return (
             <Row >
-                <TouchableOpacity style={{flex: 3}} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}>
+                <TouchableOpacity style={{flex: 3, alignItems: 'flex-start'}} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}>
                     <Row style={{ columnGap: 15 }}>
                         <View style={styles.avatarHeader}>
                             <Ionicons name="person-outline" size={18} color="black" />
