@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         marginBottom: 10
     },
     avatarText: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold'
     },
     avatarSubText: {

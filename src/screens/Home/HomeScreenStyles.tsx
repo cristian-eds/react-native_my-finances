@@ -24,13 +24,14 @@ export const styles = StyleSheet.create({
   },
   captionItemActive: {
     elevation: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#4c7fdee1',
   },
   captionItemText: {
     fontSize: 14,
     textAlign: 'center'
   },
   captionItemTextActive: {
+    color: 'white',
     fontWeight: '600'
   },
   transactions_infos_item: {
