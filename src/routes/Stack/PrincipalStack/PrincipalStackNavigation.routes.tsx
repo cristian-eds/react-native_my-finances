@@ -8,6 +8,7 @@ import { CategoriesScreen } from "../../../screens/Categories/CategoriesScreen";
 import { TransactionStatistics } from "../../../screens/TransactionStatistics/TransactionStatisticsScreen";
 import { PerfilScreen } from "../../../screens/Perfil/PerfilScreen";
 import { Configuration } from "../../../screens/Configuration/ConfigurationScreen";
+import { FinanceStatisticsScreen } from "../../../screens/FinanceStatistics/FinanceStatisticsScreen";
 
 
 const Stack = createNativeStackNavigator<PrincipalStackParamList>();
@@ -24,6 +25,7 @@ export function PrincipalStackNavigationRoutes() {
             <Stack.Screen name="TransactionStatistics" component={TransactionStatistics}/>
             <Stack.Screen name="Perfil" component={PerfilScreen} />
             <Stack.Screen name="Config" component={Configuration} />
+            <Stack.Screen name="FinanceStatistics" component={FinanceStatisticsScreen} />
         </Stack.Navigator>
     )
 }

@@ -89,7 +89,7 @@ export function FinancesScreen() {
                         {renderCleanFilters()}
                     </Row>
                 </TouchableOpacity>
-                <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('TransactionStatistics', { data: 'userTransactions' })} />
+                <Ionicons name="stats-chart-outline" size={20} color="black" onPress={() => navigation.navigate('FinanceStatistics')} />
             </Row>
             <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} />
 

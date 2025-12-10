@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './TransactionStatisticsScreenStyles';
@@ -15,7 +15,6 @@ import { useCategoryStore } from '../../stores/CategoryStore';
 import { ChartItem, ControlChart } from '../../components/charts/ControlChart';
 import { Transaction } from '../../domain/transactionModel';
 import { useAccountStore } from '../../stores/AccountStore';
-import { useAppRoute } from '../../utils/navigation/userAppRoute';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../hooks/useUserContext';
 
