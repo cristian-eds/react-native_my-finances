@@ -16,22 +16,23 @@ import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 import { CurvedLineChart } from '../../components/charts/CurvedLineChart/CurvedLineChart';
+import { lineDataItem } from 'react-native-gifted-charts';
 
 
-const lineData = [
-    { value: 58, label: 'Jan' },
-    { value: 61, label: 'Fev' },
-    { value: 51, label: 'Mar' },
-    { value: 70, label: 'Abr' },
-    { value: 56, label: 'Mai' },
+const lineData: lineDataItem[] = [
+  { value: 58, label: 'Jan', hideDataPoint: true },
+  { value: 61, label: 'Fev', hideDataPoint: true },
+  { value: 51, label: 'Mar', hideDataPoint: false},
+  { value: 70, label: 'Abr', hideDataPoint: true },
+  { value: 56, label: 'Mai', hideDataPoint: true },
 ];
 
 const lineData2 = [
-    { value: 38, label: 'Jan' },
-    { value: 41, label: 'Fev' },
-    { value: 27, label: 'Mar' },
-    { value: 58, label: 'Abr' },
-    { value: 32, label: 'Mai' },
+  { value: 38, label: 'Jan', hideDataPoint: true },
+  { value: 41, label: 'Fev', hideDataPoint: true },
+  { value: 27, label: 'Mar', hideDataPoint: false },
+  { value: 58, label: 'Abr', hideDataPoint: true },
+  { value: 32, label: 'Mai', hideDataPoint: true },
 ];
 
 export function FinanceStatisticsScreen() {
@@ -63,29 +64,29 @@ export function FinanceStatisticsScreen() {
 
   const randerCaptionChartBadge = (text: string, color: string) => {
     return (
-      <Row style={{columnGap: 6}}>
-        <View style={[styles.chartCaptionBadge, {backgroundColor: color}]}></View>
+      <Row style={{ columnGap: 6 }}>
+        <View style={[styles.chartCaptionBadge, { backgroundColor: color }]}></View>
         <Text>{text}</Text>
       </Row>
     )
   }
 
 
-return (
-  <View style={GlobalStyles.container_screens_normal}>
-    <ButtonBack onPress={() => navigation.goBack()} />
-    <PeriodFilter filters={filters} setFiltersDates={setFiltersDate} />
-    <Row style={{ columnGap: 10 }}>
-      {renderItem(MovementType.Receita, 2000, 4)}
-      {renderItem(MovementType.Despesa, 1500, 3)}
-    </Row>
-    <SectionWithTitle title='Evolução mensal'>
-      <CurvedLineChart data={lineData} data2={lineData2}/>
-      <Row style={{ justifyContent: 'center', columnGap: 20 }}>
+  return (
+    <View style={GlobalStyles.container_screens_normal}>
+      <ButtonBack onPress={() => navigation.goBack()} />
+      <PeriodFilter filters={filters} setFiltersDates={setFiltersDate} />
+      <Row style={{ columnGap: 10 }}>
+        {renderItem(MovementType.Receita, 2000, 4)}
+        {renderItem(MovementType.Despesa, 1500, 3)}
+      </Row>
+      <SectionWithTitle title='Evolução mensal'>
+        <CurvedLineChart data={lineData} data2={lineData2} />
+        <Row style={{ justifyContent: 'center', columnGap: 20 }}>
           {randerCaptionChartBadge('A Receber', '#098e00ff')}
           {randerCaptionChartBadge('A Pagar', '#d80d0dff')}
-      </Row>
-    </SectionWithTitle>
-  </View>
-);
+        </Row>
+      </SectionWithTitle>
+    </View>
+  );
 }

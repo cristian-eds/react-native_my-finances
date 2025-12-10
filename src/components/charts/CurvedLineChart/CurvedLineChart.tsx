@@ -1,24 +1,21 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Text, View } from 'react-native';
 
 import { styles } from './CurvedLineChartStyles';
-import { CurveType, LineChart } from 'react-native-gifted-charts';
+import { CurveType, LineChart, lineDataItem } from 'react-native-gifted-charts';
 
 const screenWidth = Dimensions.get('window').width;
 const PADDING_HORIZONTAL = 30;
 const chartWidth = screenWidth - (PADDING_HORIZONTAL * 2);
 
-interface Data {
-    value: number,
-    label: string
-}
+
 
 interface CurvedLineChartProps {
-    data: Data[],
-    data2: Data[]
+    data: lineDataItem[],
+    data2: lineDataItem[]
 }
 
-export function CurvedLineChart({data, data2} : CurvedLineChartProps) {
+export function CurvedLineChart({ data, data2 }: CurvedLineChartProps) {
 
     return (
         <LineChart
@@ -35,10 +32,14 @@ export function CurvedLineChart({data, data2} : CurvedLineChartProps) {
             color2="#ff0000ff"
             thickness={2}
             isAnimated
+            dataPointsColor1='#0d4500ff'
+            dataPointsColor2='#670000da'
+            dataPointsRadius={5}
+            dataPointLabelShiftY={-20}
+            dataPointLabelShiftX={-6}
             areaChart
-            startFillColor="#15b915de" 
+            startFillColor="#15b915de"
             startFillColor2="#e51313da"
-            hideDataPoints
             hideOrigin
             yAxisColor="#000000ff"
             yAxisThickness={0}
@@ -51,7 +52,6 @@ export function CurvedLineChart({data, data2} : CurvedLineChartProps) {
             verticalLinesColor="#e0e0e0"
             startOpacity={1}
             endOpacity={0.3}
-
         />
     );
 }
