@@ -32,5 +32,10 @@ export const styles = StyleSheet.create({
   },
   captionSubText: {
     fontSize: 14
+  },
+  chartCaptionBadge: {
+    width: 15,
+    height: 15,
+    borderRadius: 50
   }
 });
