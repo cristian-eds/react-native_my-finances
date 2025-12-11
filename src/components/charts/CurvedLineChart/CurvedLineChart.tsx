@@ -15,13 +15,17 @@ interface CurvedLineChartProps {
 }
 
 export function CurvedLineChart({ data, data2 }: CurvedLineChartProps) {
+    
+    const maxValueData = data.reduce((prev, current) => Number(current.value) > prev ? Number(current.value) : prev , 0) + 15;
+    const maxValueData2 = data2.reduce((prev, current) => Number(current.value) > prev ? Number(current.value) : prev , 0) + 15;
+    const maxValue = maxValueData > maxValueData2 ? maxValueData : maxValueData2;
 
     return (
         <LineChart
             width={chartWidth}
             initialSpacing={30}
             spacing={57}
-            maxValue={110}
+            maxValue={maxValue}
             noOfSections={4}
             data={data}
             data2={data2}
@@ -32,11 +36,11 @@ export function CurvedLineChart({ data, data2 }: CurvedLineChartProps) {
             thickness={2}
             isAnimated
             dataPointsColor1='#0d4500ff'
-            dataPointsColor2='#670000da'
+            dataPointsColor2='#670000b5'
             dataPointsRadius={5}
             areaChart
-            startFillColor="#15b915de"
-            startFillColor2="#e51313da"
+            startFillColor="#16d116ff"
+            startFillColor2="#d81313ff"
             hideOrigin
             yAxisColor="#000000ff"
             yAxisThickness={0}
@@ -48,7 +52,7 @@ export function CurvedLineChart({ data, data2 }: CurvedLineChartProps) {
             showVerticalLines
             verticalLinesColor="#e0e0e0"
             startOpacity={1}
-            endOpacity={0.3}
+            endOpacity={0.2}
             formatYLabel={(label) => formaterNumberToBRL(Number(label))}
         />
     );

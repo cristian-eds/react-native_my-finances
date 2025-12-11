@@ -20,12 +20,16 @@ import { lineDataItem } from 'react-native-gifted-charts';
 import { useUserContext } from '../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 import { getAllByUser } from '../../services/duplicateService';
+import { DuplicateModel } from '../../domain/duplicateModel';
+import { ColumnsOrderDuplicate } from '../../domain/enums/columnsOrderDuplicate';
+import { OrderTypes } from '../../domain/enums/orderTypes';
+import { getMonthAbbreviation } from '../../utils/DateFormater';
 
 
 const lineData: lineDataItem[] = [
   { value: 58, label: 'Jan', hideDataPoint: true },
   { value: 61, label: 'Fev', hideDataPoint: true },
-  { value: 51, label: 'Mar', hideDataPoint: false},
+  { value: 51, label: 'Mar', hideDataPoint: false },
   { value: 70, label: 'Abr', hideDataPoint: true },
   { value: 56, label: 'Mai', hideDataPoint: true },
 ];
@@ -43,37 +47,89 @@ export function FinanceStatisticsScreen() {
   const { duplicates, filters, ordernation, setFiltersDates, fetchDuplicates } = useDuplicateStore();
 
   const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
-  const {user} = useUserContext();
+  const { user } = useUserContext();
   const database = useSQLiteContext();
 
+  const [chartDuplicates, setChartDuplicates] = useState<DuplicateModel[]>(duplicates);
+
   useEffect(() => {
+    const getDuplicatesToChart = async () => {
+      const actualDate = new Date(filters.initialDate);
+      const dateMinusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 2, 1);
+      const datePlusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 2, 1);
+      const duplicates = await getAllByUser(user?.id as number, { initialDate: dateMinusTwoMonth, finalDate: datePlusTwoMonth }, { orderColumn: ColumnsOrderDuplicate.DATA_VENCIMENTO, orderType: OrderTypes.CRESCENTE }, database);
+      setChartDuplicates(duplicates);
+    }
     const fetch = async () => {
-       await fetchDuplicates(user?.id as number, database)
+      await fetchDuplicates(user?.id as number, database)
+      await getDuplicatesToChart();
     }
     fetch();
   }, [filters])
 
-  const generateReceivableDataToChart = () => {
-      const actualDate = new Date(filters.initialDate);
-      const dateMinusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 1, 1);
-      const dateMinusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 2, 1);
-      const datePlusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 1, 1);
-      const datePlusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 2, 1);
+
+  const generateItemsToChart = (type: MovementType) => {
+    if (chartDuplicates.length === 0) return;
+    const filteredDuplicates = chartDuplicates.filter(dup => dup.movementType === type);
+
+    const months = generateStaticMonthsToChart();
+
+    const initialItemWithMonth: { month: number, items: lineDataItem }[] = Array.from(months).map(month => { return { month: month as number, items: { value: 0, label: getMonthAbbreviation(month as number), hideDataPoint: true } } });
+
+    const items: { month: number, items: lineDataItem }[] = filteredDuplicates.reduce((acumulator, current) => {
+      const actualFilterMonth = new Date(filters.initialDate).getMonth();
+      const currentItemMonth = new Date(current.dueDate).getMonth();
+      const actualItem = acumulator.find(item => item.month === currentItemMonth);
+      if (actualItem) {
+        const newItem = {
+          ...actualItem, items: {
+            ...actualItem.items,
+            value: Number(actualItem.items.value) + current.totalValue,
+            hideDataPoint: actualFilterMonth === currentItemMonth ? false : true
+          }
+        }
+        return acumulator.map(item => item.month === currentItemMonth ? newItem : item);
+      }
+      return acumulator;
+    }, initialItemWithMonth);
+
+    return items.map(item => item.items);
   }
 
+  const generateStaticMonthsToChart = () => {
+    const actualDate = new Date(filters.initialDate);
+    const dateMinusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 1, 1);
+    const dateMinusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 2, 1);
+    const datePlusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 1, 1);
+    const datePlusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 2, 1);
+    const months = [dateMinusTwoMonth.getMonth(), dateMinusOneMonth.getMonth(), actualDate.getMonth(), datePlusOneMonth.getMonth(), datePlusTwoMonth.getMonth()];
+    return new Set<number>(months)
+  }
 
-  const generateLineDataItem = async (date: Date, hideDataPoint?: boolean = true): lineDataItem =>  {
-    const duplicates = await getAllByUser(user?.id as number,{initialDate: date, finalDate: date},ordernation,database);
-  
-    return {
-      value: 10
+  const generateSetMonthsToChart = (filteredDuplicates: DuplicateModel[]) => {
+    let months = new Set(filteredDuplicates.map(dup => new Date(dup.dueDate).getMonth()));
+    if (months.size <= 2) {
+      const maxMonth = Math.max(...months)
+      const minMonth = Math.min(...months);
+      months.add(minMonth - 1)
+      months.add(minMonth - 2)
+      months.add(maxMonth + 1)
+      months.add(maxMonth + 2)
     }
+    return sortSet(months);
   }
-  
+
+  const sortSet = (months: Set<Number>) => {
+    const arrayMonth = Array.from<Number>(months);
+    arrayMonth.sort((a, b) => Number(a) - Number(b));
+    return new Set(arrayMonth);
+  }
+
+
   const renderItem = (type: MovementType) => {
     const payable = MovementType.Despesa === type;
     const filteredDuplicates = duplicates.filter(dup => dup.movementType == type);
-    const totalValue = filteredDuplicates.reduce((prev, current) => prev + current.totalValue,0);
+    const totalValue = filteredDuplicates.reduce((prev, current) => prev + current.totalValue, 0);
     return (
       <View style={[styles.caption, payable ? styles.captionPayable : styles.captionReceivable]}>
         <Row>
@@ -106,7 +162,7 @@ export function FinanceStatisticsScreen() {
         {renderItem(MovementType.Despesa)}
       </Row>
       <SectionWithTitle title='Evolução mensal'>
-        <CurvedLineChart data={lineData} data2={lineData2} />
+        {chartDuplicates.length > 0 && <CurvedLineChart data={generateItemsToChart(MovementType.Receita) as lineDataItem[]} data2={generateItemsToChart(MovementType.Despesa) as lineDataItem[]} />}
         <Row style={{ justifyContent: 'center', columnGap: 20 }}>
           {randerCaptionChartBadge('A Receber', '#098e00ff')}
           {randerCaptionChartBadge('A Pagar', '#d80d0dff')}
