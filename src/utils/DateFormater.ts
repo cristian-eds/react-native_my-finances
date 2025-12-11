@@ -83,5 +83,5 @@ export const  getMonthAbbreviation = (monthIndex: number, locale = 'pt-BR') => {
 
   const date = new Date(2025, monthIndex, 1);
 
-  return date.toLocaleDateString(locale, { month: 'short' });
+  return capitalizeWord(date.toLocaleDateString(locale, { month: 'short' }));
 }
