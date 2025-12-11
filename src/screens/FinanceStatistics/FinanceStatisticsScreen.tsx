@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { styles } from './FinanceStatisticsScreenStyles';
@@ -17,6 +17,9 @@ import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 import { CurvedLineChart } from '../../components/charts/CurvedLineChart/CurvedLineChart';
 import { lineDataItem } from 'react-native-gifted-charts';
+import { useUserContext } from '../../hooks/useUserContext';
+import { useSQLiteContext } from 'expo-sqlite';
+import { getAllByUser } from '../../services/duplicateService';
 
 
 const lineData: lineDataItem[] = [
@@ -37,17 +40,40 @@ const lineData2 = [
 
 export function FinanceStatisticsScreen() {
 
-  const { filters: filtersStore } = useDuplicateStore();
+  const { duplicates, filters, ordernation, setFiltersDates, fetchDuplicates } = useDuplicateStore();
 
   const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
-  const [filters, setFilters] = useState<DuplicateFiltersModel>(filtersStore);
+  const {user} = useUserContext();
+  const database = useSQLiteContext();
 
-  const setFiltersDate = (initial: Date, final: Date) => {
-    setFilters({ ...filters, initialDate: initial, finalDate: final })
+  useEffect(() => {
+    const fetch = async () => {
+       await fetchDuplicates(user?.id as number, database)
+    }
+    fetch();
+  }, [filters])
+
+  const generateReceivableDataToChart = () => {
+      const actualDate = new Date(filters.initialDate);
+      const dateMinusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 1, 1);
+      const dateMinusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() - 2, 1);
+      const datePlusOneMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 1, 1);
+      const datePlusTwoMonth = new Date(actualDate.getFullYear(), actualDate.getMonth() + 2, 1);
   }
 
-  const renderItem = (type: MovementType, total: number, numberOfDuplicate: number) => {
+
+  const generateLineDataItem = async (date: Date, hideDataPoint?: boolean = true): lineDataItem =>  {
+    const duplicates = await getAllByUser(user?.id as number,{initialDate: date, finalDate: date},ordernation,database);
+  
+    return {
+      value: 10
+    }
+  }
+  
+  const renderItem = (type: MovementType) => {
     const payable = MovementType.Despesa === type;
+    const filteredDuplicates = duplicates.filter(dup => dup.movementType == type);
+    const totalValue = filteredDuplicates.reduce((prev, current) => prev + current.totalValue,0);
     return (
       <View style={[styles.caption, payable ? styles.captionPayable : styles.captionReceivable]}>
         <Row>
@@ -56,8 +82,8 @@ export function FinanceStatisticsScreen() {
           </Text>
           <Ionicons name="trending-up-outline" size={18} color="black" />
         </Row>
-        <Text style={[styles.captionValue, payable ? styles.captionTitlePayable : styles.captionTitleReceivable]}>{formaterNumberToBRL(total)}</Text>
-        <Text style={styles.captionSubText}>{numberOfDuplicate} duplicatas</Text>
+        <Text style={[styles.captionValue, payable ? styles.captionTitlePayable : styles.captionTitleReceivable]}>{formaterNumberToBRL(totalValue)}</Text>
+        <Text style={styles.captionSubText}>{filteredDuplicates.length} duplicatas</Text>
       </View>
     )
   }
@@ -71,14 +97,13 @@ export function FinanceStatisticsScreen() {
     )
   }
 
-
   return (
     <View style={GlobalStyles.container_screens_normal}>
       <ButtonBack onPress={() => navigation.goBack()} />
-      <PeriodFilter filters={filters} setFiltersDates={setFiltersDate} />
+      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} />
       <Row style={{ columnGap: 10 }}>
-        {renderItem(MovementType.Receita, 2000, 4)}
-        {renderItem(MovementType.Despesa, 1500, 3)}
+        {renderItem(MovementType.Receita)}
+        {renderItem(MovementType.Despesa)}
       </Row>
       <SectionWithTitle title='Evolução mensal'>
         <CurvedLineChart data={lineData} data2={lineData2} />
