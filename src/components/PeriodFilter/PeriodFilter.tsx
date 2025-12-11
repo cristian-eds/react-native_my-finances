@@ -14,12 +14,14 @@ import { DuplicateFiltersModel } from '../../domain/duplicatesFilters';
 
 export type Mode = 'DAY' | 'MONTH' | 'WEEK' | 'PERIOD';
 
+
 interface PeriodFilterProps {
     filters: TransactionFiltersModel | DuplicateFiltersModel,
-    setFiltersDates: (initialDate: Date, finalDate: Date) => void
+    setFiltersDates: (initialDate: Date, finalDate: Date) => void,
+    enableModes?: Mode[] 
 }
 
-export function PeriodFilter({filters, setFiltersDates}:PeriodFilterProps) {
+export function PeriodFilter({filters, setFiltersDates, enableModes}:PeriodFilterProps) {
 
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<Mode>('MONTH');
@@ -36,6 +38,12 @@ export function PeriodFilter({filters, setFiltersDates}:PeriodFilterProps) {
             value: 'PERIOD'
         }
     ]
+
+    const enableItemsToDrop = () => {
+        if(!enableModes) return items;
+        const filteredItems = items.filter(item => enableModes.find(mode => mode === item.value))
+        return filteredItems;
+    }
 
     const handleSetPeriodDates = (initialDate: Date, finalDate: Date) => {
         setFiltersDates(initialDate, finalDate);
@@ -81,7 +89,7 @@ export function PeriodFilter({filters, setFiltersDates}:PeriodFilterProps) {
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}
-                items={items}
+                items={enableItemsToDrop()}
                 setValue={setMode}
                 value={mode}
                 style={styles.dropDownStyle}

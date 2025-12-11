@@ -141,7 +141,7 @@ export function FinanceStatisticsScreen() {
   return (
     <View style={GlobalStyles.container_screens_normal}>
       <ButtonBack onPress={() => navigation.goBack()} />
-      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} />
+      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} enableModes={['MONTH']}/>
       <Row style={{ columnGap: 10 }}>
         {renderItem(MovementType.Receita)}
         {renderItem(MovementType.Despesa)}
