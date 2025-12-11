@@ -78,3 +78,10 @@ export const getInitialDateForNextMonth = (date: Date) => {
 export const getInitialDateForPrevMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() - 1, 1);
 }
+
+export const  getMonthAbbreviation = (monthIndex: number, locale = 'pt-BR') => {
+
+  const date = new Date(2025, monthIndex, 1);
+
+  return date.toLocaleDateString(locale, { month: 'short' });
+}
