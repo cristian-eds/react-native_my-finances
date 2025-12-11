@@ -25,23 +25,6 @@ import { ColumnsOrderDuplicate } from '../../domain/enums/columnsOrderDuplicate'
 import { OrderTypes } from '../../domain/enums/orderTypes';
 import { getMonthAbbreviation } from '../../utils/DateFormater';
 
-
-const lineData: lineDataItem[] = [
-  { value: 58, label: 'Jan', hideDataPoint: true },
-  { value: 61, label: 'Fev', hideDataPoint: true },
-  { value: 51, label: 'Mar', hideDataPoint: false },
-  { value: 70, label: 'Abr', hideDataPoint: true },
-  { value: 56, label: 'Mai', hideDataPoint: true },
-];
-
-const lineData2 = [
-  { value: 38, label: 'Jan', hideDataPoint: true },
-  { value: 41, label: 'Fev', hideDataPoint: true },
-  { value: 27, label: 'Mar', hideDataPoint: false },
-  { value: 58, label: 'Abr', hideDataPoint: true },
-  { value: 32, label: 'Mai', hideDataPoint: true },
-];
-
 export function FinanceStatisticsScreen() {
 
   const { duplicates, filters, ordernation, setFiltersDates, fetchDuplicates } = useDuplicateStore();
@@ -74,24 +57,26 @@ export function FinanceStatisticsScreen() {
 
     const months = generateStaticMonthsToChart();
 
-    const initialItemWithMonth: { month: number, items: lineDataItem }[] = Array.from(months).map(month => { return { month: month as number, items: { value: 0, label: getMonthAbbreviation(month as number), hideDataPoint: true } } });
+    const initialItemWithMonth: { month: number, items: lineDataItem }[] = Array.from(months).map(month => { return { month: month as number, items: { value: 0, label: getMonthAbbreviation(month as number), hideDataPoint: true, stripColor: '#030303ff' } } });
 
     const items: { month: number, items: lineDataItem }[] = filteredDuplicates.reduce((acumulator, current) => {
       const actualFilterMonth = new Date(filters.initialDate).getMonth();
       const currentItemMonth = new Date(current.dueDate).getMonth();
+      const isActualMonth = actualFilterMonth === currentItemMonth;
       const actualItem = acumulator.find(item => item.month === currentItemMonth);
       if (actualItem) {
         const newItem = {
           ...actualItem, items: {
             ...actualItem.items,
             value: Number(actualItem.items.value) + current.totalValue,
-            hideDataPoint: actualFilterMonth === currentItemMonth ? false : true
+            hideDataPoint: isActualMonth ? false : true,
+            showStrip: isActualMonth ? true : false,
           }
         }
         return acumulator.map(item => item.month === currentItemMonth ? newItem : item);
       }
       return acumulator;
-    }, initialItemWithMonth);
+    }, initialItemWithMonth as { month: number, items: lineDataItem }[] );
 
     return items.map(item => item.items);
   }
