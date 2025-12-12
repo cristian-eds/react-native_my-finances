@@ -3,8 +3,10 @@ import { SQLiteDatabase } from "expo-sqlite";
 import * as userRepository from "../repository/userRepository";
 import { createInitialCategories } from "./migrationsService";
 
+
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
+import { hashPassword, verifyPass } from "./passwordService";
 
 async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Promise<ResponseUser> {
 
@@ -13,31 +15,37 @@ async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Pro
         return { data: null, error: "Já existe um usuário com esse CPF" };
     }
 
-    const savedUser = await userRepository.create(data, database);
+    const passwordHased = await hashPassword(data.password);
+    if(!passwordHased) return { data: null, error: "Erro ao criar usuário" };
 
-    if( !savedUser ) {
+    const userToSave = {...data, password: passwordHased}
+    const savedUser = await userRepository.create(userToSave, database);
+
+    if (!savedUser) {
         return { data: null, error: "Erro ao criar usuário" };
     }
 
     await createInitialCategories(savedUser.id, database);
 
-    return { data: savedUser }; 
+    return { data: savedUser };
 }
 
 async function updatePassword(oldPass: string, newPass: string, userId: number, database: SQLiteDatabase): Promise<boolean> {
     const userFound = await userRepository.findUserById(userId.toLocaleString(), database);
-    if(!userFound || userFound.password !== oldPass) return false;
-    
+
+    if (!userFound) return false;
+    if (await verifyPass(oldPass, userFound.password)) return false;
+
     return await userRepository.updatePassword(newPass, userId.toLocaleString(), database);
 }
 
 async function updateUser(user: Omit<User, 'password'>, database: SQLiteDatabase): Promise<boolean> {
     let userFound = await userRepository.findUserById(user.id.toLocaleString(), database);
-    if(!userFound) return false;
-    userFound = {...userFound, ...user};
+    if (!userFound) return false;
+    userFound = { ...userFound, ...user };
 
     return await userRepository.updateUser(userFound, database);
 }
 
 
-export { createUser,updatePassword, updateUser };
+export { createUser, updatePassword, updateUser };

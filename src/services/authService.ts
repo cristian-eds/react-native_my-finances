@@ -4,8 +4,8 @@ import { UserLogin } from "../domain/userLogin";
 
 import * as userRepository from "../repository/userRepository";
 import { generateSessionToken } from "./sessionTokenService";
+import { verifyPass } from "./passwordService";
 
-import bcrypt from 'react-native-simple-bcrypt';
 
 export async function login(database: SQLiteDatabase, data: UserLogin): Promise<ResponseUser> {
 
@@ -13,9 +13,9 @@ export async function login(database: SQLiteDatabase, data: UserLogin): Promise<
 
     if (!user) return { data: null, error: "Usuário não encontrado" };
 
-    //const hashedPassword = user.password;
-    //const isMatch = await bcrypt.compare(data.password,hashedPassword);
-    const isMatch = data.password === user.password;
+    const hashedPassword = user.password;
+    const isMatch = await verifyPass(data.password,hashedPassword);
+    //const isMatch = data.password === user.password;
 
     if (!isMatch) return { data: null, error: "Senha incorreta" };
 
