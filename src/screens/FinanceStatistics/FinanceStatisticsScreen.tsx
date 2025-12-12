@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import { styles } from './FinanceStatisticsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { PeriodFilter } from '../../components/PeriodFilter/PeriodFilter';
-import { DuplicateFiltersModel } from '../../domain/duplicatesFilters';
 import { useDuplicateStore } from '../../stores/DuplicateStores';
 import { Row } from '../../components/structure/Row/Row';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -24,16 +23,20 @@ import { DuplicateModel } from '../../domain/duplicateModel';
 import { ColumnsOrderDuplicate } from '../../domain/enums/columnsOrderDuplicate';
 import { OrderTypes } from '../../domain/enums/orderTypes';
 import { getMonthAbbreviation } from '../../utils/DateFormater';
+import { CustomPieChart } from '../../components/charts/PieChart/CustomPieChart';
+import { findTransactionsByDuplicateList } from '../../services/transactionService';
+import { Transaction } from '../../domain/transactionModel';
 
 export function FinanceStatisticsScreen() {
 
-  const { duplicates, filters, ordernation, setFiltersDates, fetchDuplicates } = useDuplicateStore();
+  const { duplicates, filters, setFiltersDates, fetchDuplicates } = useDuplicateStore();
 
   const navigation = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
   const { user } = useUserContext();
   const database = useSQLiteContext();
 
   const [chartDuplicates, setChartDuplicates] = useState<DuplicateModel[]>(duplicates);
+  const [paymentsDuplicates, setPaymentsDuplicates] = useState<Transaction[]>([]);
 
   useEffect(() => {
     const getDuplicatesToChart = async () => {
@@ -46,12 +49,16 @@ export function FinanceStatisticsScreen() {
     const fetch = async () => {
       await fetchDuplicates(user?.id as number, database)
       await getDuplicatesToChart();
+      if (chartDuplicates) {
+        const payments = await findTransactionsByDuplicateList(chartDuplicates, database);
+        setPaymentsDuplicates(payments);
+      }
     }
     fetch();
   }, [filters])
 
 
-  const generateItemsToChart = (type: MovementType) => {
+  const generateItemsToLineChart = (type: MovementType) => {
     if (chartDuplicates.length === 0) return;
     const filteredDuplicates = chartDuplicates.filter(dup => dup.movementType === type);
 
@@ -76,7 +83,7 @@ export function FinanceStatisticsScreen() {
         return acumulator.map(item => item.month === currentItemMonth ? newItem : item);
       }
       return acumulator;
-    }, initialItemWithMonth as { month: number, items: lineDataItem }[] );
+    }, initialItemWithMonth as { month: number, items: lineDataItem }[]);
 
     return items.map(item => item.items);
   }
@@ -110,6 +117,25 @@ export function FinanceStatisticsScreen() {
     return new Set(arrayMonth);
   }
 
+  const generateItemsToPieChart = () => {
+    let payed = { color: '#098e00ff', value: 0, count: 0, text: 'Pago' };
+    let pending = { color: 'rgba(98, 140, 255, 1)', value: 0, count: 0, text: 'Aberto' };
+    let overdue = { color: '#d80d0dff', value: 0, count: 0, text: 'Vencido' };
+
+    chartDuplicates.forEach(dup => {
+      const payDup = paymentsDuplicates.filter(pay => pay.duplicateId === dup.id);
+      if (payDup && payDup.length > 0) {
+        const totalPayed = payDup.reduce((prev, current) => prev + current.value, 0);
+        if (totalPayed >= dup.totalValue) payed = { ...payed, value: payed.value + dup.totalValue, count: payed.count + 1 }
+      } else if (new Date() > new Date(dup.dueDate)) {
+        overdue = { ...overdue, value: overdue.value + dup.totalValue, count: overdue.count + 1 };
+      } else {
+        pending = { ...pending, value: pending.value + dup.totalValue, count: pending.count + 1 }
+      }
+    })
+    return [payed, pending, overdue]
+
+  }
 
   const renderItem = (type: MovementType) => {
     const payable = MovementType.Despesa === type;
@@ -129,11 +155,12 @@ export function FinanceStatisticsScreen() {
     )
   }
 
-  const randerCaptionChartBadge = (text: string, color: string) => {
+  const randerCaptionChartBadge = (text: string, color: string, subText?: string) => {
     return (
-      <Row style={{ columnGap: 6 }}>
+      <Row style={{ columnGap: 4 }}>
         <View style={[styles.chartCaptionBadge, { backgroundColor: color }]}></View>
         <Text>{text}</Text>
+        {subText && <Text>({subText})</Text>}
       </Row>
     )
   }
@@ -141,18 +168,31 @@ export function FinanceStatisticsScreen() {
   return (
     <View style={GlobalStyles.container_screens_normal}>
       <ButtonBack onPress={() => navigation.goBack()} />
-      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} enableModes={['MONTH']}/>
-      <Row style={{ columnGap: 10 }}>
-        {renderItem(MovementType.Receita)}
-        {renderItem(MovementType.Despesa)}
-      </Row>
-      <SectionWithTitle title='Evolução mensal'>
-        {chartDuplicates.length > 0 && <CurvedLineChart data={generateItemsToChart(MovementType.Receita) as lineDataItem[]} data2={generateItemsToChart(MovementType.Despesa) as lineDataItem[]} />}
-        <Row style={{ justifyContent: 'center', columnGap: 20 }}>
-          {randerCaptionChartBadge('A Receber', '#098e00ff')}
-          {randerCaptionChartBadge('A Pagar', '#d80d0dff')}
-        </Row>
-      </SectionWithTitle>
+      <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} enableModes={['MONTH']} />
+      <ScrollView>
+        <View style={{rowGap: 10, paddingBottom: 30}}>
+          <Row style={{ columnGap: 10 }}>
+            {renderItem(MovementType.Receita)}
+            {renderItem(MovementType.Despesa)}
+          </Row>
+          <SectionWithTitle title='Evolução mensal'>
+            {chartDuplicates.length > 0 && <CurvedLineChart data={generateItemsToLineChart(MovementType.Receita) as lineDataItem[]} data2={generateItemsToLineChart(MovementType.Despesa) as lineDataItem[]} />}
+            <Row style={{ justifyContent: 'center', columnGap: 20 }}>
+              {randerCaptionChartBadge('A Receber', '#098e00ff')}
+              {randerCaptionChartBadge('A Pagar', '#d80d0dff')}
+            </Row>
+          </SectionWithTitle>
+          <SectionWithTitle title='Status das Duplicatas'>
+            <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
+              <CustomPieChart items={generateItemsToPieChart()} donut />
+            </View>
+            <Row style={{ justifyContent: 'center', columnGap: 20 }}>
+              {generateItemsToPieChart().map(item => randerCaptionChartBadge(item.text, item.color, item.count.toLocaleString()))}
+            </Row>
+            <Text style={{textAlign: 'center', fontSize: 16, fontWeight: '500'}}>Total: {chartDuplicates.length}</Text>
+          </SectionWithTitle>
+        </View>
+      </ScrollView>
     </View>
   );
 }

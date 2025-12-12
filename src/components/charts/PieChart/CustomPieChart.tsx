@@ -6,21 +6,26 @@ interface PieChartItem {
   value: number,
   color: string,
   text?: string,
-  gradientCenterColor?: string
+  gradientCenterColor?: string,
 }
 
 interface CustomBarChartProps {
-  items: PieChartItem[]
+  items: PieChartItem[],
+  donut?: boolean
 }
 
-export function CustomPieChart({ items }: CustomBarChartProps) {
+export function CustomPieChart({ items, donut = false }: CustomBarChartProps) {
 
   const itemsToChart = items.length > 0 ? items: [{value: 100, color: '#ccccccff', text: 'Sem dados'}]; 
 
   return (
     <PieChart
       data={itemsToChart}
+      donut={donut}
       radius={60}
+      innerCircleColor={'#ffffffff'}
+      innerRadius={35}
+
     />
   );
 }
