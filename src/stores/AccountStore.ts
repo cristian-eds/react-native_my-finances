@@ -6,6 +6,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { Status } from "../domain/enums/statusEnum";
 import { MovementType } from "../domain/enums/movementTypeEnum";
+import { useTransactionStore } from "./TransactionStore";
 
 type Store = {
     accounts: Account[];
@@ -81,6 +82,19 @@ export const useAccountStore = create<Store>((set, get) => ({
         try {
             const accountId = await accountService.save(account, userId, database);
             if (!accountId) return false;
+            if (account.balance > 0) {
+                const { addTransaction } = useTransactionStore.getState();
+                await addTransaction({
+                    accountId: accountId,
+                    description: 'Saldo Inicial',
+                    movementType: MovementType.Receita,
+                    paymentDate: new Date(),
+                    value: Number(account.balance),
+                },
+                    userId,
+                    database
+                )
+            }
             set({ accounts: [...get().accounts, { ...account, id: accountId }] });
             set({ activeAccount: { ...account, id: accountId } });
             return true;

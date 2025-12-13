@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     },
     iconCircle: {
         backgroundColor: '#9bb3f9c7',
-        padding: 10,
+        padding: 8,
         borderRadius: 50
     },
     categoryItemTitle: {

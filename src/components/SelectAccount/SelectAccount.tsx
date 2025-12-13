@@ -62,7 +62,7 @@ export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps
 
             listItemContainerStyle={{borderBottomColor: '#ccc', borderBottomWidth: 1}}
             
-            placeholder='Selecione um item'
+            placeholder='Selecione uma conta'
             maxHeight={200}
             listMode='SCROLLVIEW'
             zIndex={30000}

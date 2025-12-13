@@ -17,11 +17,10 @@ import { accountSchemas } from '../../utils/schemas/accountSchemas';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 import { Status } from '../../domain/enums/statusEnum';
 
-import * as accountService from '../../services/accountService';
 import { UserContext } from '../../context/UserContext';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 import { useTransactionStore } from '../../stores/TransactionStore';
-import { MovementType } from '../../domain/enums/movementTypeEnum';
+import { useAccountStore } from '../../stores/AccountStore';
 
 
 export function RegisterInitialAccountScreen() {
@@ -34,6 +33,7 @@ export function RegisterInitialAccountScreen() {
   const route = useRoute<RouteProp<AuthStackParamList, 'RegisterInitialAccount'>>();
   const { user } = route.params;
   const { addTransaction } = useTransactionStore();
+  const { createAccount } = useAccountStore();
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(accountSchemas),
@@ -41,7 +41,7 @@ export function RegisterInitialAccountScreen() {
 
   const handleRegisterAccount = async () => {
     const formValues = watch();
-    const idConta = await accountService.save(
+    const created = await createAccount(
       {
         accountNumber: formValues.accountNumber ?? "",
         agency: formValues.agency ?? "",
@@ -54,20 +54,8 @@ export function RegisterInitialAccountScreen() {
         creationDate: new Date().toISOString(),
       }, Number(user?.id), db);
 
-    if (idConta) {
+    if (created) {
       Alert.alert("Conta criada!");
-      if (Number(formValues.balance) > 0) {
-        await addTransaction({
-          accountId: idConta,
-          description: 'Saldo Inicial',
-          movementType: MovementType.Receita,
-          paymentDate: new Date(),
-          value: Number(formValues.balance),
-        },
-          user?.id,
-          db
-        )
-      }
       context?.handleSetUser(user);
     }
   }

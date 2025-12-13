@@ -82,6 +82,7 @@ export function AccountDetails() {
         if (isDeleted) {
             Alert.alert("Conta excluída com sucesso!");
             setModalConfirmDelete(false);
+            navigation.canGoBack();
         }
     }
 
