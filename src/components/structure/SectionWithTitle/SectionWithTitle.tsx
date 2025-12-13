@@ -1,17 +1,19 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
 
 import { styles } from './SectionWithTitleStyles';
 
 interface SectionWithTitleProps {
     title: string,
-    children: React.ReactNode
+    children: React.ReactNode,
+    containerStyle?: StyleProp<ViewStyle>,
+    titleStyle?: StyleProp<TextStyle>
 }
 
-export function SectionWithTitle({title, children} : SectionWithTitleProps) {
+export function SectionWithTitle({title, containerStyle, titleStyle, children} : SectionWithTitleProps) {
     return (
-        <View style={styles.section}>
-            <Text style={styles.title}>{title}</Text>
+        <View style={[styles.section,containerStyle]}>
+            <Text style={[styles.title,titleStyle]}>{title}</Text>
             {children}
         </View>
     );
