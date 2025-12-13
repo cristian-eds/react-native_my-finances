@@ -28,6 +28,7 @@ import ModalAccount from '../../components/modals/ModalAccount/ModalAccount';
 import { useNavigation } from '@react-navigation/native';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 import { Row } from '../../components/structure/Row/Row';
+import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 
 
 export function AccountDetails() {
@@ -121,10 +122,7 @@ export function AccountDetails() {
                 <ButtonBack onPress={() => navigation.goBack()} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </Row>
-
-
-            <View style={styles.containerContent}>
-                <Text style={[GlobalStyles.sectionInputsText, { fontSize: 16, marginVertical: 10, textAlign: 'center' }]}>DADOS DA CONTA</Text>
+            <SectionWithTitle title='DADOS DA CONTA' titleStyle={{textAlign: 'center'}}>
                 <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
@@ -132,30 +130,28 @@ export function AccountDetails() {
                 <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
                 <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
                 <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
-            </View>
-            <View style={styles.containerContent}>
-                <Text style={[GlobalStyles.sectionInputsText, { fontSize: 16, marginVertical: 10, textAlign: 'center' }]}>INFORMAÇÕES</Text>
-
+            </SectionWithTitle>
+            <SectionWithTitle title='INFORMAÇÕES' titleStyle={{textAlign: 'center'}}>
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
                 </RowWithLeftLabel>
                 <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     {activeAccount?.status === Status.Ativo ? renderStatusLabel('green') : renderStatusLabel('red')}
                 </RowWithLeftLabel>
-            </View>
+            </SectionWithTitle>
             <View>
                 {isDirty ? <>
                     <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 15, marginBottom: 0 }} />
                     <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
                 </> : <>
-                    <ButtonPrincipal title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }} />
+                    <ButtonPrincipal iconName='trash-outline' title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }} />
                 </>}
 
             </View>
-            <View style={{ paddingBottom: 100 }}>
-                <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
-                <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
-            </View>
+
+            <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
+            <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
+
         </ScrollView>
     );
 }
