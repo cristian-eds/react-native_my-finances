@@ -122,7 +122,7 @@ export function AccountDetails() {
                 <ButtonBack onPress={() => navigation.goBack()} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </Row>
-            <SectionWithTitle title='DADOS DA CONTA' titleStyle={{textAlign: 'center'}}>
+            <SectionWithTitle title='DADOS DA CONTA' titleStyle={{textAlign: 'center'}} containerStyle={{rowGap: 5, marginTop: 10}}>
                 <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
@@ -131,7 +131,7 @@ export function AccountDetails() {
                 <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
                 <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
             </SectionWithTitle>
-            <SectionWithTitle title='INFORMAÇÕES' titleStyle={{textAlign: 'center'}}>
+            <SectionWithTitle title='INFORMAÇÕES' titleStyle={{textAlign: 'center'}} containerStyle={{rowGap: 5}}>
                 <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
                     <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
                 </RowWithLeftLabel>
