@@ -16,9 +16,9 @@ async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Pro
     }
 
     const passwordHased = await hashPassword(data.password);
-    if(!passwordHased) return { data: null, error: "Erro ao criar usuário" };
+    if (!passwordHased) return { data: null, error: "Erro ao criar usuário" };
 
-    const userToSave = {...data, password: passwordHased}
+    const userToSave = { ...data, password: passwordHased }
     const savedUser = await userRepository.create(userToSave, database);
 
     if (!savedUser) {
@@ -47,5 +47,15 @@ async function updateUser(user: Omit<User, 'password'>, database: SQLiteDatabase
     return await userRepository.updateUser(userFound, database);
 }
 
+async function getUserByCpf(cpf: string, database: SQLiteDatabase): Promise<User | undefined> {
+    return await userRepository.findUserByCpf(cpf, database);
+}
 
-export { createUser, updatePassword, updateUser };
+async function resetPassword(newPass: string, userId: number, database: SQLiteDatabase): Promise<boolean> {
+    const passwordHased = await hashPassword(newPass);
+    if (!passwordHased) return false;
+    return await userRepository.updatePassword(passwordHased, userId.toLocaleString(), database);
+}
+
+
+export { createUser, updatePassword, updateUser, getUserByCpf, resetPassword };

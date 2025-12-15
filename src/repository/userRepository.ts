@@ -7,7 +7,6 @@ async function create(data: Omit<User, "id">, database: SQLiteDatabase): Promise
             INSERT INTO users (name, cpf, password)
             VALUES (?, ?, ?);
         `,[data.name, data.cpf, data.password])
-        //const passwordHashed = await hash(data.password, Number(10));
 
         const insertId = res.lastInsertRowId.toLocaleString();
 
@@ -74,7 +73,6 @@ async function updatePassword(newPass: string ,userId: string, database: SQLiteD
             SET password = ?
             WHERE id = ?;
         `,[newPass, userId])
-        //const passwordHashed = await hash(data.password, Number(10));
 
         return res.changes > 0;
     } catch (error) {
