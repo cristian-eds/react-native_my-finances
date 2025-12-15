@@ -69,7 +69,7 @@ export function LoginScreen() {
             readOnly={loading}
           />
 
-          <Text style={styles.forgot_password}>Esqueceu a senha?</Text>
+          <Text style={styles.forgot_password} onPress={() => navigation.navigate("ForgotPassword")}>Esqueceu a senha?</Text>
         </View>
         <View>
           <ButtonPrincipal title={loading ? 'Entrando...' : 'Entrar'} onPress={handleSubmit(handleLogin)} loading={loading} />
