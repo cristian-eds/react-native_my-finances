@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container_screens_auth: {
-    backgroundColor: '#b7bec5ff',
+    backgroundColor: '#b6c1ccff',
     flex: 1,
     paddingTop: 80,
     paddingBottom: 60,

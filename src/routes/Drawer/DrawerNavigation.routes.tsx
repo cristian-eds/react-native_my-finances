@@ -1,23 +1,23 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { CustomDrawerContent } from "./CustomDrawerContent/CustomDrawerContent";
 import { PrincipalStackNavigationRoutes } from "../Stack/PrincipalStack/PrincipalStackNavigation.routes";
-import { Ionicons } from "@expo/vector-icons";
-
+import Logo from '../../../assets/logo.png'
+import { Image } from "react-native";
 const Drawer = createDrawerNavigator();
 
 export const DrawerNagivationRoutes = () => {
 
     return (
         <Drawer.Navigator
-            screenOptions={({navigation}) => ({
+            screenOptions={({ navigation }) => ({
                 headerTitleAlign: 'center',
                 drawerStyle: { height: '80%', marginTop: 75 },
                 title: "",
                 headerRightContainerStyle: { paddingRight: 20, paddingTop: 5 },
                 headerLeftContainerStyle: { paddingLeft: 5 },
-                headerRight: () => <Ionicons name="person-outline" size={24} color="white" onPress={() => navigation.navigate('PrincipalStack', { screen: 'Perfil' })}/>,
+                headerRight: () => <Image source={Logo} style={{width:100, height: 35}}/>,
                 headerStyle: {
-                    backgroundColor: '#01144dd5'
+                    backgroundColor: '#03305D'
                 },
                 headerTintColor: '#fff',
             })}
