@@ -37,7 +37,7 @@ export function SelectAccount({ containerStyle, labelStyle }: SelectAccountProps
             })
             return;
         }
-        const newActiveAccount = accounts.find(acc => acc.id === accountId);
+        const newActiveAccount = accounts.find(acc => acc.id === Number(accountId));
         if (newActiveAccount) {
             setActiveAccount(newActiveAccount);
         } 
