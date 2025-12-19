@@ -75,7 +75,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                 {expandAccounts && accounts &&
                     accounts.map(account => (
                         <TouchableOpacity style={styles.subItem} key={account.id} onPress={() => handleNavigateToAccountDetails(account)}>
-                            <Ionicons name="wallet-outline" size={20} color="black" />
+                            <Ionicons name="wallet-outline" size={18} color="black" />
                             <Text style={styles.subItemText}>{account.name}</Text>
                         </TouchableOpacity>
                     ))
@@ -98,7 +98,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                 </TouchableOpacity>
                 {
                     expandTransactions && <TouchableOpacity style={styles.subItem} onPress={() => navigation.navigate('PrincipalStack', { screen: 'Categories' })}>
-                        <Ionicons name="grid-outline" size={20} color="black" />
+                        <Ionicons name="grid-outline" size={18} color="black" />
                         <Text style={styles.subItemText}>Categorias</Text>
                     </TouchableOpacity>
                 }

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, Image, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 

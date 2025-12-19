@@ -13,9 +13,10 @@ export const DrawerNagivationRoutes = () => {
                 headerTitleAlign: 'center',
                 drawerStyle: { height: '80%', marginTop: 75 },
                 title: "",
+                headerTitleStyle: {fontSize: 20},
                 headerRightContainerStyle: { paddingRight: 20, paddingTop: 5 },
                 headerLeftContainerStyle: { paddingLeft: 5 },
-                headerRight: () => <Image source={Logo} style={{width:100, height: 35}}/>,
+                headerRight: () => <Image source={Logo} style={{width:80, height: 35}}/>,
                 headerStyle: {
                     backgroundColor: '#03305D'
                 },
