@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -30,9 +30,10 @@ export function RegisterInitialAccountScreen() {
   const db = useSQLiteContext();
   const context = useContext(UserContext);
 
+  const [loading, setLoading] = useState(false);
+
   const route = useRoute<RouteProp<AuthStackParamList, 'RegisterInitialAccount'>>();
   const { user } = route.params;
-  const { addTransaction } = useTransactionStore();
   const { createAccount } = useAccountStore();
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
@@ -41,6 +42,7 @@ export function RegisterInitialAccountScreen() {
 
   const handleRegisterAccount = async () => {
     const formValues = watch();
+    setLoading(true);
     const created = await createAccount(
       {
         accountNumber: formValues.accountNumber ?? "",
@@ -58,6 +60,7 @@ export function RegisterInitialAccountScreen() {
       Alert.alert("Conta criada!");
       context?.handleSetUser(user);
     }
+    setLoading(false);
   }
 
   return (
@@ -77,7 +80,7 @@ export function RegisterInitialAccountScreen() {
           <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
         </View>
         <View>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} />
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} loading={loading}/>
           <ButtonPrincipal title='Voltar' onPress={() => navigation.goBack()} />
         </View>
       </View>

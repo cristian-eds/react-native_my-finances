@@ -15,6 +15,7 @@ import { userSchemas } from '../../utils/schemas/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 import { login } from '../../services/authService';
+import { useState } from 'react';
 
 
 export function RegisterScreen() {
@@ -22,15 +23,19 @@ export function RegisterScreen() {
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
   const db = useSQLiteContext();
 
+  const [loading, setLoading] = useState(false);
+
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(userSchemas),
   })
 
   const handleRegister = async () => {
     const formValues = watch();
+    setLoading(true);
     const response = await createUser(formValues, db);
     if (response?.error) {
       Alert.alert('Erro ao registrar', response.error);
+      setLoading(false)
       return;
     }
     Alert.alert('Sucesso', 'Registrado com sucesso!');
@@ -38,6 +43,8 @@ export function RegisterScreen() {
       await login(db, {cpf: formValues.cpf, password: formValues.password})
       navigation.navigate("RegisterInitialAccount", {user: response?.data});
     }
+
+    setLoading(false);
   }
 
   return (
@@ -54,9 +61,9 @@ export function RegisterScreen() {
         </View>
 
         <View>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} />
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading}/>
           <DividerTextMiddle text='Já possui conta?' />
-          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
+          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>
         </View>
       </View>
 
