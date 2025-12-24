@@ -12,7 +12,6 @@ import { useUserContext } from '../../../hooks/useUserContext';
 import { Account } from '../../../domain/accountModel';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Row } from '../../../components/structure/Row/Row';
-import { ButtonIconSimple } from '../../../components/buttons/ButtonIconSimple/ButtonIconSimple';
 
 export function CustomDrawerContent({ navigation, ...props }: DrawerContentComponentProps) {
 
@@ -26,15 +25,6 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
         setActiveAccount(account);
         navigation.navigate('PrincipalStack', { screen: 'AccountDetails' });
     }
-
-    const renderGradient = (left?: number) => (
-        <LinearGradient
-            colors={['#0f318dff', '#4f79d3ff', '#0f318dff']}
-            style={[styles.bgGradient, left ? { left } : '']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-        />
-    )
 
     const renderHeader = () => {
         return (
@@ -50,7 +40,7 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         </View>
                     </Row>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.closeDrawer()} style={{width: 40, alignItems: 'flex-end'}}>
+                <TouchableOpacity onPress={() => navigation.closeDrawer()} style={{ width: 40, alignItems: 'flex-end' }}>
                     <Ionicons name='arrow-back' size={22} />
                 </TouchableOpacity>
             </Row>
@@ -68,9 +58,11 @@ export function CustomDrawerContent({ navigation, ...props }: DrawerContentCompo
                         <Ionicons name="wallet-outline" size={20} color="black" />
                         <Text style={styles.itemText}>Contas</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandAccounts(!expandAccounts)}>
-                        <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={20} color="black" />
-                    </TouchableOpacity>
+                    {accounts.length > 0 &&
+                        <TouchableOpacity style={styles.boxChevron} onPress={() => setExpandAccounts(!expandAccounts)}>
+                            <Ionicons name={expandAccounts ? 'chevron-up' : 'chevron-down'} size={20} color="black" />
+                        </TouchableOpacity>
+                    }
                 </TouchableOpacity>
                 {expandAccounts && accounts &&
                     accounts.map(account => (

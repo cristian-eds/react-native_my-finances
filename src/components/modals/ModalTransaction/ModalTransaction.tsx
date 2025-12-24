@@ -30,6 +30,8 @@ import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
+import { notify } from '../../../utils/notifications/NotificationsConfig';
+import { formaterNumberToBRL } from '../../../utils/NumberFormater';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -90,10 +92,16 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
             isSaved = await addTransaction(newTransaction, user?.id as number, database);
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
-        } 
+        }
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
+            await notify({
+                title: 'Nova transação registrada!',
+                body: `Transação de ${formaterNumberToBRL(newTransaction.value)} na data ${newTransaction.paymentDate}`
+            },
+                null
+            )
             handleClose();
         }
     }
@@ -112,8 +120,8 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
     }
 
     const renderTitle = () => {
-        if(mode === 'edit') return 'Editar lançamento';
-        if(mode === 'payment') return 'Novo pagamento';
+        if (mode === 'edit') return 'Editar lançamento';
+        if (mode === 'payment') return 'Novo pagamento';
         return 'Novo lançamento'
     }
 
