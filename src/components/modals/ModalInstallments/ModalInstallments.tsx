@@ -18,6 +18,7 @@ import { DuplicateModel } from '../../../domain/duplicateModel';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../../hooks/useUserContext';
+import { scheduleDuplicateNotification } from '../../../utils/notifications/templates';
 
 
 export interface Item {
@@ -68,6 +69,7 @@ export function ModalInstallments({ items, isShow, onClose,onCreateInstallments,
         const created = await createRecurrenceDuplicates(mappedItems, user?.id as number, database);
 
         if (created) {
+            await mappedItems.forEach((item) => scheduleDuplicateNotification({...item, id: 0}))
             onClose();
             onCreateInstallments && onCreateInstallments();
             Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');

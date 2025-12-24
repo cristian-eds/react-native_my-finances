@@ -7,8 +7,8 @@ import * as Notifications from 'expo-notifications';
 
 export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
     const alertDate = new Date(duplicate.dueDate);
-    alertDate.setHours(0);
-    alertDate.setMinutes(55);
+    alertDate.setHours(16);
+    alertDate.setMinutes(25);
     alertDate.setSeconds(0);
 
     try {
