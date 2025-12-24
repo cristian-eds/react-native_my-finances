@@ -30,8 +30,7 @@ import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
-import { notify } from '../../../utils/notifications/NotificationsConfig';
-import { formaterNumberToBRL } from '../../../utils/NumberFormater';
+import { notifyTransactionNotification } from '../../../utils/notifications/templates';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -44,7 +43,6 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
     const { accounts, activeAccount } = useAccountStore();
     const { user } = useUserContext();
-    const { addPayment } = useDuplicateStore();
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -96,12 +94,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
-            await notify({
-                title: 'Nova transação registrada!',
-                body: `Transação de ${formaterNumberToBRL(newTransaction.value)} na data ${newTransaction.paymentDate}`
-            },
-                null
-            )
+            await notifyTransactionNotification(newTransaction);
             handleClose();
         }
     }

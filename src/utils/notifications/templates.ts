@@ -1,5 +1,8 @@
 import { DuplicateModel } from "../../domain/duplicateModel";
+import { Transaction } from "../../domain/transactionModel";
 import { formaterNumberToBRL } from "../NumberFormater";
+import { notify } from "./NotificationsConfig";
+
 import * as Notifications from 'expo-notifications';
 
 export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
@@ -8,25 +11,36 @@ export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
     alertDate.setMinutes(55);
     alertDate.setSeconds(0);
 
-    console.log(alertDate)
-
     try {
-        const id = await Notifications.scheduleNotificationAsync({
-            content: {
+        const id = await notify(
+            {
                 title: "Vencimento de Conta! 💸",
                 body: `Sua conta ${duplicate.description} de ${formaterNumberToBRL(duplicate.totalValue)} vence hoje. Não esqueça de pagar!`,
                 data: { idConta: duplicate.id, tipo: 'Duplicate' },
                 sound: true,
             },
-            trigger: {
+            {
                 type: Notifications.SchedulableTriggerInputTypes.DATE,
                 date: alertDate
             }
-        });
+        );
         return id;
     } catch (error) {
         console.log(error)
     }
+}
 
-    
+export async function notifyTransactionNotification(transaction: Transaction) {
+
+    try {
+        await notify({
+            title: 'Nova transação registrada!',
+            body: `Transação ${transaction.description} de ${formaterNumberToBRL(transaction.value)} na data ${transaction.paymentDate.toLocaleDateString()}`
+        },
+            null
+        )
+    } catch (error) {
+        console.log(error)
+    }
+
 }
