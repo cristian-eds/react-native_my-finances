@@ -82,6 +82,15 @@ const migrations = [
             FOREIGN KEY (duplicate_id) REFERENCES duplicates(id)
     );
     `,
+    `
+        CREATE TABLE IF NOT EXISTS parameters (
+            user_id INTEGER PRIMARY KEY,
+            enable_transaction_notify INTEGER NOT NULL DEFAULT 1,
+            enable_duplicate_notify INTEGER NOT NULL DEFAULT 1,
+            duplicate_notification_time TEXT DEFAULT '08:00',
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+    `
 ];
 
 export default migrations;
