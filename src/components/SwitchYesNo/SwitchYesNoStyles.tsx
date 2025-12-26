@@ -5,7 +5,10 @@ export const styles = StyleSheet.create({
     backgroundColor: '#e2e2e2ff',
     padding: 4,
     borderRadius: 15,
-    columnGap: 0
+    columnGap: 0,
+    borderWidth: 0.1,
+    borderColor: 'rgba(87, 87, 87, 1)',
+    flex: 1
   },
   itemSwitch: {
     paddingHorizontal: 7,
@@ -18,7 +21,9 @@ export const styles = StyleSheet.create({
   },
   itemText: {
     textAlign: "center",
-    fontSize: 12
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#888888ff'
   },
   itemTextActive: {
     fontWeight: '500',
