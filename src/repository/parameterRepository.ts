@@ -1,6 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { ParameterModel } from "../domain/paremetersModel";
 import { ParametersRecord } from "./records/ParametersRecord";
+import { getHoursMinutesFromDate } from "../utils/DateFormater";
 
 
 export async function create(parameter: Omit<ParameterModel, "id">, database: SQLiteDatabase): Promise<number | undefined> {
@@ -10,10 +11,10 @@ export async function create(parameter: Omit<ParameterModel, "id">, database: SQ
             VALUES (?, ?, ?, ?);
         `,
             [
-               parameter.userId,
-               1,
-               1,
-               '08:00'
+                parameter.userId,
+                1,
+                1,
+                '08:00'
             ])
 
         return result.lastInsertRowId;
@@ -38,4 +39,26 @@ export async function getByUser(userId: number, database: SQLiteDatabase): Promi
         console.error("Error fetching parameters by user:", error);
         return undefined;
     }
-}       
+}
+
+export async function update(parameter: ParameterModel, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+            UPDATE parameters
+            SET enable_transaction_notify = ?,
+                enable_duplicate_notify = ?,
+                duplicate_notification_time = ?
+            WHERE user_id = ?;
+        `,
+            [
+                parameter.enableTransactionNotify ?? 1,
+                parameter.enableDuplicateNotify ?? 1,
+                parameter.duplicateNotificationTime ? getHoursMinutesFromDate(parameter.duplicateNotificationTime) : '08:00',
+                parameter.userId
+            ]);
+        return res.changes > 0;
+    } catch (error) {
+        console.error("Error updating parameter:", error);
+        return false;
+    }
+}

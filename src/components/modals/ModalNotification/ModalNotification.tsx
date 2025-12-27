@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, TouchableOpacity, View } from 'react-native';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -17,6 +17,8 @@ import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { SwitchYesNo } from '../../SwitchYesNo/SwitchYesNo';
 import { getHoursMinutesFromDate } from '../../../utils/DateFormater';
+import { useParameterStore } from '../../../stores/ParameterStore';
+import { useSQLiteContext } from 'expo-sqlite';
 
 interface ModalNotificationProps {
     isShow: boolean,
@@ -25,8 +27,30 @@ interface ModalNotificationProps {
 
 export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
 
+    const { parameters, updateParameters } = useParameterStore();
+    const database = useSQLiteContext();
+
+    const [transactionNotificationEnabled, setTransactionNotificationEnabled] = useState<boolean>(parameters.enableTransactionNotify ?? true);
+    const [duplicateNotificationEnabled, setDuplicateNotificationEnabled] = useState<boolean>(parameters.enableDuplicateNotify ?? true);
+    const [reminderTime, setReminderTime] = useState<Date>(parameters.duplicateNotificationTime ?? new Date(new Date().setHours(9,0,0,0)));
+
     const [showModalDatePicker, setShowModalDatePicker] = useState(false);
-    const [reminderTime, setReminderTime] = useState<Date>(new Date());
+
+    const handleSaveChanges = async () => {   
+        const updatedParameters = {
+            ...parameters,
+            enableTransactionNotify: transactionNotificationEnabled,
+            enableDuplicateNotify: duplicateNotificationEnabled,
+            duplicateNotificationTime: reminderTime
+        };
+
+        const updated = await updateParameters(updatedParameters,database);
+
+        if(updated){
+            Alert.alert("Sucesso","Parâmetros atualizados com sucesso!");
+            onClose();
+        }
+    }
 
     return (
         <Modal
@@ -48,15 +72,15 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                     <View style={styles.body}>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Notificar Transação Realizada?</Text>
-                            <SwitchYesNo />
+                            <SwitchYesNo isActive={transactionNotificationEnabled} setIsActive={setTransactionNotificationEnabled} />
                         </Row>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Notificar Vencimento Conta?</Text>
-                            <SwitchYesNo />
+                            <SwitchYesNo isActive={duplicateNotificationEnabled} setIsActive={setDuplicateNotificationEnabled} />
                         </Row>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Horário notificação vencimento: </Text>
-                            <TouchableOpacity onPress={() => setShowModalDatePicker(true)} style={styles.itemValue}>
+                            <TouchableOpacity  style={styles.itemValue} disabled={!duplicateNotificationEnabled} onPress={() => setShowModalDatePicker(true)}>
                                 <Row style={{ columnGap: 8 }}>
                                     <View >
                                         <Text>{getHoursMinutesFromDate(reminderTime)}</Text>
@@ -75,7 +99,7 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSaveChanges}/>
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

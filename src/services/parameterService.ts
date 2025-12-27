@@ -15,3 +15,7 @@ export const getByUser = async (userId: number, database: SQLiteDatabase): Promi
 
     return toParameterModel(record);
 }
+
+export const update = async (parameter: ParameterModel, database: SQLiteDatabase) => {
+    return await repository.update(parameter, database);
+}
