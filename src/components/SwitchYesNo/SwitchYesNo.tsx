@@ -4,9 +4,12 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './SwitchYesNoStyles';
 import { Row } from '../structure/Row/Row';
 
-export function SwitchYesNo() {
+interface SwitchYesNoProps {
+    isActive: boolean,
+    setIsActive: (value: boolean) => void
+}
 
-    const [isActive, setIsActive] = useState<boolean>(true);
+export function SwitchYesNo({ isActive, setIsActive }: SwitchYesNoProps) {
 
     return (
         <Row style={styles.container}>
