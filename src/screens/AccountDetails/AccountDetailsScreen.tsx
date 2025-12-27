@@ -6,7 +6,6 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
-
 import { styles } from './AccountDetailsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
@@ -51,7 +50,6 @@ export function AccountDetails() {
             type: activeAccount?.type ?? TypeAccount.Corrente
         }
     })
-
 
     const handleUpdateAccount = async () => {
         const formValues = watch();
@@ -123,7 +121,7 @@ export function AccountDetails() {
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </Row>
             <SectionWithTitle title='DADOS DA CONTA' titleStyle={{textAlign: 'center'}} containerStyle={{rowGap: 5, marginTop: 10}}>
-                <SelectAccount containerStyle={{ width: '50%' }} labelStyle={{ textAlign: 'left' }} />
+                <SelectAccount labelStyle={{ textAlign: 'left' }} />
                 <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
                 <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
                 <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />

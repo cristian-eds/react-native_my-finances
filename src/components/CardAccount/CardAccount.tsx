@@ -31,7 +31,7 @@ export function CardAccount() {
     return (
         <TouchableOpacity style={styles.card} onPress={handleNavigateToAccountDetails}>
             <View style={styles.card_header}>
-                <View style={{flex: 2 }}>
+                <View style={{flex: 3 }}>
                     <SelectAccount labelStyle={{fontSize: 35, textAlign: 'left'}}/>
                 </View>
                 <Ionicons name="add" size={25} color="black" style={{ flex: 1, textAlign: 'right' }} onPress={() => setShowModalAddAccount(true)} />
