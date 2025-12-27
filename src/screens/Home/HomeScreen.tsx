@@ -20,6 +20,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
 import { TransactionsItemList } from '../../components/TransactionsItemList/TransactionsItemList';
 import { useUserContext } from '../../hooks/useUserContext';
+import { useParameterStore } from '../../stores/ParameterStore';
 
 export function HomeScreen() {
 
@@ -32,7 +33,6 @@ export function HomeScreen() {
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const [activeMovementType, setActiveMovementType] = useState<MovementType | null>(null);
-
 
     useFocusEffect(
         useCallback(() => {     

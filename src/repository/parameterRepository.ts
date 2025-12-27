@@ -1,6 +1,5 @@
 import { SQLiteDatabase } from "expo-sqlite";
 import { ParameterModel } from "../domain/paremetersModel";
-import { getHoursMinutesFromDate } from "../utils/DateFormater";
 import { ParametersRecord } from "./records/ParametersRecord";
 
 
@@ -12,9 +11,9 @@ export async function create(parameter: Omit<ParameterModel, "id">, database: SQ
         `,
             [
                parameter.userId,
-               parameter.enableTransactionNotify ? 1 : 0,
-               parameter.enableDuplicateNotify ? 1 : 0,
-               getHoursMinutesFromDate(parameter.duplicateNotificationTime) 
+               1,
+               1,
+               '08:00'
             ])
 
         return result.lastInsertRowId;

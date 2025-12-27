@@ -8,13 +8,15 @@ import { useUserContext } from '../hooks/useUserContext';
 import { useAccountStore } from '../stores/AccountStore';
 import { useCategoryStore } from '../stores/CategoryStore';
 import { useSQLiteContext } from 'expo-sqlite';
+import { useParameterStore } from '../stores/ParameterStore';
 
 export function Routes() {
 
-  const {user} = useUserContext();
+  const { user } = useUserContext();
 
-  const {fetchAccounts} = useAccountStore();
-  const {fetchCategories} = useCategoryStore();
+  const { fetchAccounts } = useAccountStore();
+  const { fetchCategories } = useCategoryStore();
+  const { fetchParametersByUser } = useParameterStore();
 
   const database = useSQLiteContext();
 
@@ -22,6 +24,7 @@ export function Routes() {
     const fetch = async () => {
       await fetchCategories(Number(user?.id), database);
       await fetchAccounts(Number(user?.id), database);
+      await fetchParametersByUser(Number(user?.id), database);
     }
     fetch();
 

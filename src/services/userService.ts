@@ -2,7 +2,7 @@ import { SQLiteDatabase } from "expo-sqlite";
 
 import * as userRepository from "../repository/userRepository";
 import { createInitialCategories } from "./migrationsService";
-
+import { create as createParameter } from "../repository/parameterRepository";
 
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
@@ -26,6 +26,7 @@ async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Pro
     }
 
     await createInitialCategories(savedUser.id, database);
+    await createParameter({ userId: savedUser.id }, database);
 
     return { data: savedUser };
 }
