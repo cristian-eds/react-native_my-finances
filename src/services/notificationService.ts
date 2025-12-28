@@ -18,8 +18,6 @@ export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
         alertDate.setMinutes(parameters.duplicateNotificationTime.getMinutes());
     }
 
-    console.log('Agendando notificação para:', alertDate);
-
     try {
         const id = await notify(
             {

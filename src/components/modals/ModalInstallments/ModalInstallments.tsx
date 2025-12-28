@@ -69,7 +69,6 @@ export function ModalInstallments({ items, isShow, onClose,onCreateInstallments,
         const created = await createRecurrenceDuplicates(mappedItems, user?.id as number, database);
 
         if (created) {
-            await mappedItems.forEach((item) => scheduleDuplicateNotification({...item, id: 0}))
             onClose();
             onCreateInstallments && onCreateInstallments();
             Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');

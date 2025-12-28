@@ -112,8 +112,18 @@ export const useDuplicateStore = create<Store>((set, get) => ({
                 ...dup,
                 id: idsInserted[index]
             }))
+            const duplicatesWithNotifications = await Promise.all(createdDuplicates.map(async (dup) => {
+                const idNotification = await scheduleDuplicateNotification({...dup, id: dup.id!});
+                if (idNotification) {
+                    await duplicateService.updateNotificationId(idNotification, dup.id!, database);
+                }
+                return {
+                    ...dup,
+                    notificationId: idNotification
+                }
+            }));
             set({
-                duplicates: [...get().duplicates, ...createdDuplicates.filter(dup => get().filters.initialDate < dup.dueDate && get().filters.finalDate > dup.dueDate)] as DuplicateModel[]
+                duplicates: [...get().duplicates, ...duplicatesWithNotifications.filter(dup => get().filters.initialDate < dup.dueDate && get().filters.finalDate > dup.dueDate)] as DuplicateModel[]
             })
             return true;
         }

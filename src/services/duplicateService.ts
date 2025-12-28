@@ -4,12 +4,10 @@ import * as duplicateRepository from '../repository/duplicateRepository'
 import { fromRecordListToModelList } from '../utils/mappers/duplicateMapper';
 import { DuplicateFiltersModel } from '../domain/duplicatesFilters';
 import { OrderDuplicate } from '../domain/orderDuplicate';
-import { scheduleDuplicateNotification } from './notificationService';
 
 export const createDuplicate = async (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => {
     const idCreated = await duplicateRepository.create(duplicate, userId.toLocaleString(), database);
     if (!idCreated) return null;
-    
     return idCreated;
 }
 
