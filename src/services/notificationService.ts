@@ -1,9 +1,8 @@
-import { DuplicateModel } from "../../domain/duplicateModel";
-import { Transaction } from "../../domain/transactionModel";
-import { formaterNumberToBRL } from "../NumberFormater";
-import { notify } from "./NotificationsConfig";
-
 import * as Notifications from 'expo-notifications';
+import { DuplicateModel } from '../domain/duplicateModel';
+import { formaterNumberToBRL } from '../utils/NumberFormater';
+import { notify } from '../utils/notifications/NotificationsConfig';
+import { Transaction } from '../domain/transactionModel';
 
 export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
     const alertDate = new Date(duplicate.dueDate);

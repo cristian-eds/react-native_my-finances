@@ -11,4 +11,5 @@ export interface DuplicateRecord {
     category_id: number,
     duplicate_father_id?: number,
     number_installments: number,
+    notification_id?: string
 }

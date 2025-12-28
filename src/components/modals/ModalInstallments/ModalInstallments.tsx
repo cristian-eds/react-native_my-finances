@@ -18,7 +18,7 @@ import { DuplicateModel } from '../../../domain/duplicateModel';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../../hooks/useUserContext';
-import { scheduleDuplicateNotification } from '../../../utils/notifications/templates';
+import { scheduleDuplicateNotification } from '../../../services/notificationService';
 
 
 export interface Item {
@@ -75,7 +75,6 @@ export function ModalInstallments({ items, isShow, onClose,onCreateInstallments,
             Alert.alert('Sucesso', 'Parcelas geradas com sucesso!');
         }
     }
-
 
     return (
         <Modal

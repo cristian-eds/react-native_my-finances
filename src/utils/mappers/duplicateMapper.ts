@@ -13,6 +13,7 @@ export function fromRecordToModel(record: DuplicateRecord) : DuplicateModel{
         totalValue: record.total_value,
         numberInstallments: record.number_installments,
         duplicateFatherId: record.duplicate_father_id,
+        notificationId: record.notification_id
     }
 }
 

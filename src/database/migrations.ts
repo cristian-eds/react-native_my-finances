@@ -56,6 +56,7 @@ const migrations = [
             user_id INTEGER NOT NULL,
             number_installments INTEGER NOT NULL,
             duplicate_father_id INTEGER,
+            notification_id TEXT,
         FOREIGN KEY (account_id) REFERENCES accounts(id) 
         FOREIGN KEY (category_id) REFERENCES categories(id)
         FOREIGN KEY (user_id) REFERENCES users(id)

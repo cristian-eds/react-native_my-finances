@@ -11,4 +11,5 @@ export interface DuplicateModel {
     categoryId?: number,
     duplicateFatherId?: number,
     numberInstallments: number,
+    notificationId?: string
 }

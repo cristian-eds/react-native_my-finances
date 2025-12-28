@@ -29,7 +29,7 @@ import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
 import { TabInfos } from './TabInfos/TabInfos';
-import { scheduleDuplicateNotification } from '../../../utils/notifications/templates';
+import { scheduleDuplicateNotification } from '../../../services/notificationService';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -101,7 +101,6 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
         }
 
         if (isSaved) {
-            await scheduleDuplicateNotification(newDuplicate);
             Alert.alert("Finança salva com sucesso!");
             handleClose();
         }

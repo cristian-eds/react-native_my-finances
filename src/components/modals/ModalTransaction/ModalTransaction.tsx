@@ -29,8 +29,6 @@ import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
-import { useDuplicateStore } from '../../../stores/DuplicateStores';
-import { notifyTransactionNotification } from '../../../utils/notifications/templates';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -94,7 +92,6 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         if (isSaved) {
             Alert.alert("Transação salva com sucesso!");
-            await notifyTransactionNotification(newTransaction);
             handleClose();
         }
     }

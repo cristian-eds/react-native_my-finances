@@ -5,9 +5,13 @@ import { toTransactionModelList } from '../utils/mappers/transactionMapper';
 import { TransactionFiltersModel } from '../domain/transactionFiltersModel';
 import { OrderTransactionModel } from '../domain/orderTransactionModel';
 import { DuplicateModel } from '../domain/duplicateModel';
+import { notifyTransactionNotification } from './notificationService';
 
 export async function create(transaction: Omit<Transaction, 'id'>, userId: string, database: SQLiteDatabase) {
-    return transactionRepository.create(transaction, userId, database);
+    const idCreated = await transactionRepository.create(transaction, userId, database);
+    if (!idCreated) return null;
+    await notifyTransactionNotification({ ...transaction, id: idCreated });
+    return idCreated;
 }
 
 
