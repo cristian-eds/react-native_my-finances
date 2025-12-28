@@ -10,8 +10,8 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
 
     try {
         const result = await database.runAsync(` 
-            INSERT INTO duplicates (description, issue_date, due_date, total_value, movement_type, account_id, category_id, user_id, number_installments, duplicate_father_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO duplicates (description, issue_date, due_date, total_value, movement_type, account_id, category_id, user_id, number_installments, duplicate_father_id, notification_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `,
             [
                 duplicate.description,
@@ -23,7 +23,8 @@ export async function create(duplicate: Omit<DuplicateModel, "id">, userId: stri
                 duplicate.categoryId ?? '',
                 userId,
                 duplicate.numberInstallments,
-                duplicate.duplicateFatherId ?? null
+                duplicate.duplicateFatherId ?? null,
+                duplicate.notificationId ?? null
             ])
 
         return result.lastInsertRowId;
@@ -84,7 +85,8 @@ export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase
                     total_value = ?,
                     movement_type = ?,
                     account_id = ?,
-                    category_id = ?
+                    category_id = ?,
+                    notification_id = ?
                 WHERE 
                     id = ?
             `, [
@@ -95,6 +97,7 @@ export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase
             duplicate.movementType,
             duplicate.accountId,
             duplicate.categoryId ?? '',
+            duplicate.notificationId ?? null,
             duplicate.id
         ])
         return res.changes > 0;
@@ -142,7 +145,7 @@ export async function getByFatherId(fatherId: string, userId: string, database: 
         WHERE user_id = $userId
         AND duplicate_father_id = $fatherId
     `;
-    
+
     const statement = await database.prepareAsync(sql);
 
     try {
@@ -160,4 +163,23 @@ export async function getByFatherId(fatherId: string, userId: string, database: 
         await statement.finalizeAsync();
     }
 
+}
+
+export async function updateNotificationId(notification_id: string, duplicateId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+                UPDATE duplicates
+                SET 
+                    notification_id = ?
+                WHERE 
+                    id = ?
+            `, [
+            notification_id,
+            duplicateId
+        ])
+        return res.changes > 0;
+    } catch (error) {
+        console.error(error)
+        return false;
+    }
 }

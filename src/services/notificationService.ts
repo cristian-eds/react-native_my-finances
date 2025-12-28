@@ -3,12 +3,22 @@ import { DuplicateModel } from '../domain/duplicateModel';
 import { formaterNumberToBRL } from '../utils/NumberFormater';
 import { notify } from '../utils/notifications/NotificationsConfig';
 import { Transaction } from '../domain/transactionModel';
+import { useParameterStore } from '../stores/ParameterStore';
 
 export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
     const alertDate = new Date(duplicate.dueDate);
-    alertDate.setHours(16);
-    alertDate.setMinutes(25);
+    const { parameters } = useParameterStore.getState();
+    
+    alertDate.setHours(8);
+    alertDate.setMinutes(0);
     alertDate.setSeconds(0);
+
+    if(parameters.duplicateNotificationTime) {
+        alertDate.setHours(parameters.duplicateNotificationTime.getHours());
+        alertDate.setMinutes(parameters.duplicateNotificationTime.getMinutes());
+    }
+
+    console.log('Agendando notificação para:', alertDate);
 
     try {
         const id = await notify(
@@ -25,7 +35,8 @@ export async function scheduleDuplicateNotification(duplicate: DuplicateModel) {
         );
         return id;
     } catch (error) {
-        console.log(error)
+        console.error(error)
+        return null;
     }
 }
 
@@ -39,7 +50,7 @@ export async function notifyTransactionNotification(transaction: Transaction) {
             null
         )
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 
 }

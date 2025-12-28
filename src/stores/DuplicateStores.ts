@@ -8,6 +8,7 @@ import { DuplicateFiltersModel } from "../domain/duplicatesFilters"
 import { OrderDuplicate } from "../domain/orderDuplicate"
 import { ColumnsOrderDuplicate } from "../domain/enums/columnsOrderDuplicate"
 import { OrderTypes } from "../domain/enums/orderTypes"
+import { scheduleDuplicateNotification } from "../services/notificationService"
 
 type Store = {
     duplicates: DuplicateModel[]
@@ -48,8 +49,13 @@ export const useDuplicateStore = create<Store>((set, get) => ({
         try {
             const idInserted = await duplicateService.createDuplicate(duplicate, userId, database);
             if (!idInserted) return false;
+            const idNotification = await scheduleDuplicateNotification({ ...duplicate, id: idInserted });
+            let updated = false;
+            if (idNotification) {
+                updated = await duplicateService.updateNotificationId(idNotification, idInserted, database);
+            }
             set({
-                duplicates: [...get().duplicates, { ...duplicate, id: idInserted }]
+                duplicates: [...get().duplicates, { ...duplicate, id: idInserted, notificationId: updated && idNotification ? idNotification : undefined }]
             })
 
             return true;
@@ -107,7 +113,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
                 id: idsInserted[index]
             }))
             set({
-                duplicates: [...get().duplicates, ...createdDuplicates.filter(dup => get().filters.initialDate < dup.dueDate && get().filters.finalDate > dup.dueDate )] as DuplicateModel[]
+                duplicates: [...get().duplicates, ...createdDuplicates.filter(dup => get().filters.initialDate < dup.dueDate && get().filters.finalDate > dup.dueDate)] as DuplicateModel[]
             })
             return true;
         }

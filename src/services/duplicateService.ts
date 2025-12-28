@@ -9,7 +9,7 @@ import { scheduleDuplicateNotification } from './notificationService';
 export const createDuplicate = async (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => {
     const idCreated = await duplicateRepository.create(duplicate, userId.toLocaleString(), database);
     if (!idCreated) return null;
-    const idNotification = await scheduleDuplicateNotification({ ...duplicate, id: idCreated });
+    
     return idCreated;
 }
 
@@ -52,4 +52,8 @@ export const getByFatherId = async (fatherId: number, userId: number,database: S
     const duplicates = await duplicateRepository.getByFatherId(fatherId.toLocaleString(), userId.toLocaleString(), database);
     if (!duplicates) return [];
     return fromRecordListToModelList(duplicates);
+}
+
+export const updateNotificationId = async (notificationId: string, duplicateId: number, database: SQLiteDatabase) => {
+    return await duplicateRepository.updateNotificationId(notificationId, duplicateId.toLocaleString(), database);
 }
