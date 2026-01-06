@@ -29,15 +29,19 @@ import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { DuplicateModel } from '../../../domain/duplicateModel';
+import { is } from 'zod/locales';
+import { cancelNotification } from '../../../services/notificationService';
 
 interface ModalTransactionProps {
     isShow: boolean;
     onClose: () => void;
     mode: 'add' | 'edit' | 'payment',
-    transactionData?: Transaction
+    transactionData?: Transaction,
+    duplicateData?: DuplicateModel
 }
 
-export function ModalTransaction({ isShow, onClose, mode, transactionData }: ModalTransactionProps) {
+export function ModalTransaction({ isShow, onClose, mode, transactionData, duplicateData }: ModalTransactionProps) {
 
     const { accounts, activeAccount } = useAccountStore();
     const { user } = useUserContext();
@@ -86,6 +90,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData }: Mod
 
         if (mode === 'add' || mode === 'payment') {
             isSaved = await addTransaction(newTransaction, user?.id as number, database);
+            if(isSaved && mode === 'payment' && duplicateData?.notificationId) {
+                await cancelNotification(duplicateData.notificationId);
+            }
         } else if (mode === 'edit') {
             isSaved = await updateTransaction(newTransaction, database);
         }

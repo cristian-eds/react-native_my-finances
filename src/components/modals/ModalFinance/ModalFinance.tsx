@@ -263,7 +263,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                         {renderFooter()}
                     </ModalContent>
                 </ModalContainer>
-                {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} />}
+                {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} duplicateData={duplicateData}/>}
                 {showModalDelete && <ModalConfirm isShow={showModalDelete} onClose={() => setShowModalDelete(false)} onConfirm={handleDelete} title='Confirma a exclusão da finança?' />}
                 {showModalInstallments && duplicateData && recurrendeDuplicates && <ModalInstallments isShow={showModalInstallments} onClose={() => setShowModalInstallments(false)} items={recurrenceDuplicatesToItems()} data={duplicateData} mode='edit' />}
             </KeyboardAvoidingView >
