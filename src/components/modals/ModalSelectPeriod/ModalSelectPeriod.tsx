@@ -28,7 +28,7 @@ export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handl
 
     const handleConfirm = () => {
         const formValues = watch();
-        handleSetPeriodDates(formValues.initialDate as Date, formValues.finalDate as Date);
+        handleSetPeriodDates(new Date(formValues.initialDate as Date), new Date(formValues.finalDate as Date));
         handleConfirmValue();
     }
 
