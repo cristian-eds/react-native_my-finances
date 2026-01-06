@@ -8,7 +8,8 @@ import { DuplicateFiltersModel } from "../domain/duplicatesFilters"
 import { OrderDuplicate } from "../domain/orderDuplicate"
 import { ColumnsOrderDuplicate } from "../domain/enums/columnsOrderDuplicate"
 import { OrderTypes } from "../domain/enums/orderTypes"
-import { rescheduleNotification, scheduleDuplicateNotification } from "../services/notificationService"
+import { cancelNotification, rescheduleNotification, scheduleDuplicateNotification } from "../services/notificationService"
+import { is } from "zod/locales"
 
 type Store = {
     duplicates: DuplicateModel[]
@@ -19,7 +20,7 @@ type Store = {
     addDuplicate: (duplicate: Omit<DuplicateModel, "id">, userId: number, database: SQLiteDatabase) => Promise<boolean>
     fetchDuplicates: (userId: number, database: SQLiteDatabase) => Promise<void>
     updateDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
-    deleteDuplicate: (duplicateId: number, database: SQLiteDatabase) => Promise<boolean>
+    deleteDuplicate: (duplicate: DuplicateModel, database: SQLiteDatabase) => Promise<boolean>
     createRecurrenceDuplicates: (duplicates: Omit<DuplicateModel, "id">[], userId: number, database: SQLiteDatabase) => Promise<boolean>
 
     fetchPayments: (database: SQLiteDatabase) => Promise<boolean>
@@ -93,14 +94,17 @@ export const useDuplicateStore = create<Store>((set, get) => ({
             return false;
         }
     },
-    deleteDuplicate: async (duplicateId, database) => {
+    deleteDuplicate: async (duplicate, database) => {
         try {
-            const isDeleted = await duplicateService.deleteDuplicate(duplicateId, database);
-            if (isDeleted) {
-                set({
-                    duplicates: [...get().duplicates.filter((current) => current.id !== duplicateId)]
-                })
+            const isDeleted = await duplicateService.deleteDuplicate(duplicate.id, database);
+            if (!isDeleted) return false;
+            if (duplicate.notificationId) {
+                await cancelNotification(duplicate.notificationId);
             }
+            set({
+                duplicates: [...get().duplicates.filter((current) => current.id !== duplicate.id)]
+            })
+
             return isDeleted;
         } catch (error) {
             console.error("Error deleting duplicate", error)

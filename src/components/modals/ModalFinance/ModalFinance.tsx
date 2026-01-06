@@ -107,7 +107,8 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
     }
 
     const handleDelete = async () => {
-        const isDeleted = await deleteDuplicate(Number(duplicateData?.id), database);
+        if(duplicateData === undefined) return;
+        const isDeleted = await deleteDuplicate(duplicateData, database);
         if (isDeleted) {
             Alert.alert("Finança excluída com sucesso");
             handleClose();
