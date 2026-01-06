@@ -155,9 +155,9 @@ export function FinanceStatisticsScreen() {
     )
   }
 
-  const randerCaptionChartBadge = (text: string, color: string, subText?: string) => {
+  const randerCaptionChartBadge = (index: number, text: string, color: string, subText?: string) => {
     return (
-      <Row style={{ columnGap: 4 }}>
+      <Row style={{ columnGap: 4 }} key={index}>
         <View style={[styles.chartCaptionBadge, { backgroundColor: color }]}></View>
         <Text>{text}</Text>
         {subText && <Text>({subText})</Text>}
@@ -178,8 +178,8 @@ export function FinanceStatisticsScreen() {
           <SectionWithTitle title='Evolução mensal'>
             {chartDuplicates.length > 0 && <CurvedLineChart data={generateItemsToLineChart(MovementType.Receita) as lineDataItem[]} data2={generateItemsToLineChart(MovementType.Despesa) as lineDataItem[]} />}
             <Row style={{ justifyContent: 'center', columnGap: 20 }}>
-              {randerCaptionChartBadge('A Receber', '#098e00ff')}
-              {randerCaptionChartBadge('A Pagar', '#d80d0dff')}
+              {randerCaptionChartBadge(0,'A Receber', '#098e00ff')}
+              {randerCaptionChartBadge(1,'A Pagar', '#d80d0dff')}
             </Row>
           </SectionWithTitle>
           <SectionWithTitle title='Status das Duplicatas'>
@@ -187,7 +187,7 @@ export function FinanceStatisticsScreen() {
               <CustomPieChart items={generateItemsToPieChart()} donut />
             </View>
             <Row style={{ justifyContent: 'center', columnGap: 20 }}>
-              {generateItemsToPieChart().map(item => randerCaptionChartBadge(item.text, item.color, item.count.toLocaleString()))}
+              {generateItemsToPieChart().map((item, index) => randerCaptionChartBadge(index,item.text, item.color, item.count.toLocaleString()))}
             </Row>
             <Text style={{textAlign: 'center', fontSize: 16, fontWeight: '500'}}>Total: {chartDuplicates.length}</Text>
           </SectionWithTitle>
