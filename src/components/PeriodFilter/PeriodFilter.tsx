@@ -85,7 +85,7 @@ export function PeriodFilter({filters, setFiltersDates, enableModes}:PeriodFilte
 
     return (
         <View style={styles.period}>
-            <Ionicons name="chevron-back" size={24} color="black" onPress={handleBackPeriod}/>
+            <Ionicons name="chevron-back" size={24} color={ mode === 'PERIOD' ? 'gray' : 'black'} onPress={handleBackPeriod} disabled={mode === 'PERIOD'} />
             <DropDownPicker
                 open={open}
                 setOpen={setOpen}
@@ -100,7 +100,7 @@ export function PeriodFilter({filters, setFiltersDates, enableModes}:PeriodFilte
                 zIndex={2000}
                 zIndexInverse={900}
             />
-            <Ionicons name="chevron-forward" size={24} color="black" onPress={handleNextPeriod} />
+            <Ionicons name="chevron-forward" size={24} color={ mode === 'PERIOD' ? 'gray' : 'black'} onPress={handleNextPeriod} disabled={mode === 'PERIOD'} />
         </View>
 
     );

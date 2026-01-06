@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   containerPeriod: {
     alignItems: 'center',
-    width: "85%",
+    flex: 1,
     borderWidth: 0,
   },
   dropDownStyle: {
