@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { styles } from './ModalTransactionStyles';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useTransactionStore } from '../../../stores/TransactionStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useAccountStore } from '../../../stores/AccountStore';
@@ -167,7 +167,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={handleClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleCreateTransaction)} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

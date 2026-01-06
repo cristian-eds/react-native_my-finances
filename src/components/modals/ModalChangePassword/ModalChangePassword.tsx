@@ -14,7 +14,7 @@ import { useForm, Watch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchemas } from '../../../utils/schemas/changePasswordSchemas';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { updatePassword } from '../../../services/userService';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -98,7 +98,7 @@ export function ModalChangePassword({ isShow, onClose }: ModalChangePasswordProp
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirmChange)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirmChange)} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

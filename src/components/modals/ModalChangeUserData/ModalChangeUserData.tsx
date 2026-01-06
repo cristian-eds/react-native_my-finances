@@ -10,7 +10,7 @@ import { Row } from '../../structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changeUserDataSchemas } from '../../../utils/schemas/changeUserDataSchemas';
@@ -95,7 +95,7 @@ export function ModalChangeUserData({ isShow, onClose }: Props) {
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)}/>
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

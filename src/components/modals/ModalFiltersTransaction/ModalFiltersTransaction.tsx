@@ -7,7 +7,7 @@ import { ModalContent } from '../structure/ModalContent/ModalContent';
 import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { View } from 'react-native';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { Spacer } from '../../Spacer/Spacer';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
@@ -129,7 +129,7 @@ export function ModalFiltersTransaction({ isShow, onClose }: ModalFiltersTransac
           </View>
           <ModalFooter>
             <ButtonIconAction iconName='close' onPress={handleClose} />
-            <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter} />
+            <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter}  mode={Mode.CONFIRM} />
           </ModalFooter>
         </ModalContent>
       </ModalContainer>

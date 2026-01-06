@@ -16,7 +16,7 @@ import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { Row } from '../../structure/Row/Row';
 import { Cell } from '../../structure/Cell/Cell';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { filtersDuplicateSchemas } from '../../../utils/schemas/filtersDuplicateSchemas';
 
 interface ModalFiltersDuplicateProps {
@@ -115,7 +115,7 @@ export function ModalFiltersDuplicate({ isShow, onClose }: ModalFiltersDuplicate
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={handleClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleFilter} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

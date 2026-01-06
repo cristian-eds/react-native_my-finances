@@ -3,7 +3,7 @@ import React from 'react';
 import { styles } from './ModalConfirmStyles';
 import { Modal, View } from 'react-native';
 import { Text } from 'react-native';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 
 interface ModalConfirmProps {
     isShow: boolean;
@@ -26,7 +26,7 @@ export function ModalConfirm({ isShow, onClose, onConfirm, title }: ModalConfirm
                     <Text style={styles.title}>{title}</Text>
                     <View style={styles.buttons}>
                         <ButtonIconAction iconName='close' onPress={onClose}/>
-                        <ButtonIconAction onPress={onConfirm}/>
+                        <ButtonIconAction onPress={onConfirm}  mode={Mode.CONFIRM} />
                     </View>
                 </View>
 

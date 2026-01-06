@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import { Spacer } from '../../Spacer/Spacer';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { SwitchYesNo } from '../../SwitchYesNo/SwitchYesNo';
 import { getHoursMinutesFromDate } from '../../../utils/DateFormater';
 import { useParameterStore } from '../../../stores/ParameterStore';
@@ -99,7 +99,7 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSaveChanges}/>
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSaveChanges} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>

@@ -14,7 +14,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { useAccountStore } from '../../../stores/AccountStore';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 import { Row } from '../../structure/Row/Row';
@@ -119,7 +119,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleCloseModal} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleRegisterAccount)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleRegisterAccount)} mode={Mode.CONFIRM} />
                     </View>
                 </View>
             </View>

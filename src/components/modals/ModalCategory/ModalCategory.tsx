@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { categorySchemas } from '../../../utils/schemas/categorySchemas';
 import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
 import { iconsOptions } from '../../../utils/IconOptions';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { hexColorOptions } from '../../../utils/HexColorOptions';
 import { useCategoryStore } from '../../../stores/CategoryStore';
 import { Ionicons } from '@expo/vector-icons';
@@ -120,7 +120,7 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                     </View>
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={handleClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} mode={Mode.CONFIRM} />
                     </View>
                 </View>
             </View>

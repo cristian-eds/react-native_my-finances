@@ -3,7 +3,7 @@ import { Modal, Text, View } from 'react-native';
 
 import { styles } from './ModalSelectPeriodStyles';
 import {  DatePickerWithTopLabel} from '../../DatePickerWithTopLabel/DatePickerWithTopLabel';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { periodDatesSchemas } from '../../../utils/schemas/periodDatesSchemas';
@@ -50,7 +50,7 @@ export function ModalSelectPeriod({ isShow, onClose, handleSetPeriodDates, handl
                     <DatePickerWithTopLabel control={control} name='finalDate' title='Data final' />
                     <View style={styles.buttons_footer}>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} mode={Mode.CONFIRM} />
                     </View>
                 </View>
             </View>

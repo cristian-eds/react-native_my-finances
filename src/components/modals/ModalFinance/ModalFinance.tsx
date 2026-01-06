@@ -17,7 +17,7 @@ import { FinanceFormFields, financeSchemas } from '../../../utils/schemas/financ
 import { DuplicateModel } from '../../../domain/duplicateModel';
 import { MovementType } from '../../../domain/enums/movementTypeEnum';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
-import { ButtonIconAction } from '../../buttons/ButtonConfirm/ButtonIconAction';
+import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../domain/transactionModel';
@@ -221,7 +221,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                 {tabActive === 'INFO' ?
                     <>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)}  mode={Mode.CONFIRM} />
                     </> :
                     <>
                         {renderButtonPlus()}
