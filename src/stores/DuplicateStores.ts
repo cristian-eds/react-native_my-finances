@@ -8,7 +8,7 @@ import { DuplicateFiltersModel } from "../domain/duplicatesFilters"
 import { OrderDuplicate } from "../domain/orderDuplicate"
 import { ColumnsOrderDuplicate } from "../domain/enums/columnsOrderDuplicate"
 import { OrderTypes } from "../domain/enums/orderTypes"
-import { scheduleDuplicateNotification } from "../services/notificationService"
+import { rescheduleNotification, scheduleDuplicateNotification } from "../services/notificationService"
 
 type Store = {
     duplicates: DuplicateModel[]
@@ -77,12 +77,15 @@ export const useDuplicateStore = create<Store>((set, get) => ({
     updateDuplicate: async (duplicate, database) => {
         try {
             const isUpdated = await duplicateService.updateDuplicate(duplicate, database);
-            if (isUpdated) {
-                set({
-                    duplicates: [...get().duplicates.map((current) => current.id === duplicate.id ? duplicate : current)]
-                })
+            if (!isUpdated) return false;
+            const idNotification = await rescheduleNotification(duplicate);
+            if (idNotification) {
+                await duplicateService.updateNotificationId(idNotification, duplicate.id!, database);
+                duplicate.notificationId = idNotification;
             }
-
+            set({
+                duplicates: [...get().duplicates.map((current) => current.id === duplicate.id ? duplicate : current)]
+            })
             return isUpdated;
 
         } catch (error) {
@@ -113,7 +116,7 @@ export const useDuplicateStore = create<Store>((set, get) => ({
                 id: idsInserted[index]
             }))
             const duplicatesWithNotifications = await Promise.all(createdDuplicates.map(async (dup) => {
-                const idNotification = await scheduleDuplicateNotification({...dup, id: dup.id!});
+                const idNotification = await scheduleDuplicateNotification({ ...dup, id: dup.id! });
                 if (idNotification) {
                     await duplicateService.updateNotificationId(idNotification, dup.id!, database);
                 }

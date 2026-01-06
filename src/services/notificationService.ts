@@ -52,3 +52,28 @@ export async function notifyTransactionNotification(transaction: Transaction) {
     }
 
 }
+
+export async function rescheduleNotification(duplicate: DuplicateModel) {
+    if (duplicate.notificationId) {
+        await cancelNotification(duplicate.notificationId);
+    }
+    const newNotificationId = await scheduleDuplicateNotification(duplicate);
+    return newNotificationId;
+}
+
+
+export async function cancelNotification(notificationId: string) {
+    try {
+        await Notifications.cancelScheduledNotificationAsync(notificationId);
+    } catch (error) {
+        console.error(error)
+    }   
+}
+
+export async function cancelAllNotifications() {
+    try {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+    } catch (error) {
+        console.error(error)
+    }   
+}

@@ -29,7 +29,6 @@ import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
 import { TabInfos } from './TabInfos/TabInfos';
-import { scheduleDuplicateNotification } from '../../../services/notificationService';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -90,6 +89,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
             totalValue: Number(formValues.totalValue),
             id: duplicateData?.id as number,
             numberInstallments: 1,
+            notificationId: duplicateData?.notificationId
         }
 
         let isSaved;
