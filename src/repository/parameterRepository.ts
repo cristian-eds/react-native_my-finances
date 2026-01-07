@@ -27,10 +27,7 @@ export async function create(parameter: Omit<ParameterModel, "id">, database: SQ
 export async function getByUser(userId: number, database: SQLiteDatabase): Promise<ParametersRecord | undefined> {
     try {
         const result = await database.getAllAsync<ParametersRecord>(`
-            SELECT user_id, 
-                   enable_transaction_notify, 
-                   enable_duplicate_notify, 
-                   duplicate_notification_time
+            SELECT *
             FROM parameters
             WHERE user_id = ?;
         `, [userId]);
@@ -48,12 +45,14 @@ export async function update(parameter: ParameterModel, database: SQLiteDatabase
             UPDATE parameters
             SET enable_transaction_notify = ?,
                 enable_duplicate_notify = ?,
+                enable_show_balance = ?,
                 duplicate_notification_time = ?
             WHERE user_id = ?;
         `,
             [
                 parameter.enableTransactionNotify ?? 1,
                 parameter.enableDuplicateNotify ?? 1,
+                parameter.enableShowBalance ?? 1,
                 parameter.duplicateNotificationTime ? getHoursMinutesFromDate(parameter.duplicateNotificationTime) : '08:00',
                 parameter.userId
             ]);
