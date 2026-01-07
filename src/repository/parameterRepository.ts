@@ -7,11 +7,12 @@ import { getHoursMinutesFromDate } from "../utils/DateFormater";
 export async function create(parameter: Omit<ParameterModel, "id">, database: SQLiteDatabase): Promise<number | undefined> {
     try {
         const result = await database.runAsync(` 
-            INSERT INTO parameters (user_id, enable_transaction_notify, enable_duplicate_notify, duplicate_notification_time)
-            VALUES (?, ?, ?, ?);
+            INSERT INTO parameters (user_id, enable_transaction_notify, enable_duplicate_notify, enable_show_balance, duplicate_notification_time)
+            VALUES (?, ?, ?, ?, ?);
         `,
             [
                 parameter.userId,
+                1,
                 1,
                 1,
                 '08:00'

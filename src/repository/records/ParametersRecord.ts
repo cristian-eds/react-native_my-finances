@@ -3,4 +3,5 @@ export interface ParametersRecord {
     enable_transaction_notify: number,
     enable_duplicate_notify: number,
     duplicate_notification_time: string,
+    enable_show_balance: number,
 }
