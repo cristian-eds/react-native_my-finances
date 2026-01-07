@@ -17,6 +17,12 @@ export const getAllByUser = async (userId: number, filters: DuplicateFiltersMode
     return fromRecordListToModelList(duplicates);
 }
 
+export const getAllByUserToNotification = async (userId: number, database: SQLiteDatabase) => {
+    const duplicates = await duplicateRepository.getAllByUserToNotification(userId.toLocaleString(), database);
+    if (!duplicates) return [];
+    return fromRecordListToModelList(duplicates);
+}
+
 export const updateDuplicate = async (duplicate: DuplicateModel, database: SQLiteDatabase) => {
     return await duplicateRepository.udpate(duplicate, database);
 }

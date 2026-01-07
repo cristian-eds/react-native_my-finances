@@ -71,7 +71,35 @@ export async function getAllByUser(userId: string, filters: DuplicateFiltersMode
     } finally {
         await statement.finalizeAsync();
     }
+}
 
+export async function getAllByUserToNotification(userId: string, database: SQLiteDatabase): Promise<DuplicateRecord[] | undefined> {
+   try {
+     let sql = `
+        SELECT duplicates.*, COALESCE(SUM(transactions.value), 0) AS total_pago FROM duplicates 
+        LEFT JOIN transactions ON duplicates.id = transactions.duplicate_id
+        WHERE duplicates.user_id = $userId
+        AND duplicates.due_date >= datetime('now', 'localtime')
+        GROUP BY duplicates.id
+        HAVING total_pago < duplicates.total_value
+    `;
+    const statement = await database.prepareAsync(sql);
+    try {
+        const params = {
+            $userId: userId
+        };
+
+        const result = await statement.executeAsync<DuplicateRecord>(params);
+        const duplicates = await result.getAllAsync();
+        return duplicates;
+    } catch (error) {
+        console.error("Error getting duplicates:", error);
+    } finally {
+        await statement.finalizeAsync();
+    }
+   } catch (error) {
+    console.error("Error preparing statement for getting duplicates:", error);
+   }
 }
 
 export async function udpate(duplicate: DuplicateModel, database: SQLiteDatabase): Promise<boolean> {

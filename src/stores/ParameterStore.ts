@@ -2,6 +2,8 @@ import { SQLiteDatabase } from "expo-sqlite"
 import { ParameterModel } from "../domain/paremetersModel"
 import { create } from "zustand";
 import { getByUser, update } from "../services/parameterService";
+import { cancelAllNotifications, rescheduleNotification } from "../services/notificationService";
+import { getAllByUserToNotification } from "../services/duplicateService";
 
 type Store = {
     parameters: ParameterModel,
@@ -28,6 +30,14 @@ export const useParameterStore = create<Store>((set, get) => ({
     updateParameters: async (parameter, database) => {
         const updated = await update(parameter, database);
         if (!updated) return false;
+        if(!parameter.enableDuplicateNotify) {
+            await cancelAllNotifications()
+        } else if(parameter.enableDuplicateNotify && !get().parameters.enableDuplicateNotify) {
+            const duplicates = await getAllByUserToNotification(parameter.userId, database);
+            duplicates.forEach(async duplicate => {
+                await rescheduleNotification(duplicate);
+            });
+        }
         set({ parameters: parameter });
         return true;
     }
