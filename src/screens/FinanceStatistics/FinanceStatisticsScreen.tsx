@@ -38,6 +38,8 @@ export function FinanceStatisticsScreen() {
   const [chartDuplicates, setChartDuplicates] = useState<DuplicateModel[]>(duplicates);
   const [paymentsDuplicates, setPaymentsDuplicates] = useState<Transaction[]>([]);
 
+   const totalValue = chartDuplicates.reduce((prev, current) => prev + current.totalValue, 0);
+
   useEffect(() => {
     const getDuplicatesToChart = async () => {
       const actualDate = new Date(filters.initialDate);
@@ -98,25 +100,6 @@ export function FinanceStatisticsScreen() {
     return new Set<number>(months)
   }
 
-  const generateSetMonthsToChart = (filteredDuplicates: DuplicateModel[]) => {
-    let months = new Set(filteredDuplicates.map(dup => new Date(dup.dueDate).getMonth()));
-    if (months.size <= 2) {
-      const maxMonth = Math.max(...months)
-      const minMonth = Math.min(...months);
-      months.add(minMonth - 1)
-      months.add(minMonth - 2)
-      months.add(maxMonth + 1)
-      months.add(maxMonth + 2)
-    }
-    return sortSet(months);
-  }
-
-  const sortSet = (months: Set<Number>) => {
-    const arrayMonth = Array.from<Number>(months);
-    arrayMonth.sort((a, b) => Number(a) - Number(b));
-    return new Set(arrayMonth);
-  }
-
   const generateItemsToPieChart = () => {
     let payed = { color: '#098e00ff', value: 0, count: 0, text: 'Pago' };
     let pending = { color: 'rgba(98, 140, 255, 1)', value: 0, count: 0, text: 'Aberto' };
@@ -155,13 +138,16 @@ export function FinanceStatisticsScreen() {
     )
   }
 
-  const randerCaptionChartBadge = (index: number, text: string, color: string, subText?: string) => {
+  const randerCaptionChartBadge = (index: number, text: string, color: string, value?: number, subText?: string) => {
     return (
-      <Row style={{ columnGap: 4 }} key={index}>
-        <View style={[styles.chartCaptionBadge, { backgroundColor: color }]}></View>
-        <Text>{text}</Text>
-        {subText && <Text>({subText})</Text>}
-      </Row>
+      <View key={index} style={{rowGap: 3}}>
+        <Row style={{ columnGap: 4 }} >
+          <View style={[styles.chartCaptionBadge, { backgroundColor: color }]}></View>
+          <Text>{text}</Text>
+          {!!subText && <Text>({subText})</Text>}
+        </Row>
+        {!!value && <Text style={{ textAlign: 'center', fontWeight: '500'}}>{formaterNumberToBRL(value)}</Text> }
+      </View>
     )
   }
 
@@ -170,7 +156,7 @@ export function FinanceStatisticsScreen() {
       <ButtonBack onPress={() => navigation.goBack()} />
       <PeriodFilter filters={filters} setFiltersDates={setFiltersDates} enableModes={['MONTH']} />
       <ScrollView>
-        <View style={{rowGap: 10, paddingBottom: 30}}>
+        <View style={{ rowGap: 10, paddingBottom: 30 }}>
           <Row style={{ columnGap: 10 }}>
             {renderItem(MovementType.Receita)}
             {renderItem(MovementType.Despesa)}
@@ -178,8 +164,8 @@ export function FinanceStatisticsScreen() {
           <SectionWithTitle title='Evolução mensal'>
             {chartDuplicates.length > 0 && <CurvedLineChart data={generateItemsToLineChart(MovementType.Receita) as lineDataItem[]} data2={generateItemsToLineChart(MovementType.Despesa) as lineDataItem[]} />}
             <Row style={{ justifyContent: 'center', columnGap: 20 }}>
-              {randerCaptionChartBadge(0,'A Receber', '#098e00ff')}
-              {randerCaptionChartBadge(1,'A Pagar', '#d80d0dff')}
+              {randerCaptionChartBadge(0, 'A Receber', '#098e00ff')}
+              {randerCaptionChartBadge(1, 'A Pagar', '#d80d0dff')}
             </Row>
           </SectionWithTitle>
           <SectionWithTitle title='Status das Duplicatas'>
@@ -187,9 +173,9 @@ export function FinanceStatisticsScreen() {
               <CustomPieChart items={generateItemsToPieChart()} donut />
             </View>
             <Row style={{ justifyContent: 'center', columnGap: 20 }}>
-              {generateItemsToPieChart().map((item, index) => randerCaptionChartBadge(index,item.text, item.color, item.count.toLocaleString()))}
+              {generateItemsToPieChart().map((item, index) => randerCaptionChartBadge(index, item.text, item.color, item.value, item.count.toLocaleString()))}
             </Row>
-            <Text style={{textAlign: 'center', fontSize: 16, fontWeight: '500'}}>Total: {chartDuplicates.length}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>Total ({chartDuplicates.length}): {formaterNumberToBRL(totalValue)}</Text>
           </SectionWithTitle>
         </View>
       </ScrollView>
