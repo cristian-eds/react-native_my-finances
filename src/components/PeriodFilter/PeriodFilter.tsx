@@ -6,9 +6,7 @@ import { PeriodFilterDropdownItem } from '../PeriodFilterDropdownItem/PeriodFilt
 
 import { styles } from './PeriodFilterStyles';
 import { Ionicons } from '@expo/vector-icons';
-import { useTransactionStore } from '../../stores/TransactionStore';
 import { View } from 'react-native';
-import { useDuplicateStore } from '../../stores/DuplicateStores';
 import { TransactionFiltersModel } from '../../domain/transactionFiltersModel';
 import { DuplicateFiltersModel } from '../../domain/duplicatesFilters';
 

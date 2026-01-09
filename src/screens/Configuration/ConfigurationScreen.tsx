@@ -5,15 +5,17 @@ import { styles as GlobalStyles } from '../../styles/GlobalStyles'
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 import { SectionItemLink } from '../../components/SectionItemLink/SectionItemLink';
 import { ModalNotification } from '../../components/modals/ModalNotification/ModalNotification';
+import { ModalParameters } from '../../components/modals/ModalParameters/ModalParameters';
 
 export function Configuration() {
 
   const [showModalNotifications, setShowModalNotifications] = useState<boolean>();
+  const [showModalParameters, setShowModalParameters] = useState<boolean>();
 
   return (
     <View style={GlobalStyles.container_screens_normal}>
       <SectionWithTitle title='Configurações'>
-        <SectionItemLink iconName='options-outline' text='Parâmetros' subText='Gerais, finanças, lançamentos'/>
+        <SectionItemLink iconName='options-outline' text='Parâmetros' subText='Gerais, finanças, lançamentos' onPress={() => setShowModalParameters(true)}/>
         <SectionItemLink iconName='notifications-outline' text='Notificações' subText='Gerais, finanças, lançamentos' onPress={() => setShowModalNotifications(true)}/>
       </SectionWithTitle>
 
@@ -23,6 +25,7 @@ export function Configuration() {
       </SectionWithTitle>
 
       {showModalNotifications && <ModalNotification isShow={showModalNotifications} onClose={() => setShowModalNotifications(false)} /> }
+      {showModalParameters && <ModalParameters isShow={showModalParameters} onClose={() => setShowModalParameters(false)} /> }
     </View>
   );
 }

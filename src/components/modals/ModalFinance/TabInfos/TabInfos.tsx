@@ -9,7 +9,7 @@ import { Cell } from '../../../structure/Cell/Cell';
 import { PickerWithTopLabel } from '../../../PickerWithTopLabel/PickerWithTopLabel';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../../utils/mappers/itemsPickerMapper';
 import { Ionicons } from '@expo/vector-icons';
-import { Control, FieldError, FieldErrors, FieldErrorsImpl, FieldValues, Merge } from 'react-hook-form';
+import { Control, FieldError, FieldErrors, FieldErrorsImpl, Merge } from 'react-hook-form';
 import { FinanceFormFields } from '../../../../utils/schemas/financeSchemas';
 import { useAccountStore } from '../../../../stores/AccountStore';
 import { useCategoryStore } from '../../../../stores/CategoryStore';
