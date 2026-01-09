@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     section: {
         borderColor: '#ccc',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 10,
     },
     sectionTitle: {
@@ -22,12 +22,8 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 5,
         fontStyle: 'italic'
     },  
-    item: {
-        minHeight: 30
-    },
     itemText: {
         fontSize: 14,
         fontWeight: '500',
-        flex: 3
     },
 });
