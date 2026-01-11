@@ -27,7 +27,7 @@ interface ModalParametersProps {
 
 export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
 
-    const { accounts } = useAccountStore();
+    const { accounts, activeAccount, setActiveAccount } = useAccountStore();
     const { categories } = useCategoryStore();
     const { parameters, updateParameters } = useParameterStore();
     const database = useSQLiteContext();
@@ -54,6 +54,12 @@ export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
         const updated = await updateParameters(updatedParameters, database);
 
         if(updated){
+            if(activeAccount?.id !== updatedParameters.defaultActiveAccountId && updatedParameters.defaultActiveAccountId !== 0){
+                const newActiveAccount = accounts.find(acc => acc.id === updatedParameters.defaultActiveAccountId);
+                if(newActiveAccount){
+                    setActiveAccount(newActiveAccount);
+                }
+            }
             Alert.alert("Sucesso","Parâmetros atualizados com sucesso!");
             onClose();
         }

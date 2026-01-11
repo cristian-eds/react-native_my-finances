@@ -7,6 +7,7 @@ import { UpdateAccountModel } from "../domain/updateAccountModel";
 import { Status } from "../domain/enums/statusEnum";
 import { MovementType } from "../domain/enums/movementTypeEnum";
 import { useTransactionStore } from "./TransactionStore";
+import { useParameterStore } from "./ParameterStore";
 
 type Store = {
     accounts: Account[];
@@ -35,10 +36,13 @@ export const useAccountStore = create<Store>((set, get) => ({
 
     fetchAccounts: async (userId, database) => {
         const accountsUser = await accountService.getAccountsByUser(userId, database);
+        const parameters = useParameterStore.getState().parameters;
         if (accountsUser) {
             set({
                 accounts: [...accountsUser],
-                activeAccount: accountsUser[0]
+                activeAccount: parameters.defaultActiveAccountId
+                    ? accountsUser.find(acc => acc.id === parameters.defaultActiveAccountId) || null
+                    : (accountsUser.length > 0 ? accountsUser[0] : null)
             })
         };
     },
