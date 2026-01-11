@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { Alert, Modal, Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -32,6 +32,7 @@ import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTy
 import { DuplicateModel } from '../../../domain/duplicateModel';
 import { is } from 'zod/locales';
 import { cancelNotification } from '../../../services/notificationService';
+import { useParameterStore } from '../../../stores/ParameterStore';
 
 interface ModalTransactionProps {
     isShow: boolean;
@@ -45,6 +46,9 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
 
     const { accounts, activeAccount } = useAccountStore();
     const { user } = useUserContext();
+    const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
+    const { categories } = useCategoryStore();
+    const { parameters } = useParameterStore();
 
     const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
@@ -54,13 +58,11 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
-            accountId: mode === 'add' ? activeAccount?.id.toString() : transactionData?.accountId?.toString(),
+            accountId: mode === 'add' ? parameters.transactionDefaultAccountId?.toLocaleString() ?? activeAccount?.id.toString() : transactionData?.accountId?.toString(),
             destinationAccountId: transactionData?.destinationAccountId?.toString() ?? ''
         }
     });
 
-    const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
-    const { categories } = useCategoryStore();
 
     const [showModalConfirmDelete, setShowModalConfirmDelete] = useState(false);
 
@@ -90,7 +92,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
 
         if (mode === 'add' || mode === 'payment') {
             isSaved = await addTransaction(newTransaction, user?.id as number, database);
-            if(isSaved && mode === 'payment' && duplicateData?.notificationId) {
+            if (isSaved && mode === 'payment' && duplicateData?.notificationId) {
                 await cancelNotification(duplicateData.notificationId);
             }
         } else if (mode === 'edit') {
