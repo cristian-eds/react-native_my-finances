@@ -90,6 +90,11 @@ const migrations = [
             enable_duplicate_notify INTEGER NOT NULL DEFAULT 1,
             enable_show_balance INTEGER NOT NULL DEFAULT 1,
             duplicate_notification_time TEXT DEFAULT '08:00',
+            default_active_account_id INTEGER,
+            transaction_default_account_id INTEGER,
+            transaction_default_category_exit_id INTEGER,
+            transaction_default_category_entry_id INTEGER,
+            transaction_default_category_transfer_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
     `

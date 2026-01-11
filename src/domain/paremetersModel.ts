@@ -5,4 +5,9 @@ export interface ParameterModel {
     enableDuplicateNotify?: boolean,
     enableShowBalance?: boolean,
     duplicateNotificationTime?: Date,
+    defaultActiveAccountId?: number,
+    transactionDefaultAccountId?: number,
+    transactionDefaultCategoryExitId?: number,
+    transactionDefaultCategoryEntryId?: number,
+    transactionDefaultCategoryTransferId?: number,
 }

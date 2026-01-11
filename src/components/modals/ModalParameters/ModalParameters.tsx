@@ -16,6 +16,9 @@ import { useCategoryStore } from '../../../stores/CategoryStore';
 import { CustomDropdown } from '../../CustomDropdown/CustomDropdown';
 import { Cell } from '../../structure/Cell/Cell';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { useParameterStore } from '../../../stores/ParameterStore';
+import { useSQLiteContext } from 'expo-sqlite';
+import { Alert } from 'react-native';
 
 interface ModalParametersProps {
     isShow: boolean,
@@ -26,16 +29,35 @@ export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
 
     const { accounts } = useAccountStore();
     const { categories } = useCategoryStore();
+    const { parameters, updateParameters } = useParameterStore();
+    const database = useSQLiteContext();
 
-    const [homeDefaultAccount, setHomeDefaultAccount] = useState<string>('');
-    const [transacationDefaultAccount, setTransacationDefaultAccount] = useState<string>('');
+    const [deafultActiveAccount, setDeafultActiveAccount] = useState<string>(parameters.defaultActiveAccountId?.toString() || '');
+    const [transacationDefaultAccount, setTransacationDefaultAccount] = useState<string>(parameters.transactionDefaultAccountId?.toString() || '');
 
-    const [transactionDefaultCategoryExit, setTransactionDefaultCategoryExit] = useState<string>('');
-    const [transactionDefaultCategoryEntry, setTransactionDefaultCategoryEntry] = useState<string>('');
-    const [transactionDefaultCategoryTransfer, setTransactionDefaultCategoryTransfer] = useState<string>('');
+    const [transactionDefaultCategoryExit, setTransactionDefaultCategoryExit] = useState<string>(parameters.transactionDefaultCategoryExitId?.toString() || '');
+    const [transactionDefaultCategoryEntry, setTransactionDefaultCategoryEntry] = useState<string>(parameters.transactionDefaultCategoryEntryId?.toString() || '');
+    const [transactionDefaultCategoryTransfer, setTransactionDefaultCategoryTransfer] = useState<string>(parameters.transactionDefaultCategoryTransferId?.toString() || '');
 
-    const accountItems = mapAccountsToItemsDropdown(accounts);
-    const categoriesItems = mapCategoriesToItemsDropdown(categories);
+    const accountItems = [{label: 'Nenhum', value: 0}, ...mapAccountsToItemsDropdown(accounts)];
+    const categoriesItems = [{label: 'Nenhum', value: 0}, ...mapCategoriesToItemsDropdown(categories)];
+
+    const handleConfirm = async () => {
+        const updatedParameters = {
+            ...parameters,
+            defaultActiveAccountId: deafultActiveAccount ? parseInt(deafultActiveAccount) : undefined,
+            transactionDefaultAccountId: transacationDefaultAccount ? parseInt(transacationDefaultAccount) : undefined,
+            transactionDefaultCategoryExitId: transactionDefaultCategoryExit ? parseInt(transactionDefaultCategoryExit) : undefined,
+            transactionDefaultCategoryEntryId: transactionDefaultCategoryEntry ? parseInt(transactionDefaultCategoryEntry) : undefined,
+            transactionDefaultCategoryTransferId: transactionDefaultCategoryTransfer ? parseInt(transactionDefaultCategoryTransfer) : undefined,
+        };
+        const updated = await updateParameters(updatedParameters, database);
+
+        if(updated){
+            Alert.alert("Sucesso","Parâmetros atualizados com sucesso!");
+            onClose();
+        }
+    }
 
     return (
         <Modal
@@ -61,11 +83,11 @@ export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
                                 <Text style={styles.itemText}>Tela Home:</Text>
                                 <Cell flex={3}>
                                     <CustomDropdown
-                                        value={homeDefaultAccount}
-                                        setValue={setHomeDefaultAccount}
+                                        value={deafultActiveAccount}
+                                        setValue={setDeafultActiveAccount}
                                         enableItemsToDrop={accountItems}
                                         placeholder='Selecione'
-                                        zIndex={2000}
+                                        zIndex={5000}
                                         zIndexInverse={100}
                                     />
                                 </Cell>
@@ -78,7 +100,7 @@ export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
                                         setValue={setTransacationDefaultAccount}
                                         enableItemsToDrop={accountItems}
                                         placeholder='Selecione'
-                                        zIndex={1000}
+                                        zIndex={4000}
                                         zIndexInverse={100}
                                     />
                                 </Cell>
@@ -129,7 +151,7 @@ export function ModalParameters({ isShow, onClose }: ModalParametersProps) {
                     </View>
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={() => { }} mode={Mode.CONFIRM} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleConfirm} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>
