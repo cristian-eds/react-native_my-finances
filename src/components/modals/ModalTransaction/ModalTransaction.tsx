@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Modal, Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -30,7 +30,6 @@ import { Spacer } from '../../Spacer/Spacer';
 import { transactionSchemas } from '../../../utils/schemas/transactionSchemas';
 import { mapAccountsToItemsDropdown, mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
 import { DuplicateModel } from '../../../domain/duplicateModel';
-import { is } from 'zod/locales';
 import { cancelNotification } from '../../../services/notificationService';
 import { useParameterStore } from '../../../stores/ParameterStore';
 
@@ -50,7 +49,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
     const { categories } = useCategoryStore();
     const { parameters } = useParameterStore();
 
-    const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
         defaultValues: {
             description: transactionData?.description ?? '',
@@ -72,6 +71,19 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
     const accountItems = mapAccountsToItemsDropdown(accounts);
     const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));
     const categoriesItems = mapCategoriesToItemsDropdown(categories);
+
+    const movementType = watch().movementType;
+
+    useEffect(() => {
+        if(mode === 'edit') return;
+        if (movementType === MovementType.Transferencia && parameters.transactionDefaultCategoryTransferId ) {
+            setValue('category', parameters.transactionDefaultCategoryTransferId.toString());
+        } else if (movementType === MovementType.Receita && parameters.transactionDefaultCategoryEntryId) {
+            setValue('category', parameters.transactionDefaultCategoryEntryId.toString());
+        } else if (movementType === MovementType.Despesa && parameters.transactionDefaultCategoryExitId) {
+            setValue('category', parameters.transactionDefaultCategoryExitId.toString());
+        }
+    }, [movementType]);
 
     const handleCreateTransaction = async () => {
         const formValues = watch();
