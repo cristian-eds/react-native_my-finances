@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
 import { styles } from './SwitchYesNoStyles';
 import { Row } from '../structure/Row/Row';

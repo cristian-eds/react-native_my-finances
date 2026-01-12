@@ -43,7 +43,7 @@ interface ModalTransactionProps {
 
 export function ModalTransaction({ isShow, onClose, mode, transactionData, duplicateData }: ModalTransactionProps) {
 
-    const { accounts, activeAccount } = useAccountStore();
+    const { accounts } = useAccountStore();
     const { user } = useUserContext();
     const { addTransaction, updateTransaction, deleteTransaction } = useTransactionStore();
     const { categories } = useCategoryStore();
@@ -57,7 +57,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
             value: transactionData?.value.toFixed(2) ?? 0,
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
-            accountId: mode === 'add' ? parameters.transactionDefaultAccountId?.toLocaleString() ?? activeAccount?.id.toString() : transactionData?.accountId?.toString(),
+            accountId: mode === 'add' ? parameters.transactionDefaultAccountId?.toLocaleString() ?? undefined : transactionData?.accountId?.toString(),
             destinationAccountId: transactionData?.destinationAccountId?.toString() ?? ''
         }
     });
@@ -68,7 +68,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
     const database = useSQLiteContext();
 
     const movementTypeItems = mapMovementTypesToItemsDropdown();
-    const accountItems = mapAccountsToItemsDropdown(accounts);
+    const accountItems = [{label: 'Nenhum', value: 0},...mapAccountsToItemsDropdown(accounts)];
     const destinationAccountsItems = mapAccountsToItemsDropdown(accounts.filter(acc => acc.id.toString() !== watch().accountId));
     const categoriesItems = mapCategoriesToItemsDropdown(categories);
 

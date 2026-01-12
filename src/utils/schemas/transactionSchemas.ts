@@ -8,7 +8,7 @@ export const transactionSchemas = z.object({
     paymentDate: z.coerce.date('Data inválida'),
     movementType: z.enum(MovementType, "Tipo movimento inválido"),
     category: z.string('Categoria inválida!').optional(),
-    accountId: z.string('A conta para transação é obrigatória'),
+    accountId: z.string('A conta para transação é obrigatória').optional(),
     destinationAccountId: z.string('A conta destino é inválida').optional()
     })
 ;
