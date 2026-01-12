@@ -19,6 +19,8 @@ import { Status } from '../../domain/enums/statusEnum';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 import { useAccountStore } from '../../stores/AccountStore';
 import { useUserContext } from '../../hooks/useUserContext';
+import { requestPermissions } from '../../utils/notifications/NotificationsConfig';
+import { generateSessionToken } from '../../services/sessionTokenService';
 
 
 export function RegisterInitialAccountScreen() {
@@ -54,7 +56,9 @@ export function RegisterInitialAccountScreen() {
 
     if (created) {
       Alert.alert("Conta criada!");
+      await requestPermissions();
       context.handleSetUser(user);
+      await generateSessionToken(user, db);
     }
     setLoading(false);
   }
