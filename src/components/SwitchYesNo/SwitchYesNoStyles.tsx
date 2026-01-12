@@ -3,12 +3,12 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e2e2e2ff',
-    padding: 4,
+    padding: 3,
     borderRadius: 15,
     columnGap: 0,
     borderWidth: 0.1,
     borderColor: 'rgba(87, 87, 87, 1)',
-    flex: 1
+
   },
   itemSwitch: {
     paddingHorizontal: 7,
