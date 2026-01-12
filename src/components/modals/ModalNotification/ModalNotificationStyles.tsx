@@ -30,5 +30,13 @@ export const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 5,
         paddingHorizontal: 7
+    },
+    requestPermissionsButton: {
+        marginTop: 3,
+        backgroundColor: '#1d88fae3',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 8,
+        alignItems: 'center',
     }
 });

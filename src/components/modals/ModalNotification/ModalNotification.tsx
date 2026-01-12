@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Alert, Modal, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, AppState, AppStateStatus, Modal, TouchableOpacity, View } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -19,6 +20,9 @@ import { SwitchYesNo } from '../../SwitchYesNo/SwitchYesNo';
 import { getHoursMinutesFromDate } from '../../../utils/DateFormater';
 import { useParameterStore } from '../../../stores/ParameterStore';
 import { useSQLiteContext } from 'expo-sqlite';
+import { isNotificationsEnabled } from '../../../utils/notifications/NotificationsConfig';
+
+
 
 interface ModalNotificationProps {
     isShow: boolean,
@@ -32,11 +36,33 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
 
     const [transactionNotificationEnabled, setTransactionNotificationEnabled] = useState<boolean>(parameters.enableTransactionNotify ?? true);
     const [duplicateNotificationEnabled, setDuplicateNotificationEnabled] = useState<boolean>(parameters.enableDuplicateNotify ?? true);
-    const [reminderTime, setReminderTime] = useState<Date>(parameters.duplicateNotificationTime ?? new Date(new Date().setHours(9,0,0,0)));
+    const [reminderTime, setReminderTime] = useState<Date>(parameters.duplicateNotificationTime ?? new Date(new Date().setHours(9, 0, 0, 0)));
 
     const [showModalDatePicker, setShowModalDatePicker] = useState(false);
 
-    const handleSaveChanges = async () => {   
+    const [isNotificationPermissionGranted, setIsNotificationPermissionGranted] = useState<boolean>(false);
+
+    const checkNotificationPermission = async () => {
+        const granted = await isNotificationsEnabled();
+        setIsNotificationPermissionGranted(granted);
+        console.log('Notification permission granted:', granted);
+    };
+
+    useEffect(() => {
+
+        const subscription = AppState.addEventListener('change', nextAppState => {
+            if (AppState.currentState.match(/inactive|background/) && nextAppState === 'active') {
+                checkNotificationPermission();
+                console.log('App has come to the foreground!');
+            }
+        });
+
+        checkNotificationPermission();
+
+        return () => subscription.remove();
+    }, []);
+
+    const handleSaveChanges = async () => {
         const updatedParameters = {
             ...parameters,
             enableTransactionNotify: transactionNotificationEnabled,
@@ -44,13 +70,43 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
             duplicateNotificationTime: reminderTime
         };
 
-        const updated = await updateParameters(updatedParameters,database);
+        const updated = await updateParameters(updatedParameters, database);
 
-        if(updated){
-            Alert.alert("Sucesso","Parâmetros atualizados com sucesso!");
+        if (updated) {
+            Alert.alert("Sucesso", "Parâmetros atualizados com sucesso!");
             onClose();
         }
     }
+
+    const handleOpenSettings = () => {
+        if (Platform.OS === 'ios') {
+            Linking.openURL('app-settings:');
+        } else {
+            Linking.openSettings();
+        }
+    }
+
+    const renderGetPermissionButton = () => {
+        if (!isNotificationPermissionGranted) {
+            return (
+                <View style={styles.body}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 5 }}>
+                        <Ionicons name="alert-circle-outline" size={24} color="red" />
+                        <View>
+                            <Text style={{ color: '#f00e0e', fontSize: 12, fontWeight: 'bold' }}>Permissão para notificações negadas.</Text>
+                            <Text style={{ fontSize: 14 }}>Toque para acessar as configurações e habilitar as notificações</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.requestPermissionsButton}
+                        onPress={handleOpenSettings}>
+                        <Text style={{ color: 'white' }}>Abrir Configurações</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        return null;
+    };
 
     return (
         <Modal
@@ -72,7 +128,7 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                     <View style={styles.body}>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Notificar Transação Realizada?</Text>
-                            <SwitchYesNo isActive={transactionNotificationEnabled} setIsActive={setTransactionNotificationEnabled} />
+                            <SwitchYesNo isActive={transactionNotificationEnabled} setIsActive={setTransactionNotificationEnabled} disabled={!isNotificationPermissionGranted} />
                         </Row>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Notificar Vencimento Conta?</Text>
@@ -80,7 +136,7 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                         </Row>
                         <Row style={styles.item}>
                             <Text style={styles.itemText}>Horário notificação vencimento: </Text>
-                            <TouchableOpacity  style={styles.itemValue} disabled={!duplicateNotificationEnabled} onPress={() => setShowModalDatePicker(true)}>
+                            <TouchableOpacity style={styles.itemValue} disabled={!isNotificationPermissionGranted || !duplicateNotificationEnabled} onPress={() => setShowModalDatePicker(true)}>
                                 <Row style={{ columnGap: 8 }}>
                                     <View >
                                         <Text>{getHoursMinutesFromDate(reminderTime)}</Text>
@@ -97,6 +153,7 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
                             </TouchableOpacity>
                         </Row>
                     </View>
+                    {renderGetPermissionButton()}
                     <ModalFooter>
                         <ButtonIconAction iconName='close' onPress={onClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSaveChanges} mode={Mode.CONFIRM} />

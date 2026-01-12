@@ -17,6 +17,11 @@ export async function requestPermissions() {
     }
 }
 
+export const isNotificationsEnabled = async () => {
+    const { status } = await Notifications.getPermissionsAsync();
+    return status === 'granted';
+}
+
 export const notify = (content: Notifications.NotificationContentInput, trigger: Notifications.NotificationTriggerInput) => Notifications.scheduleNotificationAsync({
     content,
     trigger
