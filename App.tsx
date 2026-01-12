@@ -2,10 +2,9 @@ import { Routes } from './src/routes/Routes';
 import { DatabaseProvider } from './src/database/DatabaseProvider';
 import { UserProvider } from './src/context/UserContext';
 import { View } from 'react-native';
-import { requestPermissions, setHandler } from './src/utils/notifications/NotificationsConfig';
+import { setHandler } from './src/utils/notifications/NotificationsConfig';
 
 setHandler();
-requestPermissions();
 
 export default function App() {
   

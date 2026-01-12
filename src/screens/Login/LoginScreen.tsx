@@ -14,14 +14,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchemas } from '../../utils/schemas/loginSchemas';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
-import { UserContext } from '../../context/UserContext';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
+import { useUserContext } from '../../hooks/useUserContext';
 
 export function LoginScreen() {
 
   const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
-  const context = useContext(UserContext);
+  const context = useUserContext();
 
   const [loading, setLoading] = useState(false);
 
@@ -31,11 +31,12 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     setLoading(true);
-    const response = await context?.loginUser(watch(), navigation);
+    const response = await context.loginUser(watch(), navigation);
     if (response?.error) {
       Alert.alert("Erro no login", response.error)
     } else if (response?.data) {
       Alert.alert("Sucesso","Usuário logado!")
+      
     }
     setLoading(false);
   }

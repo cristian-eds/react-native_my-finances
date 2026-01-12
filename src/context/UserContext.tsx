@@ -30,7 +30,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         const response = await login(db, data);
         if (response?.data) {
             const account = await getAccountsByUser(response.data.id, db);
-            if (account) {
+            if (account && account?.length > 0) {
                 setUser(response?.data)
             } else {
                 navigation.navigate("RegisterInitialAccount", {user: response.data});

@@ -13,7 +13,7 @@ export const setHandler = () => Notifications.setNotificationHandler({
 export async function requestPermissions() {
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== 'granted') {
-        Alert.alert('Permissões de notificações não concedidas!');
+        Alert.alert('Permissão notificações', 'As notificações foram desativadas. Para receber notificações, por favor, ative-as nas configurações do aplicativo.');
         await Notifications.requestPermissionsAsync();
     }
 }

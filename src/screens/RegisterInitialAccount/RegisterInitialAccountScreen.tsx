@@ -4,8 +4,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { styles } from './RegisterInitialAccountScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
@@ -17,18 +16,15 @@ import { accountSchemas } from '../../utils/schemas/accountSchemas';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 import { Status } from '../../domain/enums/statusEnum';
 
-import { UserContext } from '../../context/UserContext';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
-import { useTransactionStore } from '../../stores/TransactionStore';
 import { useAccountStore } from '../../stores/AccountStore';
+import { useUserContext } from '../../hooks/useUserContext';
 
 
 export function RegisterInitialAccountScreen() {
 
-  const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
-
   const db = useSQLiteContext();
-  const context = useContext(UserContext);
+  const context = useUserContext();
 
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +54,7 @@ export function RegisterInitialAccountScreen() {
 
     if (created) {
       Alert.alert("Conta criada!");
-      context?.handleSetUser(user);
+      context.handleSetUser(user);
     }
     setLoading(false);
   }
@@ -81,7 +77,6 @@ export function RegisterInitialAccountScreen() {
         </View>
         <View>
           <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} loading={loading}/>
-          <ButtonPrincipal title='Voltar' onPress={() => navigation.goBack()} />
         </View>
       </View>
     </View>

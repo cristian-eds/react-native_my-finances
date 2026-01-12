@@ -5,6 +5,7 @@ import { UserLogin } from "../domain/userLogin";
 import * as userRepository from "../repository/userRepository";
 import { generateSessionToken } from "./sessionTokenService";
 import { verifyPass } from "./passwordService";
+import { getAccountsByUser } from "./accountService";
 
 
 export async function login(database: SQLiteDatabase, data: UserLogin): Promise<ResponseUser> {
@@ -14,12 +15,14 @@ export async function login(database: SQLiteDatabase, data: UserLogin): Promise<
     if (!user) return { data: null, error: "Usuário não encontrado" };
 
     const hashedPassword = user.password;
-    const isMatch = await verifyPass(data.password,hashedPassword);
-    //const isMatch = data.password === user.password;
+    const isMatch = await verifyPass(data.password, hashedPassword);
 
     if (!isMatch) return { data: null, error: "Senha incorreta" };
 
-    await generateSessionToken(user, database);
+    const account = await getAccountsByUser(user.id, database);
+    if (account && account?.length > 0) {
+        await generateSessionToken(user, database);
+    }
 
     return { data: user };
 }
