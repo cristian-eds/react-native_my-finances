@@ -45,7 +45,6 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
     const checkNotificationPermission = async () => {
         const granted = await isNotificationsEnabled();
         setIsNotificationPermissionGranted(granted);
-        console.log('Notification permission granted:', granted);
     };
 
     useEffect(() => {
@@ -53,8 +52,6 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
         const subscription = AppState.addEventListener('change', nextAppState => {
             if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
                 checkNotificationPermission();
-                console.log('App has come to the foreground!');
-
             }
             appState.current = nextAppState;
             setAppStateVisible(appState.current);
