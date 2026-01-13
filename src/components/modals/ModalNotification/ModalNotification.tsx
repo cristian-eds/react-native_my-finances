@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, AppState, AppStateStatus, Modal, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, AppState, Modal, TouchableOpacity, View } from 'react-native';
 import { Linking, Platform } from 'react-native';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -22,8 +22,6 @@ import { useParameterStore } from '../../../stores/ParameterStore';
 import { useSQLiteContext } from 'expo-sqlite';
 import { isNotificationsEnabled } from '../../../utils/notifications/NotificationsConfig';
 
-
-
 interface ModalNotificationProps {
     isShow: boolean,
     onClose: () => void
@@ -41,6 +39,8 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
     const [showModalDatePicker, setShowModalDatePicker] = useState(false);
 
     const [isNotificationPermissionGranted, setIsNotificationPermissionGranted] = useState<boolean>(false);
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
     const checkNotificationPermission = async () => {
         const granted = await isNotificationsEnabled();
@@ -51,10 +51,13 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
     useEffect(() => {
 
         const subscription = AppState.addEventListener('change', nextAppState => {
-            if (AppState.currentState.match(/inactive|background/) && nextAppState === 'active') {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
                 checkNotificationPermission();
                 console.log('App has come to the foreground!');
+
             }
+            appState.current = nextAppState;
+            setAppStateVisible(appState.current);
         });
 
         checkNotificationPermission();
@@ -78,11 +81,11 @@ export function ModalNotification({ isShow, onClose }: ModalNotificationProps) {
         }
     }
 
-    const handleOpenSettings = () => {
+    const handleOpenSettings = async () => {
         if (Platform.OS === 'ios') {
-            Linking.openURL('app-settings:');
+            await Linking.openURL('app-settings:');
         } else {
-            Linking.openSettings();
+            await Linking.openSettings();
         }
     }
 
