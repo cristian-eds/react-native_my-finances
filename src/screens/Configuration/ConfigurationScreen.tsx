@@ -10,9 +10,9 @@ import { ModalAbout } from '../../components/modals/ModalAbout/ModalAbout';
 
 export function Configuration() {
 
-  const [showModalNotifications, setShowModalNotifications] = useState<boolean>();
-  const [showModalParameters, setShowModalParameters] = useState<boolean>();
-  const [showModalAbout, setShowModalAbout] = useState<boolean>();
+  const [showModalNotifications, setShowModalNotifications] = useState<boolean>(false);
+  const [showModalParameters, setShowModalParameters] = useState<boolean>(false);
+  const [showModalAbout, setShowModalAbout] = useState<boolean>(false);
 
   return (
     <View style={GlobalStyles.container_screens_normal}>

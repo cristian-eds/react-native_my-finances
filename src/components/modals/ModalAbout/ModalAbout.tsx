@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { styles } from './ModalAboutStyles';
 
@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
 import { useUserContext } from '../../../hooks/useUserContext';
+import { ModalTermsPolicyPrivacy } from '../ModalTermsPolicyPrivacy/ModalTermsPolicyPrivacy';
 
 interface ModalAboutProps {
     isShow: boolean,
@@ -22,6 +23,8 @@ interface ModalAboutProps {
 export function ModalAbout({ isShow, onClose }: ModalAboutProps) {
 
     const { user } = useUserContext();
+
+    const [showModalTermsPolicyPrivacy, setShowModalTermsPolicyPrivacy] = useState<boolean>(false);
 
     return (
         <Modal
@@ -45,7 +48,7 @@ export function ModalAbout({ isShow, onClose }: ModalAboutProps) {
                         <Text style={styles.textAbout}>Esperamos que tenha experiência agrádavel e consigamos lhe ajudar em seu controle financeiro!</Text>
                     </View>
                     <View style={{ alignItems: 'center' }}>
-                        <TouchableOpacity style={styles.buttonTerms} onPress={() => { }}>
+                        <TouchableOpacity style={styles.buttonTerms} onPress={() => setShowModalTermsPolicyPrivacy(true)}>
                             <Ionicons name="newspaper-outline" size={16} color="#33911a" />
                             <Text style={styles.buttonTermsText}>Termos, política e privacidade</Text>
                         </TouchableOpacity>
@@ -56,7 +59,7 @@ export function ModalAbout({ isShow, onClose }: ModalAboutProps) {
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>
-
+            {showModalTermsPolicyPrivacy && <ModalTermsPolicyPrivacy isShow={showModalTermsPolicyPrivacy} onClose={() => setShowModalTermsPolicyPrivacy(false)} />}
         </Modal>
     );
 }
