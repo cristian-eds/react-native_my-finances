@@ -16,6 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 import { login } from '../../services/authService';
 import { useState } from 'react';
+import { Checkbox } from '../../components/Checkbox/Checkbox';
+import { Row } from '../../components/structure/Row/Row';
 
 
 export function RegisterScreen() {
@@ -24,6 +26,7 @@ export function RegisterScreen() {
   const db = useSQLiteContext();
 
   const [loading, setLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(userSchemas),
@@ -39,9 +42,9 @@ export function RegisterScreen() {
       return;
     }
     Alert.alert('Sucesso', 'Registrado com sucesso!');
-    if(response.data) {
-      await login(db, {cpf: formValues.cpf, password: formValues.password})
-      navigation.navigate("RegisterInitialAccount", {user: response?.data});
+    if (response.data) {
+      await login(db, { cpf: formValues.cpf, password: formValues.password })
+      navigation.navigate("RegisterInitialAccount", { user: response?.data });
     }
 
     setLoading(false);
@@ -55,15 +58,19 @@ export function RegisterScreen() {
       <View style={styles.container}>
         <View>
           <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' placeholderTextColor='#090909e8' errors={errors.name} />
-          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: 'placeholderTextColor='#090909e8'  inputMode='numeric' maxLength={11} errors={errors.cpf} />
-          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8'  secureTextEntry={true} errors={errors.password} />
-          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8'  secureTextEntry={true} errors={errors.confirmPassword} />
+          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: ' placeholderTextColor='#090909e8' inputMode='numeric' maxLength={11} errors={errors.cpf} />
+          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.password} />
+          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.confirmPassword} />
+          <Row style={{ justifyContent: 'flex-start' }}>
+            <Checkbox checked={termsAccepted} onPress={() => setTermsAccepted(!termsAccepted)} mode={'square'} />
+            <Text>Aceitar termos e politíca de privacidade</Text>
+          </Row>
         </View>
 
         <View>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading}/>
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading} />
           <DividerTextMiddle text='Já possui conta?' />
-          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>
+          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
         </View>
       </View>
 

@@ -5,7 +5,6 @@ import { styles as globalStyles } from '../../styles/GlobalStyles';
 import { styles } from './ForgotPasswordStyles'
 import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { useForm } from 'react-hook-form';
-import { userSchemas } from '../../utils/schemas/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 import { useNavigation } from '@react-navigation/native';

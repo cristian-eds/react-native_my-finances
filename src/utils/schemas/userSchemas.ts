@@ -13,6 +13,9 @@ export const userSchemas = z.object({
         .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
     confirmPassword: z.string()
         .nonempty('A confirmação de senha é obrigatória.'),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+        message: 'Você deve aceitar os termos e condições.',
+    }),
 }).refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem.',
     path: ['confirmPassword'],
