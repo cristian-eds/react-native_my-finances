@@ -10,6 +10,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerSquare: {
+    borderRadius: 4,
+  },
+  containerSquareCheck: {
+    backgroundColor: 'rgb(90, 141, 211)',
+    borderColor: 'rgb(90, 141, 211)',
+  },
   indicator: {
     width: 12,
     height: 12,
