@@ -38,6 +38,7 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         bottom: -6,
         backgroundColor: 'white',
-        zIndex: 2000
+        zIndex: 2000,
+        paddingLeft: 5
     },
 });

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Alert, Image, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Text, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,13 +9,13 @@ import { styles } from './LogingScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
 
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
-import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchemas } from '../../utils/schemas/loginSchemas';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';
 import { useUserContext } from '../../hooks/useUserContext';
+import { TextInputWithTopLabel } from '../../components/TextInputWithTopLabel/TextInputWithTopLabel';
 
 export function LoginScreen() {
 
@@ -27,6 +27,10 @@ export function LoginScreen() {
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchemas),
+    defaultValues: {
+      cpf: '',
+      password: ''
+    }
   })
 
   const handleLogin = async () => {
@@ -35,8 +39,8 @@ export function LoginScreen() {
     if (response?.error) {
       Alert.alert("Erro no login", response.error)
     } else if (response?.data) {
-      Alert.alert("Sucesso","Usuário logado!")
-      
+      Alert.alert("Sucesso", "Usuário logado!")
+
     }
     setLoading(false);
   }
@@ -47,33 +51,36 @@ export function LoginScreen() {
         <Text style={globalStyles.title_screens_auth}>Bem vindo</Text>
       </View>
       <View style={styles.container}>
-        <View>
-          <TextInputCustom
+        <View style={{rowGap: 15}}>
+          <TextInputWithTopLabel
+            title='CPF'
             name="cpf"
             control={control}
             placeholder='CPF:'
-            placeholderTextColor='#090909e8' 
+            placeholderTextColor='#090909e8'
             iconName='person-outline'
             inputMode='numeric'
             maxLength={11}
             errors={errors.cpf}
             readOnly={loading} />
 
-          <TextInputCustom
+          <TextInputWithTopLabel
+            title='Senha'
             name="password"
             control={control}
             placeholder='Senha:'
-            placeholderTextColor='#090909e8' 
+            placeholderTextColor='#090909e8'
             iconName='lock-closed-outline'
             secureTextEntry={true}
             errors={errors.password}
             readOnly={loading}
+            secureText={true}
           />
 
           <Text style={styles.forgot_password} onPress={() => navigation.navigate("ForgotPassword")}>Esqueceu a senha?</Text>
         </View>
-        <View style={{height: '38%', justifyContent: "space-around"}}>
-          <ButtonPrincipal title={loading ? 'Entrando...' : 'Entrar'} onPress={handleSubmit(handleLogin)} loading={loading} mode='confirm'/>
+        <View style={{ height: '38%', justifyContent: "space-around" }}>
+          <ButtonPrincipal title={loading ? 'Entrando...' : 'Entrar'} onPress={handleSubmit(handleLogin)} loading={loading} mode='confirm' />
           <DividerTextMiddle text='Não possui conta?' />
           <ButtonPrincipal title='Registre-se' onPress={() => navigation.navigate("Register")} />
         </View>

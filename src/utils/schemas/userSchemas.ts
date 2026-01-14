@@ -1,17 +1,17 @@
 import { z } from 'zod';
 
 export const userSchemas = z.object({
-    name: z.string()
+    name: z.string('O nome é obrigatório.')
         .nonempty('O nome é obrigatório.')
         .min(2, 'O nome deve ter no mínimo 2 caracteres.')
         .max(100, 'O nome deve ter no máximo 100 caracteres.'), 
-    cpf: z.string()
+    cpf: z.string('O CPF é obrigatório.')
     .nonempty('O CPF é obrigatório.')
     .regex(/^\d{11}$/, 'O CPF deve conter exatamente 11 dígitos numéricos.'),
-    password: z.string()
+    password: z.string('A senha é obrigatória.')
         .nonempty('A senha é obrigatória.')
         .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-    confirmPassword: z.string()
+    confirmPassword: z.string('A confirmação de senha é obrigatória.')
         .nonempty('A confirmação de senha é obrigatória.'),
     termsAccepted: z.boolean('Você deve aceitar os termos e condições.').refine((val) => val === true, {
         message: 'Você deve aceitar os termos e condições.',

@@ -5,7 +5,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { styles } from './RegisterScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
 
-import { TextInputCustom } from '../../components/TextInputCustom/TextInputCustom';
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 import { DividerTextMiddle } from '../../components/DividerTextMiddle/DividerTextMiddle';
 import { createUser } from '../../services/userService';
@@ -20,6 +19,7 @@ import { Checkbox } from '../../components/Checkbox/Checkbox';
 import { Row } from '../../components/structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { ModalTermsPolicyPrivacy } from '../../components/modals/ModalTermsPolicyPrivacy/ModalTermsPolicyPrivacy';
+import { TextInputWithTopLabel } from '../../components/TextInputWithTopLabel/TextInputWithTopLabel';
 
 
 export function RegisterScreen() {
@@ -31,7 +31,7 @@ export function RegisterScreen() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showModalTerms, setShowModalTerms] = useState(false);
 
-  const { control, handleSubmit, watch, setValue ,formState: { errors } } = useForm({
+  const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(userSchemas),
   })
 
@@ -54,12 +54,12 @@ export function RegisterScreen() {
   }
 
   const handleAcceptTerms = () => {
-    if(termsAccepted) {
+    if (termsAccepted) {
       setTermsAccepted(false);
-      setValue('termsAccepted',false);
+      setValue('termsAccepted', false);
     } else {
       setTermsAccepted(true);
-      setValue('termsAccepted',true);
+      setValue('termsAccepted', true);
     }
   }
 
@@ -86,22 +86,24 @@ export function RegisterScreen() {
         <Text style={[globalStyles.title_screens_auth, { textAlign: 'right' }]}>Registro</Text>
       </View>
       <View style={styles.container}>
-        <View>
-          <TextInputCustom name="name" control={control} placeholder='Informe seu nome: ' placeholderTextColor='#090909e8' errors={errors.name} />
-          <TextInputCustom name="cpf" control={control} placeholder='Informe seu CPF: ' placeholderTextColor='#090909e8' inputMode='numeric' maxLength={11} errors={errors.cpf} />
-          <TextInputCustom name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.password} />
-          <TextInputCustom name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.confirmPassword} />
-          {renderAcceptTermsPolicyPrivacy()}
-          {errors.termsAccepted && <Text style={{paddingLeft: 25 ,fontSize: 13, color: '#fc1d1d'}}>{errors.termsAccepted.message}</Text>}
+        <View style={{ rowGap: 15 }}>
+          <TextInputWithTopLabel title='Nome' name="name" control={control} placeholder='Informe seu nome: ' placeholderTextColor='#090909e8' errors={errors.name} />
+          <TextInputWithTopLabel title='CPF' name="cpf" control={control} placeholder='Informe seu CPF: ' placeholderTextColor='#090909e8' inputMode='numeric' maxLength={11} errors={errors.cpf} />
+          <TextInputWithTopLabel title='Senha' name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.password} />
+          <TextInputWithTopLabel title='Confirmar Senha' name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.confirmPassword} />
+          <View>
+            {renderAcceptTermsPolicyPrivacy()}
+            {errors.termsAccepted && <Text style={{ paddingLeft: 25, fontSize: 13, color: '#fc1d1d' }}>{errors.termsAccepted.message}</Text>}
+          </View>
         </View>
 
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading}  mode='confirm'/>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading} mode='confirm' />
           <DividerTextMiddle text='Já possui conta?' />
-          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>
+          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
         </View>
       </View>
-      {showModalTerms && <ModalTermsPolicyPrivacy isShow={showModalTerms} onClose={() => setShowModalTerms(false)} onAccept={handleAcceptTerms}/>}
+      {showModalTerms && <ModalTermsPolicyPrivacy isShow={showModalTerms} onClose={() => setShowModalTerms(false)} onAccept={handleAcceptTerms} />}
     </View>
   );
 }
