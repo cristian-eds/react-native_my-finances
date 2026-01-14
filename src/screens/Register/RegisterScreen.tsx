@@ -95,7 +95,7 @@ export function RegisterScreen() {
           {errors.termsAccepted && <Text style={{paddingLeft: 25 ,fontSize: 13, color: '#fc1d1d'}}>{errors.termsAccepted.message}</Text>}
         </View>
 
-        <View>
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading}  mode='confirm'/>
           <DividerTextMiddle text='Já possui conta?' />
           <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>

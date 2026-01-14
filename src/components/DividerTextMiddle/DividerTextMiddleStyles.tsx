@@ -4,8 +4,8 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     display: 'flex',
-    height:20,
-    marginVertical: 15,
+    marginBottom: 15,
+    marginTop: 30,
   },
   line: {
     backgroundColor: '#9c9c9cc0',

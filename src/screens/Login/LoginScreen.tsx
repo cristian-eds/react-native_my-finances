@@ -72,7 +72,7 @@ export function LoginScreen() {
 
           <Text style={styles.forgot_password} onPress={() => navigation.navigate("ForgotPassword")}>Esqueceu a senha?</Text>
         </View>
-        <View>
+        <View style={{height: '38%', justifyContent: "space-around"}}>
           <ButtonPrincipal title={loading ? 'Entrando...' : 'Entrar'} onPress={handleSubmit(handleLogin)} loading={loading} mode='confirm'/>
           <DividerTextMiddle text='Não possui conta?' />
           <ButtonPrincipal title='Registre-se' onPress={() => navigation.navigate("Register")} />

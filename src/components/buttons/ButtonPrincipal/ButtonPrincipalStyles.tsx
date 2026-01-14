@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 45,
         borderRadius: 10,
-        marginBottom: 32,
         flexDirection: 'row',
         gap: 5,
         borderColor: '#79a8ff',

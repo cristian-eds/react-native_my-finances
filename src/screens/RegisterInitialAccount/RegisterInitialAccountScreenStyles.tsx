@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 40,
     paddingTop: 25,
-    rowGap: 30,
   },
   title: {
     fontSize: 22,
