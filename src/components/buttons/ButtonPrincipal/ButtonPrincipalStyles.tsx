@@ -16,7 +16,8 @@ export const styles = StyleSheet.create({
         borderWidth: 0.3
     },
     containerButtonConfirm: {
-        backgroundColor: '#6886be'
+        backgroundColor: '#6886be',
+        borderColor: '#1a3f85'
     },
     text_button: {
         fontSize: 18

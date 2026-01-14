@@ -10,7 +10,6 @@ import { styles } from './AccountDetailsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
@@ -28,6 +27,11 @@ import { useNavigation } from '@react-navigation/native';
 import { ButtonBack } from '../../components/buttons/ButtonBack/ButtonBack';
 import { Row } from '../../components/structure/Row/Row';
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
+import { TextInputWithTopLabel } from '../../components/TextInputWithTopLabel/TextInputWithTopLabel';
+import { PickerWithTopLabel } from '../../components/PickerWithTopLabel/PickerWithTopLabel';
+import { Cell } from '../../components/structure/Cell/Cell';
+import { RowWithTopLabel } from '../../components/RowWithTopLabel/RowWithTopLabel';
+
 
 
 export function AccountDetails() {
@@ -50,6 +54,9 @@ export function AccountDetails() {
             type: activeAccount?.type ?? TypeAccount.Corrente
         }
     })
+
+    const accountTypeItems = Object.keys(TypeAccount).map((text) => { return { label: text, value: TypeAccount[text as keyof typeof TypeAccount] } })
+
 
     const handleUpdateAccount = async () => {
         const formValues = watch();
@@ -115,33 +122,49 @@ export function AccountDetails() {
     }
 
     return (
-        <ScrollView style={GlobalStyles.container_screens_normal}>
+        <View style={[GlobalStyles.container_screens_normal, { rowGap: 8 }]}>
             <Row>
                 <ButtonBack onPress={() => navigation.goBack()} />
                 <ButtonPlus onPress={handleShowModalAddAccount} />
             </Row>
-            <SectionWithTitle title='DADOS DA CONTA' titleStyle={{textAlign: 'center'}} containerStyle={{rowGap: 5, marginTop: 10}}>
+            <SectionWithTitle title='DADOS DA CONTA' titleStyle={{ textAlign: 'center' }} containerStyle={{ rowGap: 10, marginTop: 10 }}>
                 <SelectAccount labelStyle={{ textAlign: 'left' }} />
-                <TextInpuWithLeftLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
-                <TextInpuWithLeftLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
-                <PickerWithLeftLabel control={control} labelText='Tipo conta' errors={errors.type} name='type' />
-                <TextInpuWithLeftLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
-                <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
-                <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
+                <TextInputWithTopLabel control={control} title='Nome da Conta' errors={errors.name} name='name' placeholder='Nome da conta' />
+                <PickerWithTopLabel items={accountTypeItems} control={control} labelText='Tipo conta' errors={errors.type} name='type' zIndex={1000} />
+                <TextInputWithTopLabel control={control} title='Número da conta' errors={errors.accountNumber} name='accountNumber' placeholder='Número da conta' />
+                <Row>
+                    <Cell>
+                        <TextInputWithTopLabel control={control} title='Código do banco' errors={errors.bankCode} name='bankCode' placeholder='Código do banco' />
+                    </Cell>
+                    <Cell>
+                        <TextInputWithTopLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
+                    </Cell>
+                </Row>
+                <TextInputWithTopLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
             </SectionWithTitle>
-            <SectionWithTitle title='INFORMAÇÕES' titleStyle={{textAlign: 'center'}} containerStyle={{rowGap: 5}}>
-                <RowWithLeftLabel labelText='Data Cadastro' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
-                </RowWithLeftLabel>
-                <RowWithLeftLabel labelText='Status' containerStyles={{ justifyContent: 'space-between', height: 45 }}>
-                    {activeAccount?.status === Status.Ativo ? renderStatusLabel('green') : renderStatusLabel('red')}
-                </RowWithLeftLabel>
+            <SectionWithTitle title='INFORMAÇÕES' titleStyle={{ textAlign: 'center' }} containerStyle={{ rowGap: 15 }}>
+                <Row>
+                    <Cell>
+                        <RowWithTopLabel title='Data Cadastro' stylesProp={{ justifyContent: 'space-between', height: 45 }}>
+                            <Text>{activeAccount?.creationDate ? formaterIsoDateToDefaultPattern(new Date(activeAccount.creationDate)) : ""}</Text>
+                        </RowWithTopLabel>
+                    </Cell>
+                    <Cell>
+                        <RowWithTopLabel title='Status' stylesProp={{ justifyContent: 'space-between', height: 45 }}>
+                            {activeAccount?.status === Status.Ativo ? renderStatusLabel('green') : renderStatusLabel('red')}
+                        </RowWithTopLabel>
+                    </Cell>
+                </Row>
             </SectionWithTitle>
             <View>
-                {isDirty ? <>
-                    <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{ marginTop: 15, marginBottom: 0 }} />
-                    <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{ marginTop: 15 }} />
-                </> : <>
+                {isDirty ? <Row>
+                    <Cell>
+                        <ButtonPrincipal title='Cancelar Alterações' onPress={() => reset()} style={{width: '100%' }} textStyle={{fontSize: 16}}/>
+                    </Cell>
+                    <Cell>
+                        <ButtonPrincipal title='Salvar Alterações' onPress={handleSubmit(handleUpdateAccount)} style={{width: '100%' }} textStyle={{fontSize: 16}} mode='confirm'/>
+                    </Cell>
+                </Row> : <>
                     <ButtonPrincipal iconName='trash-outline' title='Excluir conta' onPress={() => setModalConfirmDelete(true)} style={{ marginTop: 15 }} />
                 </>}
 
@@ -150,6 +173,6 @@ export function AccountDetails() {
             <ModalAccount isShow={showModalAddAccount} onClose={() => setShowModalAddAccount(false)} />
             <ModalConfirm isShow={showModalConfirmDelete} title='Confirma a exclusão da conta?' onConfirm={handleDeleteAccount} onClose={() => setModalConfirmDelete(false)} />
 
-        </ScrollView>
+        </View>
     );
 }

@@ -10,10 +10,13 @@ export const styles = StyleSheet.create({
     zIndex: 2
   },
   picker: {
-    flex:1,
     borderColor: 'white',
     borderRadius: 0,
-    top: -2
+    top: -2,
+    padding: 0,
+    margin: 0,
+    height: 45,
+    minHeight: 45
   },
   picker_text: {
     fontSize: 14,
