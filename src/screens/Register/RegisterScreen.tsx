@@ -101,7 +101,7 @@ export function RegisterScreen() {
           <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>
         </View>
       </View>
-      {showModalTerms && <ModalTermsPolicyPrivacy isShow={showModalTerms} onClose={() => setShowModalTerms(false)} onAccept={() => setTermsAccepted(true)}/>}
+      {showModalTerms && <ModalTermsPolicyPrivacy isShow={showModalTerms} onClose={() => setShowModalTerms(false)} onAccept={handleAcceptTerms}/>}
     </View>
   );
 }
