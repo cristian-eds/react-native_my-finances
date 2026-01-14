@@ -94,7 +94,7 @@ export function RegisterInitialAccountScreen() {
         <SectionWithTitle title='DADOS DA CONTA' containerStyle={styles.customSection}>
 
           <TextInputWithTopLabel control={control} title='Nome da conta' errors={errors.name} name='name' placeholder='Informe nome da conta' required />
-          <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required />
+          <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial da conta' required mask='BRL_CURRENCY'/>
           <PickerWithTopLabel items={accountTypeItems} control={control} labelText='Tipo conta' errors={errors.type} name='type' />
 
           <TouchableOpacity style={styles.showMore} onPress={() => setShowDetailInputs(!showDetailInputs)}>

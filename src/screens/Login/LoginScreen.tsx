@@ -60,9 +60,11 @@ export function LoginScreen() {
             placeholderTextColor='#090909e8'
             iconName='person-outline'
             inputMode='numeric'
-            maxLength={11}
+            maxLength={14}
             errors={errors.cpf}
-            readOnly={loading} />
+            readOnly={loading} 
+            mask='BRL_CPF'
+            />
 
           <TextInputWithTopLabel
             title='Senha'

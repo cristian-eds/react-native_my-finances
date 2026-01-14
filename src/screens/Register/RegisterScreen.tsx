@@ -33,6 +33,13 @@ export function RegisterScreen() {
 
   const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(userSchemas),
+    defaultValues: {
+      confirmPassword: '',
+      cpf: '',
+      name: '',
+      password: '',
+      termsAccepted: false
+    }
   })
 
   const handleRegister = async () => {
@@ -88,9 +95,9 @@ export function RegisterScreen() {
       <View style={styles.container}>
         <View style={{ rowGap: 15 }}>
           <TextInputWithTopLabel title='Nome' name="name" control={control} placeholder='Informe seu nome: ' placeholderTextColor='#090909e8' errors={errors.name} />
-          <TextInputWithTopLabel title='CPF' name="cpf" control={control} placeholder='Informe seu CPF: ' placeholderTextColor='#090909e8' inputMode='numeric' maxLength={11} errors={errors.cpf} />
-          <TextInputWithTopLabel title='Senha' name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.password} />
-          <TextInputWithTopLabel title='Confirmar Senha' name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.confirmPassword} />
+          <TextInputWithTopLabel title='CPF' name="cpf" control={control} placeholder='Informe seu CPF: ' placeholderTextColor='#090909e8' inputMode='numeric' maxLength={14} errors={errors.cpf} mask='BRL_CPF'/>
+          <TextInputWithTopLabel title='Senha' name="password" control={control} placeholder='Digite sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.password} secureText={true}/>
+          <TextInputWithTopLabel title='Confirmar Senha' name="confirmPassword" control={control} placeholder='Confirme sua senha: ' placeholderTextColor='#090909e8' secureTextEntry={true} errors={errors.confirmPassword} secureText={true}/>
           <View>
             {renderAcceptTermsPolicyPrivacy()}
             {errors.termsAccepted && <Text style={{ paddingLeft: 25, fontSize: 13, color: '#fc1d1d' }}>{errors.termsAccepted.message}</Text>}
