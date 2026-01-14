@@ -15,14 +15,21 @@ import { DividerTextMiddle } from '../../DividerTextMiddle/DividerTextMiddle';
 
 interface ModalTermsPolicyPrivacyProps {
     isShow: boolean,
-    onClose: () => void
+    onClose: () => void,
+    onAccept?: () => void;
 }
 
-export function ModalTermsPolicyPrivacy({ isShow, onClose }: ModalTermsPolicyPrivacyProps) {
+export function ModalTermsPolicyPrivacy({ isShow, onClose, onAccept }: ModalTermsPolicyPrivacyProps) {
 
     const renderLastModified = () => {
         return <Text style={styles.textUpdate}>Última atualização: 13/01/2026</Text>
     }
+
+    const handleClose = () => {
+        onAccept && onAccept();
+        onClose()
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -35,7 +42,7 @@ export function ModalTermsPolicyPrivacy({ isShow, onClose }: ModalTermsPolicyPri
                     <ModalHeader>
                         <ButtonBack onPress={onClose} />
                         <Row style={{ flex: 4, justifyContent: 'center' }}>
-                            <Text style={styles.title}>Termos, Políticas de Privacidade</Text>
+                            <Text style={styles.title}>Termos e Políticas de Privacidade</Text>
                         </Row>
                         <Spacer />
                     </ModalHeader>
@@ -90,7 +97,7 @@ export function ModalTermsPolicyPrivacy({ isShow, onClose }: ModalTermsPolicyPri
                         </ScrollView>
                     </View>
                     <ModalFooter>
-                        <ButtonIconAction iconName='checkmark-sharp' onPress={onClose} mode={Mode.CONFIRM} />
+                        <ButtonIconAction iconName='checkmark-sharp' onPress={handleClose} mode={Mode.CONFIRM} />
                     </ModalFooter>
                 </ModalContent>
             </ModalContainer>
