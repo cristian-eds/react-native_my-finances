@@ -79,8 +79,8 @@ export function RegisterInitialAccountScreen() {
           <TextInpuWithLeftLabel control={control} title='Agência' errors={errors.agency} name='agency' placeholder='Agência' />
           <TextInpuWithLeftLabel control={control} title='Responsável' errors={errors.holderName} name='holderName' placeholder='Nome do responsável' />
         </View>
-        <View>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} loading={loading}/>
+        <View style={{flex: 1, justifyContent: "center"}}>
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegisterAccount)} loading={loading} mode='confirm'/>
         </View>
       </View>
     </View>

@@ -96,9 +96,9 @@ export function RegisterScreen() {
         </View>
 
         <View>
-          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading} />
+          <ButtonPrincipal title='Avançar' onPress={handleSubmit(handleRegister)} loading={loading}  mode='confirm'/>
           <DividerTextMiddle text='Já possui conta?' />
-          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')} />
+          <ButtonPrincipal title='Entrar' onPress={() => navigation.navigate('Login')}/>
         </View>
       </View>
       {showModalTerms && <ModalTermsPolicyPrivacy isShow={showModalTerms} onClose={() => setShowModalTerms(false)} onAccept={() => setTermsAccepted(true)}/>}

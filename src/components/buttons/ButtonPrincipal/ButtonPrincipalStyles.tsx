@@ -12,9 +12,18 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 32,
         flexDirection: 'row',
-        gap: 5
+        gap: 5,
+        borderColor: '#79a8ff',
+        borderWidth: 0.3
+    },
+    containerButtonConfirm: {
+        backgroundColor: '#6886be'
     },
     text_button: {
         fontSize: 18
+    },
+    textButtonConfirm: {
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });
