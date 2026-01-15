@@ -4,3 +4,10 @@ export function formaterNumberToBRL(value: number = 0) {
         currency: "BRL",
     }).format(value)
 }
+
+export function formaterNumberToTwoFractionDigits(value: number) {
+    return Intl.NumberFormat('en', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value / 100);
+}

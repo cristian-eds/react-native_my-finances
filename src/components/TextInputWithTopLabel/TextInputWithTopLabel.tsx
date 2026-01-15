@@ -5,6 +5,7 @@ import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-fo
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { Ionicons } from '@expo/vector-icons';
 import MaskInput, { Mask, Masks } from 'react-native-mask-input';
+import { formaterNumberToTwoFractionDigits } from '../../utils/NumberFormater';
 
 export type MaskType = keyof typeof Masks;
 
@@ -32,10 +33,16 @@ export function TextInputWithTopLabel({ name, title, control, showLabel = true, 
 
     const [showSecureText, setShowSecureText] = useState(secureText);
 
+    const onChangeTextValue = (masked : string, unmasked: string) => {
+        let newValue = unmasked;
+        if(mask === 'BRL_CURRENCY') newValue = formaterNumberToTwoFractionDigits(Number(unmasked));
+        field.onChange(newValue);
+    }
+
     return (
         <RowWithTopLabel title={title} required={required} errors={errors} showLabel={showLabel} value={field.value}>
             {iconName && <Ionicons name={iconName} size={20} />}
-            <MaskInput {...props} mask={mask? Masks[mask] : undefined} value={field.value} onChangeText={(masked, unmasked) => field.onChange(unmasked)} placeholderTextColor='#090909e8' style={{ padding: 4, flex: 1, color: '#000' }} secureTextEntry={showSecureText} />
+            <MaskInput {...props} mask={mask? Masks[mask] : undefined} value={field.value} onChangeText={onChangeTextValue} placeholderTextColor='#090909e8' style={{ padding: 4, flex: 1, color: '#000' }} secureTextEntry={showSecureText} />
             {secureText && <Ionicons name={showSecureText ? 'eye-outline' : 'eye-off-outline'} size={20} onPress={() => setShowSecureText(!showSecureText)} />}
         </RowWithTopLabel>
     );

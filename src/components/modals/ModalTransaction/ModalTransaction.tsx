@@ -54,7 +54,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
         defaultValues: {
             description: transactionData?.description ?? '',
             paymentDate: transactionData?.paymentDate ?? new Date().toISOString(),
-            value: transactionData?.value.toFixed(2) ?? 0,
+            value: transactionData?.value.toFixed(2) ?? '0',
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
             accountId: mode === 'add' ? parameters.transactionDefaultAccountId?.toLocaleString() ?? undefined : transactionData?.accountId?.toString(),
@@ -157,7 +157,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
                     <View style={{ rowGap: 10 }}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES LANÇAMENTO</Text>
                         <TextInputWithTopLabel control={control} title='Descrição' errors={errors.description} name='description' placeholder='Descrição*:' required />
-                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='Valor*: R$ 00,00' required />
+                        <TextInputWithTopLabel control={control} title='Valor R$' errors={errors.value} name='value' placeholder='Valor:' mask='BRL_CURRENCY' required/>
                         <DatePickerWithTopLabel control={control} name='paymentDate' errors={errors.paymentDate} mode='datetime' title='Data pagamento' required />
                         <Row>
                             <Cell>

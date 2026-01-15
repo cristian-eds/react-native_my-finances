@@ -14,6 +14,8 @@ import { findTransactionsByDuplicateId } from '../../../../services/transactionS
 import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../../domain/transactionModel';
 import { Ionicons } from '@expo/vector-icons';
+import MaskInput, {Masks} from 'react-native-mask-input';
+import { formaterNumberToTwoFractionDigits } from '../../../../utils/NumberFormater';
 
 interface InstallmentItemProps {
     item: Item,
@@ -121,13 +123,14 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                         control={control}
                         name="value"
                         render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
-                            <TextInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (e) => {
-                                onChange(e);
+                            <MaskInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (masked, unmasked) => {
+                                onChange(formaterNumberToTwoFractionDigits(Number(unmasked)));
                                 await trigger('value');
                                 propagateChanges();
                             }} style={[styles.input, { flex: 1, textAlign: 'right' }, payed ? { textDecorationLine: 'line-through', color: 'green' } : {}]}
                                 keyboardType="numeric"
-                                readOnly={readonly} />
+                                readOnly={readonly} 
+                                mask={Masks.BRL_CURRENCY}/>
                         )}
                     />
                     {payed && <Ionicons name="checkmark-circle" size={15} color="green" />}

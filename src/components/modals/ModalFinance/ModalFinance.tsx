@@ -60,7 +60,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
         defaultValues: {
             accountId: duplicateData?.accountId?.toLocaleString() ?? undefined,
             categoryId: duplicateData?.categoryId?.toLocaleString() ?? undefined,
-            description: duplicateData?.description ?? undefined,
+            description: duplicateData?.description ?? '',
             dueDate: (() => {
                 const dateValue = duplicateData?.dueDate;
                 if (!dateValue) return undefined;
@@ -72,7 +72,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                 return new Date(dateValue as Date).toISOString();
             })(),
             movementType: duplicateData?.movementType ?? MovementType.Despesa,
-            totalValue: duplicateData?.totalValue.toLocaleString()
+            totalValue: duplicateData?.totalValue.toLocaleString() ?? ''
         }
     });
 

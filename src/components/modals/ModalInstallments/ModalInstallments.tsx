@@ -93,9 +93,9 @@ export function ModalInstallments({ items, isShow, onClose,onCreateInstallments,
                     </ModalHeader>
                     <Row key={0} style={styles.headerItems}>
                         <Text>#</Text>
-                        <Text>Descrição</Text>
-                        <Text>Vencimento</Text>
-                        <Text>Valor</Text>
+                        <Text style={{flex: 2}}>Descrição</Text>
+                        <Text style={{flex: 2.5}}>Vencimento</Text>
+                        <Text style={{flex: 2}}>Valor</Text>
                     </Row>
                     <View style={{ maxHeight: 300 }}>
                         <FlatList
