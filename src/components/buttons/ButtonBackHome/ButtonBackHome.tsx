@@ -12,7 +12,7 @@ export function ButtonBackHome() {
 
     const navigate = useNavigation<StackNavigationProp<PrincipalStackParamList>>();
 
-    const handleNavigateHome = () => navigate.goBack();
+    const handleNavigateHome = () => navigate.navigate('Main');
 
     return (
         <TouchableOpacity style={styles.container} onPress={handleNavigateHome}>
