@@ -18,7 +18,7 @@ import { DuplicateModel } from '../../../domain/duplicateModel';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../../hooks/useUserContext';
-import { scheduleDuplicateNotification } from '../../../services/notificationService';
+import { formaterNumberToTwoFractionDigits } from '../../../utils/NumberFormater';
 
 
 export interface Item {
@@ -38,7 +38,7 @@ interface InstallmentProps {
     mode?: 'create' | 'edit';
 }
 
-export function ModalInstallments({ items, isShow, onClose,onCreateInstallments, data, mode = 'create' }: InstallmentProps) {
+export function ModalInstallments({ items, isShow, onClose, onCreateInstallments, data, mode = 'create' }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
     const { createRecurrenceDuplicates } = useDuplicateStore()
@@ -93,20 +93,20 @@ export function ModalInstallments({ items, isShow, onClose,onCreateInstallments,
                     </ModalHeader>
                     <Row key={0} style={styles.headerItems}>
                         <Text>#</Text>
-                        <Text style={{flex: 2}}>Descrição</Text>
-                        <Text style={{flex: 2.5}}>Vencimento</Text>
-                        <Text style={{flex: 2}}>Valor</Text>
+                        <Text style={{ flex: 3 }}>Descrição</Text>
+                        <Text style={{ flex: 3 }}>Vencimento</Text>
+                        <Text style={{ flex: 2.5, textAlign: 'right', paddingRight: 5 }}>Valor</Text>
                     </Row>
                     <View style={{ maxHeight: 300 }}>
                         <FlatList
                             data={controlledItems}
-                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem} readonly={mode === 'edit'}/>}
+                            renderItem={({ item }) => <InstallmentItem item={item} updateItem={handleUpdateItem} readonly={mode === 'edit'} />}
                             keyExtractor={(item) => item.sequencyItem.toString()}
                         />
                     </View>
                     {mode === 'create' && <ModalFooter>
-                            <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
-                        </ModalFooter>
+                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
+                    </ModalFooter>
                     }
                 </ModalContent>
             </ModalContainer>

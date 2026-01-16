@@ -15,7 +15,6 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../../domain/transactionModel';
 import { Ionicons } from '@expo/vector-icons';
 import MaskInput, {Masks} from 'react-native-mask-input';
-import { formaterNumberToTwoFractionDigits } from '../../../../utils/NumberFormater';
 
 interface InstallmentItemProps {
     item: Item,
@@ -32,7 +31,11 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
 
     const { control, handleSubmit, watch, formState: { errors }, trigger } = useForm({
         resolver: zodResolver(installmentsItemSchemas),
-        defaultValues: item,
+        defaultValues: {
+            description: item.description,
+            dueDate: item.dueDate,
+            value: item.value * 100
+        },
     });
 
     const overdue = new Date() > new Date(item.dueDate as Date);
@@ -100,7 +103,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                     control={control}
                     name='dueDate'
                     render={({ field: { onChange, onBlur, value } }) => (
-                        <TouchableOpacity style={[styles.input, { flex: 2 }]} onPress={() => setShowPicker(true)}
+                        <TouchableOpacity style={[styles.input, { flex: 3 }]} onPress={() => setShowPicker(true)}
                             disabled={readonly}>
                             <Text style={overdue ? { color: 'red' } : ''}>{new Date(value as Date).toLocaleDateString()}</Text>
                             <DateTimePickerModal
@@ -118,16 +121,18 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
 
                     )}
                 />
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <View style={{ flex: 3, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Controller
                         control={control}
                         name="value"
-                        render={({ field: { onChange, onBlur, value: valueInstallment } }) => (
+                        render={({ field: { onChange, onBlur,value: valueInstallment } }) => (
                             <MaskInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (masked, unmasked) => {
-                                onChange(formaterNumberToTwoFractionDigits(Number(unmasked)));
+                              
+                                onChange(unmasked);
+                                console.log(unmasked)
                                 await trigger('value');
                                 propagateChanges();
-                            }} style={[styles.input, { flex: 1, textAlign: 'right' }, payed ? { textDecorationLine: 'line-through', color: 'green' } : {}]}
+                            }} style={[styles.input, { textAlign: 'right' }, payed ? { textDecorationLine: 'line-through', color: 'green' } : {}]}
                                 keyboardType="numeric"
                                 readOnly={readonly} 
                                 mask={Masks.BRL_CURRENCY}/>

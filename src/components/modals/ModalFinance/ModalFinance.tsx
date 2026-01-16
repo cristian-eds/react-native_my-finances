@@ -29,6 +29,7 @@ import { TabRecurrence } from './TabRecurrence/TabRecurrence';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { ModalInstallments } from '../ModalInstallments/ModalInstallments';
 import { TabInfos } from './TabInfos/TabInfos';
+import { formaterNumberToTwoFractionDigits } from '../../../utils/NumberFormater';
 
 interface ModalFinanceProps {
     isShow: boolean,
@@ -72,7 +73,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                 return new Date(dateValue as Date).toISOString();
             })(),
             movementType: duplicateData?.movementType ?? MovementType.Despesa,
-            totalValue: duplicateData?.totalValue.toLocaleString() ?? ''
+            totalValue: duplicateData ? formaterNumberToTwoFractionDigits(duplicateData?.totalValue * 100).toLocaleString() : ''
         }
     });
 
