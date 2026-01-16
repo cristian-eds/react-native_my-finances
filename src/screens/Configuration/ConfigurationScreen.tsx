@@ -8,6 +8,7 @@ import { ModalNotification } from '../../components/modals/ModalNotification/Mod
 import { ModalParameters } from '../../components/modals/ModalParameters/ModalParameters';
 import { ModalAbout } from '../../components/modals/ModalAbout/ModalAbout';
 import { ModalContactUs } from '../../components/modals/ModalContactUs/ModalContactUs';
+import { ButtonBackHome } from '../../components/buttons/ButtonBackHome/ButtonBackHome';
 
 export function Configuration() {
 
@@ -27,6 +28,7 @@ export function Configuration() {
         <SectionItemLink iconName='chatbox-outline' text='Contato' subText='Fale conosco' onPress={() => setShowModalContactUs(true)}/>
         <SectionItemLink iconName='information-circle-outline' text='Sobre nós' subText='Informações' onPress={() => setShowModalAbout(true)}/>
       </SectionWithTitle>
+      <ButtonBackHome />
 
       {showModalNotifications && <ModalNotification isShow={showModalNotifications} onClose={() => setShowModalNotifications(false)} />}
       {showModalParameters && <ModalParameters isShow={showModalParameters} onClose={() => setShowModalParameters(false)} />}

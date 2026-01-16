@@ -11,7 +11,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';
-import { useUserContext } from '../../../hooks/useUserContext';
 
 interface ModalContactUsProps {
     isShow: boolean,

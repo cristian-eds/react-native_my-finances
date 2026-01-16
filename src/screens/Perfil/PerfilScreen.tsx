@@ -11,6 +11,7 @@ import { ModalChangePassword } from '../../components/modals/ModalChangePassword
 import { SectionWithTitle } from '../../components/structure/SectionWithTitle/SectionWithTitle';
 import { SectionItemLink } from '../../components/SectionItemLink/SectionItemLink';
 import { ModalChangeUserData } from '../../components/modals/ModalChangeUserData/ModalChangeUserData';
+import { ButtonBackHome } from '../../components/buttons/ButtonBackHome/ButtonBackHome';
 
 export function PerfilScreen() {
 
@@ -28,14 +29,14 @@ export function PerfilScreen() {
                 <Text style={styles.avatarText}>{user?.name}</Text>
                 <Text style={styles.avatarSubText}>Membro desde 2025</Text>
             </View>
-            <ScrollView >
+            <View style={{flex: 1}}>
                 <SectionWithTitle title='Minha Conta'>
                     <SectionItemLink iconName='person-outline' text='Dados Pessoais' subText='Nome, CPF' onPress={() => setShowModalChangeUserData(true)}/>
                     <SectionItemLink iconName='lock-closed-outline' text='Segurança' subText='Alterar Senha' onPress={() => setShowModalChangePassword(true)}/>
                 </SectionWithTitle>
+                <ButtonBackHome />
 
-
-            </ScrollView>
+            </View>
             <TouchableOpacity style={styles.buttonExit} onPress={logout}>
                 <Row style={{ justifyContent: 'center', columnGap: 10 }}>
                     <Ionicons name="exit-outline" size={24} color="white" />
