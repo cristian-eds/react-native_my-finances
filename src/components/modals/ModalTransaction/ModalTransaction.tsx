@@ -54,14 +54,13 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
         defaultValues: {
             description: transactionData?.description ?? '',
             paymentDate: transactionData?.paymentDate ?? new Date().toISOString(),
-            value: transactionData?.value.toFixed(2) ?? '0',
+            value: transactionData?.value.toFixed(2) ?? '0,00',
             movementType: transactionData?.movementType ?? MovementType.Despesa,
             category: transactionData?.categoryId?.toString() ?? undefined,
             accountId: mode === 'add' ? parameters.transactionDefaultAccountId?.toLocaleString() ?? undefined : transactionData?.accountId?.toString(),
             destinationAccountId: transactionData?.destinationAccountId?.toString() ?? ''
         }
     });
-
 
     const [showModalConfirmDelete, setShowModalConfirmDelete] = useState(false);
 

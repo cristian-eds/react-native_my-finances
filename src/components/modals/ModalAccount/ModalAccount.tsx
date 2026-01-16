@@ -38,7 +38,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
         resolver: zodResolver(accountSchemas),
         defaultValues: {
             name: '',
-            balance: 0,
+            balance: '0,00',
             bankCode: '',
             type: TypeAccount.Corrente,
             accountNumber: '',
@@ -97,7 +97,7 @@ const ModalAccount = ({ isShow, onClose }: ModalAccountProps) => {
                     <View style={styles.inputs}>
                         <Text style={styles.inputsTitle}>INFORMAÇÕES BÁSICAS</Text>
                         <TextInputWithTopLabel control={control} title='Nome' errors={errors.name} name='name' placeholder='Nome*:' required />
-                        <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' required />
+                        <TextInputWithTopLabel control={control} title='Saldo inicial' errors={errors.balance} name='balance' placeholder='Saldo inicial*:' required mask='BRL_CURRENCY' />
                         <PickerWithTopLabel items={itemsToDropDown} control={control} labelText='Tipo conta' errors={errors.type} name='type'/>
                         <TouchableOpacity style={styles.showMore} onPress={() => setShowMoreInputs(!showMoreInputs)}>
                             <Text style={styles.showMoreText}>Preencher detalhes da conta...</Text>

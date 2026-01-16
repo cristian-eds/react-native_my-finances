@@ -35,7 +35,7 @@ export function TextInputWithTopLabel({ name, title, control, showLabel = true, 
 
     const onChangeTextValue = (masked : string, unmasked: string) => {
         let newValue = unmasked;
-        if(mask === 'BRL_CURRENCY') newValue = formaterNumberToTwoFractionDigits(Number(unmasked));
+        if(mask === 'BRL_CURRENCY') newValue = formaterNumberToTwoFractionDigits(Number(unmasked)).replace(',','');
         field.onChange(newValue);
     }
 
