@@ -181,7 +181,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                     <FlatList<Transaction>
                         data={paymentsItem}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => <TransactionItem item={item} />}
+                        renderItem={({ item }) => <TransactionItem item={item} style={{backgroundColor: 'rgb(240, 242, 246)'}}/>}
                         contentContainerStyle={{ paddingBottom: 80 }}
                     /> :
                     <View style={{ paddingTop: 20, paddingBottom: 15 }}>

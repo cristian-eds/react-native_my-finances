@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
   central_info_data: {
     fontSize: 13,
     fontStyle: 'italic',
+    top: 2
     
   },
   value_info: {

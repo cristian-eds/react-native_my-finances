@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextStyle } from 'react-native';
+import { View, Text, TextStyle, ViewStyle } from 'react-native';
 
 import { styles } from './TransactionItemStyles';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { TransactionItemData } from '../../domain/transactionItemData';
 import { MovementType } from '../../domain/enums/movementTypeEnum';
 import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 import { TouchableOpacity } from 'react-native';
@@ -18,7 +17,8 @@ import { Transaction } from '../../domain/transactionModel';
 import { useCategoryStore } from '../../stores/CategoryStore';
 
 interface TransactionItemProps {
-    item: Transaction
+    item: Transaction,
+    style?: ViewStyle
 }
 
 interface IconConfig {
@@ -33,7 +33,7 @@ interface IconMapStructure {
 }
 
 
-export function TransactionItem({ item }: TransactionItemProps) {
+export function TransactionItem({ item, style }: TransactionItemProps) {
 
     const [showModalTransaction, setShowModalTransaction] = useState(false);
     const { activeAccount, accounts } = useAccountStore();
@@ -95,12 +95,12 @@ export function TransactionItem({ item }: TransactionItemProps) {
     }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => setShowModalTransaction(true)}>
+        <TouchableOpacity style={[styles.container, style]} onPress={() => setShowModalTransaction(true)}>
             <View style={[styles.iconBox, { backgroundColor: category?.hexColor ?? '#7596d7ff' }]}>
-                <Ionicons name={category?.iconName ?? 'receipt-outline'} size={20} color="white" />
+                <Ionicons name={category?.iconName ?? 'receipt-outline'} size={18} color="white" />
             </View>
             <Cell>
-                <Row>
+                <Row style={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
                     <Text style={styles.central_info_description}>{item.description}</Text>
                     <Text style={styles.central_info_data}>{formaterIsoDateToDefaultPatternWithTime(item.paymentDate)}</Text>
                 </Row>
