@@ -56,16 +56,17 @@ export function FinanceItemList({ item }: FinanceItemList) {
         )
     }
 
-    const generateStatus = () => {
-        let status: { text: DuplicateStatus, bgcolor: string } = { text: DuplicateStatus.Aberto, bgcolor: '#cacccdd8' };
+    const generateStatus = (): { text: DuplicateStatus, bgcolor: string } => {
         if (isPaid) {
-            status = { text: DuplicateStatus.Paga, bgcolor: '#79bc74ff' }
+            return { text: DuplicateStatus.Paga, bgcolor: '#79bc74ff' }
         } else if (new Date() > new Date(item.dueDate)) {
-            status = { text: DuplicateStatus.Vencido, bgcolor: '#f19393ff' }
+            return { text: DuplicateStatus.Vencido, bgcolor: '#f19393ff' }
         } else if (transactionsPayments && transactionsPayments.length > 0 && valuePaid < item.totalValue) {
-            status = { text: DuplicateStatus.Parcialmente_Paga, bgcolor: '#cacccdd8' }
+            return { text: DuplicateStatus.ParcialmentePaga, bgcolor: '#cacccdd8' }
+        } else if (new Date().toLocaleDateString() === new Date(item.dueDate).toLocaleDateString()) {
+            return { text: DuplicateStatus.VenceHoje, bgcolor: 'rgb(243, 129, 64)' }
         }
-        return status;
+        return { text: DuplicateStatus.Aberto, bgcolor: '#cacccdd8' };
     }
 
     const dataToPayment = (): Transaction => {

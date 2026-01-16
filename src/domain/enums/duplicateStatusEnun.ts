@@ -1,6 +1,7 @@
 export enum DuplicateStatus {
     Aberto = 'ABERTO',
     Vencido = 'VENCIDO',
-    Parcialmente_Paga = 'PARCIALMENTE_PAGA',
-    Paga = 'PAGA'
+    ParcialmentePaga = 'PARCIALMENTE_PAGA',
+    Paga = 'PAGA',
+    VenceHoje = 'VENCE_HOJE'
 }
