@@ -10,10 +10,11 @@ export const styles = StyleSheet.create({
     },
     container_content: {
         width: '85%',
-        height: 200,
+        minHeight: 200,
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
+        rowGap: 10
     },
     title: {
         textAlign: 'center',
@@ -25,5 +26,9 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 20,
+    },
+    text: {
+        fontSize: 16,
+        textAlign: 'center',
     }
 });
