@@ -89,3 +89,15 @@ export async function update(parameter: ParameterModel, database: SQLiteDatabase
         return false;
     }
 }
+
+export async function deleteByUserId(userId: string, database: SQLiteDatabase) {
+    try {
+        const res = await database.runAsync(`
+                    DELETE FROM parameters
+                    WHERE user_id = ?
+                `, userId)
+        return res.changes > 0;
+    } catch (error) {
+        console.error('Error deleting parameters')
+    }
+}

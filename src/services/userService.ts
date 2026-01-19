@@ -7,6 +7,12 @@ import { create as createParameter } from "../repository/parameterRepository";
 import { User } from "../domain/userModel";
 import { ResponseUser } from "../domain/responseUser";
 import { hashPassword, verifyPass } from "./passwordService";
+import { deleteSession } from "./sessionTokenService";
+import { deleteTransactionsByUserId } from "./transactionService";
+import { deleteDuplicatesByUserId } from "./duplicateService";
+import { deleteCategoriesByUserId } from "./categoryService";
+import { deleteAccountsByUserId } from "./accountService";
+import { deleteParametersByUserId } from "./parameterService";
 
 async function createUser(data: Omit<User, "id">, database: SQLiteDatabase): Promise<ResponseUser> {
 
@@ -58,5 +64,11 @@ async function resetPassword(newPass: string, userId: number, database: SQLiteDa
     return await userRepository.updatePassword(passwordHased, userId.toLocaleString(), database);
 }
 
+async function deleteUserCascade(userId: number, database: SQLiteDatabase) {
+    let userFound = await userRepository.findUserById(userId.toLocaleString(), database);
+    if (!userFound) return false;
+    return await userRepository.deleteUser(userId.toLocaleString(), database);
+}
 
-export { createUser, updatePassword, updateUser, getUserByCpf, resetPassword };
+
+export { createUser, updatePassword, updateUser, getUserByCpf, resetPassword, deleteUserCascade };

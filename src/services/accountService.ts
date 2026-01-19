@@ -32,3 +32,7 @@ export async function updateAccountBalance(accountId: number, newBalance: number
     return await accountRepository.updateAccountBalance(accountId, newBalance, database);
 }
 
+export async function deleteAccountsByUserId(userId: number, database: SQLiteDatabase): Promise<boolean>  {
+    return await accountRepository.deleteAccountsByUserId(userId.toLocaleString(), database);
+}
+

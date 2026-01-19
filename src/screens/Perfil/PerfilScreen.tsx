@@ -12,6 +12,7 @@ import { SectionWithTitle } from '../../components/structure/SectionWithTitle/Se
 import { SectionItemLink } from '../../components/SectionItemLink/SectionItemLink';
 import { ModalChangeUserData } from '../../components/modals/ModalChangeUserData/ModalChangeUserData';
 import { ButtonBackHome } from '../../components/buttons/ButtonBackHome/ButtonBackHome';
+import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
 
 export function PerfilScreen() {
 
@@ -19,6 +20,7 @@ export function PerfilScreen() {
 
     const [showModalChangePassword, setShowModalChangePassword] = useState<boolean>(false);
     const [showModalChangeUserData, setShowModalChangeUserData] = useState<boolean>(false);
+    const [showModalDeleteAccount, setShowModalDeleteAccount] = useState<boolean>(false);
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -29,11 +31,15 @@ export function PerfilScreen() {
                 <Text style={styles.avatarText}>{user?.name}</Text>
                 <Text style={styles.avatarSubText}>Membro desde 2025</Text>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <SectionWithTitle title='Minha Conta'>
-                    <SectionItemLink iconName='person-outline' text='Dados Pessoais' subText='Nome, CPF' onPress={() => setShowModalChangeUserData(true)}/>
-                    <SectionItemLink iconName='lock-closed-outline' text='Segurança' subText='Alterar Senha' onPress={() => setShowModalChangePassword(true)}/>
+                    <SectionItemLink iconName='person-outline' text='Dados Pessoais' subText='Nome, CPF' onPress={() => setShowModalChangeUserData(true)} />
                 </SectionWithTitle>
+                <SectionWithTitle title='Segurança'>
+                    <SectionItemLink iconName='lock-closed-outline' text='Senha' subText='Alterar Senha' onPress={() => setShowModalChangePassword(true)} />
+                    <SectionItemLink iconName='trash-outline' text='Conta' subText='Excluir conta' onPress={() => setShowModalDeleteAccount(true)} />
+                </SectionWithTitle>
+
                 <ButtonBackHome />
 
             </View>
@@ -45,6 +51,13 @@ export function PerfilScreen() {
             </TouchableOpacity>
             {showModalChangePassword && <ModalChangePassword isShow={showModalChangePassword} onClose={() => setShowModalChangePassword(false)} />}
             {showModalChangeUserData && <ModalChangeUserData isShow={showModalChangeUserData} onClose={() => setShowModalChangeUserData(false)} />}
+            {showModalDeleteAccount && <ModalConfirm 
+                isShow={showModalDeleteAccount} 
+                onClose={() => setShowModalDeleteAccount(false)} 
+                title='Deseja realmente excluir a conta e seus dados?' 
+                text='Essa ação é irreversível...'
+                secondsToAbilityConfirm={5000}
+                /> }
         </View>
     );
 }

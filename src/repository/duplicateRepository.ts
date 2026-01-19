@@ -211,3 +211,16 @@ export async function updateNotificationId(notification_id: string, duplicateId:
         return false;
     }
 }
+
+export async function deleteDuplicateByUserId(userId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(`
+            DELETE FROM duplicates
+            WHERE user_id = ?; 
+            `, userId)
+        return res.changes > 0;
+    } catch (error) {
+        console.error('Error deleting duplicate', error);
+        return false;
+    }
+}

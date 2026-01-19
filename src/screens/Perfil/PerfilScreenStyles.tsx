@@ -29,6 +29,6 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#b70000ff',
         paddingVertical: 8,
-        marginBottom: 50
+        marginBottom: 55
     }
 });

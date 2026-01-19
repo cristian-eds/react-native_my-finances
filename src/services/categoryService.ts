@@ -23,3 +23,7 @@ export const updateCategory = async (category: CategoryModel, database: SQLiteDa
 export const deleteCategory = async (categoryId: number, database: SQLiteDatabase) => {
     return await categoryRepository.deleteCategory(categoryId, database);
 }
+
+export const deleteCategoriesByUserId = async (userId: number, database: SQLiteDatabase) => {
+    return await categoryRepository.deleteCategoryByUserId(userId.toLocaleString(), database);
+}

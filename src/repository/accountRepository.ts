@@ -125,3 +125,17 @@ export async function updateAccountBalance(accountId: number, newBalance: number
         return false;
     }
 }
+
+export async function deleteAccountsByUserId(userId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const response = await database.runAsync(` 
+            DELETE FROM accounts  
+            WHERE user_id = ?;
+        `, [userId]);
+
+        return response.changes > 0;
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        return false;
+    }
+}

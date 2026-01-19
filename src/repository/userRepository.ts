@@ -98,6 +98,20 @@ async function updateUser(user: User, database: SQLiteDatabase): Promise<boolean
     } 
 }   
 
+async function deleteUser(userId: string, database: SQLiteDatabase): Promise<boolean> {
+    try {
+        const res = await database.runAsync(` 
+            DELETE FROM users
+            WHERE id = ?;
+        `,[userId])
+
+        return res.changes > 0;
+    } catch (error) {
+        console.error("Error updating user password:", error);
+        return false;
+    } 
+}   
 
 
-export { create, findUserByCpf, findUserBySessionToken, updatePassword, findUserById, updateUser };
+
+export { create, findUserByCpf, findUserBySessionToken, updatePassword, findUserById, updateUser, deleteUser };

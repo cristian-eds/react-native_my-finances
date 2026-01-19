@@ -11,8 +11,8 @@ const migrations = [
         CREATE TABLE IF NOT EXISTS sessions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            session_token TEXT NOT NULL UNIQUE,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+            session_token TEXT NOT NULL UNIQUE
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
     `,
     `
@@ -27,8 +27,8 @@ const migrations = [
             holder_name TEXT,
             status TEXT,
             creation_date DATETIME,
-            user_id INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+            user_id INTEGER NOT NULL
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
     `,
     `
@@ -39,7 +39,7 @@ const migrations = [
             icon_name TEXT NOT NULL,
             user_id INTEGER NOT NULL,
             expense_favorite INTEGER,
-            income_favorite INTEGER,
+            income_favorite INTEGER
         FOREIGN KEY (user_id) REFERENCES users(id)
     );
     `,
@@ -56,11 +56,11 @@ const migrations = [
             user_id INTEGER NOT NULL,
             number_installments INTEGER NOT NULL,
             duplicate_father_id INTEGER,
-            notification_id TEXT,
-        FOREIGN KEY (account_id) REFERENCES accounts(id) 
-        FOREIGN KEY (category_id) REFERENCES categories(id)
-        FOREIGN KEY (user_id) REFERENCES users(id)
-        FOREIGN KEY (duplicate_father_id) REFERENCES duplicates(id)
+            notification_id TEXT
+        FOREIGN KEY (account_id) REFERENCES accounts(id), 
+        FOREIGN KEY (category_id) REFERENCES categories(id),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        FOREIGN KEY (duplicate_father_id) REFERENCES duplicates(id),
     );    
     `,
     `
@@ -75,8 +75,8 @@ const migrations = [
             duplicate_id INTEGER,
             movement_type TEXT NOT NULL,
             transaction_father_id INTEGER,
-            user_id INTEGER NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            user_id INTEGER NOT NULL
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (account_id) REFERENCES accounts(id),
             FOREIGN KEY (destination_account_id) REFERENCES accounts(id),
             FOREIGN KEY (category_id) REFERENCES categories(id),
@@ -94,8 +94,8 @@ const migrations = [
             transaction_default_account_id INTEGER,
             transaction_default_category_exit_id INTEGER,
             transaction_default_category_entry_id INTEGER,
-            transaction_default_category_transfer_id INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+            transaction_default_category_transfer_id INTEGER
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
     `
 ];

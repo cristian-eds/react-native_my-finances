@@ -1,7 +1,7 @@
 import { SQLiteDatabase } from "expo-sqlite";
 
 
-export async function create(userId: string, sessionToken: string,database: SQLiteDatabase) {
+export async function create(userId: string, sessionToken: string, database: SQLiteDatabase) {
 
     const statement = await database.prepareAsync(` 
             INSERT INTO sessions (user_id, session_token)
@@ -9,11 +9,25 @@ export async function create(userId: string, sessionToken: string,database: SQLi
         `);
 
     try {
-        const params = { $userId: userId, $sessionToken: sessionToken};
+        const params = { $userId: userId, $sessionToken: sessionToken };
         await statement.executeAsync(params);
     } catch (error) {
         console.error("Error creating session:", error);
     } finally {
         await statement.finalizeAsync();
     }
+}
+
+export async function deleteSession(userId: string, database: SQLiteDatabase) {
+    try {
+        const res = await  database.runAsync(`
+            DELETE FROM sessions 
+            WHERE user_id = ?;
+        `, [userId])
+
+        return res.changes > 0;
+        
+    } catch (error) {
+        console.error("Error deleting session:", error);
+    } 
 }

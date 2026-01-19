@@ -182,4 +182,20 @@ export async function findTrnasactionsByDuplicateList(duplicatesIds: number[], d
     }
 }
 
+export async function deleteByUserId(userId: string, database: SQLiteDatabase): Promise<boolean> {
+
+    try {
+        const result = await database.runAsync(
+            `DELETE FROM transactions WHERE user_id = ?;`,
+            userId
+        );
+
+        return result.changes > 0;
+
+    } catch (error) {
+        console.error("Erro ao deletar transação", error);
+        return false;
+    }
+}
+
 

@@ -20,3 +20,7 @@ function saveSessionTokenOnAsyncStorage(sessionToken: string) {
     AsyncStorage.setItem("sessionToken", sessionToken);
 }
 
+export async function deleteSession(userId: number, database: SQLiteDatabase) {
+    return await sessionRepository.deleteSession(userId.toLocaleString(), database);
+}
+

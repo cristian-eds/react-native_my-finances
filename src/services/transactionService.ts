@@ -49,3 +49,7 @@ export async function findTransactionsByDuplicateList(duplicates: DuplicateModel
     if (!transactionsRecords) return [];
     return toTransactionModelList(transactionsRecords);
 }
+
+export async function deleteTransactionsByUserId(userId: number, database: SQLiteDatabase): Promise<boolean> {
+    return await transactionRepository.deleteByUserId(userId.toLocaleString(), database);
+}

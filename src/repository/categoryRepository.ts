@@ -68,3 +68,16 @@ export async function deleteCategory(categoryId: number, database: SQLiteDatabas
         console.error("Error deleting category:", error);
     } 
 }
+
+export async function deleteCategoryByUserId(userId: string, database: SQLiteDatabase): Promise<boolean | undefined> {
+    try {
+        const result = await database.runAsync(` 
+            DELETE FROM categories
+            WHERE user_id = ?;
+        `,[userId]);
+
+        return result.changes > 0;
+    } catch (error) {
+        console.error("Error deleting category:", error);
+    } 
+}

@@ -19,3 +19,7 @@ export const getByUser = async (userId: number, database: SQLiteDatabase): Promi
 export const update = async (parameter: ParameterModel, database: SQLiteDatabase) => {
     return await repository.update(parameter, database);
 }
+
+export const deleteParametersByUserId = async (userId: number, database: SQLiteDatabase) => {
+    return await repository.deleteByUserId(userId.toLocaleString(), database);
+}

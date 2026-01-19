@@ -61,3 +61,7 @@ export const getByFatherId = async (fatherId: number, userId: number,database: S
 export const updateNotificationId = async (notificationId: string, duplicateId: number, database: SQLiteDatabase) => {
     return await duplicateRepository.updateNotificationId(notificationId, duplicateId.toLocaleString(), database);
 }
+
+export const deleteDuplicatesByUserId = async (userId: number, database: SQLiteDatabase) => {
+    return await duplicateRepository.deleteDuplicateByUserId(userId.toLocaleString(), database)
+}
