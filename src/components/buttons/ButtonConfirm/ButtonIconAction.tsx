@@ -7,7 +7,8 @@ import { styles } from './ButtonIconActionStyles';
 
 export enum Mode {
   CONFIRM = 'CONFIRM',
-  DEFAULT = 'DEFAULT'
+  DEFAULT = 'DEFAULT',
+  DISABLED = 'DISABLED'
 }
 
 const MODE_STYLES = {
@@ -17,8 +18,12 @@ const MODE_STYLES = {
   },
   [Mode.DEFAULT]: {
     backgroundColor: '#f0f0f0', 
-    color: '##000'
+    color: '#000'
   },
+  [Mode.DISABLED]: {
+    backgroundColor: '#dfdfdf', 
+    color: '#989898'
+  }
 };
 
 interface ButtonIconActionProps {
@@ -30,7 +35,7 @@ interface ButtonIconActionProps {
 export function ButtonIconAction({ iconName = "checkmark", onPress, mode = Mode.DEFAULT }: ButtonIconActionProps) {
   const { backgroundColor, color } = MODE_STYLES[mode];
   return (
-    <TouchableOpacity style={[styles.container, { backgroundColor }]} onPress={onPress}>
+    <TouchableOpacity style={[styles.container, { backgroundColor }]} onPress={onPress} disabled={mode === Mode.DISABLED}>
       <Ionicons name={iconName} size={30} color={color} />
     </TouchableOpacity>
   );
