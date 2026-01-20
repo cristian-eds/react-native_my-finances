@@ -14,6 +14,7 @@ export async function intilizeDatabase(database: SQLiteDatabase) {
 
     const [{user_version}]  = await database.getAllAsync<Response>('PRAGMA user_version;');
     const currentVersion = user_version;
+    await database.execAsync('PRAGMA foreign_keys = ON;');
 
     console.log(user_version);
 

@@ -13,14 +13,22 @@ import { SectionItemLink } from '../../components/SectionItemLink/SectionItemLin
 import { ModalChangeUserData } from '../../components/modals/ModalChangeUserData/ModalChangeUserData';
 import { ButtonBackHome } from '../../components/buttons/ButtonBackHome/ButtonBackHome';
 import { ModalConfirm } from '../../components/modals/ModalConfirm/ModalConfirm';
+import { deleteUserCascade } from '../../services/userService';
+import { useSQLiteContext } from 'expo-sqlite';
 
 export function PerfilScreen() {
 
     const { user, logout } = useUserContext();
+    const database = useSQLiteContext();
 
     const [showModalChangePassword, setShowModalChangePassword] = useState<boolean>(false);
     const [showModalChangeUserData, setShowModalChangeUserData] = useState<boolean>(false);
     const [showModalDeleteAccount, setShowModalDeleteAccount] = useState<boolean>(false);
+
+    const handleDeleteUser = async () => {
+        const deleted = await deleteUserCascade(user?.id as number, database);
+        if(deleted) logout();
+    }
 
     return (
         <View style={GlobalStyles.container_screens_normal}>
@@ -57,6 +65,7 @@ export function PerfilScreen() {
                 title='Deseja realmente excluir a conta e seus dados?' 
                 text='Essa ação é irreversível...'
                 secondsToAbilityConfirm={5000}
+                onConfirm={handleDeleteUser}
                 /> }
         </View>
     );
