@@ -15,6 +15,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { Transaction } from '../../../../domain/transactionModel';
 import { Ionicons } from '@expo/vector-icons';
 import MaskInput, {Masks} from 'react-native-mask-input';
+import { formaterNumberToTwoFractionDigits } from '../../../../utils/NumberFormater';
 
 interface InstallmentItemProps {
     item: Item,
@@ -62,7 +63,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
             ...item,
             dueDate: new Date(updated.dueDate as Date),
             description: updated.description,
-            value: updated.value as number,
+            value: Number(formaterNumberToTwoFractionDigits(updated.value as number)),
         });
 
     }
@@ -127,9 +128,7 @@ export function InstallmentItem({ item, updateItem, readonly = false }: Installm
                         name="value"
                         render={({ field: { onChange, onBlur,value: valueInstallment } }) => (
                             <MaskInput value={Number(valueInstallment).toLocaleString()} onChangeText={async (masked, unmasked) => {
-                              
                                 onChange(unmasked);
-                                console.log(unmasked)
                                 await trigger('value');
                                 propagateChanges();
                             }} style={[styles.input, { textAlign: 'right' }, payed ? { textDecorationLine: 'line-through', color: 'green' } : {}]}
