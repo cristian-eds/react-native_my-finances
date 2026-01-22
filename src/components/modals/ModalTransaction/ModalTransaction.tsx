@@ -49,7 +49,7 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
     const { categories } = useCategoryStore();
     const { parameters } = useParameterStore();
 
-    const { control, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, watch, setValue, formState: { errors, isDirty }, reset } = useForm({
         resolver: zodResolver(transactionSchemas),
         defaultValues: {
             description: transactionData?.description ?? '',
@@ -107,7 +107,11 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
                 await cancelNotification(duplicateData.notificationId);
             }
         } else if (mode === 'edit') {
-            isSaved = await updateTransaction(newTransaction, database);
+            if(isDirty){
+                isSaved = await updateTransaction(newTransaction, database);
+            } else {
+                isSaved = true;
+            }
         }
 
         if (isSaved) {

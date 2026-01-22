@@ -56,7 +56,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
 
     const database = useSQLiteContext();
 
-    const { control, formState: { errors }, handleSubmit, watch, reset } = useForm<FinanceFormFields>({
+    const { control, formState: { errors, isDirty }, handleSubmit, watch, reset } = useForm<FinanceFormFields>({
         resolver: zodResolver(financeSchemas),
         defaultValues: {
             accountId: duplicateData?.accountId?.toLocaleString() ?? undefined,
@@ -98,7 +98,10 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
         if (mode === 'add') {
             isSaved = await addDuplicate(newDuplicate, user?.id as number, database)
         } else if (mode === 'edit') {
-            isSaved = await updateDuplicate(newDuplicate, database);
+            if(isDirty) {
+                isSaved = await updateDuplicate(newDuplicate, database);
+            }
+            isSaved = true;
         }
 
         if (isSaved) {

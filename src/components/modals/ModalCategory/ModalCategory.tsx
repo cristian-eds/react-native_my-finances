@@ -32,7 +32,7 @@ interface ModalCategoryProps {
 
 export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCategoryProps) {
 
-    const { control, handleSubmit, watch, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, watch, formState: { errors, isDirty }, reset } = useForm({
         resolver: zodResolver(categorySchemas),
         defaultValues: {
             description: categoryData?.description ?? '',
@@ -65,7 +65,10 @@ export function ModalCategory({ isShow, onClose, mode, categoryData }: ModalCate
                 handleClose();
             }
         } else if (mode === 'edit') {
-            const updated = await updateCategory(newCategory, database);
+            let updated = true;
+            if(isDirty) {
+                updated = await updateCategory(newCategory, database);
+            }
             if (updated) {
                 Alert.alert("Categoria atualizada com sucesso!");
                 handleClose();
