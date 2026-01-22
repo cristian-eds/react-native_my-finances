@@ -6,8 +6,8 @@ export interface Transaction {
     value: number,
     paymentDate: Date,
     movementType: MovementType,
-    accountId: number,
-    categoryId?: number,
-    duplicateId?: number
-    destinationAccountId?: number
+    accountId: number | undefined,
+    categoryId?: number | undefined,
+    duplicateId?: number ,
+    destinationAccountId?: number | undefined
 }

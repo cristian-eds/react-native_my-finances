@@ -88,14 +88,14 @@ export function ModalTransaction({ isShow, onClose, mode, transactionData, dupli
         const formValues = watch();
 
         const newTransaction = {
-            accountId: Number(formValues.accountId),
+            accountId: formValues.accountId !== '0' ? Number(formValues.accountId) : undefined,
             value: Number(formValues.value),
             description: formValues.description,
             movementType: formValues.movementType,
             paymentDate: new Date(formValues.paymentDate as Date),
             id: transactionData?.id as number,
-            categoryId: Number(formValues.category) ?? undefined,
-            destinationAccountId: Number(formValues.destinationAccountId),
+            categoryId: formValues.category !== '0' ? Number(formValues.category) : undefined,
+            destinationAccountId: formValues.destinationAccountId && formValues.destinationAccountId !== '0' ? Number(formValues.destinationAccountId) : undefined,
             duplicateId: Number(transactionData?.duplicateId)
         }
 

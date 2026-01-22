@@ -17,7 +17,7 @@ export async function create(transaction: Omit<Transaction, "id">, userId: strin
             transaction.value,
             formaterToSqlite(transaction.paymentDate),
             transaction.movementType,
-            transaction.accountId,
+            transaction.accountId ?? null,
             transaction.categoryId ?? null,
             transaction.duplicateId ?? null,
             transaction.destinationAccountId ?? null,
@@ -95,7 +95,7 @@ export async function update(transaction: Transaction, database: SQLiteDatabase)
             transaction.description,
             transaction.value, formaterToSqlite(transaction.paymentDate),
             transaction.movementType,
-            transaction.accountId,
+            transaction.accountId ?? null,
             transaction.categoryId ?? null,
             transaction.duplicateId ?? null,
             transaction.id
