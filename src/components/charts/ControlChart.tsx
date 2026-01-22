@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { styles } from './ControlChartStyles';
-import { formaterNumberToBRL } from '../../utils/NumberFormater'
 import { Row } from '../structure/Row/Row';
+import { CustomBarChart } from './BarChart/CustomBarChart';
+import { CustomPieChart } from './PieChart/CustomPieChart';
+
+import { styles } from './ControlChartStyles';
+
+import { formaterNumberToBRL } from '../../utils/NumberFormater'
 import { MovementType, textMovementType } from '../../domain/enums/movementTypeEnum';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { CustomBarChart } from './BarChart/CustomBarChart';
-import { CustomPieChart } from './PieChart/CustomPieChart';
 
 export interface ChartItem {
     value: number,

@@ -7,7 +7,6 @@ import { ModalContent } from '../structure/ModalContent/ModalContent';
 import { ModalHeader } from '../structure/ModalHeader/ModalHeader';
 import { ButtonBack } from '../../buttons/ButtonBack/ButtonBack';
 import { Row } from '../../structure/Row/Row';
-import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';
 import { ButtonIconAction, Mode } from '../../buttons/ButtonConfirm/ButtonIconAction';

@@ -10,7 +10,6 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { useAccountStore } from '../../../stores/AccountStore';
 import { useUserContext } from '../../../hooks/useUserContext';
 import { Account } from '../../../domain/accountModel';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Row } from '../../../components/structure/Row/Row';
 
 export function CustomDrawerContent({ navigation, ...props }: DrawerContentComponentProps) {

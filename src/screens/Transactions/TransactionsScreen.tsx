@@ -3,8 +3,6 @@ import { Text, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { styles } from './TransactionsScreenStyles';
-
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 import { SearchInput } from '../../components/SearchInput/SearchInput';
 import { Row } from '../../components/structure/Row/Row';

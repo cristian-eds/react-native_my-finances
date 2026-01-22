@@ -4,16 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useSQLiteContext } from 'expo-sqlite';
 
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './AccountDetailsScreenStyles';
 import { styles as GlobalStyles } from '../../styles/GlobalStyles';
 
 import { ButtonPlus } from '../../components/buttons/ButtonPlus/ButtonPlus';
-import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
-
-import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
-import { RowWithLeftLabel } from '../../components/RowWithLeftLabel/RowWithLeftLabel';
 import { updateAccountSchemas } from '../../utils/schemas/updateAccountSchemas';
 
 import { useAccountStore } from '../../stores/AccountStore';
@@ -31,6 +27,7 @@ import { TextInputWithTopLabel } from '../../components/TextInputWithTopLabel/Te
 import { PickerWithTopLabel } from '../../components/PickerWithTopLabel/PickerWithTopLabel';
 import { Cell } from '../../components/structure/Cell/Cell';
 import { RowWithTopLabel } from '../../components/RowWithTopLabel/RowWithTopLabel';
+import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 
 
 

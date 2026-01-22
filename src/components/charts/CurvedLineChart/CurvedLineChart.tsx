@@ -1,7 +1,6 @@
 import React from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions } from 'react-native';
 
-import { styles } from './CurvedLineChartStyles';
 import { CurveType, LineChart, lineDataItem } from 'react-native-gifted-charts';
 import { formaterNumberToBRL } from '../../../utils/NumberFormater';
 

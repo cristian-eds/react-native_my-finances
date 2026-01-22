@@ -2,6 +2,7 @@ import React from 'react';
 import { ActivityIndicator, Text, TextStyle, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 import { styles } from './ButtonPrincipalStyles';
+
 import { Ionicons } from '@expo/vector-icons';
 
 interface ButtonPrincipalProps {

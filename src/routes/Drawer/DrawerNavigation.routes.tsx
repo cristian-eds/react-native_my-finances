@@ -2,7 +2,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { CustomDrawerContent } from "./CustomDrawerContent/CustomDrawerContent";
 import { PrincipalStackNavigationRoutes } from "../Stack/PrincipalStack/PrincipalStackNavigation.routes";
 import Logo from '../../../assets/logo.png'
+
 import { Image } from "react-native";
+
 const Drawer = createDrawerNavigator();
 
 export const DrawerNagivationRoutes = () => {

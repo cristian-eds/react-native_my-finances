@@ -1,12 +1,16 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-
-import { styles } from './ButtonBackHomeStyles';
-import { Row } from '../../structure/Row/Row';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+
+import { styles } from './ButtonBackHomeStyles';
+
+import { Ionicons } from '@expo/vector-icons';
+
 import { PrincipalStackParamList } from '../../../routes/Stack/types/PrincipalStackParamList';
+
+import { Text, TouchableOpacity } from 'react-native';
+import { Row } from '../../structure/Row/Row';
+
 
 export function ButtonBackHome() {
 

@@ -68,7 +68,7 @@ export function TransactionStatistics() {
     const generateTransferItems = (filterTransactions: Transaction[]): ChartItem[] => {
         const items = filterTransactions.reduce((acumulator, transaction) => {
             const actualAccountsKey = `${transaction.accountId}-${transaction.destinationAccountId}`
-            const label = `De: ${getAccountName(transaction.accountId)} - Para: ${getAccountName(transaction.destinationAccountId ?? 0) ?? ' '}`
+            const label = `De: ${getAccountName(transaction.accountId as number)} - Para: ${getAccountName(transaction.destinationAccountId ?? 0) ?? ' '}`
             const isAccountDestination = activeAccount?.id === transaction.destinationAccountId;
             const frontColor = isAccountDestination ? '#28a326ff' : '#fe5e5eff';
 

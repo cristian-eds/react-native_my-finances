@@ -7,7 +7,7 @@ export type TransactionItemData = {
     value: number;
     paymentDate: Date;
     movementType: MovementType
-    accountId: number;
+    accountId?: number;
     accountName?: string;
     categoryId?: number;
     categoryName?: string;

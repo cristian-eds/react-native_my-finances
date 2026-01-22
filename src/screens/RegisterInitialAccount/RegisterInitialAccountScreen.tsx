@@ -9,11 +9,9 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { styles } from './RegisterInitialAccountScreenStyles';
 import { styles as globalStyles } from '../../styles/GlobalStyles';
 
-import { TextInpuWithLeftLabel } from '../../components/TextInpuWithLeftLabel/TextInputWithLeftLabel';
 import { ButtonPrincipal } from '../../components/buttons/ButtonPrincipal/ButtonPrincipal';
 
 import { accountSchemas } from '../../utils/schemas/accountSchemas';
-import { PickerWithLeftLabel } from '../../components/PickerWithLeftLabel/PickerWithLeftLabel';
 import { Status } from '../../domain/enums/statusEnum';
 
 import { AuthStackParamList } from '../../routes/Stack/types/AuthStackParamList';

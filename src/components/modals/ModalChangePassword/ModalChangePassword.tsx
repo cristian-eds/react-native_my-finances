@@ -10,7 +10,7 @@ import { Row } from '../../structure/Row/Row';
 import { Ionicons } from '@expo/vector-icons';
 import { Spacer } from '../../Spacer/Spacer';
 import { TextInputWithTopLabel } from '../../TextInputWithTopLabel/TextInputWithTopLabel';
-import { useForm, Watch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordSchemas } from '../../../utils/schemas/changePasswordSchemas';
 import { ModalFooter } from '../structure/ModalFooter/ModalFooter';

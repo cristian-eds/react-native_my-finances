@@ -1,20 +1,26 @@
-import React, { use, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { Text, TouchableOpacity, View } from 'react-native';
+import { Row } from '../structure/Row/Row';
+
+import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
+import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './FinanceItemListStyles';
+
 import { DuplicateModel } from '../../domain/duplicateModel';
-import { Row } from '../structure/Row/Row';
-import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
-import { formaterNumberToBRL } from '../../utils/NumberFormater';
 import { Transaction } from '../../domain/transactionModel';
-import { ModalFinance } from '../modals/ModalFinance/ModalFinance';
-import { useDuplicateStore } from '../../stores/DuplicateStores';
-import { ModalTransaction } from '../modals/ModalTransaction/ModalTransaction';
 import { DuplicateStatus } from '../../domain/enums/duplicateStatusEnun';
+
+import { formaterIsoDateToDefaultPattern } from '../../utils/DateFormater';
 import { formaterEnumKeyToLabel } from '../../utils/StringFormater';
+import { formaterNumberToBRL } from '../../utils/NumberFormater';
+
+import { useDuplicateStore } from '../../stores/DuplicateStores';
 import { getByFatherId } from '../../services/duplicateService';
+
 import { useUserContext } from '../../hooks/useUserContext';
 import { useSQLiteContext } from 'expo-sqlite';
 
@@ -40,7 +46,7 @@ export function FinanceItemList({ item }: FinanceItemList) {
     useEffect(() => {
         const fetchRecurrenceDuplicates = async () => {
             if (item.duplicateFatherId) {
-                const duplicates = await getByFatherId(item.duplicateFatherId,user?.id as number,database);
+                const duplicates = await getByFatherId(item.duplicateFatherId, user?.id as number, database);
                 setRecurrenceDuplicates(duplicates);
             }
         }
@@ -119,8 +125,8 @@ export function FinanceItemList({ item }: FinanceItemList) {
                         <Text>Duplicata {`${item.numberInstallments}/${recurrenceDuplicates.length}`}</Text>
                         {!isPaid && renderPayButton()}
                     </Row>
-                    {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} duplicateData={item}/>}
-                    {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} recurrendeDuplicates={recurrenceDuplicates}/>}
+                    {showModalTransaction && <ModalTransaction isShow={showModalTransaction} mode='payment' onClose={() => setShowModalTransaction(false)} transactionData={dataToPayment()} duplicateData={item} />}
+                    {showModalFinance && <ModalFinance isShow={showModalFinance} mode='edit' onClose={() => setShowModalFinance(false)} duplicateData={item} recurrendeDuplicates={recurrenceDuplicates} />}
                 </TouchableOpacity>
             }
         </>

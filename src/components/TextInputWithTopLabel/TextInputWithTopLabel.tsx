@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { TextInput, TextInputProps, View } from 'react-native';
+import { TextInputProps } from 'react-native';
 
 import { FieldError, FieldErrorsImpl, Merge, useController } from 'react-hook-form';
 import { RowWithTopLabel } from '../RowWithTopLabel/RowWithTopLabel';
 import { Ionicons } from '@expo/vector-icons';
-import MaskInput, { Mask, Masks } from 'react-native-mask-input';
+import MaskInput, { Masks } from 'react-native-mask-input';
 import { formaterNumberToTwoFractionDigits } from '../../utils/NumberFormater';
 
 export type MaskType = keyof typeof Masks;

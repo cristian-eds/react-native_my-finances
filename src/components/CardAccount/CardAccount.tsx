@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useSQLiteContext } from 'expo-sqlite';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './CardAccountStyles';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+
 import { useAccountStore } from '../../stores/AccountStore';
+
+import { formaterNumberToBRL } from '../../utils/NumberFormater';
+import { useParameterStore } from '../../stores/ParameterStore';
+
+import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
+
 import { SelectAccount } from '../SelectAccount/SelectAccount';
 import ModalAccount from '../modals/ModalAccount/ModalAccount';
-import { formaterNumberToBRL } from '../../utils/NumberFormater';
-import { PrincipalStackParamList } from '../../routes/Stack/types/PrincipalStackParamList';
-import { useParameterStore } from '../../stores/ParameterStore';
-import { useSQLiteContext } from 'expo-sqlite';
 
 
 export function CardAccount() {
