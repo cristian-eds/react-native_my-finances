@@ -52,7 +52,7 @@ export const mappColumnsOrderDuplicateToItemsDropdown = () => Object.keys(Column
 
 export const mappDuplicateStatusToItemsDropdown = () => Object.keys(DuplicateStatus).map((key) => {
     const value = DuplicateStatus[key as keyof typeof DuplicateStatus];
-    const label = formaterEnumKeyToLabel(key);
+    const label = formaterEnumKeyToLabel(value);
     return { label, value };
 })
 
