@@ -18,7 +18,13 @@ import { DuplicateModel } from '../../../domain/duplicateModel';
 import { useDuplicateStore } from '../../../stores/DuplicateStores';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useUserContext } from '../../../hooks/useUserContext';
-import { formaterNumberToTwoFractionDigits } from '../../../utils/NumberFormater';
+import { Cell } from '../../structure/Cell/Cell';
+import { PickerWithTopLabel } from '../../PickerWithTopLabel/PickerWithTopLabel';
+import { mapCategoriesToItemsDropdown, mapMovementTypesToItemsDropdown } from '../../../utils/mappers/itemsPickerMapper';
+import { useCategoryStore } from '../../../stores/CategoryStore';
+import { Control, FieldError } from 'react-hook-form';
+import { InstallmentsForm } from '../../../utils/schemas/installmentsSchemas';
+import { formaterNumberToBRL } from '../../../utils/NumberFormater';
 
 
 export interface Item {
@@ -36,12 +42,15 @@ interface InstallmentProps {
     items: Item[];
     data: Omit<DuplicateModel, 'id'>;
     mode?: 'create' | 'edit';
+    control?: Control<InstallmentsForm> | any,
+    errors?: FieldError | any;
 }
 
-export function ModalInstallments({ items, isShow, onClose, onCreateInstallments, data, mode = 'create' }: InstallmentProps) {
+export function ModalInstallments({ items, isShow, onClose, onCreateInstallments, data, mode = 'create', control, errors }: InstallmentProps) {
 
     const [controlledItems, setControlledItems] = useState<Item[]>(items);
-    const { createRecurrenceDuplicates } = useDuplicateStore()
+    const { createRecurrenceDuplicates } = useDuplicateStore();
+    const { categories } = useCategoryStore();
 
     const database = useSQLiteContext();
     const { user } = useUserContext();
@@ -91,6 +100,22 @@ export function ModalInstallments({ items, isShow, onClose, onCreateInstallments
                         </Row>
                         <Spacer />
                     </ModalHeader>
+                    {
+                        control && errors && (
+                            <View style={{ rowGap: 15, marginBottom: 15 }}>
+                                <Text style={styles.subtitle}>Informações</Text>
+                                <Row>
+                                    <Cell>
+                                        <PickerWithTopLabel labelText='Tipo Movimento' control={control} items={mapMovementTypesToItemsDropdown()} name='movementType' errors={errors.movementType} zIndex={10000} required />
+                                    </Cell>
+                                    <Cell>
+                                        <PickerWithTopLabel labelText='Categoria' control={control} items={mapCategoriesToItemsDropdown(categories)} name='categoryId' errors={errors.categoryId} placeholder='Categoria:' zIndex={10000} required />
+                                    </Cell>
+                                </Row>
+
+                            </View>)
+                    }
+                    {mode === 'create' && <Text style={styles.subtitle}>Parcelas que serão geradas</Text>}
                     <Row key={0} style={styles.headerItems}>
                         <Text>#</Text>
                         <Text style={{ flex: 3 }}>Descrição</Text>
@@ -104,9 +129,14 @@ export function ModalInstallments({ items, isShow, onClose, onCreateInstallments
                             keyExtractor={(item) => item.sequencyItem.toString()}
                         />
                     </View>
-                    {mode === 'create' && <ModalFooter>
-                        <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
-                    </ModalFooter>
+
+                    <Text style={{textAlign: 'right', fontWeight: '500', paddingRight: 10}}>Valor Total: {formaterNumberToBRL(controlledItems.reduce((prev, current) => prev + current.value, 0))}</Text>
+
+
+                    {mode === 'create' &&
+                        <ModalFooter>
+                            <ButtonPrincipal title='Gerar parcelas' onPress={handleGenerateInstallments} style={{ backgroundColor: '#e3e3e3ff', marginBottom: 10 }} iconName='checkmark-done' />
+                        </ModalFooter>
                     }
                 </ModalContent>
             </ModalContainer>

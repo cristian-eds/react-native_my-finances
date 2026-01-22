@@ -155,7 +155,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
                 {mode === 'edit' ? <>
                     {renderTab('PAYMENTS', 'calendar-outline', 'PAGAMENTOS', () => setTabActive('PAYMENTS'))}
                 </> : <>
-                    {renderTab('RECURRENCE', 'calendar-outline', 'RECORRÊNCIA', handleSubmit(() => setTabActive('RECURRENCE')))}
+                    {renderTab('RECURRENCE', 'calendar-outline', 'RECORRÊNCIA', () => setTabActive('RECURRENCE'))}
                 </>}
             </Row>
         )
@@ -199,7 +199,7 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
             accountId: Number(data.accountId),
             categoryId: Number(data.categoryId),
             description: data.description,
-            dueDate: new Date(data.dueDate),
+            dueDate: data.dueDate ? new Date(data.dueDate) : new Date(new Date().setDate(10)),
             issueDate: new Date(data.issueDate),
             movementType: data.movementType,
             totalValue: Number(data.totalValue),
@@ -217,17 +217,16 @@ export function ModalFinance({ isShow, mode, duplicateData, recurrendeDuplicates
     }
 
     const renderFooter = () => {
+        if(tabActive === 'RECURRENCE') return;
         return (
             <ModalFooter>
-                {tabActive === 'INFO' ?
+                {tabActive === 'INFO' &&
                     <>
                         <ButtonIconAction iconName='close' onPress={onClose} />
                         <ButtonIconAction iconName='checkmark-sharp' onPress={handleSubmit(handleConfirm)}  mode={Mode.CONFIRM} />
-                    </> :
-                    <>
-                        {renderButtonPlus()}
-                    </>
+                    </> 
                 }
+                {tabActive === 'PAYMENTS' && renderButtonPlus()}
             </ModalFooter>
         )
     }

@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 4,
         borderBottomWidth: 1,
         borderBottomColor: '#d3d3d3',
-        borderRadius: 4,    
+        borderRadius: 4,
     },
     title: {
         fontSize: 22,
@@ -15,4 +15,8 @@ export const styles = StyleSheet.create({
         marginBottom: 10,
         fontWeight: 'bold',
     },
+    subtitle: {
+        fontSize: 16,
+        fontWeight: '500',
+    }
 });
